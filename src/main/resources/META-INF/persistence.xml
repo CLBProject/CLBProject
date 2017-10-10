@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0"
+	xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+    
+	<persistence-unit name="mediaDBderby" transaction-type="JTA">
+		<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
+        <jta-data-source>clbDatabaseDerby</jta-data-source>
+        <class>clb.database.entities.DataLogger</class>
+        <class>clb.database.entities.DataLoggerExtraInfo</class>
+		<properties>
+			<property name="javax.persistence.jdbc.url" value="jdbc:derby:databaseName=clbDatabase" />
+			<property name="javax.persistence.jdbc.user" value="clb" />
+			<property name="javax.persistence.jdbc.password" value="clbadmin2" />
+			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver" />
+		</properties>
+	</persistence-unit>
+</persistence>
