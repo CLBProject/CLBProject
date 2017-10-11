@@ -12,9 +12,13 @@
 			<h3>Welcome to CLBProject</h3>
 		</div>
 		<div align="center">
-			<h:outputText value="Redontora"/>
-			<br/>
-			<h:outputText value="All rights reserved © Copyright 2017 "></h:outputText>
+			<h:form>
+				<h:outputText value="Redontora Test:" />
+				<h:outputText value="#{simpleBean.testSuccess}" />
+				<br />
+				<p:commandButton action="#{simpleBean.action}"></p:commandButton>
+				<h:outputText value="All rights reserved © Copyright 2017 "></h:outputText>
+			</h:form>
 		</div>
 	</ui:define>
 </ui:composition>
