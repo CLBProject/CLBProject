@@ -13,7 +13,6 @@ public class SimpleServiceImpl implements SimpleService{
     @Autowired
     private ClbDao<DataLogger> clbDao;
     
-	@Override
 	@Transactional
 	public void createDataLogger(DataLogger dataLogger) {
 		clbDao.create( dataLogger );

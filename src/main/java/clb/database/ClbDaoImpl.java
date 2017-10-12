@@ -5,9 +5,7 @@ import java.io.Serializable;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.springframework.stereotype.Repository;
 
-@Repository
 public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>{
 
     @PersistenceContext(unitName = "clbDatabase")
