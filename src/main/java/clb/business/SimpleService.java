@@ -1,6 +1,8 @@
 package clb.business;
 
+import clb.database.entities.DataLogger;
+
 public interface SimpleService {
 
-	public void testService();
+	public void createDataLogger(DataLogger dataLogger);
 }

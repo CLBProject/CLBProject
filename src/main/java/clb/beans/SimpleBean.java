@@ -2,27 +2,45 @@ package clb.beans;
 
 import java.io.Serializable;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.view.ViewScoped;
+import org.springframework.stereotype.Component;
 
+import clb.business.SimpleService;
+import clb.database.entities.DataLogger;
+
+@Component
 @ViewScoped
 @ManagedBean
 public class SimpleBean implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
-	private String testSuccess;
+	@ManagedProperty("#{simpleService}")
+	private SimpleService simpleService;
 	
-	public void action(){
-	    testSuccess = "Passed Action!";
+	@PostConstruct
+	public void init(){
+	}
+	
+	public void createDataLogger(){
+	    
+	    DataLogger dataLogger = new DataLogger();
+	    dataLogger.setItemid( 1L );
+	    dataLogger.setAl1( 1.0 );
+	    
+	    simpleService.createDataLogger(dataLogger);
+	    
+	    System.out.println( "Data Logger created successfully!" );
 	}
 
-    public String getTestSuccess() {
-        return testSuccess;
+    public SimpleService getSimpleService() {
+        return simpleService;
     }
 
-
-    public void setTestSuccess( String testSuccess ) {
-        this.testSuccess = testSuccess;
+    public void setSimpleService( SimpleService simpleService ) {
+        this.simpleService = simpleService;
     }
 }

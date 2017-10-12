@@ -12,11 +12,10 @@
 			<h3>Welcome to CLBProject</h3>
 		</div>
 		<div align="center">
-			<h:form>
+			<h:form id="formId">
 				<h:outputText value="Redontora Test:" />
-				<h:outputText value="#{simpleBean.testSuccess}" />
-				<br />
-				<p:commandButton action="#{simpleBean.action}"></p:commandButton>
+				<br/>
+				<p:commandButton action="#{simpleBean.createDataLogger}" ajax="true" update=":formId"></p:commandButton>
 				<h:outputText value="All rights reserved © Copyright 2017 "></h:outputText>
 			</h:form>
 		</div>

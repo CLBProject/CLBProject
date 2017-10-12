@@ -5,8 +5,7 @@
 	id="WebApp_ID" version="3.1">
 
 	<display-name>CLBProject</display-name>
-
-	<!-- Add Support for Spring -->
+	
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>

@@ -3,9 +3,8 @@
 	xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
     
-	<persistence-unit name="mediaDBderby" transaction-type="JTA">
-		<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
-        <jta-data-source>clbDatabaseDerby</jta-data-source>
+	<persistence-unit name="clbDatabase" transaction-type="JTA">
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <class>clb.database.entities.DataLogger</class>
         <class>clb.database.entities.DataLoggerExtraInfo</class>
 		<properties>
