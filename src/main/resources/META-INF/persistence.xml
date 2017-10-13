@@ -3,17 +3,14 @@
 	xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
 
-	<persistence-unit name="clbDatabase" transaction-type="JTA">
+	<persistence-unit name="clbDatabase" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 		<class>clb.database.entities.DataLogger</class>
 		<class>clb.database.entities.DataLoggerExtraInfo</class>
 		<properties>
-			<property name="javax.persistence.jdbc.url" value="jdbc:derby:databaseName=clbDatabase" />
-			<property name="javax.persistence.jdbc.user" value="clb" />
-			<property name="javax.persistence.jdbc.password" value="clbadmin2" />
-			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver" />
 			<property name="hibernate.dialect" value="org.hibernate.dialect.DerbyDialect" />
 			<property name="hibernate.show_sql" value="true" />
-		</properties>
+			<property name="hibernate.default_schema" value="clb"/>
+ 		</properties> 
 	</persistence-unit>
 </persistence>

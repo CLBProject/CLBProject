@@ -16,28 +16,41 @@
 	<context:component-scan base-package="clb.business" />
 	<context:component-scan base-package="clb.database" />
 
-	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="org.apache.derby.jdbc.EmbeddedDriver" />
-		<property name="url" value="jdbc:derby:databaseName=clbDatabase" />
+	<mvc:annotation-driven />
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.apache.derby.jdbc.ClientDriver" />
+		<property name="url" value="jdbc:derby://localhost:1527//clbDatabase" />
 		<property name="username" value="clb" />
 		<property name="password" value="clbadmin2" />
 	</bean>
 
-	<bean id="entityManagerFactory"
-		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-		<property name="persistenceUnitName" value="clbDatabase" />
+	<bean
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+		id="entityManagerFactory">
 		<property name="dataSource" ref="dataSource" />
-		<property name="jpaVendorAdapter">
-            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
-        </property>
+		<property name="persistenceUnitName" value="clbDatabase" />
 	</bean>
-	
+
 	<tx:annotation-driven transaction-manager="transactionManager" />
 
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
-		<property name="dataSource" ref="dataSource"/>
 	</bean>
+
+
+	<context:component-scan base-package="com.howtodoinjava.demo" />
+
+	<!-- This allow for dispatching requests to Controllers by registering two 
+		beans - DefaultAnnotationHandlerMapping and AnnotationMethodHandlerAdapter -->
+
+
+	<mvc:annotation-driven />
+
+	<!-- This helps in mapping the logical view names to directly view files 
+		under a certain pre-configured directory -->
+
 
 	<bean id="simpleService" class="clb.business.SimpleServiceImpl">
 	</bean>

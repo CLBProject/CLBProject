@@ -28,7 +28,6 @@ public class SimpleBean implements Serializable{
 	public void createDataLogger(){
 	    
 	    DataLogger dataLogger = new DataLogger();
-	    dataLogger.setItemid( 1L );
 	    dataLogger.setAl1( 1.0 );
 	    
 	    simpleService.createDataLogger(dataLogger);

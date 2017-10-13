@@ -13,10 +13,17 @@
 		</div>
 		<div align="center">
 			<h:form id="formId">
-				<h:outputText value="Redontora Test:" />
-				<br/>
-				<p:commandButton action="#{simpleBean.createDataLogger}" ajax="true" update=":formId"></p:commandButton>
-				<h:outputText value="All rights reserved © Copyright 2017 "></h:outputText>
+				<p:panel header="Testing Redentora.." styleClass="redentoraCSS">
+					<table>
+						<tr>
+							<td><h:outputText styleClass="redentoraCSS" value="Redontora Test:" /></td>
+							<td><p:commandButton styleClass="buttonCSS" action="#{simpleBean.createDataLogger}"
+									value="Insert Dummy D.Logger" ajax="true" update=":formId"></p:commandButton></td>
+						</tr>
+					</table>
+					<br />
+					<h:outputText styleClass="redentoraCSS" value="All rights reserved © Copyright 2017 "></h:outputText>
+				</p:panel>
 			</h:form>
 		</div>
 	</ui:define>
