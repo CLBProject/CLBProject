@@ -1,11 +1,53 @@
-DROP TABLE DATALOGGER;
-DROP TABLE DATALOGGER_EXTRA_INFO
+DROP TABLE ANALYZER_REGISTRY_EXTRA_INFO;
+DROP TABLE ANALYZER_REGISTRY;
+DROP TABLE ANALYZER;
+DROP TABLE DATA_LOGGER;
+DROP TABLE USERSYSTEM;
+DROP TABLE BUILDING;
 
 CREATE SCHEMA clb;
 
+CREATE TABLE BUILDING
+(
+ 	buildingId bigint not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+ 	name varchar(255),
+ 	CONSTRAINT BUILDING_PK PRIMARY KEY (buildingId)
+);
+  
+CREATE TABLE USERSYSTEM
+(
+ 	userId varchar(255),
+ 	name varchar(255),
+ 	username varchar(255),
+ 	password varchar(255),
+ 	address varchar(255),
+ 	buildingId bigint,
+ 	CONSTRAINT USERS_PK PRIMARY KEY (userId),
+ 	FOREIGN KEY (buildingId) REFERENCES BUILDING (buildingId)
+);
+ 
 CREATE TABLE DATA_LOGGER
 (
-	itemId bigint not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+ 	dataLoggerId bigint not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+ 	name varchar(255),
+ 	userId varchar(255),
+ 	CONSTRAINT DATA_LOGGER_PK PRIMARY KEY (dataLoggerId),
+ 	FOREIGN KEY (userId) REFERENCES USERSYSTEM (userId)
+);
+ 
+CREATE TABLE ANALYZER
+(
+ 	analyzerId bigint not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+ 	name varchar(255),
+ 	dataLoggerId bigint,
+ 	CONSTRAINT ANALYZER_PK PRIMARY KEY (analyzerId),
+ 	FOREIGN KEY (dataLoggerId) REFERENCES DATA_LOGGER (dataLoggerId)
+);
+
+CREATE TABLE ANALYZER_REGISTRY
+(
+	regId bigint not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+	temperature float,
 	recortType varchar(255),
 	productType varchar(255),
 	itemLabel varchar(255),
@@ -62,11 +104,13 @@ CREATE TABLE DATA_LOGGER
 	hourMeterKwhNegative float,
 	varDmd float,
 	vaDmd float,
-	CONSTRAINT data_logger_pk PRIMARY KEY (itemId)
+	analyzerId bigint,
+	CONSTRAINT ANALYZER_REGISTRY_pk PRIMARY KEY (regId),
+	FOREIGN KEY (analyzerId) REFERENCES ANALYZER (analyzerId)
 );
 
-CREATE TABLE DATA_LOGGER_EXTRA_INFO(
-	itemId bigint not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+CREATE TABLE ANALYZER_REGISTRY_EXTRA_INFO(
+	regId bigint not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
 	kWhNegative float,
 	phaseSequence float,
 	wDmd float,
@@ -86,7 +130,7 @@ CREATE TABLE DATA_LOGGER_EXTRA_INFO(
 	kWhL1Negative float,
 	kWhL2Negative float,
 	kWhL3Negative float,
-	dataLoggerId bigint,
-	CONSTRAINT data_logger_extra_info_pk PRIMARY KEY (itemId),
-	FOREIGN KEY (dataLoggerId) REFERENCES DATA_LOGGER (itemId)
+	analyzerRegistryId bigint,
+	CONSTRAINT ANALYZER_REGISTRY_extra_info_pk PRIMARY KEY (regId),
+	FOREIGN KEY (analyzerRegistryId) REFERENCES ANALYZER_REGISTRY (regId)
  );
