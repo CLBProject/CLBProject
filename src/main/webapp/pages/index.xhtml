@@ -8,20 +8,16 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	template="template/ui.xhtml">
 	<ui:define name="body">
+		<br/>
 		<div align="center">
 			<h3>Welcome to CLBProject</h3>
 		</div>
 		<div align="center">
-			<h:form id="formId">
-				<p:panel header="Testing Redentora.." styleClass="redentoraCSS">
-					<table>
-						<tr>
-							<td><h:outputText styleClass="redentoraCSS" value="Redontora Test:" /></td>
-							<td><p:commandButton styleClass="buttonCSS" action="#{simpleBean.createDataLogger}"
-									value="Insert Dummy D.Logger" ajax="true" update=":formId"></p:commandButton></td>
-						</tr>
-					</table>
-					<br />
+			<h:form id="chartFormId">
+				<p:panel styleClass="chartCSS">
+					<p:chart type="line" model="#{graphicBean.lineModel}" style="height:300px" />
+					<br/>
+					<p:poll interval="2" listener="#{graphicBean.updateChartValues}" update="chartFormId"/>
 					<h:outputText styleClass="redentoraCSS" value="All rights reserved © Copyright 2017 "></h:outputText>
 				</p:panel>
 			</h:form>

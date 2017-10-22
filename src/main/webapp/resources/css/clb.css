@@ -1,8 +1,14 @@
+body {
+	width: 100%;
+	padding: 0px !important;
+	margin: 0px !important;
+}
+
 .buttonCSS{
 	font-size: 12px !important;
 }
 
-.redentoraCSS{
-	width:25%;
+.chartCSS{
 	font-size: 12px;
+	width:1000px;
 }

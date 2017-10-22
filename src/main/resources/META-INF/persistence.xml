@@ -6,7 +6,11 @@
 	<persistence-unit name="clbDatabase" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 		<class>clb.database.entities.DataLogger</class>
-		<class>clb.database.entities.DataLoggerExtraInfo</class>
+		<class>clb.database.entities.Analyzer</class>
+		<class>clb.database.entities.AnalyzerRegistry</class>
+		<class>clb.database.entities.AnalyzerRegistryExtraInfo</class>
+		<class>clb.database.entities.Building</class>
+		<class>clb.database.entities.Usersystem</class>
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.DerbyDialect" />
 			<property name="hibernate.show_sql" value="true" />

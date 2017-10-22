@@ -10,21 +10,22 @@ import clb.database.entities.DataLogger;
 @Service
 public class SimpleServiceImpl implements SimpleService{
 
-    @Autowired
-    private ClbDao<DataLogger> clbDao;
-    
+	@Autowired
+	private ClbDao<DataLogger> clbDao;
+
 	@Transactional
 	public void createDataLogger(DataLogger dataLogger) {
 		clbDao.create( dataLogger );
 	}
 
-    public ClbDao<DataLogger> getClbDao() {
-        return clbDao;
-    }
 
-    public void setClbDao( ClbDao<DataLogger> clbDao ) {
-        this.clbDao = clbDao;
-    }
+	public ClbDao<DataLogger> getClbDao() {
+		return clbDao;
+	}
 
-	
+	public void setClbDao( ClbDao<DataLogger> clbDao ) {
+		this.clbDao = clbDao;
+	}
+
+
 }

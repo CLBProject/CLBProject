@@ -5,17 +5,17 @@ import javax.persistence.*;
 
 
 /**
- * The persistent class for the DATA_LOGGER_EXTRA_INFO database table.
+ * The persistent class for the ANALYZER_REGISTRY_EXTRA_INFO database table.
  * 
  */
 @Entity
-@Table(name="DATA_LOGGER_EXTRA_INFO")
-@NamedQuery(name="DataLoggerExtraInfo.findAll", query="SELECT d FROM DataLoggerExtraInfo d")
-public class DataLoggerExtraInfo implements Serializable {
+@Table(name="ANALYZER_REGISTRY_EXTRA_INFO")
+@NamedQuery(name="AnalyzerRegistryExtraInfo.findAll", query="SELECT a FROM AnalyzerRegistryExtraInfo a")
+public class AnalyzerRegistryExtraInfo implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private long itemid;
+	private long regid;
 
 	private double kvarhc;
 
@@ -55,20 +55,20 @@ public class DataLoggerExtraInfo implements Serializable {
 
 	private double wdmdmax;
 
-	//bi-directional many-to-one association to DataLogger
+	//bi-directional many-to-one association to AnalyzerRegistry
 	@ManyToOne
-	@JoinColumn(name="DATALOGGERID")
-	private DataLogger dataLogger;
+	@JoinColumn(name="ANALYZERREGISTRYID")
+	private AnalyzerRegistry analyzerRegistry;
 
-	public DataLoggerExtraInfo() {
+	public AnalyzerRegistryExtraInfo() {
 	}
 
-	public long getItemid() {
-		return this.itemid;
+	public long getRegid() {
+		return this.regid;
 	}
 
-	public void setItemid(long itemid) {
-		this.itemid = itemid;
+	public void setRegid(long regid) {
+		this.regid = regid;
 	}
 
 	public double getKvarhc() {
@@ -223,12 +223,12 @@ public class DataLoggerExtraInfo implements Serializable {
 		this.wdmdmax = wdmdmax;
 	}
 
-	public DataLogger getDataLogger() {
-		return this.dataLogger;
+	public AnalyzerRegistry getAnalyzerRegistry() {
+		return this.analyzerRegistry;
 	}
 
-	public void setDataLogger(DataLogger dataLogger) {
-		this.dataLogger = dataLogger;
+	public void setAnalyzerRegistry(AnalyzerRegistry analyzerRegistry) {
+		this.analyzerRegistry = analyzerRegistry;
 	}
 
 }
