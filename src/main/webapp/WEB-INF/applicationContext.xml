@@ -52,7 +52,7 @@
 		under a certain pre-configured directory -->
 
 
-	<bean id="simpleService" class="clb.business.SimpleServiceImpl">
+	<bean id="analyzerDataService" class="clb.business.AnalyzerDataServiceImpl">
 	</bean>
 
 	<bean id="clbDao" class="clb.database.ClbDaoImpl">

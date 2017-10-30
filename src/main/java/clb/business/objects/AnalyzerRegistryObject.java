@@ -1,23 +1,13 @@
-package clb.database.entities;
+package clb.business.objects;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.util.Date;
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.Date;
 
+public class AnalyzerRegistryObject implements Serializable {
 
-/**
- * The persistent class for the ANALYZER_REGISTRY database table.
- * 
- */
-@Entity
-@Table(name="ANALYZER_REGISTRY")
-@NamedQuery(name="AnalyzerRegistry.findAll", query="SELECT a FROM AnalyzerRegistry a")
-public class AnalyzerRegistry implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Id
 	private long regid;
 
 	private double al1;
@@ -32,7 +22,6 @@ public class AnalyzerRegistry implements Serializable {
 
 	private int comport;
 
-	@Temporal(TemporalType.DATE)
 	private Date currentdate;
 
 	private String currenttime;
@@ -140,15 +129,12 @@ public class AnalyzerRegistry implements Serializable {
 	private double vlnsys;
 
 	//bi-directional many-to-one association to Analyzer
-	@ManyToOne
-	@JoinColumn(name="ANALYZERID")
-	private Analyzer analyzer;
+	//private Analyzer analyzer;
 
 	//bi-directional many-to-one association to AnalyzerRegistryExtraInfo
-	@OneToMany(mappedBy="analyzerRegistry")
-	private List<AnalyzerRegistryExtraInfo> analyzerRegistryExtraInfos;
+	//private List<AnalyzerRegistryExtraInfo> analyzerRegistryExtraInfos;
 
-	public AnalyzerRegistry() {
+	public AnalyzerRegistryObject() {
 	}
 
 	public long getRegid() {
@@ -630,35 +616,4 @@ public class AnalyzerRegistry implements Serializable {
 	public void setVlnsys(double vlnsys) {
 		this.vlnsys = vlnsys;
 	}
-
-	public Analyzer getAnalyzer() {
-		return this.analyzer;
-	}
-
-	public void setAnalyzer(Analyzer analyzer) {
-		this.analyzer = analyzer;
-	}
-
-	public List<AnalyzerRegistryExtraInfo> getAnalyzerRegistryExtraInfos() {
-		return this.analyzerRegistryExtraInfos;
-	}
-
-	public void setAnalyzerRegistryExtraInfos(List<AnalyzerRegistryExtraInfo> analyzerRegistryExtraInfos) {
-		this.analyzerRegistryExtraInfos = analyzerRegistryExtraInfos;
-	}
-
-	public AnalyzerRegistryExtraInfo addAnalyzerRegistryExtraInfo(AnalyzerRegistryExtraInfo analyzerRegistryExtraInfo) {
-		getAnalyzerRegistryExtraInfos().add(analyzerRegistryExtraInfo);
-		analyzerRegistryExtraInfo.setAnalyzerRegistry(this);
-
-		return analyzerRegistryExtraInfo;
-	}
-
-	public AnalyzerRegistryExtraInfo removeAnalyzerRegistryExtraInfo(AnalyzerRegistryExtraInfo analyzerRegistryExtraInfo) {
-		getAnalyzerRegistryExtraInfos().remove(analyzerRegistryExtraInfo);
-		analyzerRegistryExtraInfo.setAnalyzerRegistry(null);
-
-		return analyzerRegistryExtraInfo;
-	}
-
 }

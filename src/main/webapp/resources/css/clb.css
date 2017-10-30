@@ -4,11 +4,16 @@ body {
 	margin: 0px !important;
 }
 
-.buttonCSS{
+.mainDiv{
+	padding-top: 15px !important;
+}
+
+.checkDiv{
 	font-size: 12px !important;
 }
 
 .chartCSS{
 	font-size: 12px;
-	width:1000px;
+	width: 80vw !important;
+	height:300px !important;
 }

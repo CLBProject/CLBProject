@@ -8,18 +8,35 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	template="template/ui.xhtml">
 	<ui:define name="body">
-		<br/>
-		<div align="center">
-			<h3>Welcome to CLBProject</h3>
-		</div>
-		<div align="center">
+		<div class="mainDiv" align="center">
 			<h:form id="chartFormId">
-				<p:panel styleClass="chartCSS">
-					<p:chart type="line" model="#{graphicBean.lineModel}" style="height:300px" />
-					<br/>
-					<p:poll interval="2" listener="#{graphicBean.updateChartValues}" update="chartFormId"/>
-					<h:outputText styleClass="redentoraCSS" value="All rights reserved © Copyright 2017 "></h:outputText>
-				</p:panel>
+				<table>
+					<tr>
+						<td width="8%" align="left" valign="middle">
+							<div class="checkDiv">
+								<p:selectBooleanCheckbox widgetVar="cbAL1" id="cbAL1"
+									itemLabel="AL1" label="AL1" value="#{graphicBean.aL1Check}">
+									<p:ajax update="chartFormId" listener="#{graphicBean.updateChartSeries}"/>
+								</p:selectBooleanCheckbox>
+								<br />
+								<p:selectBooleanCheckbox widgetVar="cbAL2" id="cbAL2"
+									itemLabel="AL2" label="AL2" value="#{graphicBean.aL2Check}">
+									<p:ajax event="change" update="chartFormId" listener="#{graphicBean.updateChartSeries}"/>
+								</p:selectBooleanCheckbox>
+								<br />
+								<p:selectBooleanCheckbox widgetVar="cbAL3" id="cbAL3"
+									itemLabel="AL3" label="AL3" value="#{graphicBean.aL3Check}">
+									<p:ajax event="change" update="chartFormId" listener="#{graphicBean.updateChartSeries}"/>
+								</p:selectBooleanCheckbox>
+							</div>
+						</td>
+						<td align="center" width="92%" valign="top"><p:chart
+								styleClass="chartCSS" type="line"
+								model="#{graphicBean.lineModel}" /> <br /> </td>
+					</tr>
+				</table>
+				<h:outputText styleClass="redentoraCSS"
+					value="All rights reserved © Copyright 2017 "></h:outputText>
 			</h:form>
 		</div>
 	</ui:define>

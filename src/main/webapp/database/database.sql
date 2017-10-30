@@ -47,6 +47,8 @@ CREATE TABLE ANALYZER
 CREATE TABLE ANALYZER_REGISTRY
 (
 	regId bigint not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+	currentDate date,
+	currentTime varchar(255),
 	temperature float,
 	recortType varchar(255),
 	productType varchar(255),
