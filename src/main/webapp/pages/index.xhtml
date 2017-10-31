@@ -10,33 +10,38 @@
 	<ui:define name="body">
 		<div class="mainDiv" align="center">
 			<h:form id="chartFormId">
+				<h2>CLBProject</h2>
+				<p:spacer height="15"/>
 				<table>
 					<tr>
 						<td width="8%" align="left" valign="middle">
 							<div class="checkDiv">
 								<p:selectBooleanCheckbox widgetVar="cbAL1" id="cbAL1"
 									itemLabel="AL1" label="AL1" value="#{graphicBean.aL1Check}">
-									<p:ajax update="chartFormId" listener="#{graphicBean.updateChartSeries}"/>
+									<p:ajax process="@this" event="change" update="@form" listener="#{graphicBean.updateChartSeries1}"/>
 								</p:selectBooleanCheckbox>
 								<br />
 								<p:selectBooleanCheckbox widgetVar="cbAL2" id="cbAL2"
 									itemLabel="AL2" label="AL2" value="#{graphicBean.aL2Check}">
-									<p:ajax event="change" update="chartFormId" listener="#{graphicBean.updateChartSeries}"/>
+									<p:ajax process="@this" event="change" update="@form" listener="#{graphicBean.updateChartSeries2}"/>
 								</p:selectBooleanCheckbox>
 								<br />
 								<p:selectBooleanCheckbox widgetVar="cbAL3" id="cbAL3"
 									itemLabel="AL3" label="AL3" value="#{graphicBean.aL3Check}">
-									<p:ajax event="change" update="chartFormId" listener="#{graphicBean.updateChartSeries}"/>
+									<p:ajax process="@this" event="change" update="@form" listener="#{graphicBean.updateChartSeries3}"/>
 								</p:selectBooleanCheckbox>
 							</div>
 						</td>
-						<td align="center" width="92%" valign="top"><p:chart
+						<td align="center" width="92%" valign="top">
+							<p:chart id="chartId"
 								styleClass="chartCSS" type="line"
-								model="#{graphicBean.lineModel}" /> <br /> </td>
+								model="#{graphicBean.lineModel}" /> 
+								<p:poll
+								interval="3" listener="#{graphicBean.updateChartValues}"
+								update="chartFormId" />
+								<br /> </td>
 					</tr>
 				</table>
-				<h:outputText styleClass="redentoraCSS"
-					value="All rights reserved © Copyright 2017 "></h:outputText>
 			</h:form>
 		</div>
 	</ui:define>

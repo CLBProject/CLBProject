@@ -7,7 +7,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.view.ViewScoped;
+import javax.faces.bean.ViewScoped;
 
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
@@ -30,14 +30,21 @@ public class GraphicBean implements Serializable{
 
 	private LineChartModel lineModel;
 
-	private boolean aL1Check = true;
+	ChartSeries seriesAL1;
+	ChartSeries seriesAL2;
+	ChartSeries seriesAL3;
 
-	private boolean aL2Check = true;
-
-	private boolean aL3Check = true;
+	private boolean aL1Check;
+	private boolean aL2Check;
+	private boolean aL3Check;
 
 	@PostConstruct
 	public void init(){
+
+		aL1Check = true;
+		aL2Check = true;
+		aL3Check = true;
+
 		lineModel = new LineChartModel();
 		lineModel.getAxes().put(AxisType.X, new CategoryAxis("Hours"));
 
@@ -46,13 +53,13 @@ public class GraphicBean implements Serializable{
 		yAxis.setMin(0);
 		yAxis.setMax(1000);
 
-		ChartSeries seriesAL1 = new ChartSeries();
+		seriesAL1 = new ChartSeries();
 		seriesAL1.setLabel("AL1");
 
-		ChartSeries seriesAL2 = new ChartSeries();
+		seriesAL2 = new ChartSeries();
 		seriesAL2.setLabel("AL2");
 
-		ChartSeries seriesAL3 = new ChartSeries();
+		seriesAL3 = new ChartSeries();
 		seriesAL3.setLabel("AL3");
 
 		try {
@@ -74,8 +81,7 @@ public class GraphicBean implements Serializable{
 
 				AnalyzerRegistryObject analyzerRegObj = data.get(i);
 
-				if(analyzerRegObj.getCurrenttime().endsWith(":00:00") &&
-						Integer.parseInt(analyzerRegObj.getCurrenttime().split(":")[0]) % 2 == 0 || data.size()-1 == i){ 
+				if(analyzerRegObj.getCurrenttime().endsWith(":00:00") || data.size()-1 == i){ 
 
 					if(!previousCurrentTime.equals("")){
 						seriesAL1.set(previousCurrentTime, sumAllAl1/countAl1);
@@ -120,13 +126,38 @@ public class GraphicBean implements Serializable{
 	}
 
 	public void updateChartValues(){
-
+		//TODO Update Chart Values
 	}
 
-	public void updateChartSeries(){
-		lineModel.getSeries().remove(0);
+	public void updateChartSeries1(){
+		if(!aL1Check){
+			if(lineModel.getSeries().size() == 1){
+				aL1Check = true;
+			}
+			else lineModel.getSeries().remove(seriesAL1);
+		}
+		else lineModel.getSeries().add(seriesAL1);
 	}
 
+	public void updateChartSeries2(){
+		if(!aL2Check){
+			if(lineModel.getSeries().size() == 1){
+				aL2Check = true;
+			}
+			else lineModel.getSeries().remove(seriesAL2);
+		}
+		else lineModel.getSeries().add(seriesAL2);
+	}
+
+	public void updateChartSeries3(){
+		if(!aL3Check){
+			if(lineModel.getSeries().size() == 1){
+				aL3Check = true;
+			}
+			else lineModel.getSeries().remove(seriesAL3);
+		}
+		else lineModel.getSeries().add(seriesAL3);
+	}
 
 	public AnalyzerDataService getAnalyzerDataService() {
 		return analyzerDataService;

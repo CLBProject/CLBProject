@@ -6,7 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 
-public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>{
+public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializable{
 
     @PersistenceContext(unitName = "clbDatabase")
     protected EntityManager entityManager;

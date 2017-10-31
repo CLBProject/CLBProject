@@ -1,6 +1,7 @@
 package clb.business;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,7 +22,7 @@ import clb.database.ClbDao;
 import clb.database.entities.DataLogger;
 
 @Service
-public class AnalyzerDataServiceImpl implements AnalyzerDataService{
+public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializable{
 
 	@Autowired
 	private ClbDao<DataLogger> clbDao;
@@ -57,9 +58,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService{
 
 			calendar.setTime(row.getCell(1).getDateCellValue());   // assigns calendar to given date 
 
-			if(calendar.get(Calendar.HOUR_OF_DAY) == currentHour &&
-					calendar.get(Calendar.MINUTE) == currentHour &&
-					calendar.get(Calendar.SECOND) == currentHour){
+			if(calendar.get(Calendar.HOUR_OF_DAY) == currentHour){
 				currentHourPassed = true;
 			}
 
