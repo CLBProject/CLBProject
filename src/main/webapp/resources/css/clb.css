@@ -4,6 +4,14 @@ body {
 	margin: 0px !important;
 }
 
+.ui-fieldset{
+	font-size: 12px !important;
+}
+
+.ui-button{
+	font-size: 12px !important;
+}
+
 .mainDiv{
 	padding-top: 15px !important;
 }

@@ -11,8 +11,8 @@ import javax.faces.bean.ViewScoped;
 
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
-import org.primefaces.model.chart.CategoryAxis;
 import org.primefaces.model.chart.ChartSeries;
+import org.primefaces.model.chart.DateAxis;
 import org.primefaces.model.chart.LineChartModel;
 
 import clb.business.AnalyzerDataService;
@@ -46,7 +46,13 @@ public class GraphicBean implements Serializable{
 		aL3Check = true;
 
 		lineModel = new LineChartModel();
-		lineModel.getAxes().put(AxisType.X, new CategoryAxis("Hours"));
+		lineModel.setZoom(true);
+
+		DateAxis axis = new DateAxis("Hours");
+		axis.setTickFormat("%H:%M:%S");
+
+
+		lineModel.getAxes().put(AxisType.X,axis);
 
 		Axis yAxis = lineModel.getAxis(AxisType.Y);
 		yAxis.setLabel("Power");
@@ -63,49 +69,14 @@ public class GraphicBean implements Serializable{
 		seriesAL3.setLabel("AL3");
 
 		try {
-
-			double sumAllAl1 = 0;
-			int countAl1 = 0;
-
-			double sumAllAl2 = 0;
-			int countAl2 = 0;
-
-			double sumAllAl3 = 0;
-			int countAl3 = 0;
-
 			List<AnalyzerRegistryObject> data = analyzerDataService.getAnalyzerGraphicalData();
 
-			String previousCurrentTime = "";
-
 			for(int i=0;i<data.size();i++){
-
 				AnalyzerRegistryObject analyzerRegObj = data.get(i);
+				seriesAL1.set(analyzerRegObj.getCurrenttime(), analyzerRegObj.getAl1());
+				seriesAL2.set(analyzerRegObj.getCurrenttime(), analyzerRegObj.getAl2());
+				seriesAL3.set(analyzerRegObj.getCurrenttime(), analyzerRegObj.getAl3());
 
-				if(analyzerRegObj.getCurrenttime().endsWith(":00:00") || data.size()-1 == i){ 
-
-					if(!previousCurrentTime.equals("")){
-						seriesAL1.set(previousCurrentTime, sumAllAl1/countAl1);
-						seriesAL2.set(previousCurrentTime, sumAllAl2/countAl2);
-						seriesAL3.set(previousCurrentTime, sumAllAl3/countAl3);
-					}
-
-					previousCurrentTime = analyzerRegObj.getCurrenttime();
-
-					sumAllAl1 = 0.0;
-					countAl1 = 0;
-					sumAllAl2 = 0.0;
-					countAl2 = 0;
-					sumAllAl3 = 0.0;
-					countAl3 = 0;
-				}
-				else {
-					sumAllAl1 += analyzerRegObj.getAl1();
-					countAl1 ++;
-					sumAllAl2 += analyzerRegObj.getAl2();
-					countAl2 ++;
-					sumAllAl3 += analyzerRegObj.getAl3();
-					countAl3 ++;
-				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
