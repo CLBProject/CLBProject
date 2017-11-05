@@ -1,14 +1,23 @@
 package clb.database;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import clb.database.entities.AnalyzerRegistryEntity;
+
 
 public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializable{
 
-    @PersistenceContext(unitName = "clbDatabase")
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	
+	@PersistenceContext(unitName = "clbDatabase")
     protected EntityManager entityManager;
 
     public void create( T entity ){
@@ -30,6 +39,16 @@ public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializab
     public void setEntityManager( EntityManager entityManager ) {
         this.entityManager = entityManager;
     }
+
+	@Override
+	public void persistData(List<T> data) {
+		data.stream().forEach(object -> entityManager.persist(object));
+	}
+
+	@Override
+	public List<AnalyzerRegistryEntity> getAllAnalyzerRegistryData() {
+		return entityManager.createNamedQuery("AnalyzerRegistry.findAll",AnalyzerRegistryEntity.class).getResultList();
+	}
 
     
 }

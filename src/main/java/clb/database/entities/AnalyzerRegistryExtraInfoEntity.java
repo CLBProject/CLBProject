@@ -10,11 +10,12 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="ANALYZER_REGISTRY_EXTRA_INFO")
-@NamedQuery(name="AnalyzerRegistryExtraInfo.findAll", query="SELECT a FROM AnalyzerRegistryExtraInfo a")
-public class AnalyzerRegistryExtraInfo implements Serializable {
+@NamedQuery(name="AnalyzerRegistryExtraInfo.findAll", query="SELECT a FROM AnalyzerRegistryExtraInfoEntity a")
+public class AnalyzerRegistryExtraInfoEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long regid;
 
 	private double kvarhc;
@@ -58,9 +59,9 @@ public class AnalyzerRegistryExtraInfo implements Serializable {
 	//bi-directional many-to-one association to AnalyzerRegistry
 	@ManyToOne
 	@JoinColumn(name="ANALYZERREGISTRYID")
-	private AnalyzerRegistry analyzerRegistry;
+	private AnalyzerRegistryEntity analyzerRegistry;
 
-	public AnalyzerRegistryExtraInfo() {
+	public AnalyzerRegistryExtraInfoEntity() {
 	}
 
 	public long getRegid() {
@@ -223,11 +224,11 @@ public class AnalyzerRegistryExtraInfo implements Serializable {
 		this.wdmdmax = wdmdmax;
 	}
 
-	public AnalyzerRegistry getAnalyzerRegistry() {
+	public AnalyzerRegistryEntity getAnalyzerRegistry() {
 		return this.analyzerRegistry;
 	}
 
-	public void setAnalyzerRegistry(AnalyzerRegistry analyzerRegistry) {
+	public void setAnalyzerRegistry(AnalyzerRegistryEntity analyzerRegistry) {
 		this.analyzerRegistry = analyzerRegistry;
 	}
 

@@ -10,8 +10,8 @@ import java.util.List;
  * 
  */
 @Entity
-@NamedQuery(name="Building.findAll", query="SELECT b FROM Building b")
-public class Building implements Serializable {
+@NamedQuery(name="Building.findAll", query="SELECT b FROM BuildingEntity b")
+public class BuildingEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -21,9 +21,9 @@ public class Building implements Serializable {
 
 	//bi-directional many-to-one association to Usersystem
 	@OneToMany(mappedBy="building")
-	private List<Usersystem> usersystems;
+	private List<UsersystemEntity> usersystems;
 
-	public Building() {
+	public BuildingEntity() {
 	}
 
 	public long getBuildingid() {
@@ -42,22 +42,22 @@ public class Building implements Serializable {
 		this.name = name;
 	}
 
-	public List<Usersystem> getUsersystems() {
+	public List<UsersystemEntity> getUsersystems() {
 		return this.usersystems;
 	}
 
-	public void setUsersystems(List<Usersystem> usersystems) {
+	public void setUsersystems(List<UsersystemEntity> usersystems) {
 		this.usersystems = usersystems;
 	}
 
-	public Usersystem addUsersystem(Usersystem usersystem) {
+	public UsersystemEntity addUsersystem(UsersystemEntity usersystem) {
 		getUsersystems().add(usersystem);
 		usersystem.setBuilding(this);
 
 		return usersystem;
 	}
 
-	public Usersystem removeUsersystem(Usersystem usersystem) {
+	public UsersystemEntity removeUsersystem(UsersystemEntity usersystem) {
 		getUsersystems().remove(usersystem);
 		usersystem.setBuilding(null);
 

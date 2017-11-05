@@ -13,11 +13,12 @@ import java.util.List;
  */
 @Entity
 @Table(name="ANALYZER_REGISTRY")
-@NamedQuery(name="AnalyzerRegistry.findAll", query="SELECT a FROM AnalyzerRegistry a")
-public class AnalyzerRegistry implements Serializable {
+@NamedQuery(name="AnalyzerRegistry.findAll", query="SELECT a FROM AnalyzerRegistryEntity a")
+public class AnalyzerRegistryEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long regid;
 
 	private double al1;
@@ -142,13 +143,13 @@ public class AnalyzerRegistry implements Serializable {
 	//bi-directional many-to-one association to Analyzer
 	@ManyToOne
 	@JoinColumn(name="ANALYZERID")
-	private Analyzer analyzer;
+	private AnalyzerEntity analyzer;
 
 	//bi-directional many-to-one association to AnalyzerRegistryExtraInfo
 	@OneToMany(mappedBy="analyzerRegistry")
-	private List<AnalyzerRegistryExtraInfo> analyzerRegistryExtraInfos;
+	private List<AnalyzerRegistryExtraInfoEntity> analyzerRegistryExtraInfos;
 
-	public AnalyzerRegistry() {
+	public AnalyzerRegistryEntity() {
 	}
 
 	public long getRegid() {
@@ -631,30 +632,30 @@ public class AnalyzerRegistry implements Serializable {
 		this.vlnsys = vlnsys;
 	}
 
-	public Analyzer getAnalyzer() {
+	public AnalyzerEntity getAnalyzer() {
 		return this.analyzer;
 	}
 
-	public void setAnalyzer(Analyzer analyzer) {
+	public void setAnalyzer(AnalyzerEntity analyzer) {
 		this.analyzer = analyzer;
 	}
 
-	public List<AnalyzerRegistryExtraInfo> getAnalyzerRegistryExtraInfos() {
+	public List<AnalyzerRegistryExtraInfoEntity> getAnalyzerRegistryExtraInfos() {
 		return this.analyzerRegistryExtraInfos;
 	}
 
-	public void setAnalyzerRegistryExtraInfos(List<AnalyzerRegistryExtraInfo> analyzerRegistryExtraInfos) {
+	public void setAnalyzerRegistryExtraInfos(List<AnalyzerRegistryExtraInfoEntity> analyzerRegistryExtraInfos) {
 		this.analyzerRegistryExtraInfos = analyzerRegistryExtraInfos;
 	}
 
-	public AnalyzerRegistryExtraInfo addAnalyzerRegistryExtraInfo(AnalyzerRegistryExtraInfo analyzerRegistryExtraInfo) {
+	public AnalyzerRegistryExtraInfoEntity addAnalyzerRegistryExtraInfo(AnalyzerRegistryExtraInfoEntity analyzerRegistryExtraInfo) {
 		getAnalyzerRegistryExtraInfos().add(analyzerRegistryExtraInfo);
 		analyzerRegistryExtraInfo.setAnalyzerRegistry(this);
 
 		return analyzerRegistryExtraInfo;
 	}
 
-	public AnalyzerRegistryExtraInfo removeAnalyzerRegistryExtraInfo(AnalyzerRegistryExtraInfo analyzerRegistryExtraInfo) {
+	public AnalyzerRegistryExtraInfoEntity removeAnalyzerRegistryExtraInfo(AnalyzerRegistryExtraInfoEntity analyzerRegistryExtraInfo) {
 		getAnalyzerRegistryExtraInfos().remove(analyzerRegistryExtraInfo);
 		analyzerRegistryExtraInfo.setAnalyzerRegistry(null);
 

@@ -10,8 +10,8 @@ import java.util.List;
  * 
  */
 @Entity
-@NamedQuery(name="Usersystem.findAll", query="SELECT u FROM Usersystem u")
-public class Usersystem implements Serializable {
+@NamedQuery(name="Usersystem.findAll", query="SELECT u FROM UsersystemEntity u")
+public class UsersystemEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -27,14 +27,14 @@ public class Usersystem implements Serializable {
 
 	//bi-directional many-to-one association to DataLogger
 	@OneToMany(mappedBy="usersystem")
-	private List<DataLogger> dataLoggers;
+	private List<DataLoggerEntity> dataLoggers;
 
 	//bi-directional many-to-one association to Building
 	@ManyToOne
 	@JoinColumn(name="BUILDINGID")
-	private Building building;
+	private BuildingEntity building;
 
-	public Usersystem() {
+	public UsersystemEntity() {
 	}
 
 	public String getUserid() {
@@ -77,33 +77,33 @@ public class Usersystem implements Serializable {
 		this.username = username;
 	}
 
-	public List<DataLogger> getDataLoggers() {
+	public List<DataLoggerEntity> getDataLoggers() {
 		return this.dataLoggers;
 	}
 
-	public void setDataLoggers(List<DataLogger> dataLoggers) {
+	public void setDataLoggers(List<DataLoggerEntity> dataLoggers) {
 		this.dataLoggers = dataLoggers;
 	}
 
-	public DataLogger addDataLogger(DataLogger dataLogger) {
+	public DataLoggerEntity addDataLogger(DataLoggerEntity dataLogger) {
 		getDataLoggers().add(dataLogger);
 		dataLogger.setUsersystem(this);
 
 		return dataLogger;
 	}
 
-	public DataLogger removeDataLogger(DataLogger dataLogger) {
+	public DataLoggerEntity removeDataLogger(DataLoggerEntity dataLogger) {
 		getDataLoggers().remove(dataLogger);
 		dataLogger.setUsersystem(null);
 
 		return dataLogger;
 	}
 
-	public Building getBuilding() {
+	public BuildingEntity getBuilding() {
 		return this.building;
 	}
 
-	public void setBuilding(Building building) {
+	public void setBuilding(BuildingEntity building) {
 		this.building = building;
 	}
 

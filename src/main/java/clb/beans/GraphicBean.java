@@ -11,13 +11,12 @@ import javax.faces.bean.ViewScoped;
 
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
-import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.DateAxis;
 import org.primefaces.model.chart.LineChartModel;
+import org.primefaces.model.chart.LineChartSeries;
 
 import clb.business.AnalyzerDataService;
 import clb.business.objects.AnalyzerRegistryObject;
-import clb.database.entities.DataLogger;
 
 @ViewScoped
 @ManagedBean
@@ -30,9 +29,9 @@ public class GraphicBean implements Serializable{
 
 	private LineChartModel lineModel;
 
-	ChartSeries seriesAL1;
-	ChartSeries seriesAL2;
-	ChartSeries seriesAL3;
+	LineChartSeries seriesAL1;
+	LineChartSeries seriesAL2;
+	LineChartSeries seriesAL3;
 
 	private boolean aL1Check;
 	private boolean aL2Check;
@@ -51,7 +50,6 @@ public class GraphicBean implements Serializable{
 		DateAxis axis = new DateAxis("Hours");
 		axis.setTickFormat("%H:%M:%S");
 
-
 		lineModel.getAxes().put(AxisType.X,axis);
 
 		Axis yAxis = lineModel.getAxis(AxisType.Y);
@@ -59,14 +57,17 @@ public class GraphicBean implements Serializable{
 		yAxis.setMin(0);
 		yAxis.setMax(1000);
 
-		seriesAL1 = new ChartSeries();
+		seriesAL1 = new LineChartSeries();
 		seriesAL1.setLabel("AL1");
+		seriesAL1.setShowMarker(false);
 
-		seriesAL2 = new ChartSeries();
+		seriesAL2 = new LineChartSeries();
 		seriesAL2.setLabel("AL2");
+		seriesAL2.setShowMarker(false);
 
-		seriesAL3 = new ChartSeries();
+		seriesAL3 = new LineChartSeries();
 		seriesAL3.setLabel("AL3");
+		seriesAL3.setShowMarker(false);
 
 		try {
 			List<AnalyzerRegistryObject> data = analyzerDataService.getAnalyzerGraphicalData();
@@ -85,15 +86,6 @@ public class GraphicBean implements Serializable{
 		lineModel.addSeries(seriesAL1);
 		lineModel.addSeries(seriesAL2);
 		lineModel.addSeries(seriesAL3);
-	}
-
-	public void createDataLogger(){
-
-		DataLogger dataLogger = new DataLogger();
-
-		analyzerDataService.createDataLogger(dataLogger);
-
-		System.out.println( "Data Logger created successfully!" );
 	}
 
 	public void updateChartValues(){
@@ -128,6 +120,10 @@ public class GraphicBean implements Serializable{
 			else lineModel.getSeries().remove(seriesAL3);
 		}
 		else lineModel.getSeries().add(seriesAL3);
+	}
+	
+	public void fillDatabase() throws IOException{
+		analyzerDataService.fillDatabaseData();
 	}
 
 	public AnalyzerDataService getAnalyzerDataService() {

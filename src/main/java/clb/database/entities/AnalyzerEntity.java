@@ -10,11 +10,12 @@ import java.util.List;
  * 
  */
 @Entity
-@NamedQuery(name="Analyzer.findAll", query="SELECT a FROM Analyzer a")
-public class Analyzer implements Serializable {
+@NamedQuery(name="Analyzer.findAll", query="SELECT a FROM AnalyzerEntity a")
+public class AnalyzerEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long analyzerid;
 
 	private String name;
@@ -22,13 +23,13 @@ public class Analyzer implements Serializable {
 	//bi-directional many-to-one association to DataLogger
 	@ManyToOne
 	@JoinColumn(name="DATALOGGERID")
-	private DataLogger dataLogger;
+	private DataLoggerEntity dataLogger;
 
 	//bi-directional many-to-one association to AnalyzerRegistry
 	@OneToMany(mappedBy="analyzer")
-	private List<AnalyzerRegistry> analyzerRegistries;
+	private List<AnalyzerRegistryEntity> analyzerRegistries;
 
-	public Analyzer() {
+	public AnalyzerEntity() {
 	}
 
 	public long getAnalyzerid() {
@@ -47,30 +48,30 @@ public class Analyzer implements Serializable {
 		this.name = name;
 	}
 
-	public DataLogger getDataLogger() {
+	public DataLoggerEntity getDataLogger() {
 		return this.dataLogger;
 	}
 
-	public void setDataLogger(DataLogger dataLogger) {
+	public void setDataLogger(DataLoggerEntity dataLogger) {
 		this.dataLogger = dataLogger;
 	}
 
-	public List<AnalyzerRegistry> getAnalyzerRegistries() {
+	public List<AnalyzerRegistryEntity> getAnalyzerRegistries() {
 		return this.analyzerRegistries;
 	}
 
-	public void setAnalyzerRegistries(List<AnalyzerRegistry> analyzerRegistries) {
+	public void setAnalyzerRegistries(List<AnalyzerRegistryEntity> analyzerRegistries) {
 		this.analyzerRegistries = analyzerRegistries;
 	}
 
-	public AnalyzerRegistry addAnalyzerRegistry(AnalyzerRegistry analyzerRegistry) {
+	public AnalyzerRegistryEntity addAnalyzerRegistry(AnalyzerRegistryEntity analyzerRegistry) {
 		getAnalyzerRegistries().add(analyzerRegistry);
 		analyzerRegistry.setAnalyzer(this);
 
 		return analyzerRegistry;
 	}
 
-	public AnalyzerRegistry removeAnalyzerRegistry(AnalyzerRegistry analyzerRegistry) {
+	public AnalyzerRegistryEntity removeAnalyzerRegistry(AnalyzerRegistryEntity analyzerRegistry) {
 		getAnalyzerRegistries().remove(analyzerRegistry);
 		analyzerRegistry.setAnalyzer(null);
 

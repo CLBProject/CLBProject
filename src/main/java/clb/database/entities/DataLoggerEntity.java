@@ -11,8 +11,8 @@ import java.util.List;
  */
 @Entity
 @Table(name="DATA_LOGGER")
-@NamedQuery(name="DataLogger.findAll", query="SELECT d FROM DataLogger d")
-public class DataLogger implements Serializable {
+@NamedQuery(name="DataLoggerEntity.findAll", query="SELECT d FROM DataLoggerEntity d")
+public class DataLoggerEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -22,14 +22,14 @@ public class DataLogger implements Serializable {
 
 	//bi-directional many-to-one association to Analyzer
 	@OneToMany(mappedBy="dataLogger")
-	private List<Analyzer> analyzers;
+	private List<AnalyzerEntity> analyzers;
 
 	//bi-directional many-to-one association to Usersystem
 	@ManyToOne
 	@JoinColumn(name="USERID")
-	private Usersystem usersystem;
+	private UsersystemEntity usersystem;
 
-	public DataLogger() {
+	public DataLoggerEntity() {
 	}
 
 	public long getDataloggerid() {
@@ -48,33 +48,33 @@ public class DataLogger implements Serializable {
 		this.name = name;
 	}
 
-	public List<Analyzer> getAnalyzers() {
+	public List<AnalyzerEntity> getAnalyzers() {
 		return this.analyzers;
 	}
 
-	public void setAnalyzers(List<Analyzer> analyzers) {
+	public void setAnalyzers(List<AnalyzerEntity> analyzers) {
 		this.analyzers = analyzers;
 	}
 
-	public Analyzer addAnalyzer(Analyzer analyzer) {
+	public AnalyzerEntity addAnalyzer(AnalyzerEntity analyzer) {
 		getAnalyzers().add(analyzer);
 		analyzer.setDataLogger(this);
 
 		return analyzer;
 	}
 
-	public Analyzer removeAnalyzer(Analyzer analyzer) {
+	public AnalyzerEntity removeAnalyzer(AnalyzerEntity analyzer) {
 		getAnalyzers().remove(analyzer);
 		analyzer.setDataLogger(null);
 
 		return analyzer;
 	}
 
-	public Usersystem getUsersystem() {
+	public UsersystemEntity getUsersystem() {
 		return this.usersystem;
 	}
 
-	public void setUsersystem(Usersystem usersystem) {
+	public void setUsersystem(UsersystemEntity usersystem) {
 		this.usersystem = usersystem;
 	}
 
