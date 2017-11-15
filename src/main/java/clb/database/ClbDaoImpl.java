@@ -1,6 +1,7 @@
 package clb.database;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -45,10 +46,17 @@ public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializab
 		data.stream().forEach(object -> entityManager.persist(object));
 	}
 
+	/**
+	 * @return All Analyzer Registries
+	 */
 	@Override
-	public List<AnalyzerRegistryEntity> getAllAnalyzerRegistryData() {
+	public List<AnalyzerRegistryEntity> getAllCurrentAnalyzerRegistryData() {
 		return entityManager.createNamedQuery("AnalyzerRegistry.findAll",AnalyzerRegistryEntity.class).getResultList();
 	}
-
+	
+	//TODO returns all the recent data
+	public List<AnalyzerRegistryEntity> getOnlyLatestCurrentAnalyzerRegistryData(Date sinceDate){
+		return null;
+	}
     
 }

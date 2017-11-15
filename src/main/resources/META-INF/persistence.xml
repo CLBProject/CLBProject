@@ -8,6 +8,8 @@
 		<class>clb.database.entities.AnalyzerEntity</class>
 		<class>clb.database.entities.AnalyzerRegistryEntity</class>
 		<class>clb.database.entities.AnalyzerRegistryExtraInfoEntity</class>
+		<class>clb.database.entities.AnalyzerRegistryExtraInfoTempEntity</class>
+		<class>clb.database.entities.AnalyzerRegistryTempEntity</class>
 		<class>clb.database.entities.BuildingEntity</class>
 		<class>clb.database.entities.DataLoggerEntity</class>
 		<class>clb.database.entities.UsersystemEntity</class>

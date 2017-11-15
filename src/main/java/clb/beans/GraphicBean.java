@@ -2,7 +2,7 @@ package clb.beans;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Date;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -52,10 +52,6 @@ public class GraphicBean implements Serializable{
 
 		lineModel.getAxes().put(AxisType.X,axis);
 
-		Axis yAxis = lineModel.getAxis(AxisType.Y);
-		yAxis.setLabel("Power");
-		yAxis.setMin(0);
-		yAxis.setMax(1000);
 
 		seriesAL1 = new LineChartSeries();
 		seriesAL1.setLabel("AL1");
@@ -70,15 +66,31 @@ public class GraphicBean implements Serializable{
 		seriesAL3.setShowMarker(false);
 
 		try {
-			List<AnalyzerRegistryObject> data = analyzerDataService.getAnalyzerGraphicalData();
 
-			for(int i=0;i<data.size();i++){
-				AnalyzerRegistryObject analyzerRegObj = data.get(i);
+			double maxValue = 0;
+			
+			for(AnalyzerRegistryObject analyzerRegObj : analyzerDataService.getData()){
 				seriesAL1.set(analyzerRegObj.getCurrenttime(), analyzerRegObj.getAl1());
 				seriesAL2.set(analyzerRegObj.getCurrenttime(), analyzerRegObj.getAl2());
 				seriesAL3.set(analyzerRegObj.getCurrenttime(), analyzerRegObj.getAl3());
-
+				
+				if(analyzerRegObj.getAl1() > maxValue){
+					maxValue = analyzerRegObj.getAl1();
+				}
+				if(analyzerRegObj.getAl2() > maxValue){
+					maxValue = analyzerRegObj.getAl2();
+				}
+				if(analyzerRegObj.getAl3() > maxValue){
+					maxValue = analyzerRegObj.getAl3();
+				}
+				
 			}
+			
+			Axis yAxis = lineModel.getAxis(AxisType.Y);
+			yAxis.setLabel("Power");
+			yAxis.setMin(0);
+			yAxis.setMax(new Double(maxValue + maxValue*0.05).intValue());
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -89,7 +101,12 @@ public class GraphicBean implements Serializable{
 	}
 
 	public void updateChartValues(){
-		//TODO Update Chart Values
+		for(AnalyzerRegistryObject analyzerRegObj : analyzerDataService.getNewValuesToUpdate(new Date())){
+			seriesAL1.set(analyzerRegObj.getCurrenttime(), analyzerRegObj.getAl1());
+			seriesAL2.set(analyzerRegObj.getCurrenttime(), analyzerRegObj.getAl2());
+			seriesAL3.set(analyzerRegObj.getCurrenttime(), analyzerRegObj.getAl3());
+		}
+		
 	}
 
 	public void updateChartSeries1(){

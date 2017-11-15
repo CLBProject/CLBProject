@@ -11,7 +11,7 @@ import java.util.List;
  */
 @Entity
 @Table(name="DATA_LOGGER")
-@NamedQuery(name="DataLoggerEntity.findAll", query="SELECT d FROM DataLoggerEntity d")
+@NamedQuery(name="DataLogger.findAll", query="SELECT d FROM DataLoggerEntity d")
 public class DataLoggerEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -10,12 +10,12 @@ import java.util.List;
  * 
  */
 @Entity
+@Table(name="ANALYZER")
 @NamedQuery(name="Analyzer.findAll", query="SELECT a FROM AnalyzerEntity a")
 public class AnalyzerEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long analyzerid;
 
 	private String name;
@@ -28,6 +28,10 @@ public class AnalyzerEntity implements Serializable {
 	//bi-directional many-to-one association to AnalyzerRegistry
 	@OneToMany(mappedBy="analyzer")
 	private List<AnalyzerRegistryEntity> analyzerRegistries;
+
+	//bi-directional many-to-one association to AnalyzerRegistryTemp
+	@OneToMany(mappedBy="analyzer")
+	private List<AnalyzerRegistryTempEntity> analyzerRegistryTemps;
 
 	public AnalyzerEntity() {
 	}
@@ -76,6 +80,28 @@ public class AnalyzerEntity implements Serializable {
 		analyzerRegistry.setAnalyzer(null);
 
 		return analyzerRegistry;
+	}
+
+	public List<AnalyzerRegistryTempEntity> getAnalyzerRegistryTemps() {
+		return this.analyzerRegistryTemps;
+	}
+
+	public void setAnalyzerRegistryTemps(List<AnalyzerRegistryTempEntity> analyzerRegistryTemps) {
+		this.analyzerRegistryTemps = analyzerRegistryTemps;
+	}
+
+	public AnalyzerRegistryTempEntity addAnalyzerRegistryTemp(AnalyzerRegistryTempEntity analyzerRegistryTemp) {
+		getAnalyzerRegistryTemps().add(analyzerRegistryTemp);
+		analyzerRegistryTemp.setAnalyzer(this);
+
+		return analyzerRegistryTemp;
+	}
+
+	public AnalyzerRegistryTempEntity removeAnalyzerRegistryTemp(AnalyzerRegistryTempEntity analyzerRegistryTemp) {
+		getAnalyzerRegistryTemps().remove(analyzerRegistryTemp);
+		analyzerRegistryTemp.setAnalyzer(null);
+
+		return analyzerRegistryTemp;
 	}
 
 }

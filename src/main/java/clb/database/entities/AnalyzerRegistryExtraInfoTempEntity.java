@@ -5,13 +5,13 @@ import javax.persistence.*;
 
 
 /**
- * The persistent class for the ANALYZER_REGISTRY_EXTRA_INFO database table.
+ * The persistent class for the ANALYZER_REGISTRY_EXTRA_INFO_TEMP database table.
  * 
  */
 @Entity
-@Table(name="ANALYZER_REGISTRY_EXTRA_INFO")
-@NamedQuery(name="AnalyzerRegistryExtraInfo.findAll", query="SELECT a FROM AnalyzerRegistryExtraInfoEntity a")
-public class AnalyzerRegistryExtraInfoEntity implements Serializable {
+@Table(name="ANALYZER_REGISTRY_EXTRA_INFO_TEMP")
+@NamedQuery(name="AnalyzerRegistryExtraInfoTemp.findAll", query="SELECT a FROM AnalyzerRegistryExtraInfoTempEntity a")
+public class AnalyzerRegistryExtraInfoTempEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -55,12 +55,12 @@ public class AnalyzerRegistryExtraInfoEntity implements Serializable {
 
 	private double wdmdmax;
 
-	//bi-directional many-to-one association to AnalyzerRegistry
+	//bi-directional many-to-one association to AnalyzerRegistryTemp
 	@ManyToOne
 	@JoinColumn(name="ANALYZERREGISTRYID")
-	private AnalyzerRegistryEntity analyzerRegistry;
+	private AnalyzerRegistryTempEntity analyzerRegistryTemp;
 
-	public AnalyzerRegistryExtraInfoEntity() {
+	public AnalyzerRegistryExtraInfoTempEntity() {
 	}
 
 	public long getRegid() {
@@ -223,12 +223,12 @@ public class AnalyzerRegistryExtraInfoEntity implements Serializable {
 		this.wdmdmax = wdmdmax;
 	}
 
-	public AnalyzerRegistryEntity getAnalyzerRegistry() {
-		return this.analyzerRegistry;
+	public AnalyzerRegistryTempEntity getAnalyzerRegistryTemp() {
+		return this.analyzerRegistryTemp;
 	}
 
-	public void setAnalyzerRegistry(AnalyzerRegistryEntity analyzerRegistry) {
-		this.analyzerRegistry = analyzerRegistry;
+	public void setAnalyzerRegistryTemp(AnalyzerRegistryTempEntity analyzerRegistryTemp) {
+		this.analyzerRegistryTemp = analyzerRegistryTemp;
 	}
 
 }
