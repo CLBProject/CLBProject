@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
-        http://www.springframework.org/schema/mvc
-        http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context-4.3.xsd
         http://www.springframework.org/schema/tx
@@ -16,7 +14,12 @@
 	<context:component-scan base-package="clb.business" />
 	<context:component-scan base-package="clb.database" />
 
-	<mvc:annotation-driven />
+	<bean id="taskExecutor"
+		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<property name="corePoolSize" value="5" />
+		<property name="maxPoolSize" value="10" />
+		<property name="queueCapacity" value="25" />
+	</bean>
 
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -38,19 +41,6 @@
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
-
-
-	<context:component-scan base-package="com.howtodoinjava.demo" />
-
-	<!-- This allow for dispatching requests to Controllers by registering two 
-		beans - DefaultAnnotationHandlerMapping and AnnotationMethodHandlerAdapter -->
-
-
-	<mvc:annotation-driven />
-
-	<!-- This helps in mapping the logical view names to directly view files 
-		under a certain pre-configured directory -->
-
 
 	<bean id="analyzerDataService" class="clb.business.AnalyzerDataServiceImpl">
 	</bean>

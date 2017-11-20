@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<resources>
-     <Resource id="mediaDBderby" type="javax.sql.DataSource">
-    	JdbcDriver org.apache.derby.jdbc.EmbeddedDriver
-    	JdbcUrl jdbc:derby:databaseName=clbDatabase
-        UserName clb
-        Password clbadmin2
-    </Resource>
-</resources>

@@ -19,7 +19,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
-import org.springframework.stereotype.Component;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +28,6 @@ import clb.database.ClbDao;
 import clb.database.entities.AnalyzerRegistryEntity;
 
 @Service
-@Component
 public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializable{
 
 	/**
@@ -37,24 +36,43 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	private static final long serialVersionUID = 1L;
 
 	private static Map<String,AnalyzerRegistryObject> data;
-	
+
 	@Autowired
 	private ClbDao<AnalyzerRegistryEntity> clbDaoAnalyzer;
 
+	@Autowired
+	private TaskExecutor taskExecutor;
+
 	@Value(value = "classpath:documents/fileAnalyzerRegistries.xlsx")
 	private Resource dataAnalyzerXls;
-	
 
 	@PostConstruct
 	public void init(){
 		data = clbDaoAnalyzer.getAllCurrentAnalyzerRegistryData().stream()
-					.collect(Collectors.toMap(AnalyzerRegistryEntity::getCurrenttime,AnalyzerRegistryObject::new));
+				.collect(Collectors.toMap(AnalyzerRegistryEntity::getCurrenttime,AnalyzerRegistryObject::new));
+
+		System.out.println("Service!");
+		
+		taskExecutor.execute(new Runnable() {
+			@Override
+			public void run() {
+
+				//				try(ServerSocket s = new ServerSocket(1234)){
+				//					//while(true){
+				//						Socket clientSocket = s.accept();
+				//					//}
+				//				} 
+				//				catch (IOException e) {
+				//					e.printStackTrace();
+				//				}
+			}
+		});
 	}
-	
-	
+
+
 	@Override
 	public List<AnalyzerRegistryObject> getNewValuesToUpdate(Date sinceDate) {
-		
+
 		return clbDaoAnalyzer.getOnlyLatestCurrentAnalyzerRegistryData(sinceDate).stream()
 				.map(AnalyzerRegistryObject::new)
 				.collect(Collectors.toList());
@@ -63,7 +81,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	@Override
 	@Transactional
 	public void fillDatabaseData() throws IOException{
-		
+
 		XSSFWorkbook workbook = new XSSFWorkbook(dataAnalyzerXls.getInputStream());
 		XSSFSheet worksheet = workbook.getSheet("Sheet1");
 
@@ -71,7 +89,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		calendar.setTime(new Date());
 		int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
 		int currentMinute = calendar.get(Calendar.MINUTE);
-		
+
 		List<AnalyzerRegistryEntity> analyzerRegistries = new ArrayList<AnalyzerRegistryEntity>();
 		List<AnalyzerRegistryEntity> analyzerRegistriesBeforeCurrentTime = new ArrayList<AnalyzerRegistryEntity>();
 
@@ -129,13 +147,13 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 			analyzerRegistryObject1.setKvarl2(row.getCell(30).getNumericCellValue());
 			analyzerRegistryObject1.setKvarl3(row.getCell(31).getNumericCellValue());
 			analyzerRegistryObject1.setKvarsys(row.getCell(32).getNumericCellValue());
-			
+
 			if(currentHourPassed && currentMinutesPassed)
 				analyzerRegistriesBeforeCurrentTime.add(analyzerRegistryObject1.toEntity());
 			else analyzerRegistries.add(analyzerRegistryObject1.toEntity());
 		}
 		analyzerRegistriesBeforeCurrentTime.addAll(analyzerRegistries);
-		
+
 		clbDaoAnalyzer.persistData(analyzerRegistriesBeforeCurrentTime);
 	}
 
@@ -159,5 +177,14 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		return data.values();
 	}
 
-	
+	public TaskExecutor getTaskExecutor() {
+		return taskExecutor;
+	}
+
+	public void setTaskExecutor(TaskExecutor taskExecutor) {
+		this.taskExecutor = taskExecutor;
+	}
+
+
+
 }
