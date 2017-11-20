@@ -42,7 +42,8 @@
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 
-	<bean id="analyzerDataService" class="clb.business.AnalyzerDataServiceImpl">
+	<bean id="analyzerDataService" class="clb.business.AnalyzerDataServiceImpl"
+	init-method="init" destroy-method="destroy">
 	</bean>
 
 	<bean id="clbDao" class="clb.database.ClbDaoImpl">

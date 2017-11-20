@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -46,7 +44,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	@Value(value = "classpath:documents/fileAnalyzerRegistries.xlsx")
 	private Resource dataAnalyzerXls;
 
-	@PostConstruct
 	public void init(){
 		data = clbDaoAnalyzer.getAllCurrentAnalyzerRegistryData().stream()
 				.collect(Collectors.toMap(AnalyzerRegistryEntity::getCurrenttime,AnalyzerRegistryObject::new));
@@ -68,7 +65,10 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 			}
 		});
 	}
-
+	
+	public void destroy(){
+	    
+	}
 
 	@Override
 	public List<AnalyzerRegistryObject> getNewValuesToUpdate(Date sinceDate) {
