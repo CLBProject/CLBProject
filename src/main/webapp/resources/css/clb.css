@@ -25,3 +25,8 @@ body {
 	width: 80vw !important;
 	height:300px !important;
 }
+
+.radioScale{
+	font-size: 5px;
+	margin-bottom:10px;
+}

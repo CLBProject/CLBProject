@@ -10,7 +10,12 @@
 	<ui:define name="body">
 		<div class="mainDiv" align="center">
 			<h:form id="chartFormId">
-				<p:spacer height="15" />
+				<p:selectOneRadio id="scaleRadio" styleClass="radioScale" value="#{graphicBean.scaleSelected}">
+					<f:selectItem itemLabel="Hours" itemValue="hours" />
+					<f:selectItem itemLabel="Days" itemValue="days" />
+					<f:selectItem itemLabel="Month" itemValue="month" />
+					<f:selectItem itemLabel="Year" itemValue="year" />
+				</p:selectOneRadio>
 				<table>
 					<tr>
 						<td width="8%" align="left" valign="middle">
@@ -34,17 +39,16 @@
 								</p:selectBooleanCheckbox>
 							</div>
 						</td>
-						<td align="left" width="92%" valign="top">
-								<p:chart id="chartId" widgetVar="chartId" styleClass="chartCSS" type="line"
-									model="#{graphicBean.lineModel}" />
-								<br />
-								<p:commandButton type="button" value="Reset Zoom" icon="ui-icon-cancel" onclick="PF('chartId').resetZoom()"/>
+						<td align="left" width="92%" valign="top"><p:chart
+								id="chartId" widgetVar="chartId" styleClass="chartCSS"
+								type="line" model="#{graphicBean.lineModel}" /> <br /> <p:commandButton
+								type="button" value="Reset Zoom" icon="ui-icon-cancel"
+								onclick="PF('chartId').resetZoom()" /> <p:commandButton
+								type="submit" value="Fill Database" ajax="false"
+								actionListener="#{graphicBean.fillDatabase}"></p:commandButton>
 						</td>
 					</tr>
 				</table>
-				<br/>
-				<br/>
-				<p:commandButton type="submit" value="Fill Database" ajax="false" actionListener="#{graphicBean.fillDatabase}"></p:commandButton>
 			</h:form>
 		</div>
 	</ui:define>

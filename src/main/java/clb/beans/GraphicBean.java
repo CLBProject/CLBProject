@@ -36,6 +36,8 @@ public class GraphicBean implements Serializable{
 	private boolean aL1Check;
 	private boolean aL2Check;
 	private boolean aL3Check;
+	
+	private String scaleSelected;
 
 	@PostConstruct
 	public void init(){
@@ -191,5 +193,13 @@ public class GraphicBean implements Serializable{
 		this.aL3Check = aL3Check;
 	}
 
+    public String getScaleSelected() {
+        return scaleSelected;
+    }
 
+    public void setScaleSelected( String scaleSelected ) {
+        this.scaleSelected = scaleSelected;
+    }
+
+	
 }
