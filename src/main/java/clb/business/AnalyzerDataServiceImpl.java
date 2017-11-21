@@ -2,6 +2,8 @@ package clb.business;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -9,11 +11,14 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.primefaces.json.JSONException;
+import org.primefaces.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -48,26 +53,31 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		data = clbDaoAnalyzer.getAllCurrentAnalyzerRegistryData().stream()
 				.collect(Collectors.toMap(AnalyzerRegistryEntity::getCurrenttime,AnalyzerRegistryObject::new));
 
-		System.out.println("Service!");
-		
 		taskExecutor.execute(new Runnable() {
 			@Override
 			public void run() {
-
-				//				try(ServerSocket s = new ServerSocket(1234)){
-				//					//while(true){
-				//						Socket clientSocket = s.accept();
-				//					//}
-				//				} 
-				//				catch (IOException e) {
-				//					e.printStackTrace();
-				//				}
+				
+				try(ServerSocket s = new ServerSocket(1234)){
+					while(true){
+						Socket clientSocket = s.accept();
+						try(Scanner in = new Scanner(clientSocket.getInputStream())){
+							JSONObject jsonObj = new JSONObject(in.nextLine());
+							System.out.println(jsonObj.toString());
+						}
+						catch(JSONException jsonex){
+							jsonex.printStackTrace();
+						}
+					}
+				} 
+				catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		});
 	}
-	
+
 	public void destroy(){
-	    
+
 	}
 
 	@Override
