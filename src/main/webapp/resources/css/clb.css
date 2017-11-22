@@ -22,11 +22,16 @@ body {
 
 .chartCSS{
 	font-size: 12px;
-	width: 80vw !important;
+	width: 90vw !important;
 	height:300px !important;
 }
 
-.radioScale{
-	font-size: 5px;
-	margin-bottom:10px;
+.scaleHeader{
+	font-size: 12px;
+	margin-bottom: 5px;
+	width:100%;
+}
+
+.fullWidth{
+	width:100% !important;
 }

@@ -15,6 +15,7 @@ import org.primefaces.model.chart.DateAxis;
 import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
 
+import clb.beans.enums.ScaleGraphic;
 import clb.business.AnalyzerDataService;
 import clb.business.objects.AnalyzerRegistryObject;
 
@@ -37,11 +38,15 @@ public class GraphicBean implements Serializable{
 	private boolean aL2Check;
 	private boolean aL3Check;
 	
-	private String scaleSelected;
+	private ScaleGraphic scaleSelected;
+	private ScaleGraphic[] values;
 
 	@PostConstruct
 	public void init(){
-
+	    
+	    values = ScaleGraphic.values();
+	    scaleSelected = ScaleGraphic.DAY;
+	    
 		aL1Check = true;
 		aL2Check = true;
 		aL3Check = true;
@@ -193,12 +198,20 @@ public class GraphicBean implements Serializable{
 		this.aL3Check = aL3Check;
 	}
 
-    public String getScaleSelected() {
+    public ScaleGraphic getScaleSelected() {
         return scaleSelected;
     }
 
-    public void setScaleSelected( String scaleSelected ) {
+    public void setScaleSelected( ScaleGraphic scaleSelected ) {
         this.scaleSelected = scaleSelected;
+    }
+
+    public ScaleGraphic[] getValues() {
+        return values;
+    }
+
+    public void setValues( ScaleGraphic[] values ) {
+        this.values = values;
     }
 
 	
