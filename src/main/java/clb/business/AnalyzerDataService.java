@@ -12,6 +12,8 @@ public interface AnalyzerDataService {
 	Collection<AnalyzerRegistryObject> getData() throws IOException;
 	
 	void fillDatabaseData() throws IOException;
+	
+	void fillDatabaseDataWithMoreThenOneYears();
 
 	List<AnalyzerRegistryObject> getNewValuesToUpdate(Date sinceDate);
 }

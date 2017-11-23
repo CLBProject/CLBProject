@@ -58,5 +58,11 @@ public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializab
 	public List<AnalyzerRegistryEntity> getOnlyLatestCurrentAnalyzerRegistryData(Date sinceDate){
 		return null;
 	}
+
+    @Override
+    public void flush() {
+        entityManager.flush();
+        entityManager.clear();
+    }
     
 }

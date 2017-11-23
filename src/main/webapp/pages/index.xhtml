@@ -42,10 +42,11 @@
 							</table>
 						</td>
 						<td width="45%" align="middle"><p:outputLabel for="fromDate"
-								value="From:"></p:outputLabel> <p:calendar widgetVar="fromDate"
-								id="fromDate"></p:calendar> <p:outputLabel for="toDate"
-								value="To:"></p:outputLabel> <p:calendar widgetVar="toDate"
-								id="toDate"></p:calendar></td>
+								value="Time Frame:"></p:outputLabel>
+								 <p:spacer width="10"></p:spacer>
+								 <p:calendar widgetVar="fromDate" pattern="dd/MM/yy"
+								id="fromDate" value="#{graphicBean.dayDate}"></p:calendar>
+						</td>
 					</tr>
 				</table>
 				<div align="center" class="fullWidth">
@@ -55,8 +56,11 @@
 					<p:commandButton type="button" value="Reset Zoom"
 						icon="ui-icon-cancel" onclick="PF('chartId').resetZoom()" />
 					<p:spacer width="10"/>
-					<p:commandButton type="submit" value="Fill Database" ajax="false"
+					<p:commandButton type="submit" value="Fill Database File" ajax="false"
 						actionListener="#{graphicBean.fillDatabase}"></p:commandButton>
+					<p:spacer width="10"/>
+					<p:commandButton type="submit" value="Fill Database Script" ajax="false"
+						actionListener="#{graphicBean.fillDatabaseScript}"></p:commandButton>
 				</div>
 			</h:form>
 		</div>

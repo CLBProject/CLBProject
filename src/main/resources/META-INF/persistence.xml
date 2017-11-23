@@ -15,7 +15,7 @@
 		<class>clb.database.entities.UsersystemEntity</class>
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.DerbyDialect" />
-			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.show_sql" value="false" />
 			<property name="hibernate.default_schema" value="clb"/>
  		</properties> 
 	</persistence-unit>
