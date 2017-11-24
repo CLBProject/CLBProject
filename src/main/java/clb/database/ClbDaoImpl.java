@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import clb.database.entities.AnalyzerRegistryEntity;
 
@@ -64,5 +65,14 @@ public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializab
         entityManager.flush();
         entityManager.clear();
     }
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<AnalyzerRegistryEntity> getAnalyzerRegistriesByDay(Date date) {
+		 Query q = entityManager.createNamedQuery("AnalyzerRegistry.findAllByDay",AnalyzerRegistryEntity.class);
+		 q.setParameter("currentdate", date);
+		 
+		 return q.getResultList();
+	}
     
 }

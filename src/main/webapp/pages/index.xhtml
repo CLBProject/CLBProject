@@ -10,58 +10,72 @@
 	<ui:define name="body">
 		<div class="mainDiv" align="center">
 			<h:form id="chartFormId">
-				<table class="scaleHeader">
-					<tr>
-						<td width="40%" align="middle">
-							<p:selectOneRadio
-								styleClass="radioScale" value="#{graphicBean.scaleSelected}">
+				<p:panelGrid styleClass="mainTable"
+					columnClasses="mainTableLeft mainTableRight">
+					<p:column styleClass="mainTableLeft">
+						<h:outputText value="Variables:" styleClass="titleFont"></h:outputText>
+						<br />
+						<br />
+						<div align="left" class="paddingLeft">
+							<p:selectBooleanCheckbox widgetVar="cbAL2" id="cbAL2"
+								itemLabel="AL2" label="AL2" value="#{graphicBean.aL2Check}">
+								<p:ajax process="@this" event="change" update="@form"
+									listener="#{graphicBean.updateChartSeries2}" />
+							</p:selectBooleanCheckbox>
+							<br />
+							<p:selectBooleanCheckbox widgetVar="cbAL3" id="cbAL3"
+								itemLabel="AL3" label="AL3" value="#{graphicBean.aL3Check}">
+								<p:ajax process="@this" event="change" update="@form"
+									listener="#{graphicBean.updateChartSeries3}" />
+							</p:selectBooleanCheckbox>
+							<br />
+							<p:selectBooleanCheckbox widgetVar="cbAL1" id="cbAL1"
+								itemLabel="AL1" label="AL1" value="#{graphicBean.aL1Check}">
+								<p:ajax process="@this" event="change" update="@form"
+									listener="#{graphicBean.updateChartSeries1}" />
+							</p:selectBooleanCheckbox>
+						</div>
+						<br />
+						<hr />
+						<h:outputText value="Scale:" styleClass="titleFont"></h:outputText>
+						<br />
+						<br />
+						<div align="left" class="paddingLeft">
+							<p:selectOneRadio layout="pageDirection"
+								value="#{graphicBean.scaleSelected}">
 								<c:forEach items="#{graphicBean.values}" var="value">
 									<f:selectItem itemLabel="#{value.label}" itemValue="#{value}" />
 								</c:forEach>
 							</p:selectOneRadio>
-						</td>
-						<td width="15%" align="center">
-							<table class="scaleHeader">
-								<tr>
-									<td align="right" valign="top"><p:selectBooleanCheckbox widgetVar="cbAL1" id="cbAL1"
-											itemLabel="AL1" label="AL1" value="#{graphicBean.aL1Check}">
-											<p:ajax process="@this" event="change" update="@form"
-												listener="#{graphicBean.updateChartSeries1}" />
-										</p:selectBooleanCheckbox></td>
-									<td align="center" valign="top"><p:selectBooleanCheckbox widgetVar="cbAL2" id="cbAL2"
-											itemLabel="AL2" label="AL2" value="#{graphicBean.aL2Check}">
-											<p:ajax process="@this" event="change" update="@form"
-												listener="#{graphicBean.updateChartSeries2}" />
-										</p:selectBooleanCheckbox></td>
-									<td align="left" valign="top"><p:selectBooleanCheckbox widgetVar="cbAL3" id="cbAL3"
-											itemLabel="AL3" label="AL3" value="#{graphicBean.aL3Check}">
-											<p:ajax process="@this" event="change" update="@form"
-												listener="#{graphicBean.updateChartSeries3}" />
-										</p:selectBooleanCheckbox></td>
-								</tr>
-							</table>
-						</td>
-						<td width="45%" align="middle"><p:outputLabel for="fromDate"
-								value="Time Frame:"></p:outputLabel>
-								 <p:spacer width="10"></p:spacer>
-								 <p:calendar widgetVar="fromDate" pattern="dd/MM/yy"
-								id="fromDate" value="#{graphicBean.dayDate}"></p:calendar>
-						</td>
-					</tr>
-				</table>
-				<div align="center" class="fullWidth">
-					<p:chart id="chartId" widgetVar="chartId" styleClass="chartCSS"
-						type="line" model="#{graphicBean.lineModel}" />
-					<br />
-					<p:commandButton type="button" value="Reset Zoom"
-						icon="ui-icon-cancel" onclick="PF('chartId').resetZoom()" />
-					<p:spacer width="10"/>
-					<p:commandButton type="submit" value="Fill Database File" ajax="false"
-						actionListener="#{graphicBean.fillDatabase}"></p:commandButton>
-					<p:spacer width="10"/>
-					<p:commandButton type="submit" value="Fill Database Script" ajax="false"
-						actionListener="#{graphicBean.fillDatabaseScript}"></p:commandButton>
-				</div>
+						</div>
+					</p:column>
+					<p:column styleClass="mainTableRight">
+						<div align="center" class="fullWidth">
+							<p:outputLabel for="fromDate" value="Day:"
+								styleClass="titleFont"></p:outputLabel>
+							<p:spacer width="10" />
+							<p:calendar widgetVar="fromDate" pattern="dd/MM/yy" id="fromDate"
+								value="#{graphicBean.dayDate}"></p:calendar>
+						</div>
+						<div align="center" class="fullWidth">
+							<p:chart id="chartId" widgetVar="chartId" styleClass="chartCSS"
+								type="line" model="#{graphicBean.lineModel}" />
+						</div>
+						<br />
+						<br />
+						<div align="center" class="fullWidth">
+							<p:commandButton type="button" value="Reset Zoom"
+								icon="ui-icon-cancel" onclick="PF('chartId').resetZoom()" />
+							<p:spacer width="10" />
+							<p:commandButton type="submit" value="Fill Database File"
+								ajax="false" actionListener="#{graphicBean.fillDatabase}"></p:commandButton>
+							<p:spacer width="10" />
+							<p:commandButton type="submit" value="Fill Database Script"
+								ajax="false" actionListener="#{graphicBean.fillDatabaseScript}"></p:commandButton>
+						</div>
+						<br/>
+					</p:column>
+				</p:panelGrid>
 			</h:form>
 		</div>
 	</ui:define>

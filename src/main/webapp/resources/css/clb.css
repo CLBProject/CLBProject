@@ -4,34 +4,59 @@ body {
 	margin: 0px !important;
 }
 
-.ui-fieldset{
+.ui-button {
 	font-size: 12px !important;
 }
 
-.ui-button{
-	font-size: 12px !important;
+.paddingLeft{
+	padding-left:10px;
 }
 
-.mainDiv{
+.mainDiv {
+	background-color: #F2F2F2;
 	padding-top: 15px !important;
+	padding-left: 10px;
+	padding-right: 10px;
+	height: 98vh;
 }
 
-.checkDiv{
-	font-size: 12px !important;
-}
-
-.chartCSS{
+.mainTable {
+	background-color: white !important;
 	font-size: 12px;
-	width: 90vw !important;
-	height:300px !important;
+	width: 100%;
 }
 
-.scaleHeader{
+.mainTable.ui-panelgrid {
+	background-color: white !important;
+}
+
+.defaultFont {
 	font-size: 12px;
-	margin-bottom: 5px;
-	width:100%;
 }
 
-.fullWidth{
-	width:100% !important;
+.titleFont {
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.mainTableLeft {
+	vertical-align: top !important;
+	width:8%;
+	font-size: 12px;
+}
+
+
+.mainTableRight{
+	width:92%;
+	font-size: 12px;
+	padding-top: 10px !important;
+}
+.chartCSS {
+	font-size: 12px;
+	width: 97% !important;
+	height: 300px !important;
+}
+
+.fullWidth {
+	width: 100% !important;
 }

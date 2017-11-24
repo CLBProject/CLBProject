@@ -18,7 +18,11 @@ public interface ClbDao<T extends Serializable> {
 
 	public List<AnalyzerRegistryEntity> getAllCurrentAnalyzerRegistryData();
 	
+	public List<AnalyzerRegistryEntity> getAnalyzerRegistriesByDay(Date date);
+	
 	public List<AnalyzerRegistryEntity> getOnlyLatestCurrentAnalyzerRegistryData(Date sinceDate);
 
     public void flush();
+
+	
 }

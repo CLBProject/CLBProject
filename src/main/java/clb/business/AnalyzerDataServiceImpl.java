@@ -51,7 +51,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
     private Resource dataAnalyzerXls;
 
     public void init(){
-        data = clbDaoAnalyzer.getAllCurrentAnalyzerRegistryData().stream()
+        data = clbDaoAnalyzer.getAnalyzerRegistriesByDay(new Date()).stream()
                 .collect(Collectors.toMap(AnalyzerRegistryEntity::getCurrenttime,AnalyzerRegistryObject::new));
 
         taskExecutor.execute(new Runnable() {
@@ -93,7 +93,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
     @Transactional
     public void fillDatabaseDataWithMoreThenOneYears() {
         int numberOfYears = 2;
-        int startingYear = 2016;
+        int startingYear = 2017;
         int lowAl = 150;
         int highAl = 500;
 
@@ -105,7 +105,8 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
         Random random = new Random();
         
         for(int i = 0 ;i<numberOfYears; i++){
-            for(int l = 0; l < calendar.getActualMaximum(Calendar.DAY_OF_YEAR); l++ ){
+        	int yearDays = calendar.getActualMaximum(Calendar.DAY_OF_YEAR);
+            for(int l = 0; l < yearDays; l++ ){
                 for(int j = 0; j < 24 ; j++){
                     for(int k = 0; k < 60; k++){
                         
