@@ -55,6 +55,7 @@
 							<p:outputLabel rendered="#{graphicBean.enableYearGraphic}" for="years" value="Years:" styleClass="titleFont"></p:outputLabel>
 							<p:spacer rendered="#{graphicBean.enableYearGraphic}" width="5" />
 							<p:selectOneMenu rendered="#{graphicBean.enableYearGraphic}" id="years" value="#{graphicBean.yearSelected}">
+								<p:ajax event="change" listener="#{graphicBean.updateYearGraphic}" update="chartFormId"></p:ajax>
 								<f:selectItems value="#{graphicBean.years}"/>
 							</p:selectOneMenu>
 							<p:outputLabel rendered="#{graphicBean.enableMonthGraphic}" for="months" value="Month:" styleClass="titleFont"></p:outputLabel>
@@ -83,7 +84,7 @@
 							<p:chart rendered="#{graphicBean.enableYearGraphic}" 
 								model="#{graphicBean.graphicYearPojo.barModel}" type="bar" style="height:300px"/>
 							<br />
-							<p:outputLabel rendered="#{not graphicBean.enableDayGraphic}"
+							<p:outputLabel rendered="#{graphicBean.showNoGraphic}"
 								value="No Graphic to Display" styleClass="warningFont"></p:outputLabel>
 						</div>
 						<br />

@@ -18,5 +18,5 @@ public interface AnalyzerDataService {
 
 	List<Integer> getRegistryYears();
 
-	List<?> getDataByYear(Date dayDate);
+	Object[] getDataByYear(Integer year);
 }

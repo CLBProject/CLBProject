@@ -1,7 +1,5 @@
 package clb.beans.pojos;
 
-import java.util.Collection;
-
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.BarChartModel;
@@ -16,10 +14,10 @@ public class GraphicBarPojo {
 
 	private ChartSeries chartSeries;
 
-	private Collection<?> chartData;
+	private Object[] chartData;
 
 	
-	public GraphicBarPojo(Collection<?> chartData, ScaleGraphic scaleGraphic, final String label){
+	public GraphicBarPojo(Object[] chartData, ScaleGraphic scaleGraphic, final String label){
 
 	    barModel = new BarChartModel();
 	    barModel.setZoom(true);
@@ -34,8 +32,7 @@ public class GraphicBarPojo {
 		fillGraphicForData(chartData, scaleGraphic);
 	}
 	
-	@SuppressWarnings("unchecked")
-	public void fillGraphicForData(Collection<?> collection, ScaleGraphic scaleGraphic){
+	public void fillGraphicForData(Object[] collection, ScaleGraphic scaleGraphic){
 		
 		this.chartData = collection;
 		
@@ -47,7 +44,7 @@ public class GraphicBarPojo {
 		}
 	}
 
-	private void fillGraphicForDayData(Collection<?> collection){
+	private void fillGraphicForDayData(Object[] collection){
 
 		double maxValue = 0;
 
@@ -76,6 +73,10 @@ public class GraphicBarPojo {
 
 	}
 
+	public boolean hasValues(){
+		return chartSeries.getData().size() > 0;
+	}
+	
     public BarChartModel getBarModel() {
         return barModel;
     }

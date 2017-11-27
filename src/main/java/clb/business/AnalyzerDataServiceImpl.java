@@ -87,7 +87,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
     public void fillDatabaseDataWithMoreThenOneYears() {
         int numberOfYears = 2;
         int startingYear = 2017;
-        int lowAl = 300;
+        int lowAl = 200;
         int highAl = 450;
 
         Calendar calendar = GregorianCalendar.getInstance();
@@ -225,8 +225,8 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
     }
 
 	@Override
-	public List<?> getDataByYear(Date date) {
-		return clbDaoAnalyzer.getYearMonthAverages(date);
+	public Object[] getDataByYear(Integer year) {
+		return clbDaoAnalyzer.getYearMonthAverages(year);
 	}
     
 	@Override

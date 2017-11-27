@@ -10,6 +10,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 
 import org.primefaces.event.SelectEvent;
@@ -52,12 +53,13 @@ public class GraphicBean implements Serializable{
 	private String monthSelected;
 
 	private List<Integer> years;
-	private String yearSelected;
+	private Integer yearSelected;
 
 	private boolean enableDayGraphic;
 	private boolean enableDayHoursGraphic;
 	private boolean enableYearGraphic;
 	private boolean enableMonthGraphic;
+	private boolean showNoGraphic;
 
 	@PostConstruct
 	public void init(){
@@ -67,7 +69,7 @@ public class GraphicBean implements Serializable{
 			scaleSelected = ScaleGraphic.DAY;
 
 			graphicDayPojo = new GraphicLinearPojo(analyzerDataService.getDataByDay(dayDate),scaleSelected);
-			//graphicYearPojo = new GraphicLinearPojo(analyzerDataService.getDataByMonth(dayDate),scaleSelected);
+			showNoGraphic = !graphicDayPojo.hasValues();
 
 			aL1Check = true;
 			aL2Check = true;
@@ -76,6 +78,8 @@ public class GraphicBean implements Serializable{
 			hours = getLoadHours();
 			months = Months.values();
 			years = analyzerDataService.getRegistryYears();
+			
+			yearSelected = years.size() > 0 ? years.get(0) : null;
 
 			values = ScaleGraphic.values();
 
@@ -110,7 +114,8 @@ public class GraphicBean implements Serializable{
 			enableDayGraphic = false;
 			break;
 		case YEAR:
-		    graphicYearPojo = new GraphicBarPojo(analyzerDataService.getDataByYear(dayDate),scaleSelected,GRAPHIC_MONTH_LABEL);
+		    graphicYearPojo = new GraphicBarPojo(analyzerDataService.getDataByYear(yearSelected),scaleSelected,GRAPHIC_MONTH_LABEL);
+		    showNoGraphic = !graphicYearPojo.hasValues();
 		    
 			enableYearGraphic = true;
 			enableMonthGraphic = false;
@@ -170,6 +175,11 @@ public class GraphicBean implements Serializable{
 
 	public void onDaySelect(SelectEvent event) throws IOException {
 		graphicDayPojo.fillGraphicForData(analyzerDataService.getDataByDay(dayDate),scaleSelected);
+	}
+	
+	public void updateYearGraphic(final AjaxBehaviorEvent event){
+		graphicYearPojo = new GraphicBarPojo(analyzerDataService.getDataByYear(yearSelected),scaleSelected,GRAPHIC_MONTH_LABEL);
+	    showNoGraphic = !graphicYearPojo.hasValues();
 	}
 
 	public void fillDatabase() throws IOException{
@@ -298,11 +308,11 @@ public class GraphicBean implements Serializable{
 		this.monthSelected = monthSelected;
 	}
 
-	public String getYearSelected() {
+	public Integer getYearSelected() {
 		return yearSelected;
 	}
 
-	public void setYearSelected(String yearSelected) {
+	public void setYearSelected(Integer yearSelected) {
 		this.yearSelected = yearSelected;
 	}
 
@@ -344,6 +354,14 @@ public class GraphicBean implements Serializable{
 
 	public void setGraphicYearPojo(GraphicBarPojo graphicYearPojo) {
 		this.graphicYearPojo = graphicYearPojo;
+	}
+
+	public boolean isShowNoGraphic() {
+		return showNoGraphic;
+	}
+
+	public void setShowNoGraphic(boolean showNoGraphic) {
+		this.showNoGraphic = showNoGraphic;
 	}
 	
 	

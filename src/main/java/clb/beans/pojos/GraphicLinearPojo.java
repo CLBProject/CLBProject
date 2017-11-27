@@ -132,6 +132,10 @@ public class GraphicLinearPojo {
 
 		return aL3Check;
 	}
+	
+	public boolean hasValues(){
+		return seriesAL1.getData().size() > 0;
+	}
 
 	public LineChartModel getLineModel() {
 		return lineModel;
