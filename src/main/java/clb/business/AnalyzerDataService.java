@@ -1,7 +1,6 @@
 package clb.business;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -9,11 +8,15 @@ import clb.business.objects.AnalyzerRegistryObject;
 
 public interface AnalyzerDataService {
 
-	Collection<AnalyzerRegistryObject> getData() throws IOException;
+	List<AnalyzerRegistryObject> getDataByDay(Date day) throws IOException;
 	
 	void fillDatabaseData() throws IOException;
 	
 	void fillDatabaseDataWithMoreThenOneYears();
 
 	List<AnalyzerRegistryObject> getNewValuesToUpdate(Date sinceDate);
+
+	List<Integer> getRegistryYears();
+
+	List<?> getDataByYear(Date dayDate);
 }

@@ -6,11 +6,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -39,8 +37,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
      */
     private static final long serialVersionUID = 1L;
 
-    private static Map<String,AnalyzerRegistryObject> data;
-
     @Autowired
     private ClbDao<AnalyzerRegistryEntity> clbDaoAnalyzer;
 
@@ -51,9 +47,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
     private Resource dataAnalyzerXls;
 
     public void init(){
-        data = clbDaoAnalyzer.getAnalyzerRegistriesByDay(new Date()).stream()
-                .collect(Collectors.toMap(AnalyzerRegistryEntity::getCurrenttime,AnalyzerRegistryObject::new));
-
         taskExecutor.execute(new Runnable() {
             @Override
             public void run() {
@@ -94,11 +87,11 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
     public void fillDatabaseDataWithMoreThenOneYears() {
         int numberOfYears = 2;
         int startingYear = 2017;
-        int lowAl = 150;
-        int highAl = 500;
+        int lowAl = 300;
+        int highAl = 450;
 
         Calendar calendar = GregorianCalendar.getInstance();
-        calendar.set( startingYear, 1, 1);
+        calendar.set( startingYear, 0, 1);
 
         System.out.println( "Starting persist Data.." );
         
@@ -226,9 +219,20 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
         this.dataAnalyzerXls = dataAnalyzerXls;
     }
 
-    public Collection<AnalyzerRegistryObject> getData() {
-        return data.values();
+    public List<AnalyzerRegistryObject> getDataByDay(Date day) {
+    	return new ArrayList<AnalyzerRegistryObject>(clbDaoAnalyzer.getAnalyzerRegistriesByDay(day).stream()
+        .collect(Collectors.toMap(AnalyzerRegistryEntity::getCurrenttime,AnalyzerRegistryObject::new)).values());
     }
+
+	@Override
+	public List<?> getDataByYear(Date dayDate) {
+		return clbDaoAnalyzer.getYearMonthAverages();
+	}
+    
+	@Override
+	public List<Integer> getRegistryYears() {
+		return clbDaoAnalyzer.getRegistryYears();
+	}
 
     public TaskExecutor getTaskExecutor() {
         return taskExecutor;
@@ -237,4 +241,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
     public void setTaskExecutor(TaskExecutor taskExecutor) {
         this.taskExecutor = taskExecutor;
     }
+
+
 }

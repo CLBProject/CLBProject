@@ -43,6 +43,7 @@
 						<div align="left" class="paddingLeft">
 							<p:selectOneRadio layout="pageDirection"
 								value="#{graphicBean.scaleSelected}">
+								<p:ajax listener="#{graphicBean.changeScale}" update="chartFormId"></p:ajax>
 								<c:forEach items="#{graphicBean.values}" var="value">
 									<f:selectItem itemLabel="#{value.label}" itemValue="#{value}" />
 								</c:forEach>
@@ -51,29 +52,47 @@
 					</p:column>
 					<p:column styleClass="mainTableRight">
 						<div align="center" class="fullWidth">
-							<p:outputLabel for="fromDate" value="Day:"
-								styleClass="titleFont"></p:outputLabel>
-							<p:spacer width="10" />
-							<p:calendar widgetVar="fromDate" pattern="dd/MM/yy" id="fromDate"
-								value="#{graphicBean.dayDate}"></p:calendar>
+							<p:outputLabel rendered="#{graphicBean.enableYearGraphic}" for="years" value="Years:" styleClass="titleFont"></p:outputLabel>
+							<p:spacer rendered="#{graphicBean.enableYearGraphic}" width="5" />
+							<p:selectOneMenu rendered="#{graphicBean.enableYearGraphic}" id="years" value="#{graphicBean.yearSelected}">
+								<f:selectItems value="#{graphicBean.years}"/>
+							</p:selectOneMenu>
+							<p:outputLabel rendered="#{graphicBean.enableMonthGraphic}" for="months" value="Month:" styleClass="titleFont"></p:outputLabel>
+							<p:spacer rendered="#{graphicBean.enableMonthGraphic}" width="5" />
+							<p:selectOneMenu rendered="#{graphicBean.enableMonthGraphic}" id="months" value="#{graphicBean.monthSelected}">
+								<f:selectItems value="#{graphicBean.months}"/>
+							</p:selectOneMenu>
+							<p:outputLabel rendered="#{graphicBean.enableDayGraphic}" for="forDay" value="Day:" styleClass="titleFont"></p:outputLabel>
+							<p:spacer rendered="#{graphicBean.enableDayGraphic}" width="5" />
+							<p:calendar widgetVar="forDay" pattern="dd/MM/yy" id="forDay" rendered="#{graphicBean.enableDayGraphic}"
+								value="#{graphicBean.dayDate}">
+								<p:ajax event="dateSelect" listener="#{graphicBean.onDaySelect}"
+									update=":chartFormId" />
+							</p:calendar>
+							<p:spacer width="30" rendered="#{graphicBean.enableDayHoursGraphic}"/>
+							<p:outputLabel rendered="#{graphicBean.enableDayHoursGraphic}" for="hours" value="Time: " styleClass="titleFont"></p:outputLabel>
+							<p:spacer rendered="#{graphicBean.enableDayHoursGraphic}" width="5" />
+							<p:selectOneMenu rendered="#{graphicBean.enableDayHoursGraphic}" id="hours" value="#{graphicBean.hourSelected}">
+								<f:selectItems value="#{graphicBean.hours}"/>
+							</p:selectOneMenu>
 						</div>
 						<div align="center" class="fullWidth">
-							<p:chart id="chartId" widgetVar="chartId" styleClass="chartCSS"
-								type="line" model="#{graphicBean.lineModel}" />
+							<p:chart id="chartId" rendered="#{graphicBean.enableDayGraphic}"
+								widgetVar="chartId" styleClass="chartCSS" type="line"
+								model="#{graphicBean.graphicDayPojo.lineModel}" />
+							<br />
+							<p:outputLabel rendered="#{not graphicBean.enableDayGraphic}"
+								value="No Graphic to Display" styleClass="warningFont"></p:outputLabel>
 						</div>
-						<br />
 						<br />
 						<div align="center" class="fullWidth">
 							<p:commandButton type="button" value="Reset Zoom"
 								icon="ui-icon-cancel" onclick="PF('chartId').resetZoom()" />
 							<p:spacer width="10" />
-							<p:commandButton type="submit" value="Fill Database File"
-								ajax="false" actionListener="#{graphicBean.fillDatabase}"></p:commandButton>
-							<p:spacer width="10" />
 							<p:commandButton type="submit" value="Fill Database Script"
 								ajax="false" actionListener="#{graphicBean.fillDatabaseScript}"></p:commandButton>
 						</div>
-						<br/>
+						<br />
 					</p:column>
 				</p:panelGrid>
 			</h:form>

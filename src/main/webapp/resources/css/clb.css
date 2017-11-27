@@ -4,10 +4,6 @@ body {
 	margin: 0px !important;
 }
 
-.ui-button {
-	font-size: 12px !important;
-}
-
 .paddingLeft{
 	padding-left:10px;
 }
@@ -34,8 +30,14 @@ body {
 	font-size: 12px;
 }
 
+
 .titleFont {
 	font-size: 14px;
+	font-weight: bold;
+}
+
+.warningFont{
+	font-size: 36px !important;
 	font-weight: bold;
 }
 
@@ -45,8 +47,8 @@ body {
 	font-size: 12px;
 }
 
-
 .mainTableRight{
+	vertical-align: top !important;
 	width:92%;
 	font-size: 12px;
 	padding-top: 10px !important;

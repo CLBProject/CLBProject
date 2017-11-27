@@ -8,21 +8,25 @@ import clb.database.entities.AnalyzerRegistryEntity;
 
 public interface ClbDao<T extends Serializable> {
 
-    public void create( T entity );
+    void create( T entity );
     
-    public T update( T entity );
+    T update( T entity );
     
-    public void delete( T entity );
+    void delete( T entity );
 
-	public void persistData(List<T> data);
+	void persistData(List<T> data);
 
-	public List<AnalyzerRegistryEntity> getAllCurrentAnalyzerRegistryData();
+	List<AnalyzerRegistryEntity> getAllCurrentAnalyzerRegistryData();
 	
-	public List<AnalyzerRegistryEntity> getAnalyzerRegistriesByDay(Date date);
+	List<AnalyzerRegistryEntity> getAnalyzerRegistriesByDay(Date date);
 	
-	public List<AnalyzerRegistryEntity> getOnlyLatestCurrentAnalyzerRegistryData(Date sinceDate);
+	List<AnalyzerRegistryEntity> getOnlyLatestCurrentAnalyzerRegistryData(Date sinceDate);
 
-    public void flush();
+    void flush();
+
+	List<Integer> getRegistryYears();
+	
+	List<?> getYearMonthAverages();
 
 	
 }
