@@ -29,10 +29,7 @@ public class AnalyzerEntity implements Serializable {
 	@OneToMany(mappedBy="analyzer")
 	private List<AnalyzerRegistryEntity> analyzerRegistries;
 
-	//bi-directional many-to-one association to AnalyzerRegistryTemp
-	@OneToMany(mappedBy="analyzer")
-	private List<AnalyzerRegistryTempEntity> analyzerRegistryTemps;
-
+	
 	public AnalyzerEntity() {
 	}
 
@@ -80,28 +77,6 @@ public class AnalyzerEntity implements Serializable {
 		analyzerRegistry.setAnalyzer(null);
 
 		return analyzerRegistry;
-	}
-
-	public List<AnalyzerRegistryTempEntity> getAnalyzerRegistryTemps() {
-		return this.analyzerRegistryTemps;
-	}
-
-	public void setAnalyzerRegistryTemps(List<AnalyzerRegistryTempEntity> analyzerRegistryTemps) {
-		this.analyzerRegistryTemps = analyzerRegistryTemps;
-	}
-
-	public AnalyzerRegistryTempEntity addAnalyzerRegistryTemp(AnalyzerRegistryTempEntity analyzerRegistryTemp) {
-		getAnalyzerRegistryTemps().add(analyzerRegistryTemp);
-		analyzerRegistryTemp.setAnalyzer(this);
-
-		return analyzerRegistryTemp;
-	}
-
-	public AnalyzerRegistryTempEntity removeAnalyzerRegistryTemp(AnalyzerRegistryTempEntity analyzerRegistryTemp) {
-		getAnalyzerRegistryTemps().remove(analyzerRegistryTemp);
-		analyzerRegistryTemp.setAnalyzer(null);
-
-		return analyzerRegistryTemp;
 	}
 
 }

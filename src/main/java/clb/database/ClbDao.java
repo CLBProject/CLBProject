@@ -26,7 +26,7 @@ public interface ClbDao<T extends Serializable> {
 
 	List<Integer> getRegistryYears();
 	
-	List<?> getYearMonthAverages();
+	List<?> getYearMonthAverages(Date date);
 
 	
 }

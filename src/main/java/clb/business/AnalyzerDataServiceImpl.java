@@ -225,8 +225,8 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
     }
 
 	@Override
-	public List<?> getDataByYear(Date dayDate) {
-		return clbDaoAnalyzer.getYearMonthAverages();
+	public List<?> getDataByYear(Date date) {
+		return clbDaoAnalyzer.getYearMonthAverages(date);
 	}
     
 	@Override

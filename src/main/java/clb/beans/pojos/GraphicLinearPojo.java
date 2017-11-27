@@ -1,4 +1,4 @@
-package clb.beans;
+package clb.beans.pojos;
 
 import java.util.Collection;
 
@@ -11,7 +11,7 @@ import org.primefaces.model.chart.LineChartSeries;
 import clb.beans.enums.ScaleGraphic;
 import clb.business.objects.AnalyzerRegistryObject;
 
-public class GraphicPojo {
+public class GraphicLinearPojo {
 
 	private LineChartModel lineModel;
 
@@ -20,9 +20,8 @@ public class GraphicPojo {
 	private LineChartSeries seriesAL3;
 
 	private Collection<?> chartData;
-
 	
-	public GraphicPojo(Collection<?> chartData, ScaleGraphic scaleGraphic){
+	public GraphicLinearPojo(Collection<?> chartData, ScaleGraphic scaleGraphic){
 
 		lineModel = new LineChartModel();
 		lineModel.setZoom(true);

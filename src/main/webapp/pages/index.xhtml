@@ -60,7 +60,7 @@
 							<p:outputLabel rendered="#{graphicBean.enableMonthGraphic}" for="months" value="Month:" styleClass="titleFont"></p:outputLabel>
 							<p:spacer rendered="#{graphicBean.enableMonthGraphic}" width="5" />
 							<p:selectOneMenu rendered="#{graphicBean.enableMonthGraphic}" id="months" value="#{graphicBean.monthSelected}">
-								<f:selectItems value="#{graphicBean.months}"/>
+								<f:selectItems value="#{graphicBean.months}" var="month" itemLabel="{month.name}" itemValue="{month.month}"/>
 							</p:selectOneMenu>
 							<p:outputLabel rendered="#{graphicBean.enableDayGraphic}" for="forDay" value="Day:" styleClass="titleFont"></p:outputLabel>
 							<p:spacer rendered="#{graphicBean.enableDayGraphic}" width="5" />
@@ -80,6 +80,8 @@
 							<p:chart id="chartId" rendered="#{graphicBean.enableDayGraphic}"
 								widgetVar="chartId" styleClass="chartCSS" type="line"
 								model="#{graphicBean.graphicDayPojo.lineModel}" />
+							<p:chart rendered="#{graphicBean.enableYearGraphic}" 
+								model="#{graphicBean.graphicYearPojo.barModel}" type="bar" style="height:300px"/>
 							<br />
 							<p:outputLabel rendered="#{not graphicBean.enableDayGraphic}"
 								value="No Graphic to Display" styleClass="warningFont"></p:outputLabel>

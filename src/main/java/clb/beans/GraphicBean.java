@@ -15,7 +15,10 @@ import javax.faces.model.SelectItem;
 import org.primefaces.event.SelectEvent;
 
 import clb.beans.enums.ScaleGraphic;
+import clb.beans.pojos.GraphicBarPojo;
+import clb.beans.pojos.GraphicLinearPojo;
 import clb.business.AnalyzerDataService;
+import clb.global.Months;
 
 @ViewScoped
 @ManagedBean
@@ -26,9 +29,11 @@ public class GraphicBean implements Serializable{
 	@ManagedProperty("#{analyzerDataService}")
 	private AnalyzerDataService analyzerDataService;
 
-	private GraphicPojo graphicDayPojo;
-	private GraphicPojo graphicMonthPojo;
-	private GraphicPojo graphicYearPojo;
+	private final String GRAPHIC_MONTH_LABEL = "Year Power Average";
+	
+	private GraphicLinearPojo graphicDayPojo;
+	private GraphicBarPojo graphicMonthPojo;
+	private GraphicBarPojo graphicYearPojo;
 
 	private boolean aL1Check;
 	private boolean aL2Check;
@@ -43,7 +48,7 @@ public class GraphicBean implements Serializable{
 	private List<SelectItem> hours;
 	private String hourSelected;
 
-	private List<SelectItem> months;
+	private Months[] months;
 	private String monthSelected;
 
 	private List<Integer> years;
@@ -61,16 +66,15 @@ public class GraphicBean implements Serializable{
 			dayDate = new Date();
 			scaleSelected = ScaleGraphic.DAY;
 
-			graphicDayPojo = new GraphicPojo(analyzerDataService.getDataByDay(dayDate),scaleSelected);
-			//graphicMonthPojo = new GraphicPojo(analyzerDataService.getDataByMonth(dayDate),scaleSelected);
-			graphicYearPojo = new GraphicPojo(analyzerDataService.getDataByYear(dayDate),scaleSelected);
+			graphicDayPojo = new GraphicLinearPojo(analyzerDataService.getDataByDay(dayDate),scaleSelected);
+			//graphicYearPojo = new GraphicLinearPojo(analyzerDataService.getDataByMonth(dayDate),scaleSelected);
 
 			aL1Check = true;
 			aL2Check = true;
 			aL3Check = true;
 
 			hours = getLoadHours();
-			months = getLoadMonths();
+			months = Months.values();
 			years = analyzerDataService.getRegistryYears();
 
 			values = ScaleGraphic.values();
@@ -95,7 +99,7 @@ public class GraphicBean implements Serializable{
 			break;
 		case HOUR:
 			enableDayHoursGraphic = true;
-			enableDayGraphic = true;
+			enableDayGraphic = false;
 			enableMonthGraphic = false;
 			enableYearGraphic = false;
 			break;
@@ -106,6 +110,8 @@ public class GraphicBean implements Serializable{
 			enableDayGraphic = false;
 			break;
 		case YEAR:
+		    graphicYearPojo = new GraphicBarPojo(analyzerDataService.getDataByYear(dayDate),scaleSelected,GRAPHIC_MONTH_LABEL);
+		    
 			enableYearGraphic = true;
 			enableMonthGraphic = false;
 			enableDayHoursGraphic = false;
@@ -144,25 +150,6 @@ public class GraphicBean implements Serializable{
 		hours.add(new SelectItem(23, "23:00"));
 
 		return hours;
-	}
-
-	private List<SelectItem> getLoadMonths() {
-		List<SelectItem> months = new ArrayList<SelectItem>();
-
-		months.add(new SelectItem(0, "January"));
-		months.add(new SelectItem(1, "February"));
-		months.add(new SelectItem(2, "March"));
-		months.add(new SelectItem(3, "April"));
-		months.add(new SelectItem(4, "May"));
-		months.add(new SelectItem(5, "June"));
-		months.add(new SelectItem(6, "July"));
-		months.add(new SelectItem(7, "August"));
-		months.add(new SelectItem(8, "September"));
-		months.add(new SelectItem(9, "October"));
-		months.add(new SelectItem(10, "November"));
-		months.add(new SelectItem(11, "December"));
-
-		return months;
 	}
 
 	public void updateChartValues(){
@@ -278,16 +265,16 @@ public class GraphicBean implements Serializable{
 	public void setHours(List<SelectItem> hours) {
 		this.hours = hours;
 	}
+	
+	public Months[] getMonths() {
+        return months;
+    }
 
-	public List<SelectItem> getMonths() {
-		return months;
-	}
+    public void setMonths( Months[] months ) {
+        this.months = months;
+    }
 
-	public void setMonths(List<SelectItem> months) {
-		this.months = months;
-	}
-
-	public String getHourSelected() {
+    public String getHourSelected() {
 		return hourSelected;
 	}
 
@@ -335,27 +322,27 @@ public class GraphicBean implements Serializable{
 		this.enableMonthGraphic = enableMonthGraphic;
 	}
 
-	public GraphicPojo getGraphicDayPojo() {
+	public GraphicLinearPojo getGraphicDayPojo() {
 		return graphicDayPojo;
 	}
 
-	public void setGraphicDayPojo(GraphicPojo graphicDayPojo) {
+	public void setGraphicDayPojo(GraphicLinearPojo graphicDayPojo) {
 		this.graphicDayPojo = graphicDayPojo;
 	}
 
-	public GraphicPojo getGraphicMonthPojo() {
+	public GraphicBarPojo getGraphicMonthPojo() {
 		return graphicMonthPojo;
 	}
 
-	public void setGraphicMonthPojo(GraphicPojo graphicMonthPojo) {
+	public void setGraphicMonthPojo(GraphicBarPojo graphicMonthPojo) {
 		this.graphicMonthPojo = graphicMonthPojo;
 	}
 
-	public GraphicPojo getGraphicYearPojo() {
+	public GraphicBarPojo getGraphicYearPojo() {
 		return graphicYearPojo;
 	}
 
-	public void setGraphicYearPojo(GraphicPojo graphicYearPojo) {
+	public void setGraphicYearPojo(GraphicBarPojo graphicYearPojo) {
 		this.graphicYearPojo = graphicYearPojo;
 	}
 	
