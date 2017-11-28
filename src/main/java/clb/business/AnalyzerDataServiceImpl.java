@@ -222,13 +222,23 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
     }
 
     public List<AnalyzerRegistryObject> getDataByDay(Date day) {
+        
+        if(day == null){
+            return new ArrayList<AnalyzerRegistryObject>();
+        }
+        
         return new ArrayList<AnalyzerRegistryObject>(clbDaoAnalyzer.getAnalyzerRegistriesByDay(day).stream()
                 .collect(Collectors.toMap(AnalyzerRegistryEntity::getCurrenttime,AnalyzerRegistryObject::new)).values());
     }
 
     @Override
     public List<MonthAverageObject> getDataByYear(Integer year) {
-        return clbDaoAnalyzer.getYearMonthAverages(year).stream()
+        
+        if(year == null){
+            return new ArrayList<MonthAverageObject>();
+        }
+        
+        else return clbDaoAnalyzer.getYearMonthAverages(year).stream()
                 .map(objectArray -> {
                     Object[] object = (Object[]) objectArray;
                     return new MonthAverageObject( (Double) object[0], (Double) object[1], (Double) object[2], Month.getMonthById( (Integer)object[3]));

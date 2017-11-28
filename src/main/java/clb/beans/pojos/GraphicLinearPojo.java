@@ -19,9 +19,7 @@ public class GraphicLinearPojo {
 	private LineChartSeries seriesAL2;
 	private LineChartSeries seriesAL3;
 
-	private Collection<?> chartData;
-	
-	public GraphicLinearPojo(Collection<?> chartData, ScaleGraphic scaleGraphic){
+	public GraphicLinearPojo(ScaleGraphic scaleGraphic){
 
 		lineModel = new LineChartModel();
 		lineModel.setZoom(true);
@@ -42,19 +40,14 @@ public class GraphicLinearPojo {
 		lineModel.addSeries(seriesAL2);
 		lineModel.addSeries(seriesAL3);
 
-		fillGraphicForData(chartData, scaleGraphic);
-
 	}
 	
-	@SuppressWarnings("unchecked")
-	public void fillGraphicForData(Collection<?> collection, ScaleGraphic scaleGraphic){
-		
-		this.chartData = collection;
+	public void fillGraphicForData(Collection<AnalyzerRegistryObject> chartData, ScaleGraphic scaleGraphic){
 		
 		switch(scaleGraphic){
 		case DAY:
 	
-			fillGraphicForDayData((Collection<AnalyzerRegistryObject>) this.chartData);
+			fillGraphicForDayData((Collection<AnalyzerRegistryObject>) chartData);
 
 			DateAxis axis = new DateAxis("Hours");
 			axis.setTickFormat("%H:%M:%S");

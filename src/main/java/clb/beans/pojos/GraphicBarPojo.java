@@ -19,7 +19,7 @@ public class GraphicBarPojo {
 	private ChartSeries chartSeriesAl3;
 
 	
-	public GraphicBarPojo(List<MonthAverageObject> monthAverage, ScaleGraphic scaleGraphic){
+	public GraphicBarPojo(ScaleGraphic scaleGraphic){
 
 	    barModel = new BarChartModel();
 	    barModel.setZoom(true);
@@ -38,8 +38,6 @@ public class GraphicBarPojo {
         barModel.addSeries(chartSeriesAl1);
         barModel.addSeries(chartSeriesAl2);
         barModel.addSeries(chartSeriesAl3);
-
-		fillGraphicForData(monthAverage, scaleGraphic);
 	}
 	
 	public void fillGraphicForData(List<MonthAverageObject> monthAverage, ScaleGraphic scaleGraphic){

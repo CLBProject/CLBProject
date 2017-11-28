@@ -44,7 +44,7 @@
 							<p:selectOneRadio layout="pageDirection"
 								value="#{graphicBean.scaleSelected}">
 								<p:ajax listener="#{graphicBean.changeScale}" update="chartFormId"></p:ajax>
-								<c:forEach items="#{graphicBean.values}" var="value">
+								<c:forEach items="#{graphicBean.scaleValues}" var="value">
 									<f:selectItem itemLabel="#{value.label}" itemValue="#{value}" />
 								</c:forEach>
 							</p:selectOneRadio>
@@ -61,7 +61,7 @@
 							<p:outputLabel rendered="#{graphicBean.enableMonthGraphic}" for="months" value="Month:" styleClass="titleFont"></p:outputLabel>
 							<p:spacer rendered="#{graphicBean.enableMonthGraphic}" width="5" />
 							<p:selectOneMenu rendered="#{graphicBean.enableMonthGraphic}" id="months" value="#{graphicBean.monthSelected}">
-								<f:selectItems value="#{graphicBean.months}" var="month" itemLabel="{month.name}" itemValue="{month.month}"/>
+								<f:selectItems value="#{graphicBean.months}" var="newmonth" itemLabel="{newmonth.label}" itemValue="{newmonth}"/>
 							</p:selectOneMenu>
 							<p:outputLabel rendered="#{graphicBean.enableDayGraphic}" for="forDay" value="Day:" styleClass="titleFont"></p:outputLabel>
 							<p:spacer rendered="#{graphicBean.enableDayGraphic}" width="5" />
@@ -79,12 +79,12 @@
 						</div>
 						<div align="center" class="fullWidth">
 							<p:chart id="chartId" rendered="#{graphicBean.enableDayGraphic}"
-								widgetVar="chartId" styleClass="chartCSS" type="line"
+								widgetVar="chartId" styleCdslass="chartCSS" type="line"
 								model="#{graphicBean.graphicDayPojo.lineModel}" />
 							<p:chart rendered="#{graphicBean.enableYearGraphic}" 
 								model="#{graphicBean.graphicYearPojo.barModel}" type="bar" style="height:300px"/>
-							<br />
-							<p:outputLabel rendered="#{graphicBean.showNoGraphic}"
+							<p:outputLabel rendered="#{not graphicBean.enableDayGraphic and not graphicBean.enableDayHoursGraphic and 
+													   not graphicBean.enableMonthGraphic and not graphicBean.enableYearGraphic}"
 								value="No Graphic to Display" styleClass="warningFont"></p:outputLabel>
 						</div>
 						<br />

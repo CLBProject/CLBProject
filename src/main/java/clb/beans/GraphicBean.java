@@ -20,261 +20,258 @@ import clb.beans.pojos.GraphicBarPojo;
 import clb.beans.pojos.GraphicLinearPojo;
 import clb.business.AnalyzerDataService;
 import clb.business.constants.Month;
+import clb.business.objects.MonthAverageObject;
 
 @ViewScoped
 @ManagedBean
 public class GraphicBean implements Serializable{
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@ManagedProperty("#{analyzerDataService}")
-	private AnalyzerDataService analyzerDataService;
-	
-	private GraphicLinearPojo graphicDayPojo;
-	private GraphicBarPojo graphicMonthPojo;
-	private GraphicBarPojo graphicYearPojo;
+    @ManagedProperty("#{analyzerDataService}")
+    private AnalyzerDataService analyzerDataService;
 
-	private boolean aL1Check;
-	private boolean aL2Check;
-	private boolean aL3Check;
+    private GraphicLinearPojo graphicDayPojo;
+    private GraphicBarPojo graphicMonthPojo;
+    private GraphicBarPojo graphicYearPojo;
 
-	private ScaleGraphic scaleSelected;
+    private boolean aL1Check;
+    private boolean aL2Check;
+    private boolean aL3Check;
 
-	private ScaleGraphic[] values;
+    private ScaleGraphic scaleSelected;
 
-	private Date dayDate;
+    private ScaleGraphic[] scaleValues;
 
-	private List<SelectItem> hours;
-	private String hourSelected;
+    private Date dayDate;
 
-	private Month[] months;
-	private String monthSelected;
+    private List<SelectItem> hours;
+    private String hourSelected;
 
-	private List<Integer> years;
-	private Integer yearSelected;
+    private Month[] months;
+    private Month monthSelected;
 
-	private boolean enableDayGraphic;
-	private boolean enableDayHoursGraphic;
-	private boolean enableYearGraphic;
-	private boolean enableMonthGraphic;
-	private boolean showNoGraphic;
+    private List<Integer> years;
+    private Integer yearSelected;
 
-	@PostConstruct
-	public void init(){
+    private boolean enableDayGraphic;
+    private boolean enableDayHoursGraphic;
+    private boolean enableYearGraphic;
+    private boolean enableMonthGraphic;
 
-		try{
-			dayDate = new Date();
-			scaleSelected = ScaleGraphic.DAY;
+    @PostConstruct
+    public void init(){
+        
+        dayDate = new Date();
+        scaleSelected = ScaleGraphic.DAY;
+        scaleValues = ScaleGraphic.values();
+        hours = getLoadHours();
+        months = Month.values();
+        years = analyzerDataService.getRegistryYears();
+        yearSelected = years.size() > 0 ? years.get(0) : null;
 
-			graphicDayPojo = new GraphicLinearPojo(analyzerDataService.getDataByDay(dayDate),scaleSelected);
-			showNoGraphic = !graphicDayPojo.hasValues();
+        graphicDayPojo = new GraphicLinearPojo(scaleSelected);
+        graphicYearPojo = new GraphicBarPojo(scaleSelected);
+        
+        try {
+            changeScale();
+        } catch( IOException e ) {
+            e.printStackTrace();
+        }
 
-			aL1Check = true;
-			aL2Check = true;
-			aL3Check = true;
+        aL1Check = true;
+        aL2Check = true;
+        aL3Check = true;
+    }
 
-			hours = getLoadHours();
-			months = Month.values();
-			years = analyzerDataService.getRegistryYears();
-			
-			yearSelected = years.size() > 0 ? years.get(0) : null;
+    public void changeScale() throws IOException{
+        switch(scaleSelected){
+            case DAY:
+                if(dayDate != null){
+                    graphicDayPojo.fillGraphicForData( analyzerDataService.getDataByDay(dayDate), scaleSelected );
+                }
+                enableDayGraphic = graphicDayPojo.hasValues();
+                enableDayHoursGraphic = false;
+                enableMonthGraphic = false;
+                enableYearGraphic = false;
+                break;
+            case HOUR:
+                enableDayHoursGraphic = true;
+                enableDayGraphic = false;
+                enableMonthGraphic = false;
+                enableYearGraphic = false;
+                break;
+            case MONTH:
+                enableMonthGraphic = true;
+                enableYearGraphic = false;
+                enableDayHoursGraphic = false;
+                enableDayGraphic = false;
+                break;
+            case YEAR:
+                if(yearSelected != null){
+                    graphicYearPojo.fillGraphicForData( analyzerDataService.getDataByYear( yearSelected ), scaleSelected );
+                }
+                enableYearGraphic = graphicYearPojo.hasValues();
+                enableMonthGraphic = false;
+                enableDayHoursGraphic = false;
+                enableDayGraphic = false;
+                break;
+            default: 
+        }
+    }
 
-			values = ScaleGraphic.values();
+    private List<SelectItem> getLoadHours() {
+        List<SelectItem> hours = new ArrayList<SelectItem>();
 
-			enableDayGraphic = true;
-			enableDayHoursGraphic = false;
-			enableMonthGraphic = false;
-			enableYearGraphic = false;
-			
-		}catch(IOException e){
-			e.printStackTrace();
-		}
-	}
+        hours.add(new SelectItem(0, "00:00"));
+        hours.add(new SelectItem(1, "01:00"));
+        hours.add(new SelectItem(2, "02:00"));
+        hours.add(new SelectItem(3, "03:00"));
+        hours.add(new SelectItem(4, "04:00"));
+        hours.add(new SelectItem(5, "05:00"));
+        hours.add(new SelectItem(6, "06:00"));
+        hours.add(new SelectItem(7, "07:00"));
+        hours.add(new SelectItem(8, "08:00"));
+        hours.add(new SelectItem(9, "09:00"));
+        hours.add(new SelectItem(10, "10:00"));
+        hours.add(new SelectItem(11, "11:00"));
+        hours.add(new SelectItem(12, "12:00"));
+        hours.add(new SelectItem(13, "13:00"));
+        hours.add(new SelectItem(14, "14:00"));
+        hours.add(new SelectItem(15, "15:00"));
+        hours.add(new SelectItem(16, "16:00"));
+        hours.add(new SelectItem(17, "17:00"));
+        hours.add(new SelectItem(18, "18:00"));
+        hours.add(new SelectItem(19, "19:00"));
+        hours.add(new SelectItem(20, "20:00"));
+        hours.add(new SelectItem(21, "21:00"));
+        hours.add(new SelectItem(22, "22:00"));
+        hours.add(new SelectItem(23, "23:00"));
 
-	public void changeScale(){
-		switch(scaleSelected){
-		case DAY:
-			enableDayGraphic = true;
-			enableDayHoursGraphic = false;
-			enableMonthGraphic = false;
-			enableYearGraphic = false;
-			break;
-		case HOUR:
-			enableDayHoursGraphic = true;
-			enableDayGraphic = false;
-			enableMonthGraphic = false;
-			enableYearGraphic = false;
-			break;
-		case MONTH:
-			enableMonthGraphic = true;
-			enableYearGraphic = false;
-			enableDayHoursGraphic = false;
-			enableDayGraphic = false;
-			break;
-		case YEAR:
-		    graphicYearPojo = new GraphicBarPojo(analyzerDataService.getDataByYear(yearSelected),scaleSelected);
-		    showNoGraphic = !graphicYearPojo.hasValues();
-		    
-			enableYearGraphic = true;
-			enableMonthGraphic = false;
-			enableDayHoursGraphic = false;
-			enableDayGraphic = false;
-			break;
-		default: 
-		}
-	}
+        return hours;
+    }
 
-	private List<SelectItem> getLoadHours() {
-		List<SelectItem> hours = new ArrayList<SelectItem>();
+    public void updateChartValues(){
 
-		hours.add(new SelectItem(0, "00:00"));
-		hours.add(new SelectItem(1, "01:00"));
-		hours.add(new SelectItem(2, "02:00"));
-		hours.add(new SelectItem(3, "03:00"));
-		hours.add(new SelectItem(4, "04:00"));
-		hours.add(new SelectItem(5, "05:00"));
-		hours.add(new SelectItem(6, "06:00"));
-		hours.add(new SelectItem(7, "07:00"));
-		hours.add(new SelectItem(8, "08:00"));
-		hours.add(new SelectItem(9, "09:00"));
-		hours.add(new SelectItem(10, "10:00"));
-		hours.add(new SelectItem(11, "11:00"));
-		hours.add(new SelectItem(12, "12:00"));
-		hours.add(new SelectItem(13, "13:00"));
-		hours.add(new SelectItem(14, "14:00"));
-		hours.add(new SelectItem(15, "15:00"));
-		hours.add(new SelectItem(16, "16:00"));
-		hours.add(new SelectItem(17, "17:00"));
-		hours.add(new SelectItem(18, "18:00"));
-		hours.add(new SelectItem(19, "19:00"));
-		hours.add(new SelectItem(20, "20:00"));
-		hours.add(new SelectItem(21, "21:00"));
-		hours.add(new SelectItem(22, "22:00"));
-		hours.add(new SelectItem(23, "23:00"));
+    }
 
-		return hours;
-	}
+    public void updateChartSeries1(){
+        aL1Check = graphicDayPojo.updateSeries1(aL1Check);
+    }
 
-	public void updateChartValues(){
+    public void updateChartSeries2(){
+        aL2Check = graphicDayPojo.updateSeries2(aL2Check);
+    }
 
-	}
+    public void updateChartSeries3(){
+        aL3Check = graphicDayPojo.updateSeries3(aL3Check);
+    }
 
-	public void updateChartSeries1(){
-		aL1Check = graphicDayPojo.updateSeries1(aL1Check);
-	}
+    public void onDaySelect(SelectEvent event) throws IOException {
+        graphicDayPojo.fillGraphicForData(analyzerDataService.getDataByDay(dayDate),scaleSelected);
+    }
 
-	public void updateChartSeries2(){
-		aL2Check = graphicDayPojo.updateSeries2(aL2Check);
-	}
+    public void updateYearGraphic(final AjaxBehaviorEvent event){
+        if(yearSelected != null){
+            graphicYearPojo.fillGraphicForData(analyzerDataService.getDataByYear(yearSelected),scaleSelected);
+        }
+    }
 
-	public void updateChartSeries3(){
-		aL3Check = graphicDayPojo.updateSeries3(aL3Check);
-	}
+    public void fillDatabase() throws IOException{
+        analyzerDataService.fillDatabaseData();
+    }
 
-	public void onDaySelect(SelectEvent event) throws IOException {
-		graphicDayPojo.fillGraphicForData(analyzerDataService.getDataByDay(dayDate),scaleSelected);
-	}
-	
-	public void updateYearGraphic(final AjaxBehaviorEvent event){
-		graphicYearPojo = new GraphicBarPojo(analyzerDataService.getDataByYear(yearSelected),scaleSelected);
-	    showNoGraphic = !graphicYearPojo.hasValues();
-	}
+    public void fillDatabaseScript() throws IOException{
+        analyzerDataService.fillDatabaseDataWithMoreThenOneYears();
+    }
 
-	public void fillDatabase() throws IOException{
-		analyzerDataService.fillDatabaseData();
-	}
-
-	public void fillDatabaseScript() throws IOException{
-		analyzerDataService.fillDatabaseDataWithMoreThenOneYears();
-	}
-
-	public AnalyzerDataService getAnalyzerDataService() {
-		return analyzerDataService;
-	}
+    public AnalyzerDataService getAnalyzerDataService() {
+        return analyzerDataService;
+    }
 
 
-	public void setAnalyzerDataService(AnalyzerDataService analyzerDataService) {
-		this.analyzerDataService = analyzerDataService;
-	}
+    public void setAnalyzerDataService(AnalyzerDataService analyzerDataService) {
+        this.analyzerDataService = analyzerDataService;
+    }
 
-	public boolean isaL1Check() {
-		return aL1Check;
-	}
-
-
-	public void setaL1Check(boolean aL1Check) {
-		this.aL1Check = aL1Check;
-	}
+    public boolean isaL1Check() {
+        return aL1Check;
+    }
 
 
-	public boolean isaL2Check() {
-		return aL2Check;
-	}
+    public void setaL1Check(boolean aL1Check) {
+        this.aL1Check = aL1Check;
+    }
 
 
-	public void setaL2Check(boolean aL2Check) {
-		this.aL2Check = aL2Check;
-	}
+    public boolean isaL2Check() {
+        return aL2Check;
+    }
 
 
-	public boolean isaL3Check() {
-		return aL3Check;
-	}
+    public void setaL2Check(boolean aL2Check) {
+        this.aL2Check = aL2Check;
+    }
 
 
-	public void setaL3Check(boolean aL3Check) {
-		this.aL3Check = aL3Check;
-	}
+    public boolean isaL3Check() {
+        return aL3Check;
+    }
 
-	public ScaleGraphic getScaleSelected() {
-		return scaleSelected;
-	}
 
-	public void setScaleSelected( ScaleGraphic scaleSelected ) {
-		this.scaleSelected = scaleSelected;
-	}
+    public void setaL3Check(boolean aL3Check) {
+        this.aL3Check = aL3Check;
+    }
 
-	public ScaleGraphic[] getValues() {
-		return values;
-	}
+    public ScaleGraphic getScaleSelected() {
+        return scaleSelected;
+    }
 
-	public void setValues( ScaleGraphic[] values ) {
-		this.values = values;
-	}
+    public void setScaleSelected( ScaleGraphic scaleSelected ) {
+        this.scaleSelected = scaleSelected;
+    }
 
-	public Date getDayDate() {
-		return dayDate;
-	}
+    public ScaleGraphic[] getScaleValues() {
+        return scaleValues;
+    }
 
-	public void setDayDate( Date dayDate ) {
-		this.dayDate = dayDate;
-	}
+    public void setScaleValues( ScaleGraphic[] scaleValues ) {
+        this.scaleValues = scaleValues;
+    }
 
-	public boolean isEnableDayGraphic() {
-		return enableDayGraphic;
-	}
+    public Date getDayDate() {
+        return dayDate;
+    }
 
-	public void setEnableDayGraphic(boolean enableDayGraphic) {
-		this.enableDayGraphic = enableDayGraphic;
-	}
+    public void setDayDate( Date dayDate ) {
+        this.dayDate = dayDate;
+    }
 
-	public List<Integer> getYears() {
-		return years;
-	}
+    public boolean isEnableDayGraphic() {
+        return enableDayGraphic;
+    }
 
-	public void setYears(List<Integer> years) {
-		this.years = years;
-	}
+    public void setEnableDayGraphic(boolean enableDayGraphic) {
+        this.enableDayGraphic = enableDayGraphic;
+    }
 
-	public List<SelectItem> getHours() {
-		return hours;
-	}
+    public List<Integer> getYears() {
+        return years;
+    }
 
-	public void setHours(List<SelectItem> hours) {
-		this.hours = hours;
-	}
-	
-	public Month[] getMonths() {
+    public void setYears(List<Integer> years) {
+        this.years = years;
+    }
+
+    public List<SelectItem> getHours() {
+        return hours;
+    }
+
+    public void setHours(List<SelectItem> hours) {
+        this.hours = hours;
+    }
+
+    public Month[] getMonths() {
         return months;
     }
 
@@ -283,84 +280,75 @@ public class GraphicBean implements Serializable{
     }
 
     public String getHourSelected() {
-		return hourSelected;
-	}
+        return hourSelected;
+    }
 
-	public void setHourSelected(String hourSelected) {
-		this.hourSelected = hourSelected;
-	}
+    public void setHourSelected(String hourSelected) {
+        this.hourSelected = hourSelected;
+    }
 
-	public boolean isEnableDayHoursGraphic() {
-		return enableDayHoursGraphic;
-	}
+    public boolean isEnableDayHoursGraphic() {
+        return enableDayHoursGraphic;
+    }
 
-	public void setEnableDayHoursGraphic(boolean enableDayHoursGraphic) {
-		this.enableDayHoursGraphic = enableDayHoursGraphic;
-	}
+    public void setEnableDayHoursGraphic(boolean enableDayHoursGraphic) {
+        this.enableDayHoursGraphic = enableDayHoursGraphic;
+    }
 
-	public String getMonthSelected() {
-		return monthSelected;
-	}
+    public Month getMonthSelected() {
+        return monthSelected;
+    }
 
-	public void setMonthSelected(String monthSelected) {
-		this.monthSelected = monthSelected;
-	}
+    public void setMonthSelected(Month monthSelected) {
+        this.monthSelected = monthSelected;
+    }
 
-	public Integer getYearSelected() {
-		return yearSelected;
-	}
+    public Integer getYearSelected() {
+        return yearSelected;
+    }
 
-	public void setYearSelected(Integer yearSelected) {
-		this.yearSelected = yearSelected;
-	}
+    public void setYearSelected(Integer yearSelected) {
+        this.yearSelected = yearSelected;
+    }
 
-	public boolean isEnableYearGraphic() {
-		return enableYearGraphic;
-	}
+    public boolean isEnableYearGraphic() {
+        return enableYearGraphic;
+    }
 
-	public void setEnableYearGraphic(boolean enableYearGraphic) {
-		this.enableYearGraphic = enableYearGraphic;
-	}
+    public void setEnableYearGraphic(boolean enableYearGraphic) {
+        this.enableYearGraphic = enableYearGraphic;
+    }
 
-	public boolean isEnableMonthGraphic() {
-		return enableMonthGraphic;
-	}
+    public boolean isEnableMonthGraphic() {
+        return enableMonthGraphic;
+    }
 
-	public void setEnableMonthGraphic(boolean enableMonthGraphic) {
-		this.enableMonthGraphic = enableMonthGraphic;
-	}
+    public void setEnableMonthGraphic(boolean enableMonthGraphic) {
+        this.enableMonthGraphic = enableMonthGraphic;
+    }
 
-	public GraphicLinearPojo getGraphicDayPojo() {
-		return graphicDayPojo;
-	}
+    public GraphicLinearPojo getGraphicDayPojo() {
+        return graphicDayPojo;
+    }
 
-	public void setGraphicDayPojo(GraphicLinearPojo graphicDayPojo) {
-		this.graphicDayPojo = graphicDayPojo;
-	}
+    public void setGraphicDayPojo(GraphicLinearPojo graphicDayPojo) {
+        this.graphicDayPojo = graphicDayPojo;
+    }
 
-	public GraphicBarPojo getGraphicMonthPojo() {
-		return graphicMonthPojo;
-	}
+    public GraphicBarPojo getGraphicMonthPojo() {
+        return graphicMonthPojo;
+    }
 
-	public void setGraphicMonthPojo(GraphicBarPojo graphicMonthPojo) {
-		this.graphicMonthPojo = graphicMonthPojo;
-	}
+    public void setGraphicMonthPojo(GraphicBarPojo graphicMonthPojo) {
+        this.graphicMonthPojo = graphicMonthPojo;
+    }
 
-	public GraphicBarPojo getGraphicYearPojo() {
-		return graphicYearPojo;
-	}
+    public GraphicBarPojo getGraphicYearPojo() {
+        return graphicYearPojo;
+    }
 
-	public void setGraphicYearPojo(GraphicBarPojo graphicYearPojo) {
-		this.graphicYearPojo = graphicYearPojo;
-	}
+    public void setGraphicYearPojo(GraphicBarPojo graphicYearPojo) {
+        this.graphicYearPojo = graphicYearPojo;
+    }
 
-	public boolean isShowNoGraphic() {
-		return showNoGraphic;
-	}
-
-	public void setShowNoGraphic(boolean showNoGraphic) {
-		this.showNoGraphic = showNoGraphic;
-	}
-	
-	
 }
