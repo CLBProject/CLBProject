@@ -25,7 +25,9 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import clb.business.constants.Month;
 import clb.business.objects.AnalyzerRegistryObject;
+import clb.business.objects.MonthAverageObject;
 import clb.database.ClbDao;
 import clb.database.entities.AnalyzerRegistryEntity;
 
@@ -94,23 +96,23 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
         calendar.set( startingYear, 0, 1);
 
         System.out.println( "Starting persist Data.." );
-        
+
         Random random = new Random();
-        
+
         for(int i = 0 ;i<numberOfYears; i++){
-        	int yearDays = calendar.getActualMaximum(Calendar.DAY_OF_YEAR);
+            int yearDays = calendar.getActualMaximum(Calendar.DAY_OF_YEAR);
             for(int l = 0; l < yearDays; l++ ){
                 for(int j = 0; j < 24 ; j++){
                     for(int k = 0; k < 60; k++){
-                        
+
                         AnalyzerRegistryObject anaRegObj = new AnalyzerRegistryObject();
                         anaRegObj.setCurrenttime( (j < 10 ? "0"+j : ""+j) + ":" + (k < 10 ? "0"+k : ""+k)+ ":00");
                         anaRegObj.setCurrentdate( calendar.getTime() ); 
-                        
+
                         anaRegObj.setAl1(lowAl + (highAl - lowAl) * random.nextDouble());
                         anaRegObj.setAl2(lowAl + (highAl - lowAl) * random.nextDouble());
                         anaRegObj.setAl3(lowAl + (highAl - lowAl) * random.nextDouble());
-                        
+
                         clbDaoAnalyzer.create( anaRegObj.toEntity() );
                         anaRegObj = null;
                     }
@@ -220,19 +222,24 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
     }
 
     public List<AnalyzerRegistryObject> getDataByDay(Date day) {
-    	return new ArrayList<AnalyzerRegistryObject>(clbDaoAnalyzer.getAnalyzerRegistriesByDay(day).stream()
-        .collect(Collectors.toMap(AnalyzerRegistryEntity::getCurrenttime,AnalyzerRegistryObject::new)).values());
+        return new ArrayList<AnalyzerRegistryObject>(clbDaoAnalyzer.getAnalyzerRegistriesByDay(day).stream()
+                .collect(Collectors.toMap(AnalyzerRegistryEntity::getCurrenttime,AnalyzerRegistryObject::new)).values());
     }
 
-	@Override
-	public Object[] getDataByYear(Integer year) {
-		return clbDaoAnalyzer.getYearMonthAverages(year);
-	}
-    
-	@Override
-	public List<Integer> getRegistryYears() {
-		return clbDaoAnalyzer.getRegistryYears();
-	}
+    @Override
+    public List<MonthAverageObject> getDataByYear(Integer year) {
+        return clbDaoAnalyzer.getYearMonthAverages(year).stream()
+                .map(objectArray -> {
+                    Object[] object = (Object[]) objectArray;
+                    return new MonthAverageObject( (Double) object[0], (Double) object[1], (Double) object[2], Month.getMonthById( (Integer)object[3]));
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Integer> getRegistryYears() {
+        return clbDaoAnalyzer.getRegistryYears();
+    }
 
     public TaskExecutor getTaskExecutor() {
         return taskExecutor;

@@ -19,7 +19,7 @@ import clb.beans.enums.ScaleGraphic;
 import clb.beans.pojos.GraphicBarPojo;
 import clb.beans.pojos.GraphicLinearPojo;
 import clb.business.AnalyzerDataService;
-import clb.global.Months;
+import clb.business.constants.Month;
 
 @ViewScoped
 @ManagedBean
@@ -29,8 +29,6 @@ public class GraphicBean implements Serializable{
 
 	@ManagedProperty("#{analyzerDataService}")
 	private AnalyzerDataService analyzerDataService;
-
-	private final String GRAPHIC_MONTH_LABEL = "Year Power Average";
 	
 	private GraphicLinearPojo graphicDayPojo;
 	private GraphicBarPojo graphicMonthPojo;
@@ -49,7 +47,7 @@ public class GraphicBean implements Serializable{
 	private List<SelectItem> hours;
 	private String hourSelected;
 
-	private Months[] months;
+	private Month[] months;
 	private String monthSelected;
 
 	private List<Integer> years;
@@ -76,7 +74,7 @@ public class GraphicBean implements Serializable{
 			aL3Check = true;
 
 			hours = getLoadHours();
-			months = Months.values();
+			months = Month.values();
 			years = analyzerDataService.getRegistryYears();
 			
 			yearSelected = years.size() > 0 ? years.get(0) : null;
@@ -114,7 +112,7 @@ public class GraphicBean implements Serializable{
 			enableDayGraphic = false;
 			break;
 		case YEAR:
-		    graphicYearPojo = new GraphicBarPojo(analyzerDataService.getDataByYear(yearSelected),scaleSelected,GRAPHIC_MONTH_LABEL);
+		    graphicYearPojo = new GraphicBarPojo(analyzerDataService.getDataByYear(yearSelected),scaleSelected);
 		    showNoGraphic = !graphicYearPojo.hasValues();
 		    
 			enableYearGraphic = true;
@@ -178,7 +176,7 @@ public class GraphicBean implements Serializable{
 	}
 	
 	public void updateYearGraphic(final AjaxBehaviorEvent event){
-		graphicYearPojo = new GraphicBarPojo(analyzerDataService.getDataByYear(yearSelected),scaleSelected,GRAPHIC_MONTH_LABEL);
+		graphicYearPojo = new GraphicBarPojo(analyzerDataService.getDataByYear(yearSelected),scaleSelected);
 	    showNoGraphic = !graphicYearPojo.hasValues();
 	}
 
@@ -276,11 +274,11 @@ public class GraphicBean implements Serializable{
 		this.hours = hours;
 	}
 	
-	public Months[] getMonths() {
+	public Month[] getMonths() {
         return months;
     }
 
-    public void setMonths( Months[] months ) {
+    public void setMonths( Month[] months ) {
         this.months = months;
     }
 

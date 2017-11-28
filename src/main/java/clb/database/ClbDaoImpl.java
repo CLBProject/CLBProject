@@ -2,6 +2,7 @@ package clb.database;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -89,11 +90,11 @@ public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializab
 	}
 	
 	@Override
-	public Object[] getYearMonthAverages(Integer year){
-		Query q = entityManager.createNativeQuery("select avg(al1),month(currentDate) from analyzer_registry where year(currentDate) = ?1 group by month(currentdate)");		
+	public Collection<?> getYearMonthAverages(Integer year){
+		Query q = entityManager.createNativeQuery("select avg(al1), avg(al2), avg(al3), month(currentDate) from analyzer_registry where year(currentDate) = ?1 group by month(currentdate)");		
 		q.setParameter(1, year);
 		
-		return q.getResultList().toArray();
+		return q.getResultList();
 	}
 
 }

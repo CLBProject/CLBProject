@@ -1,6 +1,7 @@
 package clb.database;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public interface ClbDao<T extends Serializable> {
 
 	List<Integer> getRegistryYears();
 	
-	Object[] getYearMonthAverages(Integer year);
+	Collection<?> getYearMonthAverages(Integer year);
 
 	
 }

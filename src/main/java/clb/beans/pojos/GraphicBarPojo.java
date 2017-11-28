@@ -1,64 +1,81 @@
 package clb.beans.pojos;
 
+import java.util.List;
+
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.ChartSeries;
 
 import clb.beans.enums.ScaleGraphic;
-import clb.global.Months;
+import clb.business.objects.MonthAverageObject;
 
 public class GraphicBarPojo {
 
     private BarChartModel barModel;
 
-	private ChartSeries chartSeries;
-
-	private Object[] chartData;
+	private ChartSeries chartSeriesAl1;
+	private ChartSeries chartSeriesAl2;
+	private ChartSeries chartSeriesAl3;
 
 	
-	public GraphicBarPojo(Object[] chartData, ScaleGraphic scaleGraphic, final String label){
+	public GraphicBarPojo(List<MonthAverageObject> monthAverage, ScaleGraphic scaleGraphic){
 
 	    barModel = new BarChartModel();
 	    barModel.setZoom(true);
 	    barModel.setTitle( "" );
         barModel.setLegendPosition("se");
          
-        chartSeries = new ChartSeries();
-        chartSeries.setLabel( label );
+        chartSeriesAl1 = new ChartSeries();
+        chartSeriesAl1.setLabel( "AL1" );
+        
+        chartSeriesAl2 = new ChartSeries();
+        chartSeriesAl2.setLabel( "AL2" );
+        
+        chartSeriesAl3 = new ChartSeries();
+        chartSeriesAl3.setLabel( "AL3" );
 
-        barModel.addSeries(chartSeries);
+        barModel.addSeries(chartSeriesAl1);
+        barModel.addSeries(chartSeriesAl2);
+        barModel.addSeries(chartSeriesAl3);
 
-		fillGraphicForData(chartData, scaleGraphic);
+		fillGraphicForData(monthAverage, scaleGraphic);
 	}
 	
-	public void fillGraphicForData(Object[] collection, ScaleGraphic scaleGraphic){
+	public void fillGraphicForData(List<MonthAverageObject> monthAverage, ScaleGraphic scaleGraphic){
 		
-		this.chartData = collection;
 		
 		switch(scaleGraphic){
 		case YEAR:
-			fillGraphicForDayData(this.chartData);
+			fillGraphicForDayData(monthAverage);
 			break;
 		default: 
 		}
 	}
 
-	private void fillGraphicForDayData(Object[] collection){
+	private void fillGraphicForDayData(List<MonthAverageObject> monthAverage){
 
 		double maxValue = 0;
 
-		chartSeries.getData().clear();
+		chartSeriesAl1.getData().clear();
+		chartSeriesAl2.getData().clear();
+		chartSeriesAl3.getData().clear();
 
-		for(Object monthInfo : collection){
+		for(MonthAverageObject monthInfo : monthAverage){
 		    
-		    Object[] monthInfoParsed = (Object[]) monthInfo;
-		    
-		    chartSeries.set(Months.getMonthName((Integer)monthInfoParsed[1]), (Double)monthInfoParsed[0]);
+		    chartSeriesAl1.set(monthInfo.getMonth().name(), monthInfo.getAl1Average());
+		    chartSeriesAl2.set(monthInfo.getMonth().name(), monthInfo.getAl2Average());
+		    chartSeriesAl3.set(monthInfo.getMonth().name(), monthInfo.getAl3Average());
 
-			if((Double)monthInfoParsed[0] > maxValue){
-				maxValue = (Double)monthInfoParsed[0];
+			if(monthInfo.getAl1Average() > maxValue){
+			    maxValue = monthInfo.getAl1Average();
 			}
+			if(monthInfo.getAl1Average() > maxValue){
+			    maxValue = monthInfo.getAl1Average();
+            }
+			if(monthInfo.getAl1Average() > maxValue){
+			    maxValue = monthInfo.getAl1Average();
+            }
 
 		}
 		
@@ -74,7 +91,7 @@ public class GraphicBarPojo {
 	}
 
 	public boolean hasValues(){
-		return chartSeries.getData().size() > 0;
+		return chartSeriesAl1.getData().size() > 0;
 	}
 	
     public BarChartModel getBarModel() {

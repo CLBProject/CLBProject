@@ -1,6 +1,6 @@
-package clb.global;
+package clb.business.constants;
 
-public enum Months
+public enum Month
 {
     January(1),
     February(2),
@@ -17,7 +17,7 @@ public enum Months
     
     Integer month;
     
-    Months(Integer month){
+    Month(Integer month){
         this.month = month;
     }
 
@@ -25,10 +25,10 @@ public enum Months
         return month;
     }
 
-    public static String getMonthName( Integer monthId ) {
-        for(Months value: values()){
+    public static Month getMonthById( Integer monthId ) {
+        for(Month value: values()){
             if(value.getMonth() == monthId)
-                return value.name();
+                return value;
         }
         return null;
     }

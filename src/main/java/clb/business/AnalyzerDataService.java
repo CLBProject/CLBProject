@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import clb.business.objects.AnalyzerRegistryObject;
+import clb.business.objects.MonthAverageObject;
 
 public interface AnalyzerDataService {
 
@@ -18,5 +19,5 @@ public interface AnalyzerDataService {
 
 	List<Integer> getRegistryYears();
 
-	Object[] getDataByYear(Integer year);
+	List<MonthAverageObject> getDataByYear(Integer year);
 }
