@@ -20,7 +20,6 @@ import clb.beans.pojos.GraphicBarPojo;
 import clb.beans.pojos.GraphicLinearPojo;
 import clb.business.AnalyzerDataService;
 import clb.business.constants.Month;
-import clb.business.objects.MonthAverageObject;
 
 @ViewScoped
 @ManagedBean
@@ -31,6 +30,7 @@ public class GraphicBean implements Serializable{
     @ManagedProperty("#{analyzerDataService}")
     private AnalyzerDataService analyzerDataService;
 
+    private GraphicLinearPojo graphicDayHoursPojo;
     private GraphicLinearPojo graphicDayPojo;
     private GraphicBarPojo graphicMonthPojo;
     private GraphicBarPojo graphicYearPojo;
@@ -68,10 +68,14 @@ public class GraphicBean implements Serializable{
         hours = getLoadHours();
         months = Month.values();
         years = analyzerDataService.getRegistryYears();
+        hourSelected = hours.size() > 0 ? (String) hours.get(0).getValue() : null;
         yearSelected = years.size() > 0 ? years.get(0) : null;
+        monthSelected = months.length > 0 ? months[0] : null;
 
-        graphicDayPojo = new GraphicLinearPojo(scaleSelected);
-        graphicYearPojo = new GraphicBarPojo(scaleSelected);
+        graphicDayPojo = new GraphicLinearPojo();
+        graphicDayHoursPojo = new GraphicLinearPojo();
+        graphicYearPojo = new GraphicBarPojo();
+        graphicMonthPojo = new GraphicBarPojo();
         
         try {
             changeScale();
@@ -87,30 +91,28 @@ public class GraphicBean implements Serializable{
     public void changeScale() throws IOException{
         switch(scaleSelected){
             case DAY:
-                if(dayDate != null){
-                    graphicDayPojo.fillGraphicForData( analyzerDataService.getDataByDay(dayDate), scaleSelected );
-                }
+                graphicDayPojo.fillGraphicForDayData( analyzerDataService.getDataByDay(dayDate));
                 enableDayGraphic = graphicDayPojo.hasValues();
                 enableDayHoursGraphic = false;
                 enableMonthGraphic = false;
                 enableYearGraphic = false;
                 break;
             case HOUR:
-                enableDayHoursGraphic = true;
+                graphicDayHoursPojo.fillGraphicForDayHoursData( analyzerDataService.getDataByDayAndHours(dayDate, hourSelected));
+                enableDayHoursGraphic = graphicDayHoursPojo.hasValues();
                 enableDayGraphic = false;
                 enableMonthGraphic = false;
                 enableYearGraphic = false;
                 break;
             case MONTH:
-                enableMonthGraphic = true;
+                graphicMonthPojo.fillGraphicForMonthData( analyzerDataService.getDataByYearAndMonths( yearSelected, monthSelected ) );
+                enableMonthGraphic = graphicMonthPojo.hasValues();
                 enableYearGraphic = false;
                 enableDayHoursGraphic = false;
                 enableDayGraphic = false;
                 break;
             case YEAR:
-                if(yearSelected != null){
-                    graphicYearPojo.fillGraphicForData( analyzerDataService.getDataByYear( yearSelected ), scaleSelected );
-                }
+                graphicYearPojo.fillGraphicForYearData( analyzerDataService.getDataByYear( yearSelected ) );
                 enableYearGraphic = graphicYearPojo.hasValues();
                 enableMonthGraphic = false;
                 enableDayHoursGraphic = false;
@@ -123,30 +125,30 @@ public class GraphicBean implements Serializable{
     private List<SelectItem> getLoadHours() {
         List<SelectItem> hours = new ArrayList<SelectItem>();
 
-        hours.add(new SelectItem(0, "00:00"));
-        hours.add(new SelectItem(1, "01:00"));
-        hours.add(new SelectItem(2, "02:00"));
-        hours.add(new SelectItem(3, "03:00"));
-        hours.add(new SelectItem(4, "04:00"));
-        hours.add(new SelectItem(5, "05:00"));
-        hours.add(new SelectItem(6, "06:00"));
-        hours.add(new SelectItem(7, "07:00"));
-        hours.add(new SelectItem(8, "08:00"));
-        hours.add(new SelectItem(9, "09:00"));
-        hours.add(new SelectItem(10, "10:00"));
-        hours.add(new SelectItem(11, "11:00"));
-        hours.add(new SelectItem(12, "12:00"));
-        hours.add(new SelectItem(13, "13:00"));
-        hours.add(new SelectItem(14, "14:00"));
-        hours.add(new SelectItem(15, "15:00"));
-        hours.add(new SelectItem(16, "16:00"));
-        hours.add(new SelectItem(17, "17:00"));
-        hours.add(new SelectItem(18, "18:00"));
-        hours.add(new SelectItem(19, "19:00"));
-        hours.add(new SelectItem(20, "20:00"));
-        hours.add(new SelectItem(21, "21:00"));
-        hours.add(new SelectItem(22, "22:00"));
-        hours.add(new SelectItem(23, "23:00"));
+        hours.add(new SelectItem("00", "00:00"));
+        hours.add(new SelectItem("01", "01:00"));
+        hours.add(new SelectItem("02", "02:00"));
+        hours.add(new SelectItem("03", "03:00"));
+        hours.add(new SelectItem("04", "04:00"));
+        hours.add(new SelectItem("05", "05:00"));
+        hours.add(new SelectItem("06", "06:00"));
+        hours.add(new SelectItem("07", "07:00"));
+        hours.add(new SelectItem("08", "08:00"));
+        hours.add(new SelectItem("09", "09:00"));
+        hours.add(new SelectItem("10", "10:00"));
+        hours.add(new SelectItem("11", "11:00"));
+        hours.add(new SelectItem("12", "12:00"));
+        hours.add(new SelectItem("13", "13:00"));
+        hours.add(new SelectItem("14", "14:00"));
+        hours.add(new SelectItem("15", "15:00"));
+        hours.add(new SelectItem("16", "16:00"));
+        hours.add(new SelectItem("17", "17:00"));
+        hours.add(new SelectItem("18", "18:00"));
+        hours.add(new SelectItem("19", "19:00"));
+        hours.add(new SelectItem("20", "20:00"));
+        hours.add(new SelectItem("21", "21:00"));
+        hours.add(new SelectItem("22", "22:00"));
+        hours.add(new SelectItem("23", "23:00"));
 
         return hours;
     }
@@ -168,13 +170,28 @@ public class GraphicBean implements Serializable{
     }
 
     public void onDaySelect(SelectEvent event) throws IOException {
-        graphicDayPojo.fillGraphicForData(analyzerDataService.getDataByDay(dayDate),scaleSelected);
+        if(dayDate != null)
+            graphicDayPojo.fillGraphicForDayData(analyzerDataService.getDataByDay(dayDate));
+    }
+    
+    public void onDayHourSelect(SelectEvent event) throws IOException {
+        if(dayDate != null && hourSelected != null)
+            graphicDayHoursPojo.fillGraphicForDayHoursData( analyzerDataService.getDataByDayAndHours( dayDate, hourSelected ) );
     }
 
+    public void updateDayHoursGraphic(final AjaxBehaviorEvent event) throws IOException{
+        if(dayDate != null && hourSelected != null)
+            graphicDayHoursPojo.fillGraphicForDayHoursData( analyzerDataService.getDataByDayAndHours( dayDate, hourSelected ) );
+    }
+    
     public void updateYearGraphic(final AjaxBehaviorEvent event){
-        if(yearSelected != null){
-            graphicYearPojo.fillGraphicForData(analyzerDataService.getDataByYear(yearSelected),scaleSelected);
-        }
+        if(yearSelected != null)
+            graphicYearPojo.fillGraphicForYearData(analyzerDataService.getDataByYear(yearSelected));
+    }
+    
+    public void updateMonthGraphic(final AjaxBehaviorEvent event){
+        if(yearSelected != null && monthSelected != null)
+            graphicMonthPojo.fillGraphicForMonthData(analyzerDataService.getDataByYearAndMonths( yearSelected, monthSelected ));
     }
 
     public void fillDatabase() throws IOException{
@@ -349,6 +366,14 @@ public class GraphicBean implements Serializable{
 
     public void setGraphicYearPojo(GraphicBarPojo graphicYearPojo) {
         this.graphicYearPojo = graphicYearPojo;
+    }
+
+    public GraphicLinearPojo getGraphicDayHoursPojo() {
+        return graphicDayHoursPojo;
+    }
+
+    public void setGraphicDayHoursPojo( GraphicLinearPojo graphicDayHoursPojo ) {
+        this.graphicDayHoursPojo = graphicDayHoursPojo;
     }
 
 }

@@ -52,45 +52,72 @@
 					</p:column>
 					<p:column styleClass="mainTableRight">
 						<div align="center" class="fullWidth">
-							<p:outputLabel rendered="#{graphicBean.enableYearGraphic}" for="years" value="Years:" styleClass="titleFont"></p:outputLabel>
-							<p:spacer rendered="#{graphicBean.enableYearGraphic}" width="5" />
+							<p:outputLabel rendered="#{graphicBean.enableYearGraphic or graphicBean.enableMonthGraphic}" for="years" value="Year:" styleClass="titleFont"></p:outputLabel>
+							<p:spacer rendered="#{graphicBean.enableYearGraphic or graphicBean.enableMonthGraphic}" width="5" />
 							<p:selectOneMenu rendered="#{graphicBean.enableYearGraphic}" id="years" value="#{graphicBean.yearSelected}">
 								<p:ajax event="change" listener="#{graphicBean.updateYearGraphic}" update="chartFormId"></p:ajax>
 								<f:selectItems value="#{graphicBean.years}"/>
 							</p:selectOneMenu>
+							<p:selectOneMenu rendered="#{graphicBean.enableMonthGraphic}" id="yearsMonths" value="#{graphicBean.yearSelected}">
+								<p:ajax event="change" listener="#{graphicBean.updateMonthGraphic}" update="chartFormId"></p:ajax>
+								<f:selectItems value="#{graphicBean.years}"/>
+							</p:selectOneMenu>
+							<p:spacer rendered="#{graphicBean.enableMonthGraphic}" width="20" />
 							<p:outputLabel rendered="#{graphicBean.enableMonthGraphic}" for="months" value="Month:" styleClass="titleFont"></p:outputLabel>
 							<p:spacer rendered="#{graphicBean.enableMonthGraphic}" width="5" />
 							<p:selectOneMenu rendered="#{graphicBean.enableMonthGraphic}" id="months" value="#{graphicBean.monthSelected}">
-								<f:selectItems value="#{graphicBean.months}" var="newmonth" itemLabel="{newmonth.label}" itemValue="{newmonth}"/>
+								<p:ajax event="change" listener="#{graphicBean.updateMonthGraphic}" update="chartFormId"></p:ajax>
+								<f:selectItems value="#{graphicBean.months}" var="newmonth" itemLabel="#{newmonth.label}" itemValue="#{newmonth}"/>
 							</p:selectOneMenu>
-							<p:outputLabel rendered="#{graphicBean.enableDayGraphic}" for="forDay" value="Day:" styleClass="titleFont"></p:outputLabel>
-							<p:spacer rendered="#{graphicBean.enableDayGraphic}" width="5" />
+							<p:outputLabel rendered="#{graphicBean.enableDayGraphic or graphicBean.enableDayHoursGraphic}" for="forDay" value="Day:" styleClass="titleFont"></p:outputLabel>
+							<p:spacer rendered="#{graphicBean.enableDayGraphic or graphicBean.enableDayHoursGraphic}" width="5" />
 							<p:calendar widgetVar="forDay" pattern="dd/MM/yy" id="forDay" rendered="#{graphicBean.enableDayGraphic}"
 								value="#{graphicBean.dayDate}">
 								<p:ajax event="dateSelect" listener="#{graphicBean.onDaySelect}"
+									update=":chartFormId" />
+							</p:calendar>
+							<p:calendar widgetVar="forDay" pattern="dd/MM/yy" id="forDayHours" rendered="#{graphicBean.enableDayHoursGraphic}"
+								value="#{graphicBean.dayDate}">
+								<p:ajax event="dateSelect" listener="#{graphicBean.onDayHourSelect}"
 									update=":chartFormId" />
 							</p:calendar>
 							<p:spacer width="30" rendered="#{graphicBean.enableDayHoursGraphic}"/>
 							<p:outputLabel rendered="#{graphicBean.enableDayHoursGraphic}" for="hours" value="Time: " styleClass="titleFont"></p:outputLabel>
 							<p:spacer rendered="#{graphicBean.enableDayHoursGraphic}" width="5" />
 							<p:selectOneMenu rendered="#{graphicBean.enableDayHoursGraphic}" id="hours" value="#{graphicBean.hourSelected}">
-								<f:selectItems value="#{graphicBean.hours}"/>
+								<p:ajax event="change" listener="#{graphicBean.updateDayHoursGraphic}" update="chartFormId"></p:ajax>
+								<f:selectItems value="#{graphicBean.hours}" var="newhour" itemLabel="#{newhour.label}" itemValue="#{newhour.value}"/>
 							</p:selectOneMenu>
 						</div>
-						<div align="center" class="fullWidth">
-							<p:chart id="chartId" rendered="#{graphicBean.enableDayGraphic}"
-								widgetVar="chartId" styleCdslass="chartCSS" type="line"
+						<div align="center">
+							<p:chart id="chartHourId" rendered="#{graphicBean.enableDayHoursGraphic}" 
+								widgetVar="chartHourId" styleClass="chartCSS" type="line"
+								model="#{graphicBean.graphicDayHoursPojo.lineModel}" />
+							<p:chart id="chartDayId" rendered="#{graphicBean.enableDayGraphic}"
+								widgetVar="chartDayId" styleClass="chartCSS" type="line"
 								model="#{graphicBean.graphicDayPojo.lineModel}" />
-							<p:chart rendered="#{graphicBean.enableYearGraphic}" 
+							<p:chart rendered="#{graphicBean.enableYearGraphic}" styleClass="chartCSS" id="chartYearId" widgetVar="chartYearId" 
 								model="#{graphicBean.graphicYearPojo.barModel}" type="bar" style="height:300px"/>
+							<p:chart rendered="#{graphicBean.enableMonthGraphic}" styleClass="chartCSS" id="chartMonthId" widgetVar="chartMonthId" 
+								model="#{graphicBean.graphicMonthPojo.barModel}" type="bar" style="height:300px"/>
 							<p:outputLabel rendered="#{not graphicBean.enableDayGraphic and not graphicBean.enableDayHoursGraphic and 
 													   not graphicBean.enableMonthGraphic and not graphicBean.enableYearGraphic}"
 								value="No Graphic to Display" styleClass="warningFont"></p:outputLabel>
 						</div>
 						<br />
 						<div align="center" class="fullWidth">
-							<p:commandButton type="button" value="Reset Zoom"
-								icon="ui-icon-cancel" onclick="PF('chartId').resetZoom()" />
+							<p:commandButton type="button" value="Reset Zoom" rendered="#{graphicBean.enableDayHoursGraphic}"
+								icon="ui-icon-cancel" 
+								onclick="PF('chartHourId').resetZoom()" />
+							<p:commandButton type="button" value="Reset Zoom" rendered="#{graphicBean.enableDayGraphic}"
+								icon="ui-icon-cancel" 
+								onclick="PF('chartDayId').resetZoom()" />
+							<p:commandButton type="button" value="Reset Zoom" rendered="#{graphicBean.enableYearGraphic}"
+								icon="ui-icon-cancel" 
+								onclick="PF('chartYearId').resetZoom()" />
+							<p:commandButton type="button" value="Reset Zoom" rendered="#{graphicBean.enableMonthGraphic}"
+								icon="ui-icon-cancel" 
+								onclick="PF('chartMonthId').resetZoom()" />
 							<p:spacer width="10" />
 							<p:commandButton type="submit" value="Fill Database Script"
 								ajax="false" actionListener="#{graphicBean.fillDatabaseScript}"></p:commandButton>

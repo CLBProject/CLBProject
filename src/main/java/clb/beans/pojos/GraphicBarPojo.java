@@ -19,7 +19,7 @@ public class GraphicBarPojo {
 	private ChartSeries chartSeriesAl3;
 
 	
-	public GraphicBarPojo(ScaleGraphic scaleGraphic){
+	public GraphicBarPojo(){
 
 	    barModel = new BarChartModel();
 	    barModel.setZoom(true);
@@ -39,19 +39,45 @@ public class GraphicBarPojo {
         barModel.addSeries(chartSeriesAl2);
         barModel.addSeries(chartSeriesAl3);
 	}
-	
-	public void fillGraphicForData(List<MonthAverageObject> monthAverage, ScaleGraphic scaleGraphic){
-		
-		
-		switch(scaleGraphic){
-		case YEAR:
-			fillGraphicForDayData(monthAverage);
-			break;
-		default: 
-		}
-	}
 
-	private void fillGraphicForDayData(List<MonthAverageObject> monthAverage){
+	public void fillGraphicForMonthData( List<MonthAverageObject> monthAverage ) {
+	    
+        double maxValue = 0;
+
+        chartSeriesAl1.getData().clear();
+        chartSeriesAl2.getData().clear();
+        chartSeriesAl3.getData().clear();
+
+        for(MonthAverageObject monthInfo : monthAverage){
+            
+            chartSeriesAl1.set(monthInfo.getDay(), monthInfo.getAl1Average());
+            chartSeriesAl2.set(monthInfo.getDay(), monthInfo.getAl2Average());
+            chartSeriesAl3.set(monthInfo.getDay(), monthInfo.getAl3Average());
+
+            if(monthInfo.getAl1Average() > maxValue){
+                maxValue = monthInfo.getAl1Average();
+            }
+            if(monthInfo.getAl1Average() > maxValue){
+                maxValue = monthInfo.getAl1Average();
+            }
+            if(monthInfo.getAl1Average() > maxValue){
+                maxValue = monthInfo.getAl1Average();
+            }
+
+        }
+        
+        Axis xAxis = barModel.getAxis(AxisType.X);
+        xAxis.setLabel("Day Average");
+         
+        Axis yAxis = barModel.getAxis(AxisType.Y);
+        yAxis.setLabel("Power");
+        
+        yAxis.setMin(0);
+        yAxis.setMax(new Double(maxValue + maxValue*0.05).intValue());
+        
+    }
+
+	public void fillGraphicForYearData(List<MonthAverageObject> monthAverage){
 
 		double maxValue = 0;
 
@@ -61,9 +87,9 @@ public class GraphicBarPojo {
 
 		for(MonthAverageObject monthInfo : monthAverage){
 		    
-		    chartSeriesAl1.set(monthInfo.getMonth().name(), monthInfo.getAl1Average());
-		    chartSeriesAl2.set(monthInfo.getMonth().name(), monthInfo.getAl2Average());
-		    chartSeriesAl3.set(monthInfo.getMonth().name(), monthInfo.getAl3Average());
+		    chartSeriesAl1.set(monthInfo.getMonth().getLabel(), monthInfo.getAl1Average());
+		    chartSeriesAl2.set(monthInfo.getMonth().getLabel(), monthInfo.getAl2Average());
+		    chartSeriesAl3.set(monthInfo.getMonth().getLabel(), monthInfo.getAl3Average());
 
 			if(monthInfo.getAl1Average() > maxValue){
 			    maxValue = monthInfo.getAl1Average();
@@ -78,7 +104,7 @@ public class GraphicBarPojo {
 		}
 		
         Axis xAxis = barModel.getAxis(AxisType.X);
-        xAxis.setLabel("Month");
+        xAxis.setLabel("Month Average");
          
         Axis yAxis = barModel.getAxis(AxisType.Y);
         yAxis.setLabel("Power");

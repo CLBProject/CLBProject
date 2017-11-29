@@ -8,14 +8,18 @@ public class MonthAverageObject
     private double al1Average;
     private double al2Average;
     private double al3Average;
+    private Integer year;
     private Month month;
+    private Integer day;
     
-    public MonthAverageObject( double al1Average, double al2Average, double al3Average, Month month ) {
+    public MonthAverageObject( double al1Average, double al2Average, double al3Average, Integer year, Month month, Integer day ) {
         super();
         this.al1Average = al1Average;
         this.al2Average = al2Average;
         this.al3Average = al3Average;
+        this.year = year;
         this.month = month;
+        this.day = day;
     }
 
     public double getAl1Average() {
@@ -32,6 +36,14 @@ public class MonthAverageObject
 
     public Month getMonth() {
         return month;
+    }
+
+    public Integer getDay() {
+        return day;
+    }
+
+    public Integer getYear() {
+        return year;
     }
     
     

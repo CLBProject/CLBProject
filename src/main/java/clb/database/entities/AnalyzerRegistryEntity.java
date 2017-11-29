@@ -15,7 +15,9 @@ import java.util.List;
 @Table(name="ANALYZER_REGISTRY")
 @NamedQueries({
 	@NamedQuery(name="AnalyzerRegistry.findAll", query="SELECT a FROM AnalyzerRegistryEntity a"),
-	@NamedQuery(name="AnalyzerRegistry.findAllByDay", query="SELECT a FROM AnalyzerRegistryEntity a where a.currentdate = :currentdate")})
+	@NamedQuery(name="AnalyzerRegistry.findAllByDay", query="SELECT a FROM AnalyzerRegistryEntity a where a.currentdate = :currentdate"),
+    @NamedQuery(name="AnalyzerRegistry.findAllByDayHour", query="SELECT a FROM AnalyzerRegistryEntity a where a.currentdate = :currentdate and substring(a.currenttime,1,2) = :currenthour")}
+)
 public class AnalyzerRegistryEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 

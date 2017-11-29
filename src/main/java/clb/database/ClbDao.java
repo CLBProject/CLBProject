@@ -21,13 +21,15 @@ public interface ClbDao<T extends Serializable> {
 	
 	List<AnalyzerRegistryEntity> getAnalyzerRegistriesByDay(Date date);
 	
-	List<AnalyzerRegistryEntity> getOnlyLatestCurrentAnalyzerRegistryData(Date sinceDate);
+	List<AnalyzerRegistryEntity> getAnalyzerRegistriesByDayAndHour(Date date, String hour); 
 
     void flush();
 
 	List<Integer> getRegistryYears();
 	
 	Collection<?> getYearMonthAverages(Integer year);
+
+    Collection<?> getYearMonthDaysAverages( Integer yearSelected, Integer monthSelected );
 
 	
 }

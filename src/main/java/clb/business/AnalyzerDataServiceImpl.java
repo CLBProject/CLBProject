@@ -77,14 +77,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
     }
 
     @Override
-    public List<AnalyzerRegistryObject> getNewValuesToUpdate(Date sinceDate) {
-
-        return clbDaoAnalyzer.getOnlyLatestCurrentAnalyzerRegistryData(sinceDate).stream()
-                .map(AnalyzerRegistryObject::new)
-                .collect(Collectors.toList());
-    }
-
-    @Override
     @Transactional
     public void fillDatabaseDataWithMoreThenOneYears() {
         int numberOfYears = 2;
@@ -222,29 +214,56 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
     }
 
     public List<AnalyzerRegistryObject> getDataByDay(Date day) {
-        
+
         if(day == null){
             return new ArrayList<AnalyzerRegistryObject>();
         }
-        
+
         return new ArrayList<AnalyzerRegistryObject>(clbDaoAnalyzer.getAnalyzerRegistriesByDay(day).stream()
-                .collect(Collectors.toMap(AnalyzerRegistryEntity::getCurrenttime,AnalyzerRegistryObject::new)).values());
+                .map( AnalyzerRegistryObject::new ).collect( Collectors.toList() ));
+    }
+
+    @Override
+    public List<AnalyzerRegistryObject> getDataByDayAndHours( Date day, String hour ) throws IOException {
+
+        if(day == null || hour == null){
+            return new ArrayList<AnalyzerRegistryObject>();
+        }
+
+        return new ArrayList<AnalyzerRegistryObject>(clbDaoAnalyzer.getAnalyzerRegistriesByDayAndHour(day,hour).stream()
+                .map( AnalyzerRegistryObject::new ).collect( Collectors.toList() ));
     }
 
     @Override
     public List<MonthAverageObject> getDataByYear(Integer year) {
-        
+
         if(year == null){
             return new ArrayList<MonthAverageObject>();
         }
-        
+
         else return clbDaoAnalyzer.getYearMonthAverages(year).stream()
                 .map(objectArray -> {
                     Object[] object = (Object[]) objectArray;
-                    return new MonthAverageObject( (Double) object[0], (Double) object[1], (Double) object[2], Month.getMonthById( (Integer)object[3]));
+                    return new MonthAverageObject( (Double) object[0], (Double) object[1], (Double) object[2], (Integer) object[3], Month.getMonthById( (Integer)object[4]),null);
                 })
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<MonthAverageObject> getDataByYearAndMonths( Integer yearSelected, Month monthSelected ) {
+        if(yearSelected == null || monthSelected == null){
+            return new ArrayList<MonthAverageObject>();
+        }
+
+        else return clbDaoAnalyzer.getYearMonthDaysAverages(yearSelected,monthSelected.getMonth()).stream()
+                .map(objectArray -> {
+                    Object[] object = (Object[]) objectArray;
+                    return new MonthAverageObject( (Double) object[0], (Double) object[1], (Double) object[2], (Integer) object[3], 
+                            Month.getMonthById( (Integer)object[4]), (Integer) object[5]);
+                })
+                .collect(Collectors.toList());
+    }
+
 
     @Override
     public List<Integer> getRegistryYears() {
@@ -258,6 +277,4 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
     public void setTaskExecutor(TaskExecutor taskExecutor) {
         this.taskExecutor = taskExecutor;
     }
-
-
 }
