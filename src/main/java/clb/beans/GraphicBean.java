@@ -77,18 +77,19 @@ public class GraphicBean implements Serializable{
         graphicYearPojo = new GraphicBarPojo();
         graphicMonthPojo = new GraphicBarPojo();
         
+        enableAllVariables();
+        
         try {
             changeScale();
         } catch( IOException e ) {
             e.printStackTrace();
         }
-
-        aL1Check = true;
-        aL2Check = true;
-        aL3Check = true;
     }
 
     public void changeScale() throws IOException{
+        
+        enableAllVariables();
+        
         switch(scaleSelected){
             case DAY:
                 graphicDayPojo.fillGraphicForDayData( analyzerDataService.getDataByDay(dayDate));
@@ -122,6 +123,12 @@ public class GraphicBean implements Serializable{
         }
     }
 
+    private void enableAllVariables(){
+        aL1Check = true;
+        aL2Check = true;
+        aL3Check = true;
+    }
+    
     private List<SelectItem> getLoadHours() {
         List<SelectItem> hours = new ArrayList<SelectItem>();
 
@@ -158,15 +165,54 @@ public class GraphicBean implements Serializable{
     }
 
     public void updateChartSeries1(){
-        aL1Check = graphicDayPojo.updateSeries1(aL1Check);
+        switch(scaleSelected){
+            case HOUR:
+                aL1Check = graphicDayHoursPojo.updateSeries1(aL1Check);
+                break;
+            case DAY:
+                aL1Check = graphicDayPojo.updateSeries1(aL1Check);
+                break;
+            case MONTH:
+                aL1Check = graphicMonthPojo.updateSeries1(aL1Check);
+                break;
+            case YEAR:
+                aL1Check = graphicYearPojo.updateSeries1(aL1Check);
+                break;
+        }
     }
 
     public void updateChartSeries2(){
-        aL2Check = graphicDayPojo.updateSeries2(aL2Check);
+        switch(scaleSelected){
+            case HOUR:
+                aL2Check = graphicDayHoursPojo.updateSeries2(aL2Check);
+                break;
+            case DAY:
+                aL2Check = graphicDayPojo.updateSeries2(aL2Check);
+                break;
+            case MONTH:
+                aL2Check = graphicMonthPojo.updateSeries2(aL2Check);
+                break;
+            case YEAR:
+                aL2Check = graphicYearPojo.updateSeries2(aL2Check);
+                break;
+        }
     }
 
     public void updateChartSeries3(){
-        aL3Check = graphicDayPojo.updateSeries3(aL3Check);
+        switch(scaleSelected){
+            case HOUR:
+                aL3Check = graphicDayHoursPojo.updateSeries3(aL3Check);
+                break;
+            case DAY:
+                aL3Check = graphicDayPojo.updateSeries3(aL3Check);
+                break;
+            case MONTH:
+                aL3Check = graphicMonthPojo.updateSeries3(aL3Check);
+                break;
+            case YEAR:
+                aL3Check = graphicYearPojo.updateSeries3(aL3Check);
+                break;
+        }
     }
 
     public void onDaySelect(SelectEvent event) throws IOException {
