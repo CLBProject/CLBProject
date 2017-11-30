@@ -16,6 +16,7 @@ public class DataLoggerEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long dataloggerid;
 
 	private String name;
@@ -24,10 +25,10 @@ public class DataLoggerEntity implements Serializable {
 	@OneToMany(mappedBy="dataLogger")
 	private List<AnalyzerEntity> analyzers;
 
-	//bi-directional many-to-one association to Usersystem
+	//bi-directional many-to-one association to Building
 	@ManyToOne
-	@JoinColumn(name="USERID")
-	private UsersystemEntity usersystem;
+	@JoinColumn(name="BUILDINGID")
+	private BuildingEntity building;
 
 	public DataLoggerEntity() {
 	}
@@ -70,12 +71,12 @@ public class DataLoggerEntity implements Serializable {
 		return analyzer;
 	}
 
-	public UsersystemEntity getUsersystem() {
-		return this.usersystem;
+	public BuildingEntity getBuilding() {
+		return this.building;
 	}
 
-	public void setUsersystem(UsersystemEntity usersystem) {
-		this.usersystem = usersystem;
+	public void setBuilding(BuildingEntity building) {
+		this.building = building;
 	}
 
 }

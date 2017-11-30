@@ -8,8 +8,7 @@ import clb.database.entities.AnalyzerRegistryEntity;
 
 public class AnalyzerRegistryObject implements Serializable {
 
-	
-	
+
 	public AnalyzerRegistryObject(AnalyzerRegistryEntity analyzerRegEntity) {
 		super();
 		this.regid = analyzerRegEntity.getRegid();

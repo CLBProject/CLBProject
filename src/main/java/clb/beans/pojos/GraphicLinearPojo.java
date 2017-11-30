@@ -1,6 +1,7 @@
 package clb.beans.pojos;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
@@ -8,8 +9,8 @@ import org.primefaces.model.chart.DateAxis;
 import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
 
-import clb.beans.enums.ScaleGraphic;
 import clb.business.objects.AnalyzerRegistryObject;
+import clb.business.objects.MonthAverageObject;
 
 public class GraphicLinearPojo {
 
@@ -111,6 +112,43 @@ public class GraphicLinearPojo {
 
         Axis yAxis = lineModel.getAxis(AxisType.Y);
         yAxis.setLabel("Power");
+        yAxis.setMin(0);
+        yAxis.setMax(new Double(maxValue + maxValue*0.05).intValue());
+
+    }
+
+    public void fillGraphicForMonthData( List<MonthAverageObject> monthAverage ) {
+
+        double maxValue = 0;
+
+        seriesAL1.getData().clear();
+        seriesAL2.getData().clear();
+        seriesAL3.getData().clear();
+
+        for(MonthAverageObject monthInfo : monthAverage){
+
+            seriesAL1.set(monthInfo.getDay(), monthInfo.getAl1Average());
+            seriesAL2.set(monthInfo.getDay(), monthInfo.getAl2Average());
+            seriesAL3.set(monthInfo.getDay(), monthInfo.getAl3Average());
+
+            if(monthInfo.getAl1Average() > maxValue){
+                maxValue = monthInfo.getAl1Average();
+            }
+            if(monthInfo.getAl1Average() > maxValue){
+                maxValue = monthInfo.getAl1Average();
+            }
+            if(monthInfo.getAl1Average() > maxValue){
+                maxValue = monthInfo.getAl1Average();
+            }
+
+        }
+
+        Axis xAxis = lineModel.getAxis(AxisType.X);
+        xAxis.setLabel("Day Average");
+
+        Axis yAxis = lineModel.getAxis(AxisType.Y);
+        yAxis.setLabel("Power");
+
         yAxis.setMin(0);
         yAxis.setMax(new Double(maxValue + maxValue*0.05).intValue());
 

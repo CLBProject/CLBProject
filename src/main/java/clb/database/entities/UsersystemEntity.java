@@ -10,12 +10,12 @@ import java.util.List;
  * 
  */
 @Entity
-@Table(name="USERSYSTEM")
 @NamedQuery(name="Usersystem.findAll", query="SELECT u FROM UsersystemEntity u")
 public class UsersystemEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String userid;
 
 	private String address;
@@ -26,14 +26,9 @@ public class UsersystemEntity implements Serializable {
 
 	private String username;
 
-	//bi-directional many-to-one association to DataLogger
-	@OneToMany(mappedBy="usersystem")
-	private List<DataLoggerEntity> dataLoggers;
-
 	//bi-directional many-to-one association to Building
-	@ManyToOne
-	@JoinColumn(name="BUILDINGID")
-	private BuildingEntity building;
+	@OneToMany(mappedBy="usersystem")
+	private List<BuildingEntity> buildings;
 
 	public UsersystemEntity() {
 	}
@@ -78,34 +73,26 @@ public class UsersystemEntity implements Serializable {
 		this.username = username;
 	}
 
-	public List<DataLoggerEntity> getDataLoggers() {
-		return this.dataLoggers;
+	public List<BuildingEntity> getBuildings() {
+		return this.buildings;
 	}
 
-	public void setDataLoggers(List<DataLoggerEntity> dataLoggers) {
-		this.dataLoggers = dataLoggers;
+	public void setBuildings(List<BuildingEntity> buildings) {
+		this.buildings = buildings;
 	}
 
-	public DataLoggerEntity addDataLogger(DataLoggerEntity dataLogger) {
-		getDataLoggers().add(dataLogger);
-		dataLogger.setUsersystem(this);
+	public BuildingEntity addBuilding(BuildingEntity building) {
+		getBuildings().add(building);
+		building.setUsersystem(this);
 
-		return dataLogger;
+		return building;
 	}
 
-	public DataLoggerEntity removeDataLogger(DataLoggerEntity dataLogger) {
-		getDataLoggers().remove(dataLogger);
-		dataLogger.setUsersystem(null);
+	public BuildingEntity removeBuilding(BuildingEntity building) {
+		getBuildings().remove(building);
+		building.setUsersystem(null);
 
-		return dataLogger;
-	}
-
-	public BuildingEntity getBuilding() {
-		return this.building;
-	}
-
-	public void setBuilding(BuildingEntity building) {
-		this.building = building;
+		return building;
 	}
 
 }

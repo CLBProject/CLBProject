@@ -32,7 +32,7 @@ public class GraphicBean implements Serializable{
 
     private GraphicLinearPojo graphicDayHoursPojo;
     private GraphicLinearPojo graphicDayPojo;
-    private GraphicBarPojo graphicMonthPojo;
+    private GraphicLinearPojo graphicMonthPojo;
     private GraphicBarPojo graphicYearPojo;
 
     private boolean aL1Check;
@@ -75,7 +75,7 @@ public class GraphicBean implements Serializable{
         graphicDayPojo = new GraphicLinearPojo();
         graphicDayHoursPojo = new GraphicLinearPojo();
         graphicYearPojo = new GraphicBarPojo();
-        graphicMonthPojo = new GraphicBarPojo();
+        graphicMonthPojo = new GraphicLinearPojo();
         
         enableAllVariables();
         
@@ -398,11 +398,11 @@ public class GraphicBean implements Serializable{
         this.graphicDayPojo = graphicDayPojo;
     }
 
-    public GraphicBarPojo getGraphicMonthPojo() {
+    public GraphicLinearPojo getGraphicMonthPojo() {
         return graphicMonthPojo;
     }
 
-    public void setGraphicMonthPojo(GraphicBarPojo graphicMonthPojo) {
+    public void setGraphicMonthPojo(GraphicLinearPojo graphicMonthPojo) {
         this.graphicMonthPojo = graphicMonthPojo;
     }
 

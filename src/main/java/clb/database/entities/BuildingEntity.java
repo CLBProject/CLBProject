@@ -10,19 +10,24 @@ import java.util.List;
  * 
  */
 @Entity
-@Table(name="BUILDING")
 @NamedQuery(name="Building.findAll", query="SELECT b FROM BuildingEntity b")
 public class BuildingEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long buildingid;
 
 	private String name;
 
 	//bi-directional many-to-one association to Usersystem
+	@ManyToOne
+	@JoinColumn(name="USERID")
+	private UsersystemEntity usersystem;
+
+	//bi-directional many-to-one association to DataLogger
 	@OneToMany(mappedBy="building")
-	private List<UsersystemEntity> usersystems;
+	private List<DataLoggerEntity> dataLoggers;
 
 	public BuildingEntity() {
 	}
@@ -43,26 +48,34 @@ public class BuildingEntity implements Serializable {
 		this.name = name;
 	}
 
-	public List<UsersystemEntity> getUsersystems() {
-		return this.usersystems;
+	public UsersystemEntity getUsersystem() {
+		return this.usersystem;
 	}
 
-	public void setUsersystems(List<UsersystemEntity> usersystems) {
-		this.usersystems = usersystems;
+	public void setUsersystem(UsersystemEntity usersystem) {
+		this.usersystem = usersystem;
 	}
 
-	public UsersystemEntity addUsersystem(UsersystemEntity usersystem) {
-		getUsersystems().add(usersystem);
-		usersystem.setBuilding(this);
-
-		return usersystem;
+	public List<DataLoggerEntity> getDataLoggers() {
+		return this.dataLoggers;
 	}
 
-	public UsersystemEntity removeUsersystem(UsersystemEntity usersystem) {
-		getUsersystems().remove(usersystem);
-		usersystem.setBuilding(null);
+	public void setDataLoggers(List<DataLoggerEntity> dataLoggers) {
+		this.dataLoggers = dataLoggers;
+	}
 
-		return usersystem;
+	public DataLoggerEntity addDataLogger(DataLoggerEntity dataLogger) {
+		getDataLoggers().add(dataLogger);
+		dataLogger.setBuilding(this);
+
+		return dataLogger;
+	}
+
+	public DataLoggerEntity removeDataLogger(DataLoggerEntity dataLogger) {
+		getDataLoggers().remove(dataLogger);
+		dataLogger.setBuilding(null);
+
+		return dataLogger;
 	}
 
 }

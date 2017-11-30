@@ -27,9 +27,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import clb.business.constants.Month;
 import clb.business.objects.AnalyzerRegistryObject;
+import clb.business.objects.BuildingObject;
 import clb.business.objects.MonthAverageObject;
+import clb.business.objects.UsersystemObject;
 import clb.database.ClbDao;
 import clb.database.entities.AnalyzerRegistryEntity;
+import clb.database.entities.BuildingEntity;
+import clb.database.entities.UsersystemEntity;
 
 @Service
 public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializable{
@@ -41,6 +45,12 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
     @Autowired
     private ClbDao<AnalyzerRegistryEntity> clbDaoAnalyzer;
+    
+    @Autowired
+    private ClbDao<UsersystemEntity> clbDaoUsersystem;
+    
+    @Autowired
+    private ClbDao<BuildingEntity> clbDaoBuilding;
 
     @Autowired
     private TaskExecutor taskExecutor;
@@ -75,10 +85,62 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
     public void destroy(){
 
     }
+    
+    private void createDummyUsers(){
+        UsersystemObject userObject = new UsersystemObject();
+        
+        userObject.setUserid( "nobreyeste@hotmail.com" );
+        userObject.setName( "Carlos Nobre" );
+        userObject.setAddress( "No address at this point" );
+        userObject.setUsername( "cnobre" );
+        userObject.setPassword( "123" );
+        
+        clbDaoUsersystem.create( userObject.toEntity() );
+        
+        UsersystemObject userObject2 = new UsersystemObject();
+        
+        userObject2.setUserid( "brunocatela@hotmail.com" );
+        userObject2.setName( "Bruno Catela" );
+        userObject2.setAddress( "No address at this point" );
+        userObject2.setUsername( "brunocatela" );
+        userObject2.setPassword( "123" );
+        
+        clbDaoUsersystem.create( userObject2.toEntity() );
+        
+        UsersystemObject userObject3 = new UsersystemObject();
+        
+        userObject3.setUserid( "ritz@hotmail.com" );
+        userObject3.setName( "Ritz" );
+        userObject3.setAddress( "No address at this point" );
+        userObject3.setUsername( "ritz" );
+        userObject3.setPassword( "123" );
+        
+        clbDaoUsersystem.create( userObject3.toEntity() );
+        
+        UsersystemObject userObject4 = new UsersystemObject();
+        
+        userObject4.setUserid( "vasp@hotmail.com" );
+        userObject4.setName( "VASP" );
+        userObject4.setAddress( "No address at this point" );
+        userObject4.setUsername( "rvasp" );
+        userObject4.setPassword( "123" );
+        
+        clbDaoUsersystem.create( userObject4.toEntity() );
+    }
+    
+    private void createDummyBuildings(){
+        BuildingObject buildingObject = new BuildingObject();
+        buildingObject.setName( "Amanjena Hotel" );
+        
+        clbDaoBuilding.create( buildingObject.toEntity() );
+    }
 
     @Override
     @Transactional
     public void fillDatabaseDataWithMoreThenOneYears() {
+        
+        createDummyUsers();
+        
         int numberOfYears = 2;
         int startingYear = 2017;
         int lowAl = 200;
@@ -277,4 +339,14 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
     public void setTaskExecutor(TaskExecutor taskExecutor) {
         this.taskExecutor = taskExecutor;
     }
+
+    public ClbDao<UsersystemEntity> getClbDaoUsersystem() {
+        return clbDaoUsersystem;
+    }
+
+    public void setClbDaoUsersystem( ClbDao<UsersystemEntity> clbDaoUsersystem ) {
+        this.clbDaoUsersystem = clbDaoUsersystem;
+    }
+    
+    
 }
