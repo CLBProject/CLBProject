@@ -51,6 +51,7 @@ public class GraphicLinearPojo {
         lineModel.getAxes().put(AxisType.X,axis);
 
         double maxValue = 0;
+        double minValue = Integer.MAX_VALUE;
 
         seriesAL1.getData().clear();
         seriesAL2.getData().clear();
@@ -70,12 +71,22 @@ public class GraphicLinearPojo {
             if(analyzerRegObj.getAl3() > maxValue){
                 maxValue = analyzerRegObj.getAl3();
             }
+            
+            if(analyzerRegObj.getAl1() < minValue){
+            	minValue = analyzerRegObj.getAl1();
+            }
+            if(analyzerRegObj.getAl2() < minValue){
+            	minValue = analyzerRegObj.getAl2();
+            }
+            if(analyzerRegObj.getAl3() < minValue){
+            	minValue = analyzerRegObj.getAl3();
+            }
 
         }
 
         Axis yAxis = lineModel.getAxis(AxisType.Y);
         yAxis.setLabel("Power");
-        yAxis.setMin(0);
+        yAxis.setMin(new Double(minValue - minValue*0.05).intValue());
         yAxis.setMax(new Double(maxValue + maxValue*0.05).intValue());
 
     }
@@ -88,6 +99,7 @@ public class GraphicLinearPojo {
         lineModel.getAxes().put(AxisType.X,axis);
 
         double maxValue = 0;
+        double minValue = Integer.MAX_VALUE;
 
         seriesAL1.getData().clear();
         seriesAL2.getData().clear();
@@ -107,12 +119,22 @@ public class GraphicLinearPojo {
             if(analyzerRegObj.getAl3() > maxValue){
                 maxValue = analyzerRegObj.getAl3();
             }
+            
+            if(analyzerRegObj.getAl1() < minValue){
+            	minValue = analyzerRegObj.getAl1();
+            }
+            if(analyzerRegObj.getAl2() < minValue){
+            	minValue = analyzerRegObj.getAl2();
+            }
+            if(analyzerRegObj.getAl3() < minValue){
+            	minValue = analyzerRegObj.getAl3();
+            }
 
         }
 
         Axis yAxis = lineModel.getAxis(AxisType.Y);
         yAxis.setLabel("Power");
-        yAxis.setMin(0);
+        yAxis.setMin(new Double(minValue - minValue*0.05).intValue());
         yAxis.setMax(new Double(maxValue + maxValue*0.05).intValue());
 
     }
@@ -120,6 +142,7 @@ public class GraphicLinearPojo {
     public void fillGraphicForMonthData( List<MonthAverageObject> monthAverage ) {
 
         double maxValue = 0;
+        double minValue = Integer.MAX_VALUE;
         int maxValueMonthDay = 0;
 
         seriesAL1.getData().clear();
@@ -135,11 +158,21 @@ public class GraphicLinearPojo {
             if(monthInfo.getAl1Average() > maxValue){
                 maxValue = monthInfo.getAl1Average();
             }
-            if(monthInfo.getAl1Average() > maxValue){
-                maxValue = monthInfo.getAl1Average();
+            if(monthInfo.getAl2Average() > maxValue){
+                maxValue = monthInfo.getAl2Average();
             }
-            if(monthInfo.getAl1Average() > maxValue){
-                maxValue = monthInfo.getAl1Average();
+            if(monthInfo.getAl3Average() > maxValue){
+                maxValue = monthInfo.getAl3Average();
+            }
+            
+            if(monthInfo.getAl1Average() < minValue){
+            	minValue = monthInfo.getAl1Average();
+            }
+            if(monthInfo.getAl2Average() < minValue){
+            	minValue = monthInfo.getAl2Average();
+            }
+            if(monthInfo.getAl3Average() < minValue){
+            	minValue = monthInfo.getAl3Average();
             }
 
             if(monthInfo.getDay() > maxValueMonthDay){
@@ -156,7 +189,7 @@ public class GraphicLinearPojo {
         Axis yAxis = lineModel.getAxis(AxisType.Y);
         yAxis.setLabel("Power");
 
-        yAxis.setMin(0);
+        yAxis.setMin(new Double(minValue - minValue*0.05).intValue());;
         yAxis.setMax(new Double(maxValue + maxValue*0.05).intValue());
 
     }
