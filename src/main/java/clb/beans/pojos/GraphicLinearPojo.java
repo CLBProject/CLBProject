@@ -120,6 +120,7 @@ public class GraphicLinearPojo {
     public void fillGraphicForMonthData( List<MonthAverageObject> monthAverage ) {
 
         double maxValue = 0;
+        int maxValueMonthDay = 0;
 
         seriesAL1.getData().clear();
         seriesAL2.getData().clear();
@@ -141,10 +142,16 @@ public class GraphicLinearPojo {
                 maxValue = monthInfo.getAl1Average();
             }
 
+            if(monthInfo.getDay() > maxValueMonthDay){
+            	maxValueMonthDay = monthInfo.getDay();
+            }
         }
 
         Axis xAxis = lineModel.getAxis(AxisType.X);
         xAxis.setLabel("Day Average");
+        xAxis.setTickFormat("%d");
+        xAxis.setMin(1);
+        xAxis.setMax(maxValueMonthDay);
 
         Axis yAxis = lineModel.getAxis(AxisType.Y);
         yAxis.setLabel("Power");

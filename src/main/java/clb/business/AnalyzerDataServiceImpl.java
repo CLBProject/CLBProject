@@ -95,44 +95,55 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
         userObject.setUsername( "cnobre" );
         userObject.setPassword( "123" );
         
-        clbDaoUsersystem.create( userObject.toEntity() );
-        
         UsersystemObject userObject2 = new UsersystemObject();
         
         userObject2.setUserid( "brunocatela@hotmail.com" );
         userObject2.setName( "Bruno Catela" );
         userObject2.setAddress( "No address at this point" );
-        userObject2.setUsername( "brunocatela" );
+        userObject2.setUsername( "bcatela" );
         userObject2.setPassword( "123" );
-        
-        clbDaoUsersystem.create( userObject2.toEntity() );
         
         UsersystemObject userObject3 = new UsersystemObject();
         
-        userObject3.setUserid( "ritz@hotmail.com" );
-        userObject3.setName( "Ritz" );
+        userObject3.setUserid( "luissantos@hotmail.com" );
+        userObject3.setName( "Luis Santos" );
         userObject3.setAddress( "No address at this point" );
-        userObject3.setUsername( "ritz" );
+        userObject3.setUsername( "lsantos" );
         userObject3.setPassword( "123" );
         
+        List<BuildingObject> buildObjectUser1 = new ArrayList<BuildingObject>();
+        List<BuildingObject> buildObjectUser2 = new ArrayList<BuildingObject>();
+        List<BuildingObject> buildObjectUser3 = new ArrayList<BuildingObject>();
+        
+        BuildingObject buildingObject = new BuildingObject();
+        buildingObject.setName( "Amanjena Hotel" );
+        userObject.setBuildings(buildObjectUser1);
+        
+        BuildingObject buildingObject2 = new BuildingObject();
+        buildingObject2.setName( "AquaMirage Hotel" );
+        
+        BuildingObject buildingObject3 = new BuildingObject();
+        buildingObject3.setName( "Ritz" );
+        
+        BuildingObject buildingObject4 = new BuildingObject();
+        buildingObject4.setName( "VASP" );
+        
+        buildObjectUser1.add(buildingObject);
+        buildObjectUser1.add(buildingObject2);
+        buildObjectUser2.add(buildingObject3);
+        buildObjectUser3.add(buildingObject4);
+        
+        userObject.setBuildings(buildObjectUser1);
+        userObject.setBuildings(buildObjectUser2);
+        userObject.setBuildings(buildObjectUser3);
+        
+        clbDaoUsersystem.create( userObject.toEntity() );
+        clbDaoUsersystem.create( userObject2.toEntity() );
         clbDaoUsersystem.create( userObject3.toEntity() );
-        
-        UsersystemObject userObject4 = new UsersystemObject();
-        
-        userObject4.setUserid( "vasp@hotmail.com" );
-        userObject4.setName( "VASP" );
-        userObject4.setAddress( "No address at this point" );
-        userObject4.setUsername( "rvasp" );
-        userObject4.setPassword( "123" );
-        
-        clbDaoUsersystem.create( userObject4.toEntity() );
     }
     
     private void createDummyBuildings(){
-        BuildingObject buildingObject = new BuildingObject();
-        buildingObject.setName( "Amanjena Hotel" );
-        
-        clbDaoBuilding.create( buildingObject.toEntity() );
+
     }
 
     @Override

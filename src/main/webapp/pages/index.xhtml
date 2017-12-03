@@ -99,7 +99,7 @@
 							<p:chart rendered="#{graphicBean.enableYearGraphic}" styleClass="chartCSS" id="chartYearId" widgetVar="chartYearId" 
 								model="#{graphicBean.graphicYearPojo.barModel}" type="bar" style="height:300px"/>
 							<p:chart rendered="#{graphicBean.enableMonthGraphic}" styleClass="chartCSS" id="chartMonthId" widgetVar="chartMonthId" 
-								model="#{graphicBean.graphicMonthPojo.barModel}" type="bar" style="height:300px"/>
+								model="#{graphicBean.graphicMonthPojo.lineModel}" type="line" style="height:300px"/>
 							<p:outputLabel rendered="#{not graphicBean.enableDayGraphic and not graphicBean.enableDayHoursGraphic and 
 													   not graphicBean.enableMonthGraphic and not graphicBean.enableYearGraphic}"
 								value="No Graphic to Display" styleClass="warningFont"></p:outputLabel>
