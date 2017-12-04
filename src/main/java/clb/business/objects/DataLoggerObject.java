@@ -24,14 +24,16 @@ public class DataLoggerObject
         this.dataloggerid = dataLogger.getDataloggerid();
         this.name = dataLogger.getName();
         this.building = new BuildingObject(dataLogger.getBuilding());
-        this.analyzers = dataLogger.getAnalyzers().stream().map( AnalyzerObject::new ).collect( Collectors.toList() );
+        this.analyzers = dataLogger.getAnalyzers() != null ?
+        		dataLogger.getAnalyzers().stream().map( AnalyzerObject::new ).collect( Collectors.toList() ) : null;
     }
     
     public DataLoggerEntity toEntity() {
         DataLoggerEntity dataLogEntity = new DataLoggerEntity();
         dataLogEntity.setDataloggerid( this.dataloggerid );
         dataLogEntity.setBuilding( this.building.toEntity() );
-        dataLogEntity.setAnalyzers( this.analyzers.stream().map( AnalyzerObject::toEntity ).collect(Collectors.toList()) );
+        dataLogEntity.setAnalyzers( this.analyzers != null ? 
+        		this.analyzers.stream().map( AnalyzerObject::toEntity ).collect(Collectors.toList()) : null);
         return dataLogEntity;
     }
 

@@ -23,7 +23,8 @@ public class BuildingObject
         this.buildingid = building.getBuildingid();
         this.name = building.getName();
         this.usersystem = new UsersystemObject(building.getUsersystem());
-        this.dataLoggers = building.getDataLoggers().stream().map( DataLoggerObject::new ).collect( Collectors.toList() );
+        this.dataLoggers = building.getDataLoggers() != null ?
+        		building.getDataLoggers().stream().map( DataLoggerObject::new ).collect( Collectors.toList() ) : null;
     }
 
     public BuildingEntity toEntity() {
@@ -31,7 +32,8 @@ public class BuildingObject
         buildingEntity.setBuildingid( this.buildingid );
         buildingEntity.setName( this.name );
         buildingEntity.setUsersystem( this.usersystem.toEntity() );
-        buildingEntity.setDataLoggers( this.dataLoggers.stream().map( DataLoggerObject::toEntity ).collect( Collectors.toList() ) );
+        buildingEntity.setDataLoggers( this.dataLoggers != null ?
+        		this.dataLoggers.stream().map( DataLoggerObject::toEntity ).collect( Collectors.toList() ) : null);
         return buildingEntity;
     }
 

@@ -26,13 +26,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import clb.business.constants.Month;
+import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.BuildingObject;
+import clb.business.objects.DataLoggerObject;
 import clb.business.objects.MonthAverageObject;
 import clb.business.objects.UsersystemObject;
 import clb.database.ClbDao;
 import clb.database.entities.AnalyzerRegistryEntity;
-import clb.database.entities.BuildingEntity;
 import clb.database.entities.UsersystemEntity;
 
 @Service
@@ -48,9 +49,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
     
     @Autowired
     private ClbDao<UsersystemEntity> clbDaoUsersystem;
-    
-    @Autowired
-    private ClbDao<BuildingEntity> clbDaoBuilding;
 
     @Autowired
     private TaskExecutor taskExecutor;
@@ -86,7 +84,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
     }
     
-    private void createDummyUsers(){
+    private List<AnalyzerObject> createDummyUsers(){
         UsersystemObject userObject = new UsersystemObject();
         
         userObject.setUserid( "nobreyeste@hotmail.com" );
@@ -110,47 +108,67 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
         userObject3.setAddress( "No address at this point" );
         userObject3.setUsername( "lsantos" );
         userObject3.setPassword( "123" );
-        
-        List<BuildingObject> buildObjectUser1 = new ArrayList<BuildingObject>();
-        List<BuildingObject> buildObjectUser2 = new ArrayList<BuildingObject>();
-        List<BuildingObject> buildObjectUser3 = new ArrayList<BuildingObject>();
+
         
         BuildingObject buildingObject = new BuildingObject();
         buildingObject.setName( "Amanjena Hotel" );
-        userObject.setBuildings(buildObjectUser1);
+        buildingObject.setUsersystem(userObject);
         
         BuildingObject buildingObject2 = new BuildingObject();
         buildingObject2.setName( "AquaMirage Hotel" );
+        buildingObject.setUsersystem(userObject);
         
         BuildingObject buildingObject3 = new BuildingObject();
         buildingObject3.setName( "Ritz" );
+        buildingObject.setUsersystem(userObject2);
         
         BuildingObject buildingObject4 = new BuildingObject();
         buildingObject4.setName( "VASP" );
+        buildingObject.setUsersystem(userObject3);
         
-        buildObjectUser1.add(buildingObject);
-        buildObjectUser1.add(buildingObject2);
-        buildObjectUser2.add(buildingObject3);
-        buildObjectUser3.add(buildingObject4);
+        List<AnalyzerObject> listAnalyzerObject = new ArrayList<AnalyzerObject>();
         
-        userObject.setBuildings(buildObjectUser1);
-        userObject.setBuildings(buildObjectUser2);
-        userObject.setBuildings(buildObjectUser3);
+        //Create Data Loggers
+        for(int i=0 ;i< 100; i++){
+        	DataLoggerObject dlObj = new DataLoggerObject();
+        	dlObj.setName("Data Logger " + i);
+        	
+        	for(int j=0;j<100;j++){
+        		AnalyzerObject analyzerObject = new AnalyzerObject();
+        		analyzerObject.setName("Analyzer "+j);
+        		
+        		analyzerObject.setDataLogger(dlObj);
+        		
+        		listAnalyzerObject.add(analyzerObject);
+        	}
+        	
+        	if(i < 25){
+        		dlObj.setBuilding(buildingObject);
+        	}
+        	else if(i >=25 && i < 50){
+        		dlObj.setBuilding(buildingObject2);
+        	}
+        	else if(i >=50 && i < 75){
+        		dlObj.setBuilding(buildingObject3);
+        	}
+        	else{
+        		dlObj.setBuilding(buildingObject4);
+        	}
+        }
         
         clbDaoUsersystem.create( userObject.toEntity() );
         clbDaoUsersystem.create( userObject2.toEntity() );
         clbDaoUsersystem.create( userObject3.toEntity() );
+        
+        return listAnalyzerObject;
     }
     
-    private void createDummyBuildings(){
-
-    }
 
     @Override
     @Transactional
     public void fillDatabaseDataWithMoreThenOneYears() {
         
-        createDummyUsers();
+        List<AnalyzerObject> analyzersList = createDummyUsers();
         
         int numberOfYears = 2;
         int startingYear = 2017;
@@ -164,6 +182,8 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
         Random random = new Random();
 
+        int m = 0;
+        
         for(int i = 0 ;i<numberOfYears; i++){
             int yearDays = calendar.getActualMaximum(Calendar.DAY_OF_YEAR);
             for(int l = 0; l < yearDays; l++ ){
@@ -177,6 +197,12 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                         anaRegObj.setAl1(lowAl + (highAl - lowAl) * random.nextDouble());
                         anaRegObj.setAl2(lowAl + (highAl - lowAl) * random.nextDouble());
                         anaRegObj.setAl3(lowAl + (highAl - lowAl) * random.nextDouble());
+                        
+                        analyzersList.get(m).getAnalyzerRegistries().add(anaRegObj);
+                        
+                        m++;
+                        
+                        m = m == analyzersList.size() ? 0 : m;
 
                         clbDaoAnalyzer.create( anaRegObj.toEntity() );
                         anaRegObj = null;

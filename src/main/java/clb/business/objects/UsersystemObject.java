@@ -24,7 +24,8 @@ public class UsersystemObject
         this.address = usersystem.getAddress();
         this.name = usersystem.getName();
         this.password = usersystem.getPassword();
-        this.buildings = usersystem.getBuildings().stream().map( BuildingObject::new ).collect( Collectors.toList() );
+        this.buildings = usersystem.getBuildings() != null ?
+        		usersystem.getBuildings().stream().map( BuildingObject::new ).collect( Collectors.toList() ) : null;
     }
 
     public UsersystemEntity toEntity() {
@@ -34,7 +35,8 @@ public class UsersystemObject
         userSystemEntity.setName( this.name );
         userSystemEntity.setPassword( this.password );
         userSystemEntity.setUsername( this.username );
-        userSystemEntity.setBuildings( this.buildings.stream().map( BuildingObject::toEntity ).collect( Collectors.toList() ) );
+        userSystemEntity.setBuildings( this.buildings != null ? 
+        					this.buildings.stream().map( BuildingObject::toEntity ).collect( Collectors.toList() ) : null);
         
         return userSystemEntity;
     }
