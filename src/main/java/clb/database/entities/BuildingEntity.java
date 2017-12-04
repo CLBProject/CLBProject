@@ -10,6 +10,7 @@ import java.util.List;
  * 
  */
 @Entity
+@Table(name="BUILDING")
 @NamedQuery(name="Building.findAll", query="SELECT b FROM BuildingEntity b")
 public class BuildingEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -21,12 +22,12 @@ public class BuildingEntity implements Serializable {
 	private String name;
 
 	//bi-directional many-to-one association to Usersystem
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="USERID")
 	private UsersystemEntity usersystem;
 
 	//bi-directional many-to-one association to DataLogger
-	@OneToMany(mappedBy="building")
+	@OneToMany(mappedBy="building", cascade=CascadeType.ALL)
 	private List<DataLoggerEntity> dataLoggers;
 
 	public BuildingEntity() {

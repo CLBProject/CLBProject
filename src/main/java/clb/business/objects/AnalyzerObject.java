@@ -24,7 +24,7 @@ public class AnalyzerObject
     public AnalyzerObject(AnalyzerEntity analyzerEntity){
         this.analyzerid = analyzerEntity.getAnalyzerid();
         this.name = analyzerEntity.getName();
-        this.dataLogger = new DataLoggerObject(analyzerEntity.getDataLogger());
+        this.dataLogger = analyzerEntity.getDataLogger() != null ? new DataLoggerObject(analyzerEntity.getDataLogger()) : new DataLoggerObject();
         this.analyzerRegistries = analyzerEntity.getAnalyzerRegistries() != null ?
         		analyzerEntity.getAnalyzerRegistries().stream().map(AnalyzerRegistryObject::new).collect(Collectors.toList()) : null;
     }
@@ -33,7 +33,7 @@ public class AnalyzerObject
         AnalyzerEntity analyzerEntity = new AnalyzerEntity();
         analyzerEntity.setAnalyzerid( this.analyzerid );
         analyzerEntity.setName( this.name );
-        analyzerEntity.setDataLogger( this.dataLogger.toEntity() );
+        analyzerEntity.setDataLogger( this.dataLogger != null ? this.dataLogger.toEntity() : null );
         analyzerEntity.setAnalyzerRegistries( this.analyzerRegistries != null ?
         		this.analyzerRegistries.stream().map( AnalyzerRegistryObject::toEntity).collect(Collectors.toList()) : null);
         

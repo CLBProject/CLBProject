@@ -26,7 +26,7 @@ public class DataLoggerEntity implements Serializable {
 	private List<AnalyzerEntity> analyzers;
 
 	//bi-directional many-to-one association to Building
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="BUILDINGID")
 	private BuildingEntity building;
 

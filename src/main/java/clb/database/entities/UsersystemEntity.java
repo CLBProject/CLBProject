@@ -1,8 +1,14 @@
 package clb.database.entities;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 
 /**
@@ -10,12 +16,12 @@ import java.util.List;
  * 
  */
 @Entity
+@Table(name="USERSYSTEM")
 @NamedQuery(name="Usersystem.findAll", query="SELECT u FROM UsersystemEntity u")
 public class UsersystemEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String userid;
 
 	private String address;
@@ -27,7 +33,7 @@ public class UsersystemEntity implements Serializable {
 	private String username;
 
 	//bi-directional many-to-one association to Building
-	@OneToMany(mappedBy="usersystem")
+	@OneToMany(mappedBy="usersystem", cascade=CascadeType.ALL)
 	private List<BuildingEntity> buildings;
 
 	public UsersystemEntity() {

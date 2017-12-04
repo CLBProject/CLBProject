@@ -2,7 +2,7 @@ package clb.database.entities;
 
 import java.io.Serializable;
 import java.util.List;
-
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import clb.database.entities.AnalyzerRegistryEntity;
 
@@ -20,6 +21,7 @@ import clb.database.entities.AnalyzerRegistryEntity;
  * 
  */
 @Entity
+@Table(name="ANALYZER")
 @NamedQuery(name="Analyzer.findAll", query="SELECT a FROM AnalyzerEntity a")
 public class AnalyzerEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -31,7 +33,7 @@ public class AnalyzerEntity implements Serializable {
 	private String name;
 
 	//bi-directional many-to-one association to DataLogger
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="DATALOGGERID")
 	private DataLoggerEntity dataLogger;
 

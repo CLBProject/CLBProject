@@ -145,7 +145,7 @@ public class AnalyzerRegistryEntity implements Serializable {
 	private double vlnsys;
 
 	//bi-directional many-to-one association to Analyzer
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="ANALYZERID")
 	private AnalyzerEntity analyzer;
 

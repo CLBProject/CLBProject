@@ -22,7 +22,7 @@ public class BuildingObject
     public BuildingObject( BuildingEntity building ) {
         this.buildingid = building.getBuildingid();
         this.name = building.getName();
-        this.usersystem = new UsersystemObject(building.getUsersystem());
+        this.usersystem = building.getUsersystem() != null ? new UsersystemObject(building.getUsersystem()) : new UsersystemObject();
         this.dataLoggers = building.getDataLoggers() != null ?
         		building.getDataLoggers().stream().map( DataLoggerObject::new ).collect( Collectors.toList() ) : null;
     }
@@ -31,7 +31,7 @@ public class BuildingObject
         BuildingEntity buildingEntity = new BuildingEntity();
         buildingEntity.setBuildingid( this.buildingid );
         buildingEntity.setName( this.name );
-        buildingEntity.setUsersystem( this.usersystem.toEntity() );
+        buildingEntity.setUsersystem( this.usersystem != null ? this.usersystem.toEntity() : null );
         buildingEntity.setDataLoggers( this.dataLoggers != null ?
         		this.dataLoggers.stream().map( DataLoggerObject::toEntity ).collect( Collectors.toList() ) : null);
         return buildingEntity;
