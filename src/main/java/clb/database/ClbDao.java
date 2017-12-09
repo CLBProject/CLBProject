@@ -31,5 +31,7 @@ public interface ClbDao<T extends Serializable> {
 
     Collection<?> getYearMonthDaysAverages( Integer yearSelected, Integer monthSelected );
 
+	void persistScriptBigData();
+
 	
 }

@@ -133,9 +133,6 @@ public class AnalyzerRegistryObject implements Serializable {
 	//bi-directional many-to-one association to Analyzer
 	private AnalyzerObject analyzer;
 
-	//bi-directional many-to-one association to AnalyzerRegistryExtraInfo
-	//private List<AnalyzerRegistryExtraInfo> analyzerRegistryExtraInfos;
-
 	public AnalyzerRegistryObject() {
 	}
 

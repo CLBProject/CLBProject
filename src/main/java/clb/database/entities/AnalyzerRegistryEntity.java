@@ -1,10 +1,21 @@
 package clb.database.entities;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.util.Date;
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.Date;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
 /**
@@ -146,12 +157,8 @@ public class AnalyzerRegistryEntity implements Serializable {
 
 	//bi-directional many-to-one association to Analyzer
 	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="ANALYZERID")
+	@JoinColumn(name="analyzerid")
 	private AnalyzerEntity analyzer;
-
-	//bi-directional many-to-one association to AnalyzerRegistryExtraInfo
-	@OneToMany(mappedBy="analyzerRegistry")
-	private List<AnalyzerRegistryExtraInfoEntity> analyzerRegistryExtraInfos;
 
 	public AnalyzerRegistryEntity() {
 	}
@@ -642,28 +649,6 @@ public class AnalyzerRegistryEntity implements Serializable {
 
 	public void setAnalyzer(AnalyzerEntity analyzer) {
 		this.analyzer = analyzer;
-	}
-
-	public List<AnalyzerRegistryExtraInfoEntity> getAnalyzerRegistryExtraInfos() {
-		return this.analyzerRegistryExtraInfos;
-	}
-
-	public void setAnalyzerRegistryExtraInfos(List<AnalyzerRegistryExtraInfoEntity> analyzerRegistryExtraInfos) {
-		this.analyzerRegistryExtraInfos = analyzerRegistryExtraInfos;
-	}
-
-	public AnalyzerRegistryExtraInfoEntity addAnalyzerRegistryExtraInfo(AnalyzerRegistryExtraInfoEntity analyzerRegistryExtraInfo) {
-		getAnalyzerRegistryExtraInfos().add(analyzerRegistryExtraInfo);
-		analyzerRegistryExtraInfo.setAnalyzerRegistry(this);
-
-		return analyzerRegistryExtraInfo;
-	}
-
-	public AnalyzerRegistryExtraInfoEntity removeAnalyzerRegistryExtraInfo(AnalyzerRegistryExtraInfoEntity analyzerRegistryExtraInfo) {
-		getAnalyzerRegistryExtraInfos().remove(analyzerRegistryExtraInfo);
-		analyzerRegistryExtraInfo.setAnalyzerRegistry(null);
-
-		return analyzerRegistryExtraInfo;
 	}
 
 }

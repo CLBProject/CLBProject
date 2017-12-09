@@ -1,13 +1,10 @@
 package clb.database.entities;
 
 import java.io.Serializable;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 
@@ -31,10 +28,7 @@ public class UsersystemEntity implements Serializable {
 	private String password;
 
 	private String username;
-
-	//bi-directional many-to-one association to Building
-	@OneToMany(mappedBy="usersystem", cascade=CascadeType.ALL)
-	private List<BuildingEntity> buildings;
+	
 
 	public UsersystemEntity() {
 	}
@@ -78,27 +72,4 @@ public class UsersystemEntity implements Serializable {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
-	public List<BuildingEntity> getBuildings() {
-		return this.buildings;
-	}
-
-	public void setBuildings(List<BuildingEntity> buildings) {
-		this.buildings = buildings;
-	}
-
-	public BuildingEntity addBuilding(BuildingEntity building) {
-		getBuildings().add(building);
-		building.setUsersystem(this);
-
-		return building;
-	}
-
-	public BuildingEntity removeBuilding(BuildingEntity building) {
-		getBuildings().remove(building);
-		building.setUsersystem(null);
-
-		return building;
-	}
-
 }

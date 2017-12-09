@@ -1,7 +1,7 @@
 package clb.database.entities;
 
 import java.io.Serializable;
-import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,10 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import clb.database.entities.AnalyzerRegistryEntity;
 
 
 /**
@@ -34,12 +31,8 @@ public class AnalyzerEntity implements Serializable {
 
 	//bi-directional many-to-one association to DataLogger
 	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="DATALOGGERID")
+	@JoinColumn(name="dataloggerid")
 	private DataLoggerEntity dataLogger;
-
-	//bi-directional many-to-one association to AnalyzerRegistry
-	@OneToMany(mappedBy="analyzer")
-	private List<AnalyzerRegistryEntity> analyzerRegistries;
 
 	public AnalyzerEntity() {
 	}
@@ -67,27 +60,4 @@ public class AnalyzerEntity implements Serializable {
 	public void setDataLogger(DataLoggerEntity dataLogger) {
 		this.dataLogger = dataLogger;
 	}
-
-	public List<AnalyzerRegistryEntity> getAnalyzerRegistries() {
-		return this.analyzerRegistries;
-	}
-
-	public void setAnalyzerRegistries(List<AnalyzerRegistryEntity> analyzerRegistries) {
-		this.analyzerRegistries = analyzerRegistries;
-	}
-
-	public AnalyzerRegistryEntity addAnalyzerRegistry(AnalyzerRegistryEntity analyzerRegistry) {
-		getAnalyzerRegistries().add(analyzerRegistry);
-		analyzerRegistry.setAnalyzer(this);
-
-		return analyzerRegistry;
-	}
-
-	public AnalyzerRegistryEntity removeAnalyzerRegistry(AnalyzerRegistryEntity analyzerRegistry) {
-		getAnalyzerRegistries().remove(analyzerRegistry);
-		analyzerRegistry.setAnalyzer(null);
-
-		return analyzerRegistry;
-	}
-
 }

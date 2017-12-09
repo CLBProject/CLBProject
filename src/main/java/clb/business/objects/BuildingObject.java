@@ -13,7 +13,6 @@ public class BuildingObject
 
     private UsersystemObject usersystem;
 
-    private List<DataLoggerObject> dataLoggers;
     
     public BuildingObject(){
         
@@ -23,8 +22,6 @@ public class BuildingObject
         this.buildingid = building.getBuildingid();
         this.name = building.getName();
         this.usersystem = building.getUsersystem() != null ? new UsersystemObject(building.getUsersystem()) : new UsersystemObject();
-        this.dataLoggers = building.getDataLoggers() != null ?
-        		building.getDataLoggers().stream().map( DataLoggerObject::new ).collect( Collectors.toList() ) : null;
     }
 
     public BuildingEntity toEntity() {
@@ -32,8 +29,7 @@ public class BuildingObject
         buildingEntity.setBuildingid( this.buildingid );
         buildingEntity.setName( this.name );
         buildingEntity.setUsersystem( this.usersystem != null ? this.usersystem.toEntity() : null );
-        buildingEntity.setDataLoggers( this.dataLoggers != null ?
-        		this.dataLoggers.stream().map( DataLoggerObject::toEntity ).collect( Collectors.toList() ) : null);
+
         return buildingEntity;
     }
 
@@ -60,14 +56,4 @@ public class BuildingObject
     public void setUsersystem( UsersystemObject usersystem ) {
         this.usersystem = usersystem;
     }
-
-    public List<DataLoggerObject> getDataLoggers() {
-        return dataLoggers;
-    }
-
-    public void setDataLoggers( List<DataLoggerObject> dataLoggers ) {
-        this.dataLoggers = dataLoggers;
-    }
-
-    
 }

@@ -1,8 +1,16 @@
 package clb.database.entities;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 
 /**
@@ -23,12 +31,9 @@ public class BuildingEntity implements Serializable {
 
 	//bi-directional many-to-one association to Usersystem
 	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="USERID")
+	@JoinColumn(name="userid")
 	private UsersystemEntity usersystem;
-
-	//bi-directional many-to-one association to DataLogger
-	@OneToMany(mappedBy="building", cascade=CascadeType.ALL)
-	private List<DataLoggerEntity> dataLoggers;
+	
 
 	public BuildingEntity() {
 	}
@@ -55,28 +60,6 @@ public class BuildingEntity implements Serializable {
 
 	public void setUsersystem(UsersystemEntity usersystem) {
 		this.usersystem = usersystem;
-	}
-
-	public List<DataLoggerEntity> getDataLoggers() {
-		return this.dataLoggers;
-	}
-
-	public void setDataLoggers(List<DataLoggerEntity> dataLoggers) {
-		this.dataLoggers = dataLoggers;
-	}
-
-	public DataLoggerEntity addDataLogger(DataLoggerEntity dataLogger) {
-		getDataLoggers().add(dataLogger);
-		dataLogger.setBuilding(this);
-
-		return dataLogger;
-	}
-
-	public DataLoggerEntity removeDataLogger(DataLoggerEntity dataLogger) {
-		getDataLoggers().remove(dataLogger);
-		dataLogger.setBuilding(null);
-
-		return dataLogger;
 	}
 
 }

@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import clb.database.entities.AnalyzerEntity;
-import clb.database.entities.AnalyzerRegistryEntity;
 
 public class AnalyzerObject
 {
@@ -14,8 +13,6 @@ public class AnalyzerObject
     private String name;
 
     private DataLoggerObject dataLogger;
-
-    private List<AnalyzerRegistryObject> analyzerRegistries;
     
     public AnalyzerObject(){
         
@@ -25,8 +22,7 @@ public class AnalyzerObject
         this.analyzerid = analyzerEntity.getAnalyzerid();
         this.name = analyzerEntity.getName();
         this.dataLogger = analyzerEntity.getDataLogger() != null ? new DataLoggerObject(analyzerEntity.getDataLogger()) : new DataLoggerObject();
-        this.analyzerRegistries = analyzerEntity.getAnalyzerRegistries() != null ?
-        		analyzerEntity.getAnalyzerRegistries().stream().map(AnalyzerRegistryObject::new).collect(Collectors.toList()) : null;
+      
     }
     
     public AnalyzerEntity toEntity(){
@@ -34,8 +30,6 @@ public class AnalyzerObject
         analyzerEntity.setAnalyzerid( this.analyzerid );
         analyzerEntity.setName( this.name );
         analyzerEntity.setDataLogger( this.dataLogger != null ? this.dataLogger.toEntity() : null );
-        analyzerEntity.setAnalyzerRegistries( this.analyzerRegistries != null ?
-        		this.analyzerRegistries.stream().map( AnalyzerRegistryObject::toEntity).collect(Collectors.toList()) : null);
         
         return analyzerEntity;
     }
@@ -63,14 +57,5 @@ public class AnalyzerObject
     public void setDataLogger( DataLoggerObject dataLogger ) {
         this.dataLogger = dataLogger;
     }
-
-    public List<AnalyzerRegistryObject> getAnalyzerRegistries() {
-        return analyzerRegistries;
-    }
-
-    public void setAnalyzerRegistries( List<AnalyzerRegistryObject> analyzerRegistries ) {
-        this.analyzerRegistries = analyzerRegistries;
-    }
-    
     
 }

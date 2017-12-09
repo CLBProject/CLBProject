@@ -58,7 +58,7 @@ public class AnalyzerRegistryExtraInfoEntity implements Serializable {
 
 	//bi-directional many-to-one association to AnalyzerRegistry
 	@ManyToOne
-	@JoinColumn(name="ANALYZERREGISTRYID")
+	@JoinColumn(name="analyzerregistryid")
 	private AnalyzerRegistryEntity analyzerRegistry;
 
 	public AnalyzerRegistryExtraInfoEntity() {

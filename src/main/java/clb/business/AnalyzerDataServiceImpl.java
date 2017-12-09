@@ -34,7 +34,6 @@ import clb.business.objects.MonthAverageObject;
 import clb.business.objects.UsersystemObject;
 import clb.database.ClbDao;
 import clb.database.entities.AnalyzerRegistryEntity;
-import clb.database.entities.BuildingEntity;
 import clb.database.entities.UsersystemEntity;
 
 @Service
@@ -47,9 +46,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
     @Autowired
     private ClbDao<AnalyzerRegistryEntity> clbDaoAnalyzer;
-
-    @Autowired
-    private ClbDao<UsersystemEntity> clbDaoUsersystem;
 
     @Autowired
     private TaskExecutor taskExecutor;
@@ -88,171 +84,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
     @Override
     @Transactional
     public void fillDatabaseDataWithMoreThenOneYears() {
-
-        UsersystemObject userObject = new UsersystemObject();
-
-        userObject.setUserid( "nobreyeste@hotmail.com" );
-        userObject.setName( "Carlos Nobre" );
-        userObject.setAddress( "No address at this point" );
-        userObject.setUsername( "cnobre" );
-        userObject.setPassword( "123" );
-
-        UsersystemObject userObject2 = new UsersystemObject();
-
-        userObject2.setUserid( "brunocatela@hotmail.com" );
-        userObject2.setName( "Bruno Catela" );
-        userObject2.setAddress( "No address at this point" );
-        userObject2.setUsername( "bcatela" );
-        userObject2.setPassword( "123" );
-
-        UsersystemObject userObject3 = new UsersystemObject();
-
-        userObject3.setUserid( "luissantos@hotmail.com" );
-        userObject3.setName( "Luis Santos" );
-        userObject3.setAddress( "No address at this point" );
-        userObject3.setUsername( "lsantos" );
-        userObject3.setPassword( "123" );
-
-
-        BuildingObject buildingObject = new BuildingObject();
-        buildingObject.setName( "Amanjena Hotel" );
-
-        BuildingObject buildingObject2 = new BuildingObject();
-        buildingObject2.setName( "AquaMirage Hotel" );
-
-        BuildingObject buildingObject3 = new BuildingObject();
-        buildingObject3.setName( "Ritz" );
-
-        BuildingObject buildingObject4 = new BuildingObject();
-        buildingObject4.setName( "VASP" );
-
-        List<BuildingObject> buildings = new ArrayList<BuildingObject>();
-        buildings.add( buildingObject );
-        buildings.add( buildingObject2 );
-        userObject.setBuildings( buildings );
-
-        List<BuildingObject> buildings2 = new ArrayList<BuildingObject>();
-        buildings2.add( buildingObject3 );
-        userObject2.setBuildings( buildings2 );
-
-        List<BuildingObject> buildings3 = new ArrayList<BuildingObject>();
-        buildings3.add( buildingObject4 );
-        userObject3.setBuildings( buildings3 );
-
-        List<AnalyzerObject> analyzersFinal = new ArrayList<AnalyzerObject>();
-
-        //Create Data Loggers
-        for(int i=0 ;i< 100; i++){
-            DataLoggerObject dlObj = new DataLoggerObject();
-            dlObj.setName("Data Logger " + i);
-
-            List<AnalyzerObject> listAnalyzerObject = new ArrayList<AnalyzerObject>();
-
-            for(int j=0;j<100;j++){
-                AnalyzerObject analyzerObject = new AnalyzerObject();
-                analyzerObject.setName("Analyzer "+j);
-
-                analyzerObject.setDataLogger(dlObj);
-
-                listAnalyzerObject.add(analyzerObject);
-            }
-
-            dlObj.setAnalyzers( listAnalyzerObject );
-            analyzersFinal.addAll( listAnalyzerObject );
-
-            if(i < 25){
-                List<DataLoggerObject> dataLoggersBuilding = buildingObject.getDataLoggers();
-
-                if(dataLoggersBuilding == null)
-                    dataLoggersBuilding = new ArrayList<DataLoggerObject>();
-
-                dataLoggersBuilding.add( dlObj );
-                buildingObject.setDataLoggers( dataLoggersBuilding );
-            }
-            else if(i >=25 && i < 50){
-                List<DataLoggerObject> dataLoggersBuilding = buildingObject2.getDataLoggers();
-
-                if(dataLoggersBuilding == null)
-                    dataLoggersBuilding = new ArrayList<DataLoggerObject>();
-
-                dataLoggersBuilding.add( dlObj );
-                buildingObject2.setDataLoggers( dataLoggersBuilding );
-            }
-            else if(i >=50 && i < 75){
-                List<DataLoggerObject> dataLoggersBuilding = buildingObject3.getDataLoggers();
-
-                if(dataLoggersBuilding == null)
-                    dataLoggersBuilding = new ArrayList<DataLoggerObject>();
-
-                dataLoggersBuilding.add( dlObj );
-                buildingObject3.setDataLoggers( dataLoggersBuilding );
-            }
-            else{
-                List<DataLoggerObject> dataLoggersBuilding = buildingObject4.getDataLoggers();
-
-                if(dataLoggersBuilding == null)
-                    dataLoggersBuilding = new ArrayList<DataLoggerObject>();
-
-                dataLoggersBuilding.add( dlObj );
-                buildingObject4.setDataLoggers( dataLoggersBuilding );
-            }
-        }
-    
-
-        int numberOfYears = 2;
-        int startingYear = 2017;
-        int lowAl = 200;
-        int highAl = 450;
-
-        Calendar calendar = GregorianCalendar.getInstance();
-        calendar.set( startingYear, 0, 1);
-
-        System.out.println( "Starting persist Data.." );
-
-        Random random = new Random();
-
-        int m = 0;
-
-        for(int i = 0 ;i<numberOfYears; i++){
-            int yearDays = calendar.getActualMaximum(Calendar.DAY_OF_YEAR);
-            for(int l = 0; l < yearDays; l++ ){
-                for(int j = 0; j < 24 ; j++){
-                    for(int k = 0; k < 60; k++){
-
-                        AnalyzerRegistryObject anaRegObj = new AnalyzerRegistryObject();
-                        anaRegObj.setCurrenttime( (j < 10 ? "0"+j : ""+j) + ":" + (k < 10 ? "0"+k : ""+k)+ ":00");
-                        anaRegObj.setCurrentdate( calendar.getTime() ); 
-
-                        anaRegObj.setAl1(lowAl + (highAl - lowAl) * random.nextDouble());
-                        anaRegObj.setAl2(lowAl + (highAl - lowAl) * random.nextDouble());
-                        anaRegObj.setAl3(lowAl + (highAl - lowAl) * random.nextDouble());
-
-                        AnalyzerObject currentAnalyzer = analyzersFinal.get(m);
-
-                        if(currentAnalyzer.getAnalyzerRegistries() == null){
-                            currentAnalyzer.setAnalyzerRegistries( new ArrayList<AnalyzerRegistryObject>() );
-                        }
-
-                        //currentAnalyzer.getAnalyzerRegistries().add(anaRegObj);
-
-                        m++;
-
-                        m = m == analyzersFinal.size() ? 0 : m;
-
-                        //clbDaoAnalyzer.create( anaRegObj.toEntity() );
-                        anaRegObj = null;
-                    }
-                    //clbDaoAnalyzer.flush();
-                }
-
-                System.out.println( "Persisted Day: " + calendar.get( Calendar.DAY_OF_MONTH ) + ", from month " + calendar.get( Calendar.MONTH ) + ", from year " + calendar.get( Calendar.YEAR ));
-                calendar.add(Calendar.DATE, 1);
-            }
-        }
-        
-        clbDaoUsersystem.create( userObject.toEntity() );
-        //clbDaoUsersystem.create( userObject2.toEntity() );
-        //clbDaoUsersystem.create( userObject3.toEntity() );
+        clbDaoAnalyzer.persistScriptBigData();
     }
 
 
@@ -415,14 +247,5 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
     public void setTaskExecutor(TaskExecutor taskExecutor) {
         this.taskExecutor = taskExecutor;
     }
-
-    public ClbDao<UsersystemEntity> getClbDaoUsersystem() {
-        return clbDaoUsersystem;
-    }
-
-    public void setClbDaoUsersystem( ClbDao<UsersystemEntity> clbDaoUsersystem ) {
-        this.clbDaoUsersystem = clbDaoUsersystem;
-    }
-
     
 }

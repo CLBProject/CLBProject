@@ -1,8 +1,16 @@
 package clb.database.entities;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 
 /**
@@ -21,13 +29,9 @@ public class DataLoggerEntity implements Serializable {
 
 	private String name;
 
-	//bi-directional many-to-one association to Analyzer
-	@OneToMany(mappedBy="dataLogger")
-	private List<AnalyzerEntity> analyzers;
-
 	//bi-directional many-to-one association to Building
 	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="BUILDINGID")
+	@JoinColumn(name="buildingid")
 	private BuildingEntity building;
 
 	public DataLoggerEntity() {
@@ -47,28 +51,6 @@ public class DataLoggerEntity implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public List<AnalyzerEntity> getAnalyzers() {
-		return this.analyzers;
-	}
-
-	public void setAnalyzers(List<AnalyzerEntity> analyzers) {
-		this.analyzers = analyzers;
-	}
-
-	public AnalyzerEntity addAnalyzer(AnalyzerEntity analyzer) {
-		getAnalyzers().add(analyzer);
-		analyzer.setDataLogger(this);
-
-		return analyzer;
-	}
-
-	public AnalyzerEntity removeAnalyzer(AnalyzerEntity analyzer) {
-		getAnalyzers().remove(analyzer);
-		analyzer.setDataLogger(null);
-
-		return analyzer;
 	}
 
 	public BuildingEntity getBuilding() {
