@@ -1,8 +1,5 @@
 package clb.business.objects;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import clb.database.entities.BuildingEntity;
 
 public class BuildingObject
@@ -12,8 +9,6 @@ public class BuildingObject
     private String name;
 
     private UsersystemObject usersystem;
-
-    private List<DataLoggerObject> dataLoggers;
     
     public BuildingObject(){
         
@@ -22,16 +17,14 @@ public class BuildingObject
     public BuildingObject( BuildingEntity building ) {
         this.buildingid = building.getBuildingid();
         this.name = building.getName();
-        this.usersystem = new UsersystemObject(building.getUsersystem());
-        this.dataLoggers = building.getDataLoggers().stream().map( DataLoggerObject::new ).collect( Collectors.toList() );
+        this.usersystem = new UsersystemObject(building != null ? building.getUsersystem() : null);
     }
 
     public BuildingEntity toEntity() {
         BuildingEntity buildingEntity = new BuildingEntity();
         buildingEntity.setBuildingid( this.buildingid );
         buildingEntity.setName( this.name );
-        buildingEntity.setUsersystem( this.usersystem.toEntity() );
-        buildingEntity.setDataLoggers( this.dataLoggers.stream().map( DataLoggerObject::toEntity ).collect( Collectors.toList() ) );
+        buildingEntity.setUsersystem( this.usersystem != null ? this.usersystem.toEntity() : null);
         return buildingEntity;
     }
 
@@ -58,14 +51,4 @@ public class BuildingObject
     public void setUsersystem( UsersystemObject usersystem ) {
         this.usersystem = usersystem;
     }
-
-    public List<DataLoggerObject> getDataLoggers() {
-        return dataLoggers;
-    }
-
-    public void setDataLoggers( List<DataLoggerObject> dataLoggers ) {
-        this.dataLoggers = dataLoggers;
-    }
-
-    
 }

@@ -1,10 +1,6 @@
 package clb.business.objects;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import clb.database.entities.AnalyzerEntity;
-import clb.database.entities.AnalyzerRegistryEntity;
 
 public class AnalyzerObject
 {
@@ -14,8 +10,6 @@ public class AnalyzerObject
     private String name;
 
     private DataLoggerObject dataLogger;
-
-    private List<AnalyzerRegistryObject> analyzerRegistries;
     
     public AnalyzerObject(){
         
@@ -24,17 +18,15 @@ public class AnalyzerObject
     public AnalyzerObject(AnalyzerEntity analyzerEntity){
         this.analyzerid = analyzerEntity.getAnalyzerid();
         this.name = analyzerEntity.getName();
-        this.dataLogger = new DataLoggerObject(analyzerEntity.getDataLogger());
-        this.analyzerRegistries = analyzerEntity.getAnalyzerRegistries().stream().map(AnalyzerRegistryObject::new).collect(Collectors.toList());
-    }
+        this.dataLogger = new DataLoggerObject(analyzerEntity != null ? analyzerEntity.getDataLogger() : null);
+       }
     
     public AnalyzerEntity toEntity(){
         AnalyzerEntity analyzerEntity = new AnalyzerEntity();
         analyzerEntity.setAnalyzerid( this.analyzerid );
         analyzerEntity.setName( this.name );
-        analyzerEntity.setDataLogger( this.dataLogger.toEntity() );
-        analyzerEntity.setAnalyzerRegistries( this.analyzerRegistries.stream().map( AnalyzerRegistryObject::toEntity).collect(Collectors.toList()) );
-        
+        analyzerEntity.setDataLogger( this.dataLogger != null ? this.dataLogger.toEntity() : null);
+
         return analyzerEntity;
     }
 
@@ -61,14 +53,5 @@ public class AnalyzerObject
     public void setDataLogger( DataLoggerObject dataLogger ) {
         this.dataLogger = dataLogger;
     }
-
-    public List<AnalyzerRegistryObject> getAnalyzerRegistries() {
-        return analyzerRegistries;
-    }
-
-    public void setAnalyzerRegistries( List<AnalyzerRegistryObject> analyzerRegistries ) {
-        this.analyzerRegistries = analyzerRegistries;
-    }
-    
     
 }

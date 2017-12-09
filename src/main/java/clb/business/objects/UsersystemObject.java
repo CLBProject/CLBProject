@@ -1,8 +1,5 @@
 package clb.business.objects;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import clb.database.entities.UsersystemEntity;
 
 public class UsersystemObject
@@ -13,7 +10,6 @@ public class UsersystemObject
     private String name;
     private String password;
     private String username;
-    private List<BuildingObject> buildings;
 
     public UsersystemObject(){
         
@@ -24,7 +20,6 @@ public class UsersystemObject
         this.address = usersystem.getAddress();
         this.name = usersystem.getName();
         this.password = usersystem.getPassword();
-        this.buildings = usersystem.getBuildings().stream().map( BuildingObject::new ).collect( Collectors.toList() );
     }
 
     public UsersystemEntity toEntity() {
@@ -34,7 +29,6 @@ public class UsersystemObject
         userSystemEntity.setName( this.name );
         userSystemEntity.setPassword( this.password );
         userSystemEntity.setUsername( this.username );
-        userSystemEntity.setBuildings( this.buildings.stream().map( BuildingObject::toEntity ).collect( Collectors.toList() ) );
         
         return userSystemEntity;
     }
@@ -78,15 +72,4 @@ public class UsersystemObject
     public void setUsername( String username ) {
         this.username = username;
     }
-
-    public List<BuildingObject> getBuildings() {
-        return buildings;
-    }
-
-    public void setBuildings( List<BuildingObject> buildings ) {
-        this.buildings = buildings;
-    }
-    
-    
-
 }

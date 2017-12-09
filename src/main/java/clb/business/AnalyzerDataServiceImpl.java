@@ -27,12 +27,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import clb.business.constants.Month;
 import clb.business.objects.AnalyzerRegistryObject;
-import clb.business.objects.BuildingObject;
 import clb.business.objects.MonthAverageObject;
-import clb.business.objects.UsersystemObject;
 import clb.database.ClbDao;
 import clb.database.entities.AnalyzerRegistryEntity;
-import clb.database.entities.BuildingEntity;
 import clb.database.entities.UsersystemEntity;
 
 @Service
@@ -48,9 +45,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
     
     @Autowired
     private ClbDao<UsersystemEntity> clbDaoUsersystem;
-    
-    @Autowired
-    private ClbDao<BuildingEntity> clbDaoBuilding;
 
     @Autowired
     private TaskExecutor taskExecutor;
@@ -85,72 +79,11 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
     public void destroy(){
 
     }
-    
-    private void createDummyUsers(){
-        UsersystemObject userObject = new UsersystemObject();
-        
-        userObject.setUserid( "nobreyeste@hotmail.com" );
-        userObject.setName( "Carlos Nobre" );
-        userObject.setAddress( "No address at this point" );
-        userObject.setUsername( "cnobre" );
-        userObject.setPassword( "123" );
-        
-        UsersystemObject userObject2 = new UsersystemObject();
-        
-        userObject2.setUserid( "brunocatela@hotmail.com" );
-        userObject2.setName( "Bruno Catela" );
-        userObject2.setAddress( "No address at this point" );
-        userObject2.setUsername( "bcatela" );
-        userObject2.setPassword( "123" );
-        
-        UsersystemObject userObject3 = new UsersystemObject();
-        
-        userObject3.setUserid( "luissantos@hotmail.com" );
-        userObject3.setName( "Luis Santos" );
-        userObject3.setAddress( "No address at this point" );
-        userObject3.setUsername( "lsantos" );
-        userObject3.setPassword( "123" );
-        
-        List<BuildingObject> buildObjectUser1 = new ArrayList<BuildingObject>();
-        List<BuildingObject> buildObjectUser2 = new ArrayList<BuildingObject>();
-        List<BuildingObject> buildObjectUser3 = new ArrayList<BuildingObject>();
-        
-        BuildingObject buildingObject = new BuildingObject();
-        buildingObject.setName( "Amanjena Hotel" );
-        userObject.setBuildings(buildObjectUser1);
-        
-        BuildingObject buildingObject2 = new BuildingObject();
-        buildingObject2.setName( "AquaMirage Hotel" );
-        
-        BuildingObject buildingObject3 = new BuildingObject();
-        buildingObject3.setName( "Ritz" );
-        
-        BuildingObject buildingObject4 = new BuildingObject();
-        buildingObject4.setName( "VASP" );
-        
-        buildObjectUser1.add(buildingObject);
-        buildObjectUser1.add(buildingObject2);
-        buildObjectUser2.add(buildingObject3);
-        buildObjectUser3.add(buildingObject4);
-        
-        userObject.setBuildings(buildObjectUser1);
-        userObject.setBuildings(buildObjectUser2);
-        userObject.setBuildings(buildObjectUser3);
-        
-        clbDaoUsersystem.create( userObject.toEntity() );
-        clbDaoUsersystem.create( userObject2.toEntity() );
-        clbDaoUsersystem.create( userObject3.toEntity() );
-    }
-    
-    private void createDummyBuildings(){
 
-    }
 
     @Override
     @Transactional
     public void fillDatabaseDataWithMoreThenOneYears() {
-        
-        createDummyUsers();
         
         int numberOfYears = 2;
         int startingYear = 2017;

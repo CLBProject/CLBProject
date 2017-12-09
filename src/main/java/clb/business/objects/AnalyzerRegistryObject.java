@@ -70,6 +70,7 @@ public class AnalyzerRegistryObject implements Serializable {
 		this.vl3n = analyzerRegEntity.getVl3n();
 		this.vllsys = analyzerRegEntity.getVllsys();
 		this.vlnsys = analyzerRegEntity.getVlnsys();
+		this.analyzer = analyzerRegEntity.getAnalyzer() != null ? new AnalyzerObject(analyzerRegEntity.getAnalyzer()) : null;
 	}
 
 	private static final long serialVersionUID = 1L;
@@ -194,11 +195,7 @@ public class AnalyzerRegistryObject implements Serializable {
 
 	private double vlnsys;
 
-	//bi-directional many-to-one association to Analyzer
-	//private Analyzer analyzer;
-
-	//bi-directional many-to-one association to AnalyzerRegistryExtraInfo
-	//private List<AnalyzerRegistryExtraInfo> analyzerRegistryExtraInfos;
+	private AnalyzerObject analyzer;
 
 	public AnalyzerRegistryObject() {
 	}
@@ -744,6 +741,7 @@ public class AnalyzerRegistryObject implements Serializable {
 		anaRegEntity.setVl3n(thdvl3n);
 		anaRegEntity.setVllsys(vllsys);
 		anaRegEntity.setVlnsys(vlnsys);
+		anaRegEntity.setAnalyzer(analyzer != null ? analyzer.toEntity() : null);
 		
 		return anaRegEntity;
 	}
