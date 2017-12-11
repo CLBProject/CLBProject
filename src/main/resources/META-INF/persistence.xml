@@ -15,8 +15,7 @@
 			<property name="hibernate.dialect" value="org.hibernate.dialect.DerbyDialect" />
 			<property name="hibernate.show_sql" value="false" />
 			<property name="hibernate.default_schema" value="clb"/>
-			<property name="hibernate.jdbc.batch_size" value="20"/>
-			<property name="hibernate.cache.use_second_level_cache" value="false"/>
+			<property name="hibernate.jdbc.batch_size" value="60"/>
  		</properties> 
 	</persistence-unit>
 </persistence>

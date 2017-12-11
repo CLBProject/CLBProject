@@ -180,72 +180,62 @@ public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializab
         System.out.println( "Starting persist Data.." );
 
         Random random = new Random();
-        
-        List<AnalyzerEntity> analyzers = new ArrayList<AnalyzerEntity>();
-        
+
         //Create Data Loggers
-        for(int i=0 ;i< 100; i++){
+        for(int i=0 ;i< 1; i++){
             DataLoggerEntity dlObj = new DataLoggerEntity();
             dlObj.setName("Data Logger " + i);
             
             System.out.println("Starting Persist for data logger :"+ i);
             
-            for(int j=0;j<100;j++){
+            for(int j=0;j<10;j++){
                 AnalyzerEntity analyzerEntity = new AnalyzerEntity();
                 analyzerEntity.setName("Analyzer "+j);
                 analyzerEntity.setDataLogger(dlObj);
-                entityManager.persist(analyzerEntity);
-                analyzers.add(analyzerEntity);
-            }
-            
-            entityManager.flush();
+                //entityManager.persist( analyzerEntity );
+                for(int a = 0 ;a<numberOfYears; a++){
+                    int yearDays = calendar.getActualMaximum(Calendar.DAY_OF_YEAR);
+                    for(int l = 0; l < yearDays; l++ ){
+                        for(int b = 0; b < 24 ; b++){
+                            for(int k = 0; k < 60; k++){
 
-            if(i < 25){
+                                AnalyzerRegistryEntity anaRegObj = new AnalyzerRegistryEntity();
+                                anaRegObj.setCurrenttime( (b < 10 ? "0"+b : ""+b) + ":" + (k < 10 ? "0"+k : ""+k)+ ":00");
+                                anaRegObj.setCurrentdate( calendar.getTime() ); 
+
+                                anaRegObj.setAl1(lowAl + (highAl - lowAl) * random.nextDouble());
+                                anaRegObj.setAl2(lowAl + (highAl - lowAl) * random.nextDouble());
+                                anaRegObj.setAl3(lowAl + (highAl - lowAl) * random.nextDouble());
+                                
+                                //anaRegObj.setAnalyzer(analyzerEntity);
+                                
+                                entityManager.persist(anaRegObj);
+                            }
+                            entityManager.flush();
+                            entityManager.clear();
+                        }
+
+                        calendar.add(Calendar.DATE, 1);
+                    }
+                    
+                }
+                
+                System.out.println( "Persisted Registries Year for Analyzer " + j);
+                
+            }
+
+            if(i < 2){
             	dlObj.setBuilding(buildingEntity);
             }
-            else if(i >=25 && i < 50){
+            else if(i >= 2 && i < 5){
             	dlObj.setBuilding(buildingEntity2);
             }
-            else if(i >=50 && i < 75){
+            else if(i >=5 && i < 7){
             	dlObj.setBuilding(buildingEntity3);
             }
             else{
             	dlObj.setBuilding(buildingEntity4);
             }
-        }
-        
-        int m = 0;
-        
-        for(int a = 0 ;a<numberOfYears; a++){
-            int yearDays = calendar.getActualMaximum(Calendar.DAY_OF_YEAR);
-            for(int l = 0; l < yearDays; l++ ){
-                for(int b = 0; b < 24 ; b++){
-                    for(int k = 0; k < 60; k++){
-
-                        AnalyzerRegistryEntity anaRegObj = new AnalyzerRegistryEntity();
-                        anaRegObj.setCurrenttime( (b < 10 ? "0"+b : ""+b) + ":" + (k < 10 ? "0"+k : ""+k)+ ":00");
-                        anaRegObj.setCurrentdate( calendar.getTime() ); 
-
-                        anaRegObj.setAl1(lowAl + (highAl - lowAl) * random.nextDouble());
-                        anaRegObj.setAl2(lowAl + (highAl - lowAl) * random.nextDouble());
-                        anaRegObj.setAl3(lowAl + (highAl - lowAl) * random.nextDouble());
-                        
-                        anaRegObj.setAnalyzer(analyzers.get(m));
-                        
-                        m++;
-                        
-                        m = m == analyzers.size() ? 0 : m;
-                        
-                        entityManager.persist(anaRegObj);
-                        anaRegObj = null;
-                    }
-                    entityManager.flush();
-                }
-
-                System.out.println( "Persisted Day: " + calendar.get( Calendar.DAY_OF_MONTH ) + ", from month " + calendar.get( Calendar.MONTH ) + ", from year " + calendar.get( Calendar.YEAR ));
-                calendar.add(Calendar.DATE, 1);
-            }
-        	
         }
     }
 }

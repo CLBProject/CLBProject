@@ -1,8 +1,5 @@
 package clb.business.objects;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import clb.database.entities.AnalyzerEntity;
 
 public class AnalyzerObject
