@@ -180,25 +180,21 @@ public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializab
         System.out.println( "Starting persist Data.." );
 
         Random random = new Random();
-        
-        List<AnalyzerEntity> analyzers = new ArrayList<AnalyzerEntity>();
-        
+
         //Create Data Loggers
-        for(int i=0 ;i< 100; i++){
+        for(int i=0 ;i< 10; i++){
             DataLoggerEntity dlObj = new DataLoggerEntity();
             dlObj.setName("Data Logger " + i);
-            
-            System.out.println("Starting Persist for data logger :"+ i);
-            
-            for(int j=0;j<100;j++){
+
+            for(int j=0;j<10;j++){
                 AnalyzerEntity analyzerEntity = new AnalyzerEntity();
                 analyzerEntity.setName("Analyzer "+j);
                 analyzerEntity.setDataLogger(dlObj);
-                entityManager.persist(analyzerEntity);
-                analyzers.add(analyzerEntity);
+                //entityManager.persist(analyzerEntity);
+                
+                persistDummyAnalyzerRegistries(numberOfYears, calendar, random, lowAl, highAl,analyzerEntity);
+                System.out.println("Persisted 2 Years registry for analyzer: " + j);
             }
-            
-            entityManager.flush();
 
             if(i < 25){
             	dlObj.setBuilding(buildingEntity);
@@ -213,9 +209,11 @@ public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializab
             	dlObj.setBuilding(buildingEntity4);
             }
         }
-        
-        int m = 0;
-        
+
+    }
+    
+    private void persistDummyAnalyzerRegistries(int numberOfYears, Calendar calendar, Random random, double lowAl, double highAl,
+    			AnalyzerEntity analyzer){
         for(int a = 0 ;a<numberOfYears; a++){
             int yearDays = calendar.getActualMaximum(Calendar.DAY_OF_YEAR);
             for(int l = 0; l < yearDays; l++ ){
@@ -230,22 +228,19 @@ public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializab
                         anaRegObj.setAl2(lowAl + (highAl - lowAl) * random.nextDouble());
                         anaRegObj.setAl3(lowAl + (highAl - lowAl) * random.nextDouble());
                         
-                        anaRegObj.setAnalyzer(analyzers.get(m));
-                        
-                        m++;
-                        
-                        m = m == analyzers.size() ? 0 : m;
+                        //anaRegObj.setAnalyzer(analyzer);
                         
                         entityManager.persist(anaRegObj);
                         anaRegObj = null;
+                        
+                        if(k % 30 == 0){
+                            entityManager.flush();
+                            entityManager.clear();
+                        }
                     }
-                    entityManager.flush();
                 }
-
-                System.out.println( "Persisted Day: " + calendar.get( Calendar.DAY_OF_MONTH ) + ", from month " + calendar.get( Calendar.MONTH ) + ", from year " + calendar.get( Calendar.YEAR ));
-                calendar.add(Calendar.DATE, 1);
             }
-        	
+            System.out.println("Persisted Registries from year: " + a);
         }
     }
 }

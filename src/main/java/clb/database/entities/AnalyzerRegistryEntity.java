@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -156,7 +155,7 @@ public class AnalyzerRegistryEntity implements Serializable {
 	private double vlnsys;
 
 	//bi-directional many-to-one association to Analyzer
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name="analyzerid")
 	private AnalyzerEntity analyzer;
 

@@ -7,7 +7,6 @@ import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.ChartSeries;
 
-import clb.beans.enums.ScaleGraphic;
 import clb.business.objects.MonthAverageObject;
 
 public class GraphicBarPojo {
