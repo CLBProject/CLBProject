@@ -10,9 +10,7 @@ import clb.business.objects.MonthAverageObject;
 
 public interface AnalyzerDataService {
 	
-	void fillDatabaseData() throws IOException;
-	
-	void fillDatabaseDataWithMoreThenOneYears();
+	void fillDatabaseDataWithMoreThenOneYears()  throws IOException;
 	
 	List<AnalyzerRegistryObject> getDataByDayAndHours(Date day, String hour) throws IOException;
 

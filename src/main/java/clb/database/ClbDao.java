@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import clb.database.entities.AnalyzerEntity;
 import clb.database.entities.AnalyzerRegistryEntity;
 
 public interface ClbDao<T extends Serializable> {
@@ -31,7 +32,7 @@ public interface ClbDao<T extends Serializable> {
 
     Collection<?> getYearMonthDaysAverages( Integer yearSelected, Integer monthSelected );
 
-	void persistScriptBigData();
+	AnalyzerEntity persistScriptBigData();
 
-	
+	void updateAnalyzerRegistries(List<AnalyzerRegistryEntity> data, AnalyzerEntity analyzer);
 }

@@ -22,225 +22,247 @@ import clb.database.entities.UsersystemEntity;
 
 public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializable{
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 
-    @PersistenceContext(unitName = "clbDatabase")
-    protected EntityManager entityManager;
+	@PersistenceContext(unitName = "clbDatabase")
+	protected EntityManager entityManager;
 
-    public void create( T entity ){
-        entityManager.persist( entity );
-    }
+	public void create( T entity ){
+		entityManager.persist( entity );
+	}
 
-    public T update( T entity ){
-        return entityManager.merge( entity );
-    }
+	public T update( T entity ){
+		return entityManager.merge( entity );
+	}
 
-    public void delete( T entity ){
-        entityManager.remove( entity );
-    }
+	public void delete( T entity ){
+		entityManager.remove( entity );
+	}
 
-    public EntityManager getEntityManager() {
-        return entityManager;
-    }
+	public EntityManager getEntityManager() {
+		return entityManager;
+	}
 
-    public void setEntityManager( EntityManager entityManager ) {
-        this.entityManager = entityManager;
-    }
+	public void setEntityManager( EntityManager entityManager ) {
+		this.entityManager = entityManager;
+	}
 
-    @Override
-    public void persistData(List<T> data) {
-        data.stream().forEach(Entity -> entityManager.persist(Entity));
-    }
-
-    /**
-     * @return All Analyzer Registries
-     */
-    @Override
-    public List<AnalyzerRegistryEntity> getAllCurrentAnalyzerRegistryData() {
-        return entityManager.createNamedQuery("AnalyzerRegistry.findAll",AnalyzerRegistryEntity.class).getResultList();
-    }
-
-    @Override
-    public void flush() {
-        entityManager.flush();
-        entityManager.clear();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public List<AnalyzerRegistryEntity> getAnalyzerRegistriesByDay(Date date) {
-        Query q = entityManager.createNamedQuery("AnalyzerRegistry.findAllByDay",AnalyzerRegistryEntity.class);
-        q.setParameter("currentdate", date);
-
-        List<AnalyzerRegistryEntity> resultList = q.getResultList();
-
-        return resultList == null ? new ArrayList<AnalyzerRegistryEntity>() : resultList;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public List<AnalyzerRegistryEntity> getAnalyzerRegistriesByDayAndHour(Date date, String hour) {
-        Query q = entityManager.createNamedQuery("AnalyzerRegistry.findAllByDayHour",AnalyzerRegistryEntity.class);
-        q.setParameter("currentdate", date);
-        q.setParameter("currenthour", hour);
-
-        List<AnalyzerRegistryEntity> resultList = q.getResultList();
-
-        return resultList == null ? new ArrayList<AnalyzerRegistryEntity>() : resultList;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public List<Integer> getRegistryYears() {
-        Query q = entityManager.createNativeQuery("select year(currentDate) from ANALYZER_REGISTRY group by year(currentDate)");
-
-        List<Integer> resultList = q.getResultList();
-
-        return resultList == null ? new ArrayList<Integer>() : resultList;
-    }
-
-    @Override
-    public Collection<?> getYearMonthAverages(Integer year){
-        Query q = entityManager.createNativeQuery("select avg(al1), avg(al2), avg(al3), year(currentDate), month(currentDate) "
-                + "from analyzer_registry "
-                + "where year(currentDate) = ?1 "
-                + "group by year(currentDate), month(currentdate)");		
-        q.setParameter(1, year);
-
-        return q.getResultList();
-    }
-
-    @Override
-    public Collection<?> getYearMonthDaysAverages( Integer yearSelected, Integer monthSelected ) {
-        Query q = entityManager.createNativeQuery("select avg(al1), avg(al2), avg(al3), year(currentdate), month(currentdate),day(currentdate) "
-                + "from clb.analyzer_registry "
-                + "where year(currentdate) = ?1 and month(currentdate) = ?2 "
-                + "group by year(currentdate),month(currentdate), day(currentdate)");       
-        q.setParameter(1, yearSelected);
-        q.setParameter(2, monthSelected);
-
-        return q.getResultList();
-    }
-
-    @Override
-    public void persistScriptBigData(){
-    	UsersystemEntity userEntity = new UsersystemEntity();
-
-        userEntity.setUserid( "nobreyeste@hotmail.com" );
-        userEntity.setName( "Carlos Nobre" );
-        userEntity.setAddress( "No address at this point" );
-        userEntity.setUsername( "cnobre" );
-        userEntity.setPassword( "123" );
-
-        UsersystemEntity userEntity2 = new UsersystemEntity();
-
-        userEntity2.setUserid( "brunocatela@hotmail.com" );
-        userEntity2.setName( "Bruno Catela" );
-        userEntity2.setAddress( "No address at this point" );
-        userEntity2.setUsername( "bcatela" );
-        userEntity2.setPassword( "123" );
-
-        UsersystemEntity userEntity3 = new UsersystemEntity();
-
-        userEntity3.setUserid( "luissantos@hotmail.com" );
-        userEntity3.setName( "Luis Santos" );
-        userEntity3.setAddress( "No address at this point" );
-        userEntity3.setUsername( "lsantos" );
-        userEntity3.setPassword( "123" );
+	@Override
+	public void persistData(List<T> data) {
+		data.stream().forEach(Entity -> entityManager.persist(Entity));
+	}
+	
+	@Override
+	public void updateAnalyzerRegistries(List<AnalyzerRegistryEntity> data, AnalyzerEntity analyzer) {
+		data.stream().forEach(entity -> {
+			Query q = entityManager.createNativeQuery("update AnalyzerRegistryEntity set kwh=:kwh where currentDate=:currentDate and "
+					+ "currentTime=:currentTime and analyzerId=:analyzerId");
+			
+			q.setParameter("kwh", entity.getKwh());
+			q.setParameter("currentDate",entity.getCurrentdate());
+			q.setParameter("currentTime",entity.getCurrenttime());
+			q.setParameter("analyzerId",entity.getAnalyzer().getAnalyzerid());
+			
+			q.executeUpdate();
+		});
+	}
 
 
-        BuildingEntity buildingEntity = new BuildingEntity();
-        buildingEntity.setName( "Amanjena Hotel" );
-        buildingEntity.setUsersystem(userEntity);
+	/**
+	 * @return All Analyzer Registries
+	 */
+	@Override
+	public List<AnalyzerRegistryEntity> getAllCurrentAnalyzerRegistryData() {
+		return entityManager.createNamedQuery("AnalyzerRegistry.findAll",AnalyzerRegistryEntity.class).getResultList();
+	}
 
-        BuildingEntity buildingEntity2 = new BuildingEntity();
-        buildingEntity2.setName( "AquaMirage Hotel" );
-        buildingEntity.setUsersystem(userEntity);
+	@Override
+	public void flush() {
+		entityManager.flush();
+		entityManager.clear();
+	}
 
-        BuildingEntity buildingEntity3 = new BuildingEntity();
-        buildingEntity3.setName( "Ritz" );
-        buildingEntity.setUsersystem(userEntity2);
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<AnalyzerRegistryEntity> getAnalyzerRegistriesByDay(Date date) {
+		Query q = entityManager.createNamedQuery("AnalyzerRegistry.findAllByDay",AnalyzerRegistryEntity.class);
+		q.setParameter("currentdate", date);
 
-        BuildingEntity buildingEntity4 = new BuildingEntity();
-        buildingEntity4.setName( "VASP" );
-        buildingEntity.setUsersystem(userEntity3);
-        
-        int numberOfYears = 2;
-        int startingYear = 2017;
-        int lowAl = 200;
-        int highAl = 450;
+		List<AnalyzerRegistryEntity> resultList = q.getResultList();
 
-        Calendar calendar = GregorianCalendar.getInstance();
-        calendar.set( startingYear, 0, 1);
+		return resultList == null ? new ArrayList<AnalyzerRegistryEntity>() : resultList;
+	}
 
-        System.out.println( "Starting persist Data.." );
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<AnalyzerRegistryEntity> getAnalyzerRegistriesByDayAndHour(Date date, String hour) {
+		Query q = entityManager.createNamedQuery("AnalyzerRegistry.findAllByDayHour",AnalyzerRegistryEntity.class);
+		q.setParameter("currentdate", date);
+		q.setParameter("currenthour", hour);
 
-        Random random = new Random();
+		List<AnalyzerRegistryEntity> resultList = q.getResultList();
 
-        //Create Data Loggers
-        for(int i=0 ;i< 10; i++){
-            DataLoggerEntity dlObj = new DataLoggerEntity();
-            dlObj.setName("Data Logger " + i);
+		return resultList == null ? new ArrayList<AnalyzerRegistryEntity>() : resultList;
+	}
 
-            for(int j=0;j<10;j++){
-                AnalyzerEntity analyzerEntity = new AnalyzerEntity();
-                analyzerEntity.setName("Analyzer "+j);
-                analyzerEntity.setDataLogger(dlObj);
-                //entityManager.persist(analyzerEntity);
-                
-                persistDummyAnalyzerRegistries(numberOfYears, calendar, random, lowAl, highAl,analyzerEntity);
-                System.out.println("Persisted 2 Years registry for analyzer: " + j);
-            }
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Integer> getRegistryYears() {
+		Query q = entityManager.createNativeQuery("select year(currentDate) from ANALYZER_REGISTRY group by year(currentDate)");
 
-            if(i < 25){
-            	dlObj.setBuilding(buildingEntity);
-            }
-            else if(i >=25 && i < 50){
-            	dlObj.setBuilding(buildingEntity2);
-            }
-            else if(i >=50 && i < 75){
-            	dlObj.setBuilding(buildingEntity3);
-            }
-            else{
-            	dlObj.setBuilding(buildingEntity4);
-            }
-        }
+		List<Integer> resultList = q.getResultList();
 
-    }
-    
-    private void persistDummyAnalyzerRegistries(int numberOfYears, Calendar calendar, Random random, double lowAl, double highAl,
-    			AnalyzerEntity analyzer){
-        for(int a = 0 ;a<numberOfYears; a++){
-            int yearDays = calendar.getActualMaximum(Calendar.DAY_OF_YEAR);
-            for(int l = 0; l < yearDays; l++ ){
-                for(int b = 0; b < 24 ; b++){
-                    for(int k = 0; k < 60; k++){
+		return resultList == null ? new ArrayList<Integer>() : resultList;
+	}
 
-                        AnalyzerRegistryEntity anaRegObj = new AnalyzerRegistryEntity();
-                        anaRegObj.setCurrenttime( (b < 10 ? "0"+b : ""+b) + ":" + (k < 10 ? "0"+k : ""+k)+ ":00");
-                        anaRegObj.setCurrentdate( calendar.getTime() ); 
+	@Override
+	public Collection<?> getYearMonthAverages(Integer year){
+		Query q = entityManager.createNativeQuery("select avg(al1), avg(al2), avg(al3), year(currentDate), month(currentDate) "
+				+ "from analyzer_registry "
+				+ "where year(currentDate) = ?1 "
+				+ "group by year(currentDate), month(currentdate)");		
+		q.setParameter(1, year);
 
-                        anaRegObj.setAl1(lowAl + (highAl - lowAl) * random.nextDouble());
-                        anaRegObj.setAl2(lowAl + (highAl - lowAl) * random.nextDouble());
-                        anaRegObj.setAl3(lowAl + (highAl - lowAl) * random.nextDouble());
-                        
-                        //anaRegObj.setAnalyzer(analyzer);
-                        
-                        entityManager.persist(anaRegObj);
-                        anaRegObj = null;
-                        
-                        if(k % 30 == 0){
-                            entityManager.flush();
-                            entityManager.clear();
-                        }
-                    }
-                }
-            }
-            System.out.println("Persisted Registries from year: " + a);
-        }
-    }
+		return q.getResultList();
+	}
+
+	@Override
+	public Collection<?> getYearMonthDaysAverages( Integer yearSelected, Integer monthSelected ) {
+		Query q = entityManager.createNativeQuery("select avg(al1), avg(al2), avg(al3), year(currentdate), month(currentdate),day(currentdate) "
+				+ "from clb.analyzer_registry "
+				+ "where year(currentdate) = ?1 and month(currentdate) = ?2 "
+				+ "group by year(currentdate),month(currentdate), day(currentdate)");       
+		q.setParameter(1, yearSelected);
+		q.setParameter(2, monthSelected);
+
+		return q.getResultList();
+	}
+
+	@Override
+	public AnalyzerEntity persistScriptBigData(){
+		UsersystemEntity userEntity = new UsersystemEntity();
+
+		userEntity.setUserid( "nobreyeste@hotmail.com" );
+		userEntity.setName( "Carlos Nobre" );
+		userEntity.setAddress( "No address at this point" );
+		userEntity.setUsername( "cnobre" );
+		userEntity.setPassword( "123" );
+
+		UsersystemEntity userEntity2 = new UsersystemEntity();
+
+		userEntity2.setUserid( "brunocatela@hotmail.com" );
+		userEntity2.setName( "Bruno Catela" );
+		userEntity2.setAddress( "No address at this point" );
+		userEntity2.setUsername( "bcatela" );
+		userEntity2.setPassword( "123" );
+
+		UsersystemEntity userEntity3 = new UsersystemEntity();
+
+		userEntity3.setUserid( "luissantos@hotmail.com" );
+		userEntity3.setName( "Luis Santos" );
+		userEntity3.setAddress( "No address at this point" );
+		userEntity3.setUsername( "lsantos" );
+		userEntity3.setPassword( "123" );
+
+
+		BuildingEntity buildingEntity = new BuildingEntity();
+		buildingEntity.setName( "Amanjena Hotel" );
+		buildingEntity.setUsersystem(userEntity);
+
+		BuildingEntity buildingEntity2 = new BuildingEntity();
+		buildingEntity2.setName( "AquaMirage Hotel" );
+		buildingEntity.setUsersystem(userEntity);
+
+		BuildingEntity buildingEntity3 = new BuildingEntity();
+		buildingEntity3.setName( "Ritz" );
+		buildingEntity.setUsersystem(userEntity2);
+
+		BuildingEntity buildingEntity4 = new BuildingEntity();
+		buildingEntity4.setName( "VASP" );
+		buildingEntity.setUsersystem(userEntity3);
+
+		AnalyzerEntity analyzer = null;
+		
+		//Create Data Loggers
+		for(int i=0 ;i< 100; i++){
+			DataLoggerEntity dlObj = new DataLoggerEntity();
+			dlObj.setName("Data Logger " + i);
+
+			if(i < 25){
+				dlObj.setBuilding(buildingEntity);
+			}
+			else if (i>=25 && i < 50){
+				dlObj.setBuilding(buildingEntity2);
+			}
+			else if (i>=50 && i < 75){
+				dlObj.setBuilding(buildingEntity3);
+			}
+			else{
+				dlObj.setBuilding(buildingEntity4);
+			}
+			
+			for(int j=0;j<100;j++){
+				AnalyzerEntity analyzerEntity = new AnalyzerEntity();
+				analyzerEntity.setName("Analyzer "+j);
+				analyzerEntity.setDataLogger(dlObj);
+				
+				entityManager.persist(analyzerEntity);
+				
+				if(j == 0)
+					analyzer = analyzerEntity;
+			}
+		}
+		
+		persistDummyAnalyzerRegistries(analyzer);
+		
+		return analyzer;
+	}
+
+	private void persistDummyAnalyzerRegistries(AnalyzerEntity analyzer){
+
+		Random random = new Random();
+
+		int numberOfYears = 2;
+		int startingYear = 2017;
+		int lowAl = 200;
+		int highAl = 450;
+
+		Calendar calendar = GregorianCalendar.getInstance();
+		calendar.set( startingYear, 0, 1);
+
+		for(int a = 0 ;a<numberOfYears; a++){
+			int yearDays = calendar.getActualMaximum(Calendar.DAY_OF_YEAR);
+			for(int l = 0; l < yearDays; l++ ){
+				for(int b = 0; b < 24 ; b++){
+					for(int k = 0; k < 60; k++){
+
+						AnalyzerRegistryEntity anaRegObj = new AnalyzerRegistryEntity();
+						anaRegObj.setCurrenttime( (b < 10 ? "0"+b : ""+b) + ":" + (k < 10 ? "0"+k : ""+k)+ ":00");
+						anaRegObj.setCurrentdate( calendar.getTime() ); 
+
+						anaRegObj.setAl1(lowAl + (highAl - lowAl) * random.nextDouble());
+						anaRegObj.setAl2(lowAl + (highAl - lowAl) * random.nextDouble());
+						anaRegObj.setAl3(lowAl + (highAl - lowAl) * random.nextDouble());
+
+						anaRegObj.setAnalyzer(analyzer);
+
+						entityManager.persist(anaRegObj);
+						anaRegObj = null;
+
+						if(k % 30 == 0){
+							entityManager.flush();
+							entityManager.clear();
+						}
+					}
+				}
+				calendar.add(Calendar.DATE, 1);
+			}
+			System.out.println("Persisted Registries from year: " + a);
+		}
+
+	}
 }

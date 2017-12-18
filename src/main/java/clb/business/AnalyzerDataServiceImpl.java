@@ -9,7 +9,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Random;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -26,15 +25,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import clb.business.constants.Month;
-import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
-import clb.business.objects.BuildingObject;
-import clb.business.objects.DataLoggerObject;
 import clb.business.objects.MonthAverageObject;
-import clb.business.objects.UsersystemObject;
 import clb.database.ClbDao;
 import clb.database.entities.AnalyzerRegistryEntity;
-import clb.database.entities.UsersystemEntity;
 
 @Service
 public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializable{
@@ -83,14 +77,12 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
     @Override
     @Transactional
-    public void fillDatabaseDataWithMoreThenOneYears() {
+    public void fillDatabaseDataWithMoreThenOneYears() throws IOException {
         clbDaoAnalyzer.persistScriptBigData();
+        updateDatabasWithRealData();
     }
 
-
-    @Override
-    @Transactional
-    public void fillDatabaseData() throws IOException{
+    private void updateDatabasWithRealData() throws IOException{
 
         XSSFWorkbook workbook = new XSSFWorkbook(dataAnalyzerXls.getInputStream());
         XSSFSheet worksheet = workbook.getSheet("Sheet1");
@@ -164,7 +156,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
         }
         analyzerRegistriesBeforeCurrentTime.addAll(analyzerRegistries);
 
-        clbDaoAnalyzer.persistData(analyzerRegistriesBeforeCurrentTime);
+        clbDaoAnalyzer.updateAnalyzerRegistries(analyzerRegistriesBeforeCurrentTime,null);
     }
 
     public ClbDao<AnalyzerRegistryEntity> getClbDaoAnalyzer() {
