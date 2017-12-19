@@ -1,10 +1,12 @@
 package clb.database.entities;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 
@@ -29,6 +31,9 @@ public class UsersystemEntity implements Serializable {
 
 	private String username;
 	
+	//bi-directional many-to-one association to BuildingEntity
+	@OneToMany(mappedBy="usersystem")
+	private List<BuildingEntity> BuildingEntitys;
 
 	public UsersystemEntity() {
 	}
@@ -71,5 +76,13 @@ public class UsersystemEntity implements Serializable {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+	
+	public List<BuildingEntity> getBuildingEntitys() {
+		return this.BuildingEntitys;
+	}
+
+	public void setBuildingEntitys(List<BuildingEntity> BuildingEntitys) {
+		this.BuildingEntitys = BuildingEntitys;
 	}
 }

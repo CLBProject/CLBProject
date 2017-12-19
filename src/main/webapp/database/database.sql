@@ -21,6 +21,7 @@ CREATE TABLE BUILDING
 (
  	buildingId bigint not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
  	name varchar(255),
+ 	buildingUserName varchar(255),
  	userId varchar(255),
  	CONSTRAINT BUILDING_PK PRIMARY KEY (buildingId),
  	FOREIGN KEY (userId) REFERENCES USERSYSTEM (userId)
@@ -30,6 +31,7 @@ CREATE TABLE DATA_LOGGER
 (
  	dataLoggerId bigint not null GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
  	name varchar(255),
+ 	ftpAddress varchar (255),
  	buildingId bigint,
  	CONSTRAINT DATA_LOGGER_PK PRIMARY KEY (dataLoggerId),
  	FOREIGN KEY (buildingId) REFERENCES BUILDING (buildingId)

@@ -1,5 +1,8 @@
 package clb.database;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -12,6 +15,10 @@ import java.util.Random;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import clb.database.entities.AnalyzerEntity;
 import clb.database.entities.AnalyzerRegistryEntity;
@@ -57,18 +64,73 @@ public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializab
 	}
 	
 	@Override
-	public void updateAnalyzerRegistries(List<AnalyzerRegistryEntity> data, AnalyzerEntity analyzer) {
-		data.stream().forEach(entity -> {
-			Query q = entityManager.createNativeQuery("update AnalyzerRegistryEntity set kwh=:kwh where currentDate=:currentDate and "
-					+ "currentTime=:currentTime and analyzerId=:analyzerId");
+	public void updateAnalyzerRegistriesForAnalyzer(File file) throws IOException {
+		
+		XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(file));
+		XSSFSheet worksheet = workbook.getSheet("Sheet1");
+
+		Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
+		calendar.setTime(new Date());
+
+		for(int i = 1;i<worksheet.getLastRowNum();i++){
+
+			XSSFRow row = worksheet.getRow(i);
+
+			Date currentDate = row.getCell(0).getDateCellValue();
+
+			calendar.setTime(row.getCell(1).getDateCellValue());   // assigns calendar to given date 
+
+			String currentTime = (calendar.get(Calendar.HOUR_OF_DAY) < 10 ? "0" + calendar.get(Calendar.HOUR_OF_DAY) : calendar.get(Calendar.HOUR_OF_DAY)+"") + ":" + 
+					(calendar.get(Calendar.MINUTE) < 10 ? "0" + calendar.get(Calendar.MINUTE) : calendar.get(Calendar.MINUTE)+"") +":"+ 
+					(calendar.get(Calendar.SECOND) < 10 ? "0" + calendar.get(Calendar.SECOND) : calendar.get(Calendar.SECOND));
 			
-			q.setParameter("kwh", entity.getKwh());
-			q.setParameter("currentDate",entity.getCurrentdate());
-			q.setParameter("currentTime",entity.getCurrenttime());
-			q.setParameter("analyzerId",entity.getAnalyzer().getAnalyzerid());
 			
-			q.executeUpdate();
-		});
+			Query qBuilding = entityManager.createNamedQuery("Building.findByUsername");
+			qBuilding.setParameter("busername", file.getName());
+			
+			BuildingEntity building = (BuildingEntity) qBuilding.getSingleResult();
+			
+			Query q = entityManager.createNamedQuery("AnalyzerRegistry.findSpecificAnalyzerRegistry",AnalyzerRegistryEntity.class);
+			q.setParameter("currenttime", currentTime);
+			q.setParameter("currentDate", currentDate);
+			q.setParameter("analyzer", building.getDataLoggerEntitys().get(0).getAnalyzerEntitys().get(0));
+			
+			AnalyzerRegistryEntity analyzerRegistryEntity = (AnalyzerRegistryEntity) q.getSingleResult();
+
+			analyzerRegistryEntity.setAl1(row.getCell(2).getNumericCellValue());
+			analyzerRegistryEntity.setAl2(row.getCell(3).getNumericCellValue());
+			analyzerRegistryEntity.setAl3(row.getCell(4).getNumericCellValue());
+			analyzerRegistryEntity.setHz(row.getCell(5).getNumericCellValue());
+			analyzerRegistryEntity.setPfl1(row.getCell(6).getNumericCellValue());
+			analyzerRegistryEntity.setPfl2(row.getCell(7).getNumericCellValue());
+			analyzerRegistryEntity.setPfl3(row.getCell(8).getNumericCellValue());
+			analyzerRegistryEntity.setPfsys(row.getCell(9).getNumericCellValue());
+			//analyzerRegistryObject.setPhaseSequence(row.getCell(10).getNumericCellValue());
+			analyzerRegistryEntity.setVl1l2(row.getCell(11).getNumericCellValue());
+			analyzerRegistryEntity.setVl1n(row.getCell(12).getNumericCellValue());
+			analyzerRegistryEntity.setVl2l3(row.getCell(13).getNumericCellValue());
+			analyzerRegistryEntity.setVl2n(row.getCell(14).getNumericCellValue());
+			analyzerRegistryEntity.setVl3l1(row.getCell(15).getNumericCellValue());
+			analyzerRegistryEntity.setVl3n(row.getCell(16).getNumericCellValue());
+			analyzerRegistryEntity.setVllsys(row.getCell(17).getNumericCellValue());
+			analyzerRegistryEntity.setVlnsys(row.getCell(18).getNumericCellValue());
+			analyzerRegistryEntity.setKval1(row.getCell(19).getNumericCellValue());
+			analyzerRegistryEntity.setKval2(row.getCell(20).getNumericCellValue());
+			analyzerRegistryEntity.setKval3(row.getCell(21).getNumericCellValue());
+			analyzerRegistryEntity.setKvasys(row.getCell(22).getNumericCellValue());
+			analyzerRegistryEntity.setKwh(row.getCell(23).getNumericCellValue());
+			analyzerRegistryEntity.setKwl1(row.getCell(24).getNumericCellValue());
+			analyzerRegistryEntity.setKwl2(row.getCell(25).getNumericCellValue());
+			analyzerRegistryEntity.setKwl3(row.getCell(26).getNumericCellValue());
+			analyzerRegistryEntity.setKwsys(row.getCell(27).getNumericCellValue());
+			analyzerRegistryEntity.setKvarh(row.getCell(28).getNumericCellValue());
+			analyzerRegistryEntity.setKvarl1(row.getCell(29).getNumericCellValue());
+			analyzerRegistryEntity.setKvarl2(row.getCell(30).getNumericCellValue());
+			analyzerRegistryEntity.setKvarl3(row.getCell(31).getNumericCellValue());
+			analyzerRegistryEntity.setKvarsys(row.getCell(32).getNumericCellValue());
+		}
+		
+	
 	}
 
 
@@ -143,7 +205,7 @@ public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializab
 	}
 
 	@Override
-	public AnalyzerEntity persistScriptBigData(){
+	public void persistScriptBigData(){
 		UsersystemEntity userEntity = new UsersystemEntity();
 
 		userEntity.setUserid( "nobreyeste@hotmail.com" );
@@ -171,19 +233,23 @@ public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializab
 
 		BuildingEntity buildingEntity = new BuildingEntity();
 		buildingEntity.setName( "Amanjena Hotel" );
+		buildingEntity.setBuildingusername("amanjenaHotel");
 		buildingEntity.setUsersystem(userEntity);
 
 		BuildingEntity buildingEntity2 = new BuildingEntity();
 		buildingEntity2.setName( "AquaMirage Hotel" );
-		buildingEntity.setUsersystem(userEntity);
+		buildingEntity2.setBuildingusername("aquaMirageHotel");
+		buildingEntity2.setUsersystem(userEntity);
 
 		BuildingEntity buildingEntity3 = new BuildingEntity();
 		buildingEntity3.setName( "Ritz" );
-		buildingEntity.setUsersystem(userEntity2);
+		buildingEntity3.setBuildingusername("ritz");
+		buildingEntity3.setUsersystem(userEntity2);
 
 		BuildingEntity buildingEntity4 = new BuildingEntity();
 		buildingEntity4.setName( "VASP" );
-		buildingEntity.setUsersystem(userEntity3);
+		buildingEntity4.setBuildingusername("vasp");
+		buildingEntity4.setUsersystem(userEntity3);
 
 		AnalyzerEntity analyzer = null;
 		
@@ -218,8 +284,6 @@ public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializab
 		}
 		
 		persistDummyAnalyzerRegistries(analyzer);
-		
-		return analyzer;
 	}
 
 	private void persistDummyAnalyzerRegistries(AnalyzerEntity analyzer){

@@ -1,11 +1,12 @@
 package clb.database;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import clb.database.entities.AnalyzerEntity;
 import clb.database.entities.AnalyzerRegistryEntity;
 
 public interface ClbDao<T extends Serializable> {
@@ -32,7 +33,7 @@ public interface ClbDao<T extends Serializable> {
 
     Collection<?> getYearMonthDaysAverages( Integer yearSelected, Integer monthSelected );
 
-	AnalyzerEntity persistScriptBigData();
+	void persistScriptBigData();
 
-	void updateAnalyzerRegistries(List<AnalyzerRegistryEntity> data, AnalyzerEntity analyzer);
+	void updateAnalyzerRegistriesForAnalyzer(File file) throws IOException;
 }

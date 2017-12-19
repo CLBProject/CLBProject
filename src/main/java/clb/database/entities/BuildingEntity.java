@@ -1,15 +1,19 @@
 package clb.database.entities;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 
@@ -19,7 +23,11 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="BUILDING")
-@NamedQuery(name="Building.findAll", query="SELECT b FROM BuildingEntity b")
+@NamedQueries({
+	@NamedQuery(name="Building.findAll", query="SELECT b FROM BuildingEntity b"),
+	@NamedQuery(name="Building.findByUsername", query = "select b from BuildingEntity b where b.buildingusername=:busername")
+})
+
 public class BuildingEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -28,12 +36,17 @@ public class BuildingEntity implements Serializable {
 	private long buildingid;
 
 	private String name;
+	
+	private String buildingusername;
 
 	//bi-directional many-to-one association to Usersystem
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
 	@JoinColumn(name="userid")
 	private UsersystemEntity usersystem;
 	
+	//bi-directional many-to-one association to DataLoggerEntity
+	@OneToMany(mappedBy="building")
+	private List<DataLoggerEntity> DataLoggerEntitys;
 
 	public BuildingEntity() {
 	}
@@ -60,6 +73,22 @@ public class BuildingEntity implements Serializable {
 
 	public void setUsersystem(UsersystemEntity usersystem) {
 		this.usersystem = usersystem;
+	}
+
+	public String getBuildingusername() {
+		return this.buildingusername;
+	}
+
+	public void setBuildingusername(String buildingusername) {
+		this.buildingusername = buildingusername;
+	}
+	
+	public List<DataLoggerEntity> getDataLoggerEntitys() {
+		return this.DataLoggerEntitys;
+	}
+
+	public void setDataLoggerEntitys(List<DataLoggerEntity> DataLoggerEntitys) {
+		this.DataLoggerEntitys = DataLoggerEntitys;
 	}
 
 }

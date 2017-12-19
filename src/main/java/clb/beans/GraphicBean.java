@@ -248,10 +248,6 @@ public class GraphicBean implements Serializable{
 			graphicMonthPojo.fillGraphicForMonthData(analyzerDataService.getDataByYearAndMonths( yearSelected, monthSelected ));
 	}
 
-	public void fillDatabase() throws IOException{
-		analyzerDataService.fillDatabaseData();
-	}
-
 	public void fillDatabaseScript() throws IOException{
 		analyzerDataService.fillDatabaseDataWithMoreThenOneYears();
 	}

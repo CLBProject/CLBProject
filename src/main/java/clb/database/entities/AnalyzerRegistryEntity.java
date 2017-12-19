@@ -3,6 +3,7 @@ package clb.database.entities;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -24,6 +26,7 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name="ANALYZER_REGISTRY")
 @NamedQueries({
+	@NamedQuery(name="AnalyzerRegistry.findSpecificAnalyzerRegistry", query="SELECT a FROM AnalyzerRegistryEntity a where a.currentdate = :currentdate and a.currenttime=:currenttime and a.analyzer=:analyzer"),
 	@NamedQuery(name="AnalyzerRegistry.findAll", query="SELECT a FROM AnalyzerRegistryEntity a"),
 	@NamedQuery(name="AnalyzerRegistry.findAllByDay", query="SELECT a FROM AnalyzerRegistryEntity a where a.currentdate = :currentdate"),
     @NamedQuery(name="AnalyzerRegistry.findAllByDayHour", query="SELECT a FROM AnalyzerRegistryEntity a where a.currentdate = :currentdate and substring(a.currenttime,1,2) = :currenthour")}
@@ -158,6 +161,11 @@ public class AnalyzerRegistryEntity implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="analyzerid")
 	private AnalyzerEntity analyzer;
+	
+	//bi-directional many-to-one association to AnalyzerRegistryExtraInfoEntity
+	@OneToMany(mappedBy="analyzerRegistry")
+	private List<AnalyzerRegistryExtraInfoEntity> AnalyzerRegistryExtraInfoEntitys;
+
 
 	public AnalyzerRegistryEntity() {
 	}
@@ -650,4 +658,11 @@ public class AnalyzerRegistryEntity implements Serializable {
 		this.analyzer = analyzer;
 	}
 
+	public List<AnalyzerRegistryExtraInfoEntity> getAnalyzerRegistryExtraInfoEntitys() {
+		return this.AnalyzerRegistryExtraInfoEntitys;
+	}
+
+	public void setAnalyzerRegistryExtraInfoEntitys(List<AnalyzerRegistryExtraInfoEntity> AnalyzerRegistryExtraInfoEntitys) {
+		this.AnalyzerRegistryExtraInfoEntitys = AnalyzerRegistryExtraInfoEntitys;
+	}
 }
