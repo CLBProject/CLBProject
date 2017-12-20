@@ -1,22 +1,9 @@
-package clb.database.entities;
+  package clb.database.entities;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import java.sql.Timestamp;
 
 
 /**
@@ -26,9 +13,9 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name="ANALYZER_REGISTRY")
 @NamedQueries({
-	@NamedQuery(name="AnalyzerRegistry.findSpecificAnalyzerRegistry", query="SELECT a FROM AnalyzerRegistryEntity a where a.currentdate = :currentdate and a.currenttime=:currenttime and a.analyzer=:analyzer"),
-	@NamedQuery(name="AnalyzerRegistry.findAll", query="SELECT a FROM AnalyzerRegistryEntity a"),
-	@NamedQuery(name="AnalyzerRegistry.findAllByDay", query="SELECT a FROM AnalyzerRegistryEntity a where a.currentdate = :currentdate"),
+    @NamedQuery(name="AnalyzerRegistry.findSpecificAnalyzerRegistry", query="SELECT a FROM AnalyzerRegistryEntity a where a.currentdate = :currentdate and a.currenttime=:currenttime and a.analyzer.analyzerid=:analyzerId"),
+    @NamedQuery(name="AnalyzerRegistry.findAll", query="SELECT a FROM AnalyzerRegistryEntity a"),
+    @NamedQuery(name="AnalyzerRegistry.findAllByDay", query="SELECT a FROM AnalyzerRegistryEntity a where a.currentdate = :currentdate"),
     @NamedQuery(name="AnalyzerRegistry.findAllByDayHour", query="SELECT a FROM AnalyzerRegistryEntity a where a.currentdate = :currentdate and substring(a.currenttime,1,2) = :currenthour")}
 )
 public class AnalyzerRegistryEntity implements Serializable {
@@ -81,6 +68,24 @@ public class AnalyzerRegistryEntity implements Serializable {
 
 	private double kvarh;
 
+	private double kvarhc;
+
+	private double kvarhl;
+
+	private double kvarhl1;
+
+	private double kvarhl1negative;
+
+	private double kvarhl2;
+
+	private double kvarhl2negative;
+
+	private double kvarhl3;
+
+	private double kvarhl3negative;
+
+	private double kvarhnegative;
+
 	private double kvarl1;
 
 	private double kvarl2;
@@ -95,9 +100,17 @@ public class AnalyzerRegistryEntity implements Serializable {
 
 	private double kwhl1;
 
+	private double kwhl1negative;
+
 	private double kwhl2;
 
+	private double kwhl2negative;
+
 	private double kwhl3;
+
+	private double kwhl3negative;
+
+	private double kwhnegative;
 
 	private double kwl1;
 
@@ -116,6 +129,8 @@ public class AnalyzerRegistryEntity implements Serializable {
 	private double pfl3;
 
 	private double pfsys;
+
+	private double phasesequence;
 
 	private String producttype;
 
@@ -137,6 +152,12 @@ public class AnalyzerRegistryEntity implements Serializable {
 
 	private double thdvl3n;
 
+	private double totalizer1;
+
+	private double totalizer2;
+
+	private double totalizer3;
+
 	private double vadmd;
 
 	private double vardmd;
@@ -157,15 +178,14 @@ public class AnalyzerRegistryEntity implements Serializable {
 
 	private double vlnsys;
 
-	//bi-directional many-to-one association to Analyzer
-	@ManyToOne
-	@JoinColumn(name="analyzerid")
-	private AnalyzerEntity analyzer;
-	
-	//bi-directional many-to-one association to AnalyzerRegistryExtraInfoEntity
-	@OneToMany(mappedBy="analyzerRegistry")
-	private List<AnalyzerRegistryExtraInfoEntity> AnalyzerRegistryExtraInfoEntitys;
+	private double wdmd;
 
+	private double wdmdmax;
+
+	//bi-directional many-to-one association to Analyzer
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="ANALYZERID")
+	private AnalyzerEntity analyzer;
 
 	public AnalyzerRegistryEntity() {
 	}
@@ -346,6 +366,78 @@ public class AnalyzerRegistryEntity implements Serializable {
 		this.kvarh = kvarh;
 	}
 
+	public double getKvarhc() {
+		return this.kvarhc;
+	}
+
+	public void setKvarhc(double kvarhc) {
+		this.kvarhc = kvarhc;
+	}
+
+	public double getKvarhl() {
+		return this.kvarhl;
+	}
+
+	public void setKvarhl(double kvarhl) {
+		this.kvarhl = kvarhl;
+	}
+
+	public double getKvarhl1() {
+		return this.kvarhl1;
+	}
+
+	public void setKvarhl1(double kvarhl1) {
+		this.kvarhl1 = kvarhl1;
+	}
+
+	public double getKvarhl1negative() {
+		return this.kvarhl1negative;
+	}
+
+	public void setKvarhl1negative(double kvarhl1negative) {
+		this.kvarhl1negative = kvarhl1negative;
+	}
+
+	public double getKvarhl2() {
+		return this.kvarhl2;
+	}
+
+	public void setKvarhl2(double kvarhl2) {
+		this.kvarhl2 = kvarhl2;
+	}
+
+	public double getKvarhl2negative() {
+		return this.kvarhl2negative;
+	}
+
+	public void setKvarhl2negative(double kvarhl2negative) {
+		this.kvarhl2negative = kvarhl2negative;
+	}
+
+	public double getKvarhl3() {
+		return this.kvarhl3;
+	}
+
+	public void setKvarhl3(double kvarhl3) {
+		this.kvarhl3 = kvarhl3;
+	}
+
+	public double getKvarhl3negative() {
+		return this.kvarhl3negative;
+	}
+
+	public void setKvarhl3negative(double kvarhl3negative) {
+		this.kvarhl3negative = kvarhl3negative;
+	}
+
+	public double getKvarhnegative() {
+		return this.kvarhnegative;
+	}
+
+	public void setKvarhnegative(double kvarhnegative) {
+		this.kvarhnegative = kvarhnegative;
+	}
+
 	public double getKvarl1() {
 		return this.kvarl1;
 	}
@@ -402,6 +494,14 @@ public class AnalyzerRegistryEntity implements Serializable {
 		this.kwhl1 = kwhl1;
 	}
 
+	public double getKwhl1negative() {
+		return this.kwhl1negative;
+	}
+
+	public void setKwhl1negative(double kwhl1negative) {
+		this.kwhl1negative = kwhl1negative;
+	}
+
 	public double getKwhl2() {
 		return this.kwhl2;
 	}
@@ -410,12 +510,36 @@ public class AnalyzerRegistryEntity implements Serializable {
 		this.kwhl2 = kwhl2;
 	}
 
+	public double getKwhl2negative() {
+		return this.kwhl2negative;
+	}
+
+	public void setKwhl2negative(double kwhl2negative) {
+		this.kwhl2negative = kwhl2negative;
+	}
+
 	public double getKwhl3() {
 		return this.kwhl3;
 	}
 
 	public void setKwhl3(double kwhl3) {
 		this.kwhl3 = kwhl3;
+	}
+
+	public double getKwhl3negative() {
+		return this.kwhl3negative;
+	}
+
+	public void setKwhl3negative(double kwhl3negative) {
+		this.kwhl3negative = kwhl3negative;
+	}
+
+	public double getKwhnegative() {
+		return this.kwhnegative;
+	}
+
+	public void setKwhnegative(double kwhnegative) {
+		this.kwhnegative = kwhnegative;
 	}
 
 	public double getKwl1() {
@@ -488,6 +612,14 @@ public class AnalyzerRegistryEntity implements Serializable {
 
 	public void setPfsys(double pfsys) {
 		this.pfsys = pfsys;
+	}
+
+	public double getPhasesequence() {
+		return this.phasesequence;
+	}
+
+	public void setPhasesequence(double phasesequence) {
+		this.phasesequence = phasesequence;
 	}
 
 	public String getProducttype() {
@@ -570,6 +702,30 @@ public class AnalyzerRegistryEntity implements Serializable {
 		this.thdvl3n = thdvl3n;
 	}
 
+	public double getTotalizer1() {
+		return this.totalizer1;
+	}
+
+	public void setTotalizer1(double totalizer1) {
+		this.totalizer1 = totalizer1;
+	}
+
+	public double getTotalizer2() {
+		return this.totalizer2;
+	}
+
+	public void setTotalizer2(double totalizer2) {
+		this.totalizer2 = totalizer2;
+	}
+
+	public double getTotalizer3() {
+		return this.totalizer3;
+	}
+
+	public void setTotalizer3(double totalizer3) {
+		this.totalizer3 = totalizer3;
+	}
+
 	public double getVadmd() {
 		return this.vadmd;
 	}
@@ -650,6 +806,22 @@ public class AnalyzerRegistryEntity implements Serializable {
 		this.vlnsys = vlnsys;
 	}
 
+	public double getWdmd() {
+		return this.wdmd;
+	}
+
+	public void setWdmd(double wdmd) {
+		this.wdmd = wdmd;
+	}
+
+	public double getWdmdmax() {
+		return this.wdmdmax;
+	}
+
+	public void setWdmdmax(double wdmdmax) {
+		this.wdmdmax = wdmdmax;
+	}
+
 	public AnalyzerEntity getAnalyzer() {
 		return this.analyzer;
 	}
@@ -658,11 +830,4 @@ public class AnalyzerRegistryEntity implements Serializable {
 		this.analyzer = analyzer;
 	}
 
-	public List<AnalyzerRegistryExtraInfoEntity> getAnalyzerRegistryExtraInfoEntitys() {
-		return this.AnalyzerRegistryExtraInfoEntitys;
-	}
-
-	public void setAnalyzerRegistryExtraInfoEntitys(List<AnalyzerRegistryExtraInfoEntity> AnalyzerRegistryExtraInfoEntitys) {
-		this.AnalyzerRegistryExtraInfoEntitys = AnalyzerRegistryExtraInfoEntitys;
-	}
 }

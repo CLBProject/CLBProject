@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -29,304 +30,298 @@ import clb.database.entities.UsersystemEntity;
 
 public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializable{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
 
-	@PersistenceContext(unitName = "clbDatabase")
-	protected EntityManager entityManager;
+    @PersistenceContext(unitName = "clbDatabase")
+    protected EntityManager entityManager;
 
-	public void create( T entity ){
-		entityManager.persist( entity );
-	}
+    public void create( T entity ){
+        entityManager.persist( entity );
+    }
 
-	public T update( T entity ){
-		return entityManager.merge( entity );
-	}
+    public T update( T entity ){
+        return entityManager.merge( entity );
+    }
 
-	public void delete( T entity ){
-		entityManager.remove( entity );
-	}
+    public void delete( T entity ){
+        entityManager.remove( entity );
+    }
 
-	public EntityManager getEntityManager() {
-		return entityManager;
-	}
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
 
-	public void setEntityManager( EntityManager entityManager ) {
-		this.entityManager = entityManager;
-	}
+    public void setEntityManager( EntityManager entityManager ) {
+        this.entityManager = entityManager;
+    }
 
-	@Override
-	public void persistData(List<T> data) {
-		data.stream().forEach(Entity -> entityManager.persist(Entity));
-	}
-	
-	@Override
-	public void updateAnalyzerRegistriesForAnalyzer(File file) throws IOException {
-		
-		XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(file));
-		XSSFSheet worksheet = workbook.getSheet("Sheet1");
-
-		Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
-		calendar.setTime(new Date());
-
-		for(int i = 1;i<worksheet.getLastRowNum();i++){
-
-			XSSFRow row = worksheet.getRow(i);
-
-			Date currentDate = row.getCell(0).getDateCellValue();
-
-			calendar.setTime(row.getCell(1).getDateCellValue());   // assigns calendar to given date 
-
-			String currentTime = (calendar.get(Calendar.HOUR_OF_DAY) < 10 ? "0" + calendar.get(Calendar.HOUR_OF_DAY) : calendar.get(Calendar.HOUR_OF_DAY)+"") + ":" + 
-					(calendar.get(Calendar.MINUTE) < 10 ? "0" + calendar.get(Calendar.MINUTE) : calendar.get(Calendar.MINUTE)+"") +":"+ 
-					(calendar.get(Calendar.SECOND) < 10 ? "0" + calendar.get(Calendar.SECOND) : calendar.get(Calendar.SECOND));
-			
-			
-			Query qBuilding = entityManager.createNamedQuery("Building.findByUsername");
-			qBuilding.setParameter("busername", file.getName());
-			
-			BuildingEntity building = (BuildingEntity) qBuilding.getSingleResult();
-			
-			Query q = entityManager.createNamedQuery("AnalyzerRegistry.findSpecificAnalyzerRegistry",AnalyzerRegistryEntity.class);
-			q.setParameter("currenttime", currentTime);
-			q.setParameter("currentDate", currentDate);
-			q.setParameter("analyzer", building.getDataLoggerEntitys().get(0).getAnalyzerEntitys().get(0));
-			
-			AnalyzerRegistryEntity analyzerRegistryEntity = (AnalyzerRegistryEntity) q.getSingleResult();
-
-			analyzerRegistryEntity.setAl1(row.getCell(2).getNumericCellValue());
-			analyzerRegistryEntity.setAl2(row.getCell(3).getNumericCellValue());
-			analyzerRegistryEntity.setAl3(row.getCell(4).getNumericCellValue());
-			analyzerRegistryEntity.setHz(row.getCell(5).getNumericCellValue());
-			analyzerRegistryEntity.setPfl1(row.getCell(6).getNumericCellValue());
-			analyzerRegistryEntity.setPfl2(row.getCell(7).getNumericCellValue());
-			analyzerRegistryEntity.setPfl3(row.getCell(8).getNumericCellValue());
-			analyzerRegistryEntity.setPfsys(row.getCell(9).getNumericCellValue());
-			//analyzerRegistryObject.setPhaseSequence(row.getCell(10).getNumericCellValue());
-			analyzerRegistryEntity.setVl1l2(row.getCell(11).getNumericCellValue());
-			analyzerRegistryEntity.setVl1n(row.getCell(12).getNumericCellValue());
-			analyzerRegistryEntity.setVl2l3(row.getCell(13).getNumericCellValue());
-			analyzerRegistryEntity.setVl2n(row.getCell(14).getNumericCellValue());
-			analyzerRegistryEntity.setVl3l1(row.getCell(15).getNumericCellValue());
-			analyzerRegistryEntity.setVl3n(row.getCell(16).getNumericCellValue());
-			analyzerRegistryEntity.setVllsys(row.getCell(17).getNumericCellValue());
-			analyzerRegistryEntity.setVlnsys(row.getCell(18).getNumericCellValue());
-			analyzerRegistryEntity.setKval1(row.getCell(19).getNumericCellValue());
-			analyzerRegistryEntity.setKval2(row.getCell(20).getNumericCellValue());
-			analyzerRegistryEntity.setKval3(row.getCell(21).getNumericCellValue());
-			analyzerRegistryEntity.setKvasys(row.getCell(22).getNumericCellValue());
-			analyzerRegistryEntity.setKwh(row.getCell(23).getNumericCellValue());
-			analyzerRegistryEntity.setKwl1(row.getCell(24).getNumericCellValue());
-			analyzerRegistryEntity.setKwl2(row.getCell(25).getNumericCellValue());
-			analyzerRegistryEntity.setKwl3(row.getCell(26).getNumericCellValue());
-			analyzerRegistryEntity.setKwsys(row.getCell(27).getNumericCellValue());
-			analyzerRegistryEntity.setKvarh(row.getCell(28).getNumericCellValue());
-			analyzerRegistryEntity.setKvarl1(row.getCell(29).getNumericCellValue());
-			analyzerRegistryEntity.setKvarl2(row.getCell(30).getNumericCellValue());
-			analyzerRegistryEntity.setKvarl3(row.getCell(31).getNumericCellValue());
-			analyzerRegistryEntity.setKvarsys(row.getCell(32).getNumericCellValue());
-		}
-		
-	
-	}
+    @Override
+    public void persistData(List<T> data) {
+        data.stream().forEach(Entity -> entityManager.persist(Entity));
+    }
 
 
-	/**
-	 * @return All Analyzer Registries
-	 */
-	@Override
-	public List<AnalyzerRegistryEntity> getAllCurrentAnalyzerRegistryData() {
-		return entityManager.createNamedQuery("AnalyzerRegistry.findAll",AnalyzerRegistryEntity.class).getResultList();
-	}
+    /**
+     * @return All Analyzer Registries
+     */
+    @Override
+    public List<AnalyzerRegistryEntity> getAllCurrentAnalyzerRegistryData() {
+        return entityManager.createNamedQuery("AnalyzerRegistry.findAll",AnalyzerRegistryEntity.class).getResultList();
+    }
 
-	@Override
-	public void flush() {
-		entityManager.flush();
-		entityManager.clear();
-	}
+    @Override
+    public void flush() {
+        entityManager.flush();
+        entityManager.clear();
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<AnalyzerRegistryEntity> getAnalyzerRegistriesByDay(Date date) {
-		Query q = entityManager.createNamedQuery("AnalyzerRegistry.findAllByDay",AnalyzerRegistryEntity.class);
-		q.setParameter("currentdate", date);
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<AnalyzerRegistryEntity> getAnalyzerRegistriesByDay(Date date) {
+        Query q = entityManager.createNamedQuery("AnalyzerRegistry.findAllByDay",AnalyzerRegistryEntity.class);
+        q.setParameter("currentdate", date);
 
-		List<AnalyzerRegistryEntity> resultList = q.getResultList();
+        List<AnalyzerRegistryEntity> resultList = q.getResultList();
 
-		return resultList == null ? new ArrayList<AnalyzerRegistryEntity>() : resultList;
-	}
+        return resultList == null ? new ArrayList<AnalyzerRegistryEntity>() : resultList;
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<AnalyzerRegistryEntity> getAnalyzerRegistriesByDayAndHour(Date date, String hour) {
-		Query q = entityManager.createNamedQuery("AnalyzerRegistry.findAllByDayHour",AnalyzerRegistryEntity.class);
-		q.setParameter("currentdate", date);
-		q.setParameter("currenthour", hour);
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<AnalyzerRegistryEntity> getAnalyzerRegistriesByDayAndHour(Date date, String hour) {
+        Query q = entityManager.createNamedQuery("AnalyzerRegistry.findAllByDayHour",AnalyzerRegistryEntity.class);
+        q.setParameter("currentdate", date);
+        q.setParameter("currenthour", hour);
 
-		List<AnalyzerRegistryEntity> resultList = q.getResultList();
+        List<AnalyzerRegistryEntity> resultList = q.getResultList();
 
-		return resultList == null ? new ArrayList<AnalyzerRegistryEntity>() : resultList;
-	}
+        return resultList == null ? new ArrayList<AnalyzerRegistryEntity>() : resultList;
+    }
 
-	@Override
-	@SuppressWarnings("unchecked")
-	public List<Integer> getRegistryYears() {
-		Query q = entityManager.createNativeQuery("select year(currentDate) from ANALYZER_REGISTRY group by year(currentDate)");
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Integer> getRegistryYears() {
+        Query q = entityManager.createNativeQuery("select year(currentDate) from ANALYZER_REGISTRY group by year(currentDate)");
 
-		List<Integer> resultList = q.getResultList();
+        List<Integer> resultList = q.getResultList();
 
-		return resultList == null ? new ArrayList<Integer>() : resultList;
-	}
+        return resultList == null ? new ArrayList<Integer>() : resultList;
+    }
 
-	@Override
-	public Collection<?> getYearMonthAverages(Integer year){
-		Query q = entityManager.createNativeQuery("select avg(al1), avg(al2), avg(al3), year(currentDate), month(currentDate) "
-				+ "from analyzer_registry "
-				+ "where year(currentDate) = ?1 "
-				+ "group by year(currentDate), month(currentdate)");		
-		q.setParameter(1, year);
+    @Override
+    public Collection<?> getYearMonthAverages(Integer year){
+        Query q = entityManager.createNativeQuery("select avg(al1), avg(al2), avg(al3), year(currentDate), month(currentDate) "
+                + "from analyzer_registry "
+                + "where year(currentDate) = ?1 "
+                + "group by year(currentDate), month(currentdate)");		
+        q.setParameter(1, year);
 
-		return q.getResultList();
-	}
+        return q.getResultList();
+    }
 
-	@Override
-	public Collection<?> getYearMonthDaysAverages( Integer yearSelected, Integer monthSelected ) {
-		Query q = entityManager.createNativeQuery("select avg(al1), avg(al2), avg(al3), year(currentdate), month(currentdate),day(currentdate) "
-				+ "from clb.analyzer_registry "
-				+ "where year(currentdate) = ?1 and month(currentdate) = ?2 "
-				+ "group by year(currentdate),month(currentdate), day(currentdate)");       
-		q.setParameter(1, yearSelected);
-		q.setParameter(2, monthSelected);
+    @Override
+    public Collection<?> getYearMonthDaysAverages( Integer yearSelected, Integer monthSelected ) {
+        Query q = entityManager.createNativeQuery("select avg(al1), avg(al2), avg(al3), year(currentdate), month(currentdate),day(currentdate) "
+                + "from clb.analyzer_registry "
+                + "where year(currentdate) = ?1 and month(currentdate) = ?2 "
+                + "group by year(currentdate),month(currentdate), day(currentdate)");       
+        q.setParameter(1, yearSelected);
+        q.setParameter(2, monthSelected);
 
-		return q.getResultList();
-	}
+        return q.getResultList();
+    }
 
-	@Override
-	public void persistScriptBigData(){
-		UsersystemEntity userEntity = new UsersystemEntity();
+    @Override
+    public void persistScriptBigData(File registryFiles) throws IOException{
+        UsersystemEntity userEntity = new UsersystemEntity();
 
-		userEntity.setUserid( "nobreyeste@hotmail.com" );
-		userEntity.setName( "Carlos Nobre" );
-		userEntity.setAddress( "No address at this point" );
-		userEntity.setUsername( "cnobre" );
-		userEntity.setPassword( "123" );
+        userEntity.setUserid( "nobreyeste@hotmail.com" );
+        userEntity.setName( "Carlos Nobre" );
+        userEntity.setAddress( "No address at this point" );
+        userEntity.setUsername( "cnobre" );
+        userEntity.setPassword( "123" );
 
-		UsersystemEntity userEntity2 = new UsersystemEntity();
+        UsersystemEntity userEntity2 = new UsersystemEntity();
 
-		userEntity2.setUserid( "brunocatela@hotmail.com" );
-		userEntity2.setName( "Bruno Catela" );
-		userEntity2.setAddress( "No address at this point" );
-		userEntity2.setUsername( "bcatela" );
-		userEntity2.setPassword( "123" );
+        userEntity2.setUserid( "brunocatela@hotmail.com" );
+        userEntity2.setName( "Bruno Catela" );
+        userEntity2.setAddress( "No address at this point" );
+        userEntity2.setUsername( "bcatela" );
+        userEntity2.setPassword( "123" );
 
-		UsersystemEntity userEntity3 = new UsersystemEntity();
+        UsersystemEntity userEntity3 = new UsersystemEntity();
 
-		userEntity3.setUserid( "luissantos@hotmail.com" );
-		userEntity3.setName( "Luis Santos" );
-		userEntity3.setAddress( "No address at this point" );
-		userEntity3.setUsername( "lsantos" );
-		userEntity3.setPassword( "123" );
+        userEntity3.setUserid( "luissantos@hotmail.com" );
+        userEntity3.setName( "Luis Santos" );
+        userEntity3.setAddress( "No address at this point" );
+        userEntity3.setUsername( "lsantos" );
+        userEntity3.setPassword( "123" );
+        
+        List<BuildingEntity> buildings = new ArrayList<BuildingEntity>();
 
+        BuildingEntity buildingEntity = new BuildingEntity();
+        buildingEntity.setName( "Amanjena Hotel" );
+        buildingEntity.setBuildingusername("amanjenaHotel");
+        buildingEntity.setUsersystem(userEntity);
 
-		BuildingEntity buildingEntity = new BuildingEntity();
-		buildingEntity.setName( "Amanjena Hotel" );
-		buildingEntity.setBuildingusername("amanjenaHotel");
-		buildingEntity.setUsersystem(userEntity);
+        BuildingEntity buildingEntity2 = new BuildingEntity();
+        buildingEntity2.setName( "AquaMirage Hotel" );
+        buildingEntity2.setBuildingusername("aquaMirageHotel");
+        buildingEntity2.setUsersystem(userEntity);
 
-		BuildingEntity buildingEntity2 = new BuildingEntity();
-		buildingEntity2.setName( "AquaMirage Hotel" );
-		buildingEntity2.setBuildingusername("aquaMirageHotel");
-		buildingEntity2.setUsersystem(userEntity);
+        BuildingEntity buildingEntity3 = new BuildingEntity();
+        buildingEntity3.setName( "Ritz" );
+        buildingEntity3.setBuildingusername("ritz");
+        buildingEntity3.setUsersystem(userEntity2);
 
-		BuildingEntity buildingEntity3 = new BuildingEntity();
-		buildingEntity3.setName( "Ritz" );
-		buildingEntity3.setBuildingusername("ritz");
-		buildingEntity3.setUsersystem(userEntity2);
+        BuildingEntity buildingEntity4 = new BuildingEntity();
+        buildingEntity4.setName( "VASP" );
+        buildingEntity4.setBuildingusername("vasp");
+        buildingEntity4.setUsersystem(userEntity3);
+        
+        buildings.add( buildingEntity );
+        buildings.add( buildingEntity2 );
+        buildings.add( buildingEntity3 );
+        buildings.add( buildingEntity4 );
+        
+        int buildingIndex = 0;
+        
+        for(File file: registryFiles.listFiles()){
+            updateAnalyzerRegistriesForAnalyzer(file,buildings.get( buildingIndex ));
+            buildingIndex = buildingIndex +1 == buildings.size() ? 0 : buildingIndex+1;
+        }
+    }
+    
+    private void updateAnalyzerRegistriesForAnalyzer(File file, BuildingEntity building) throws IOException {
 
-		BuildingEntity buildingEntity4 = new BuildingEntity();
-		buildingEntity4.setName( "VASP" );
-		buildingEntity4.setBuildingusername("vasp");
-		buildingEntity4.setUsersystem(userEntity3);
+        XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(file));
 
-		AnalyzerEntity analyzer = null;
-		
-		//Create Data Loggers
-		for(int i=0 ;i< 100; i++){
-			DataLoggerEntity dlObj = new DataLoggerEntity();
-			dlObj.setName("Data Logger " + i);
+        for(int j = 0; j<workbook.getNumberOfSheets();j++){
+            
+            DataLoggerEntity dl = new DataLoggerEntity();
+            dl.setName( "Data Logger "+j );
+            dl.setFtpaddress( "ftp://noftp" );
+            dl.setBuilding( building );
+            
+            AnalyzerEntity ana = new AnalyzerEntity();
+            ana.setDataLogger( dl );
+            ana.setName( "Analyzer " + j);
+            
+            entityManager.merge( ana);
+            
+            persistDummyAnalyzerRegistries( ana );
+            
+            XSSFSheet worksheet = workbook.getSheetAt( j );
 
-			if(i < 25){
-				dlObj.setBuilding(buildingEntity);
-			}
-			else if (i>=25 && i < 50){
-				dlObj.setBuilding(buildingEntity2);
-			}
-			else if (i>=50 && i < 75){
-				dlObj.setBuilding(buildingEntity3);
-			}
-			else{
-				dlObj.setBuilding(buildingEntity4);
-			}
-			
-			for(int j=0;j<100;j++){
-				AnalyzerEntity analyzerEntity = new AnalyzerEntity();
-				analyzerEntity.setName("Analyzer "+j);
-				analyzerEntity.setDataLogger(dlObj);
-				
-				entityManager.persist(analyzerEntity);
-				
-				if(j == 0)
-					analyzer = analyzerEntity;
-			}
-		}
-		
-		persistDummyAnalyzerRegistries(analyzer);
-	}
+            Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
+            calendar.setTime(new Date());
 
-	private void persistDummyAnalyzerRegistries(AnalyzerEntity analyzer){
+            for(int i = 2;i<worksheet.getLastRowNum();i++){
 
-		Random random = new Random();
+                XSSFRow row = worksheet.getRow(i);
 
-		int numberOfYears = 2;
-		int startingYear = 2017;
-		int lowAl = 200;
-		int highAl = 450;
+                Date currentRowDate = row.getCell(0).getDateCellValue();
+                String currentRowTime = row.getCell(1).getStringCellValue();
 
-		Calendar calendar = GregorianCalendar.getInstance();
-		calendar.set( startingYear, 0, 1);
+                calendar.setTime(currentRowDate);   // assigns calendar to given date 
 
-		for(int a = 0 ;a<numberOfYears; a++){
-			int yearDays = calendar.getActualMaximum(Calendar.DAY_OF_YEAR);
-			for(int l = 0; l < yearDays; l++ ){
-				for(int b = 0; b < 24 ; b++){
-					for(int k = 0; k < 60; k++){
+                Query qBuilding = entityManager.createNativeQuery( "select an.analyzerId from Building b2 "
+                        + "inner join Data_Logger dl on b2.buildingId = dl.buildingId "
+                        + "inner join Analyzer an on dl.dataLoggerId = an.dataLoggerId "
+                        + "where b2.buildingUsername=?1" );
 
-						AnalyzerRegistryEntity anaRegObj = new AnalyzerRegistryEntity();
-						anaRegObj.setCurrenttime( (b < 10 ? "0"+b : ""+b) + ":" + (k < 10 ? "0"+k : ""+k)+ ":00");
-						anaRegObj.setCurrentdate( calendar.getTime() ); 
+                qBuilding.setParameter(1, file.getName().split( "\\." )[0]);
+                BigInteger analyzerId = (BigInteger) qBuilding.getResultList().get( 0 );
 
-						anaRegObj.setAl1(lowAl + (highAl - lowAl) * random.nextDouble());
-						anaRegObj.setAl2(lowAl + (highAl - lowAl) * random.nextDouble());
-						anaRegObj.setAl3(lowAl + (highAl - lowAl) * random.nextDouble());
+                Query q = entityManager.createNamedQuery("AnalyzerRegistry.findSpecificAnalyzerRegistry",AnalyzerRegistryEntity.class);
+                q.setParameter("currenttime", currentRowTime);
+                q.setParameter("currentdate", currentRowDate);
+                q.setParameter("analyzerId", analyzerId.longValue() );
 
-						anaRegObj.setAnalyzer(analyzer);
+                AnalyzerRegistryEntity analyzerRegistryEntity = (AnalyzerRegistryEntity) q.getSingleResult();
 
-						entityManager.persist(anaRegObj);
-						anaRegObj = null;
+                analyzerRegistryEntity.setAl1(row.getCell(2).getNumericCellValue());
+                analyzerRegistryEntity.setAl2(row.getCell(3).getNumericCellValue());
+                analyzerRegistryEntity.setAl3(row.getCell(4).getNumericCellValue());
+                analyzerRegistryEntity.setHz(row.getCell(5).getNumericCellValue());
+                analyzerRegistryEntity.setPfl1(row.getCell(6).getNumericCellValue());
+                analyzerRegistryEntity.setPfl2(row.getCell(7).getNumericCellValue());
+                analyzerRegistryEntity.setPfl3(row.getCell(8).getNumericCellValue());
+                analyzerRegistryEntity.setPfsys(row.getCell(9).getNumericCellValue());
+                analyzerRegistryEntity.setVl1l2(row.getCell(10).getNumericCellValue());
+                analyzerRegistryEntity.setVl1n(row.getCell(11).getNumericCellValue());
+                analyzerRegistryEntity.setVl2l3(row.getCell(12).getNumericCellValue());
+                analyzerRegistryEntity.setVl2n(row.getCell(13).getNumericCellValue());
+                analyzerRegistryEntity.setVl3l1(row.getCell(14).getNumericCellValue());
+                analyzerRegistryEntity.setVl3n(row.getCell(15).getNumericCellValue());
+                analyzerRegistryEntity.setVllsys(row.getCell(16).getNumericCellValue());
+                analyzerRegistryEntity.setVlnsys(row.getCell(17).getNumericCellValue());
+                analyzerRegistryEntity.setKval1(row.getCell(18).getNumericCellValue());
+                analyzerRegistryEntity.setKval2(row.getCell(19).getNumericCellValue());
+                analyzerRegistryEntity.setKval3(row.getCell(20).getNumericCellValue());
+                analyzerRegistryEntity.setKvasys(row.getCell(21).getNumericCellValue());
+                analyzerRegistryEntity.setKwl1(row.getCell(22).getNumericCellValue());
+                analyzerRegistryEntity.setKwl2(row.getCell(23).getNumericCellValue());
+                analyzerRegistryEntity.setKwl3(row.getCell(24).getNumericCellValue());
+                analyzerRegistryEntity.setKwsys(row.getCell(25).getNumericCellValue());
+                analyzerRegistryEntity.setKvarl1(row.getCell(26).getNumericCellValue());
+                analyzerRegistryEntity.setKvarl2(row.getCell(27).getNumericCellValue());
+                analyzerRegistryEntity.setKvarl3(row.getCell(28).getNumericCellValue());
+                analyzerRegistryEntity.setKvarsys(row.getCell(29).getNumericCellValue());
+                
+                entityManager.merge( analyzerRegistryEntity );
+            }
+            
+            flush();
+        }
 
-						if(k % 30 == 0){
-							entityManager.flush();
-							entityManager.clear();
-						}
-					}
-				}
-				calendar.add(Calendar.DATE, 1);
-			}
-			System.out.println("Persisted Registries from year: " + a);
-		}
+    }
 
-	}
+    private void persistDummyAnalyzerRegistries(AnalyzerEntity analyzer){
+
+        Random random = new Random();
+
+        int numberOfYears = 2;
+        int startingYear = 2017;
+        int lowAl = 200;
+        int highAl = 450;
+
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.set( startingYear, 0, 1);
+        
+        System.out.println( "Starting persisting data for Analyzer: " + analyzer.getAnalyzerid() );
+        
+        for(int a = 0 ;a<numberOfYears; a++){
+            int yearDays = calendar.getActualMaximum(Calendar.DAY_OF_YEAR);
+            for(int l = 0; l < yearDays; l++ ){
+                for(int b = 0; b < 24 ; b++){
+                    for(int k = 0; k < 60; k++){
+
+                        AnalyzerRegistryEntity anaRegObj = new AnalyzerRegistryEntity();
+                        anaRegObj.setCurrenttime( (b < 10 ? "0"+b : ""+b) + ":" + (k < 10 ? "0"+k : ""+k)+ ":00");
+                        anaRegObj.setCurrentdate( calendar.getTime() ); 
+
+                        anaRegObj.setAl1(lowAl + (highAl - lowAl) * random.nextDouble());
+                        anaRegObj.setAl2(lowAl + (highAl - lowAl) * random.nextDouble());
+                        anaRegObj.setAl3(lowAl + (highAl - lowAl) * random.nextDouble());
+
+                        anaRegObj.setAnalyzer(analyzer);
+
+                        entityManager.merge(anaRegObj);
+                        anaRegObj = null;
+                    }
+                    
+                    entityManager.flush();
+                    entityManager.clear();
+                }
+                calendar.add(Calendar.DATE, 1);
+            }
+            System.out.println("Persisted Registries from year: " + a);
+        }
+
+    }
 }

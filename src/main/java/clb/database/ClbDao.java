@@ -33,7 +33,5 @@ public interface ClbDao<T extends Serializable> {
 
     Collection<?> getYearMonthDaysAverages( Integer yearSelected, Integer monthSelected );
 
-	void persistScriptBigData();
-
-	void updateAnalyzerRegistriesForAnalyzer(File file) throws IOException;
+	void persistScriptBigData(File registryFile) throws IOException;
 }

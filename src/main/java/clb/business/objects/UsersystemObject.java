@@ -1,13 +1,9 @@
 package clb.business.objects;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import clb.database.entities.UsersystemEntity;
 
 public class UsersystemObject
 {
-    
     private String userid;
     private String address;
     private String name;

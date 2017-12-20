@@ -1,7 +1,6 @@
 package clb.database.entities;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -11,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 
@@ -37,10 +35,6 @@ public class DataLoggerEntity implements Serializable {
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="buildingid")
 	private BuildingEntity building;
-	
-	//bi-directional many-to-one association to AnalyzerEntity
-	@OneToMany(mappedBy="dataLogger")
-	private List<AnalyzerEntity> AnalyzerEntitys;
 
 	public DataLoggerEntity() {
 	}
@@ -75,13 +69,5 @@ public class DataLoggerEntity implements Serializable {
 
 	public void setFtpaddress(String ftpaddress) {
 		this.ftpaddress = ftpaddress;
-	}
-	
-	public List<AnalyzerEntity> getAnalyzerEntitys() {
-		return this.AnalyzerEntitys;
-	}
-
-	public void setAnalyzerEntitys(List<AnalyzerEntity> AnalyzerEntitys) {
-		this.AnalyzerEntitys = AnalyzerEntitys;
 	}
 }

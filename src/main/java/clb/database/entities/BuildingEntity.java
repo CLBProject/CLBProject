@@ -40,13 +40,9 @@ public class BuildingEntity implements Serializable {
 	private String buildingusername;
 
 	//bi-directional many-to-one association to Usersystem
-	@ManyToOne(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="userid")
 	private UsersystemEntity usersystem;
-	
-	//bi-directional many-to-one association to DataLoggerEntity
-	@OneToMany(mappedBy="building")
-	private List<DataLoggerEntity> DataLoggerEntitys;
 
 	public BuildingEntity() {
 	}
@@ -81,14 +77,6 @@ public class BuildingEntity implements Serializable {
 
 	public void setBuildingusername(String buildingusername) {
 		this.buildingusername = buildingusername;
-	}
-	
-	public List<DataLoggerEntity> getDataLoggerEntitys() {
-		return this.DataLoggerEntitys;
-	}
-
-	public void setDataLoggerEntitys(List<DataLoggerEntity> DataLoggerEntitys) {
-		this.DataLoggerEntitys = DataLoggerEntitys;
 	}
 
 }

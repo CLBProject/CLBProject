@@ -35,10 +35,6 @@ public class AnalyzerEntity implements Serializable {
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="dataloggerid")
 	private DataLoggerEntity dataLogger;
-	
-	//bi-directional many-to-one association to AnalyzerRegistryEntity
-	@OneToMany(mappedBy="analyzer")
-	private List<AnalyzerRegistryEntity> analyzerRegistries;
 
 	public AnalyzerEntity() {
 	}
@@ -65,14 +61,5 @@ public class AnalyzerEntity implements Serializable {
 
 	public void setDataLogger(DataLoggerEntity dataLogger) {
 		this.dataLogger = dataLogger;
-	}
-	
-
-	public List<AnalyzerRegistryEntity> getAnalyzerRegistries() {
-		return this.analyzerRegistries;
-	}
-
-	public void setAnalyzerRegistries(List<AnalyzerRegistryEntity> analyzerRegistries) {
-		this.analyzerRegistries = analyzerRegistries;
 	}
 }

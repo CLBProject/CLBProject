@@ -1,5 +1,6 @@
 package clb.business;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.ServerSocket;
@@ -73,11 +74,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	@Override
 	@Transactional
 	public void fillDatabaseDataWithMoreThenOneYears() throws IOException {
-		clbDaoAnalyzer.persistScriptBigData();
-		
-//		for(File file: dataAnalyzerXls.getFile().listFiles()){
-//			clbDaoAnalyzer.updateAnalyzerRegistriesForAnalyzer(file);
-//		}
+		clbDaoAnalyzer.persistScriptBigData(dataAnalyzerXls.getFile());
 	}
 
 	public ClbDao<AnalyzerRegistryEntity> getClbDaoAnalyzer() {
