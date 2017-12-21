@@ -32,7 +32,7 @@ public class DataLoggerEntity implements Serializable {
 	private String ftpaddress;
 
 	//bi-directional many-to-one association to Building
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name="buildingid")
 	private BuildingEntity building;
 

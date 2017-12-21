@@ -32,7 +32,7 @@ public class AnalyzerEntity implements Serializable {
 	private String name;
 
 	//bi-directional many-to-one association to DataLogger
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name="dataloggerid")
 	private DataLoggerEntity dataLogger;
 

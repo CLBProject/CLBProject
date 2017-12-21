@@ -167,21 +167,25 @@ public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializab
         buildingEntity.setName( "Amanjena Hotel" );
         buildingEntity.setBuildingusername("amanjenaHotel");
         buildingEntity.setUsersystem(userEntity);
+        entityManager.persist( buildingEntity );
 
         BuildingEntity buildingEntity2 = new BuildingEntity();
         buildingEntity2.setName( "AquaMirage Hotel" );
         buildingEntity2.setBuildingusername("aquaMirageHotel");
         buildingEntity2.setUsersystem(userEntity);
+        entityManager.persist( buildingEntity2 );
 
         BuildingEntity buildingEntity3 = new BuildingEntity();
         buildingEntity3.setName( "Ritz" );
         buildingEntity3.setBuildingusername("ritz");
         buildingEntity3.setUsersystem(userEntity2);
+        entityManager.persist( buildingEntity3 );
 
         BuildingEntity buildingEntity4 = new BuildingEntity();
         buildingEntity4.setName( "VASP" );
         buildingEntity4.setBuildingusername("vasp");
         buildingEntity4.setUsersystem(userEntity3);
+        entityManager.persist( buildingEntity4 );
         
         buildings.add( buildingEntity );
         buildings.add( buildingEntity2 );
@@ -207,11 +211,13 @@ public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializab
             dl.setFtpaddress( "ftp://noftp" );
             dl.setBuilding( building );
             
+            entityManager.persist( dl);
+            
             AnalyzerEntity ana = new AnalyzerEntity();
             ana.setDataLogger( dl );
             ana.setName( "Analyzer " + j);
             
-            entityManager.merge( ana);
+            entityManager.persist( ana);
             
             persistDummyAnalyzerRegistries( ana );
             
@@ -242,8 +248,10 @@ public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializab
                 q.setParameter("currentdate", currentRowDate);
                 q.setParameter("analyzerId", analyzerId.longValue() );
 
-                AnalyzerRegistryEntity analyzerRegistryEntity = (AnalyzerRegistryEntity) q.getSingleResult();
-
+                AnalyzerRegistryEntity analyzerRegistryEntity = (AnalyzerRegistryEntity)q.getSingleResult();
+                
+                analyzerRegistryEntity.setCurrentdate( currentRowDate );
+                analyzerRegistryEntity.setCurrenttime( currentRowTime );
                 analyzerRegistryEntity.setAl1(row.getCell(2).getNumericCellValue());
                 analyzerRegistryEntity.setAl2(row.getCell(3).getNumericCellValue());
                 analyzerRegistryEntity.setAl3(row.getCell(4).getNumericCellValue());
@@ -272,6 +280,7 @@ public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializab
                 analyzerRegistryEntity.setKvarl2(row.getCell(27).getNumericCellValue());
                 analyzerRegistryEntity.setKvarl3(row.getCell(28).getNumericCellValue());
                 analyzerRegistryEntity.setKvarsys(row.getCell(29).getNumericCellValue());
+                analyzerRegistryEntity.setAnalyzer( ana );
                 
                 entityManager.merge( analyzerRegistryEntity );
             }
@@ -285,7 +294,7 @@ public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializab
 
         Random random = new Random();
 
-        int numberOfYears = 2;
+        int numberOfYears = 1;
         int startingYear = 2017;
         int lowAl = 200;
         int highAl = 450;
