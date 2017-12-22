@@ -13,7 +13,6 @@ import java.sql.Timestamp;
 @Entity
 @Table(name="ANALYZER_REGISTRY")
 @NamedQueries({
-    @NamedQuery(name="AnalyzerRegistry.findSpecificAnalyzerRegistry", query="SELECT a FROM AnalyzerRegistryEntity a where a.currentdate = :currentdate and a.currenttime=:currenttime and a.analyzer.analyzerid=:analyzerId"),
     @NamedQuery(name="AnalyzerRegistry.findAll", query="SELECT a FROM AnalyzerRegistryEntity a"),
     @NamedQuery(name="AnalyzerRegistry.findAllByDay", query="SELECT a FROM AnalyzerRegistryEntity a where a.currentdate = :currentdate"),
     @NamedQuery(name="AnalyzerRegistry.findAllByDayHour", query="SELECT a FROM AnalyzerRegistryEntity a where a.currentdate = :currentdate and substring(a.currenttime,1,2) = :currenthour")}

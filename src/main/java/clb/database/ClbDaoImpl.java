@@ -4,14 +4,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -219,43 +220,29 @@ public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializab
             
             entityManager.persist( ana);
             
-            persistDummyAnalyzerRegistries( ana );
-            
             XSSFSheet worksheet = workbook.getSheetAt( j );
 
             Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
             calendar.setTime(new Date());
 
+            Set<String> dataToExclueOnDummy = new HashSet<String>();
+            
             for(int i = 2;i<worksheet.getLastRowNum();i++){
 
                 XSSFRow row = worksheet.getRow(i);
-
+                
+                if(row.getCell(0) == null){
+                    continue;
+                }
+                
                 Date currentRowDate = row.getCell(0).getDateCellValue();
                 String currentRowTime = row.getCell(1).getStringCellValue();
+                
+                dataToExclueOnDummy.add( currentRowDate.toString() + "_" + currentRowTime );
 
                 calendar.setTime(currentRowDate);   // assigns calendar to given date 
-
-                Query qBuilding = entityManager.createNativeQuery( "select an.analyzerId from Building b2 "
-                        + "inner join Data_Logger dl on b2.buildingId = dl.buildingId "
-                        + "inner join Analyzer an on dl.dataLoggerId = an.dataLoggerId "
-                        + "where b2.buildingUsername=?1" );
-
-                qBuilding.setParameter(1, file.getName().split( "\\." )[0]);
-                BigInteger analyzerId = (BigInteger) qBuilding.getResultList().get( 0 );
-
-                Query q = entityManager.createNamedQuery("AnalyzerRegistry.findSpecificAnalyzerRegistry",AnalyzerRegistryEntity.class);
-                q.setParameter("currenttime", currentRowTime);
-                q.setParameter("currentdate", currentRowDate);
-                q.setParameter("analyzerId", analyzerId.longValue() );
                 
-                AnalyzerRegistryEntity analyzerRegistryEntity = null;
-                
-                try{
-                	analyzerRegistryEntity = (AnalyzerRegistryEntity)q.getSingleResult();
-                }
-                catch(Exception e){
-                	e.printStackTrace();
-                }
+                AnalyzerRegistryEntity analyzerRegistryEntity = new AnalyzerRegistryEntity();
                 
                 analyzerRegistryEntity.setCurrentdate( currentRowDate );
                 analyzerRegistryEntity.setCurrenttime( currentRowTime );
@@ -289,15 +276,17 @@ public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializab
                 analyzerRegistryEntity.setKvarsys(row.getCell(29).getNumericCellValue());
                 analyzerRegistryEntity.setAnalyzer( ana );
                 
-                entityManager.merge( analyzerRegistryEntity );
+                entityManager.persist( analyzerRegistryEntity );
             }
+            
+            persistDummyAnalyzerRegistries( ana, dataToExclueOnDummy);
             
             flush();
         }
 
     }
 
-    private void persistDummyAnalyzerRegistries(AnalyzerEntity analyzer){
+    private void persistDummyAnalyzerRegistries(AnalyzerEntity analyzer, Set<String> dataToExclude){
 
         Random random = new Random();
 
@@ -316,10 +305,17 @@ public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializab
             for(int l = 0; l < yearDays; l++ ){
                 for(int b = 0; b < 24 ; b++){
                     for(int k = 0; k < 60; k++){
-
+                        
+                        String currentTime = (b < 10 ? "0"+b : ""+b) + ":" + (k < 10 ? "0"+k : ""+k)+ ":00";
+                        Date currentDate = calendar.getTime();
+                        
+                        if(dataToExclude.contains( currentDate.toString() + "_" + currentTime)){
+                            continue;
+                        }
+                        
                         AnalyzerRegistryEntity anaRegObj = new AnalyzerRegistryEntity();
-                        anaRegObj.setCurrenttime( (b < 10 ? "0"+b : ""+b) + ":" + (k < 10 ? "0"+k : ""+k)+ ":00");
-                        anaRegObj.setCurrentdate( calendar.getTime() ); 
+                        anaRegObj.setCurrenttime( currentTime );
+                        anaRegObj.setCurrentdate( currentDate ); 
 
                         anaRegObj.setAl1(lowAl + (highAl - lowAl) * random.nextDouble());
                         anaRegObj.setAl2(lowAl + (highAl - lowAl) * random.nextDouble());
