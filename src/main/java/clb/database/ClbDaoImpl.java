@@ -175,11 +175,11 @@ public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializab
         buildingEntity2.setUsersystem(userEntity);
         entityManager.persist( buildingEntity2 );
 
-        BuildingEntity buildingEntity3 = new BuildingEntity();
-        buildingEntity3.setName( "Ritz" );
-        buildingEntity3.setBuildingusername("ritz");
-        buildingEntity3.setUsersystem(userEntity2);
-        entityManager.persist( buildingEntity3 );
+//        BuildingEntity buildingEntity3 = new BuildingEntity();
+//        buildingEntity3.setName( "Ritz" );
+//        buildingEntity3.setBuildingusername("ritz");
+//        buildingEntity3.setUsersystem(userEntity2);
+//        entityManager.persist( buildingEntity3 );
 
         BuildingEntity buildingEntity4 = new BuildingEntity();
         buildingEntity4.setName( "VASP" );
@@ -189,7 +189,7 @@ public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializab
         
         buildings.add( buildingEntity );
         buildings.add( buildingEntity2 );
-        buildings.add( buildingEntity3 );
+       // buildings.add( buildingEntity3 );
         buildings.add( buildingEntity4 );
         
         int buildingIndex = 0;
@@ -247,8 +247,15 @@ public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializab
                 q.setParameter("currenttime", currentRowTime);
                 q.setParameter("currentdate", currentRowDate);
                 q.setParameter("analyzerId", analyzerId.longValue() );
-
-                AnalyzerRegistryEntity analyzerRegistryEntity = (AnalyzerRegistryEntity)q.getSingleResult();
+                
+                AnalyzerRegistryEntity analyzerRegistryEntity = null;
+                
+                try{
+                	analyzerRegistryEntity = (AnalyzerRegistryEntity)q.getSingleResult();
+                }
+                catch(Exception e){
+                	e.printStackTrace();
+                }
                 
                 analyzerRegistryEntity.setCurrentdate( currentRowDate );
                 analyzerRegistryEntity.setCurrenttime( currentRowTime );
