@@ -25,7 +25,6 @@ public class DataLoggerObject
         DataLoggerEntity dataLogEntity = new DataLoggerEntity();
         dataLogEntity.setDataloggerid( this.dataloggerid );
         dataLogEntity.setBuilding( this.building != null ? this.building.toEntity() : null );
-
         return dataLogEntity;
     }
 
@@ -48,8 +47,7 @@ public class DataLoggerObject
     public void setName( String name ) {
         this.name = name;
     }
-
-
+    
     public BuildingObject getBuilding() {
         return building;
     }

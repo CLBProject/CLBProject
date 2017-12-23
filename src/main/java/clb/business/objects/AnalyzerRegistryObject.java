@@ -130,7 +130,6 @@ public class AnalyzerRegistryObject implements Serializable {
 
 	private double vlnsys;
 
-	//bi-directional many-to-one association to Analyzer
 	private AnalyzerObject analyzer;
 
 	public AnalyzerRegistryObject() {
@@ -756,6 +755,5 @@ public class AnalyzerRegistryObject implements Serializable {
     public void setAnalyzer( AnalyzerObject analyzer ) {
         this.analyzer = analyzer;
     }
-	
-	
+
 }

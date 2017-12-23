@@ -19,7 +19,6 @@ public class AnalyzerObject
         this.analyzerid = analyzerEntity.getAnalyzerid();
         this.name = analyzerEntity.getName();
         this.dataLogger = analyzerEntity.getDataLogger() != null ? new DataLoggerObject(analyzerEntity.getDataLogger()) : new DataLoggerObject();
-      
     }
     
     public AnalyzerEntity toEntity(){
@@ -27,7 +26,6 @@ public class AnalyzerObject
         analyzerEntity.setAnalyzerid( this.analyzerid );
         analyzerEntity.setName( this.name );
         analyzerEntity.setDataLogger( this.dataLogger != null ? this.dataLogger.toEntity() : null );
-        
         return analyzerEntity;
     }
 

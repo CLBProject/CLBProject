@@ -156,5 +156,4 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	public void setTaskExecutor(TaskExecutor taskExecutor) {
 		this.taskExecutor = taskExecutor;
 	}
-
 }

@@ -10,7 +10,6 @@ public class BuildingObject
 
     private UsersystemObject usersystem;
 
-    
     public BuildingObject(){
         
     }
