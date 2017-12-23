@@ -280,7 +280,7 @@ public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializab
         Calendar calendar = GregorianCalendar.getInstance();
         calendar.set( startingYear, 0, 1);
         
-        System.out.println( "Starting persisting data for Analyzer: " + analyzer.getAnalyzerid() );
+        System.out.println( "Starting persisting data for Analyzer: " + analyzer.getAnalyzerid());
         
         for(int a = 0 ;a<numberOfYears; a++){
             int yearDays = calendar.getActualMaximum(Calendar.DAY_OF_YEAR);
@@ -315,7 +315,7 @@ public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializab
                 }
                 calendar.add(Calendar.DATE, 1);
             }
-            System.out.println("Persisted Registries from year: " + a);
+            System.out.println("Persisted Registries from year: " + (a+startingYear) + ", for analyzer: " + analyzer.getAnalyzerid());
         }
 
     }
