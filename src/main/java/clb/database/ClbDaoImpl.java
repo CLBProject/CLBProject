@@ -162,49 +162,30 @@ public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializab
         userEntity3.setUsername( "lsantos" );
         userEntity3.setPassword( "123" );
         
-        List<BuildingEntity> buildings = new ArrayList<BuildingEntity>();
-
-        BuildingEntity buildingEntity = new BuildingEntity();
-        buildingEntity.setName( "Amanjena Hotel" );
-        buildingEntity.setBuildingusername("amanjenaHotel");
-        buildingEntity.setUsersystem(userEntity);
-        entityManager.persist( buildingEntity );
-
-        BuildingEntity buildingEntity2 = new BuildingEntity();
-        buildingEntity2.setName( "AquaMirage Hotel" );
-        buildingEntity2.setBuildingusername("aquaMirageHotel");
-        buildingEntity2.setUsersystem(userEntity);
-        entityManager.persist( buildingEntity2 );
-
-//        BuildingEntity buildingEntity3 = new BuildingEntity();
-//        buildingEntity3.setName( "Ritz" );
-//        buildingEntity3.setBuildingusername("ritz");
-//        buildingEntity3.setUsersystem(userEntity2);
-//        entityManager.persist( buildingEntity3 );
-
-        BuildingEntity buildingEntity4 = new BuildingEntity();
-        buildingEntity4.setName( "VASP" );
-        buildingEntity4.setBuildingusername("vasp");
-        buildingEntity4.setUsersystem(userEntity3);
-        entityManager.persist( buildingEntity4 );
+        List<UsersystemEntity> users = new ArrayList<UsersystemEntity>();
         
-        buildings.add( buildingEntity );
-        buildings.add( buildingEntity2 );
-       // buildings.add( buildingEntity3 );
-        buildings.add( buildingEntity4 );
+        users.add( userEntity );
+        users.add( userEntity2 );
+        users.add( userEntity3 );
         
-        int buildingIndex = 0;
+        int usersIndex = 0;
         
         for(File file: registryFiles.listFiles()){
-            updateAnalyzerRegistriesForAnalyzer(file,buildings.get( buildingIndex ));
-            buildingIndex = buildingIndex +1 == buildings.size() ? 0 : buildingIndex+1;
+            updateAnalyzerRegistriesForAnalyzer(file,users.get( usersIndex ));
+            usersIndex = usersIndex +1 == users.size() ? 0 : usersIndex+1;
         }
     }
     
-    private void updateAnalyzerRegistriesForAnalyzer(File file, BuildingEntity building) throws IOException {
+    private void updateAnalyzerRegistriesForAnalyzer(File file, UsersystemEntity userEntity) throws IOException {
 
         XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(file));
 
+        BuildingEntity building = new BuildingEntity();
+        building.setName(file.getName().split("\\.")[0]);
+        building.setBuildingusername(file.getName().split("\\.")[0]);
+        building.setUsersystem(userEntity);
+        entityManager.persist( building );
+        
         for(int j = 0; j<workbook.getNumberOfSheets();j++){
             
             DataLoggerEntity dl = new DataLoggerEntity();
@@ -237,10 +218,11 @@ public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializab
                 
                 Date currentRowDate = row.getCell(0).getDateCellValue();
                 String currentRowTime = row.getCell(1).getStringCellValue();
-                
-                dataToExclueOnDummy.add( currentRowDate.toString() + "_" + currentRowTime );
 
                 calendar.setTime(currentRowDate);   // assigns calendar to given date 
+                
+                dataToExclueOnDummy.add( calendar.get(Calendar.YEAR) +"/"+calendar.get(Calendar.MONTH) + "/" + 
+                					calendar.get(Calendar.DAY_OF_MONTH) + "_" + currentRowTime );
                 
                 AnalyzerRegistryEntity analyzerRegistryEntity = new AnalyzerRegistryEntity();
                 
@@ -309,7 +291,8 @@ public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializab
                         String currentTime = (b < 10 ? "0"+b : ""+b) + ":" + (k < 10 ? "0"+k : ""+k)+ ":00";
                         Date currentDate = calendar.getTime();
                         
-                        if(dataToExclude.contains( currentDate.toString() + "_" + currentTime)){
+                        if(dataToExclude.contains( calendar.get(Calendar.YEAR) +"/"+calendar.get(Calendar.MONTH) + "/" + 
+                        		calendar.get(Calendar.DAY_OF_MONTH) + "_" + currentTime)){
                             continue;
                         }
                         
