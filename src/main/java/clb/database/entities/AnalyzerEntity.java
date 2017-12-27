@@ -1,37 +1,27 @@
 package clb.database.entities;
 
 import java.io.Serializable;
+import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * The persistent class for the ANALYZER database table.
  * 
  */
-@Entity
-@Table(name="ANALYZER")
-@NamedQuery(name="Analyzer.findAll", query="SELECT a FROM AnalyzerEntity a")
+@Document
 public class AnalyzerEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long analyzerid;
 
 	private String name;
-
-	//bi-directional many-to-one association to DataLogger
-	@ManyToOne
-	@JoinColumn(name="dataloggerid")
-	private DataLoggerEntity dataLogger;
+	
+	@DBRef
+	private List<DataLoggerEntity> analyzerRegistries;
 
 	public AnalyzerEntity() {
 	}
@@ -52,11 +42,13 @@ public class AnalyzerEntity implements Serializable {
 		this.name = name;
 	}
 
-	public DataLoggerEntity getDataLogger() {
-		return this.dataLogger;
-	}
+    public List<DataLoggerEntity> getAnalyzerRegistries() {
+        return analyzerRegistries;
+    }
 
-	public void setDataLogger(DataLoggerEntity dataLogger) {
-		this.dataLogger = dataLogger;
-	}
+    public void setAnalyzerRegistries( List<DataLoggerEntity> analyzerRegistries ) {
+        this.analyzerRegistries = analyzerRegistries;
+    }
+	
+	
 }

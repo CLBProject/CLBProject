@@ -1,39 +1,30 @@
 package clb.database.entities;
 
 import java.io.Serializable;
+import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * The persistent class for the DATA_LOGGER database table.
  * 
  */
-@Entity
-@Table(name="DATA_LOGGER")
-@NamedQuery(name="DataLogger.findAll", query="SELECT d FROM DataLoggerEntity d")
+
+@Document
 public class DataLoggerEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long dataloggerid;
 
 	private String name;
 	
 	private String ftpaddress;
-
-	//bi-directional many-to-one association to Building
-	@ManyToOne
-	@JoinColumn(name="buildingid")
-	private BuildingEntity building;
+	
+	@DBRef
+	private List<AnalyzerEntity> analyzers;
 
 	public DataLoggerEntity() {
 	}
@@ -54,14 +45,6 @@ public class DataLoggerEntity implements Serializable {
 		this.name = name;
 	}
 
-	public BuildingEntity getBuilding() {
-		return this.building;
-	}
-
-	public void setBuilding(BuildingEntity building) {
-		this.building = building;
-	}
-
 	public String getFtpaddress() {
 		return this.ftpaddress;
 	}
@@ -69,4 +52,14 @@ public class DataLoggerEntity implements Serializable {
 	public void setFtpaddress(String ftpaddress) {
 		this.ftpaddress = ftpaddress;
 	}
+
+    public List<AnalyzerEntity> getAnalyzers() {
+        return analyzers;
+    }
+
+    public void setAnalyzers( List<AnalyzerEntity> analyzers ) {
+        this.analyzers = analyzers;
+    }
+	
+	
 }

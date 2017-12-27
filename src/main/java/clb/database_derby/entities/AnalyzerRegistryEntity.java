@@ -1,23 +1,27 @@
-  package clb.database.entities;
+  package clb.database_derby.entities;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import javax.persistence.*;
 import java.util.Date;
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import java.sql.Timestamp;
 
 
 /**
  * The persistent class for the ANALYZER_REGISTRY database table.
  * 
  */
-
-@Document
+@Entity
+@Table(name="ANALYZER_REGISTRY")
+@NamedQueries({
+    @NamedQuery(name="AnalyzerRegistry.findAll", query="SELECT a FROM AnalyzerRegistryEntity a"),
+    @NamedQuery(name="AnalyzerRegistry.findAllByDay", query="SELECT a FROM AnalyzerRegistryEntity a where a.currentdate = :currentdate"),
+    @NamedQuery(name="AnalyzerRegistry.findAllByDayHour", query="SELECT a FROM AnalyzerRegistryEntity a where a.currentdate = :currentdate and substring(a.currenttime,1,2) = :currenthour")}
+)
 public class AnalyzerRegistryEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long regid;
 
 	private double al1;
@@ -32,6 +36,7 @@ public class AnalyzerRegistryEntity implements Serializable {
 
 	private int comport;
 
+	@Temporal(TemporalType.DATE)
 	private Date currentdate;
 
 	private String currenttime;
@@ -175,6 +180,11 @@ public class AnalyzerRegistryEntity implements Serializable {
 	private double wdmd;
 
 	private double wdmdmax;
+
+	//bi-directional many-to-one association to Analyzer
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="ANALYZERID")
+	private AnalyzerEntity analyzer;
 
 	public AnalyzerRegistryEntity() {
 	}
@@ -810,4 +820,13 @@ public class AnalyzerRegistryEntity implements Serializable {
 	public void setWdmdmax(double wdmdmax) {
 		this.wdmdmax = wdmdmax;
 	}
+
+	public AnalyzerEntity getAnalyzer() {
+		return this.analyzer;
+	}
+
+	public void setAnalyzer(AnalyzerEntity analyzer) {
+		this.analyzer = analyzer;
+	}
+
 }

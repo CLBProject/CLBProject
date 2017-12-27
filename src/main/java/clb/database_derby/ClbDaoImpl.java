@@ -1,4 +1,4 @@
-package clb.database;
+package clb.database_derby;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,11 +22,11 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import clb.database.entities.AnalyzerEntity;
-import clb.database.entities.AnalyzerRegistryEntity;
-import clb.database.entities.BuildingEntity;
-import clb.database.entities.DataLoggerEntity;
-import clb.database.entities.UsersystemEntity;
+import clb.database_derby.entities.AnalyzerEntity;
+import clb.database_derby.entities.AnalyzerRegistryEntity;
+import clb.database_derby.entities.BuildingEntity;
+import clb.database_derby.entities.DataLoggerEntity;
+import clb.database_derby.entities.UsersystemEntity;
 
 
 public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializable{

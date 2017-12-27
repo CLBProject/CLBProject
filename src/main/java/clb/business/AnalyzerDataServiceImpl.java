@@ -22,8 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 import clb.business.constants.Month;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.MonthAverageObject;
-import clb.database.ClbDao;
-import clb.database.entities.AnalyzerRegistryEntity;
+import clb.database_derby.ClbDao;
+import clb.database_derby.entities.AnalyzerRegistryEntity;
 
 @Service
 public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializable{

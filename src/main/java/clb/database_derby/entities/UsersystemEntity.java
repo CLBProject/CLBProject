@@ -1,18 +1,20 @@
-package clb.database.entities;
+package clb.database_derby.entities;
 
 import java.io.Serializable;
-import java.util.List;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 
 /**
  * The persistent class for the USERSYSTEM database table.
  * 
  */
-@Document
+@Entity
+@Table(name="USERSYSTEM")
+@NamedQuery(name="Usersystem.findAll", query="SELECT u FROM UsersystemEntity u")
 public class UsersystemEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -26,9 +28,6 @@ public class UsersystemEntity implements Serializable {
 	private String password;
 
 	private String username;
-	
-	@DBRef
-	private List<BuildingEntity> buildings;
 
 	public UsersystemEntity() {
 	}
@@ -72,14 +71,4 @@ public class UsersystemEntity implements Serializable {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
-    public List<BuildingEntity> getBuildings() {
-        return buildings;
-    }
-
-    public void setBuildings( List<BuildingEntity> buildings ) {
-        this.buildings = buildings;
-    }
-	
-	
 }

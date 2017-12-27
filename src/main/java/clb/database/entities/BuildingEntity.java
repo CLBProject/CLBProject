@@ -1,45 +1,30 @@
 package clb.database.entities;
 
 import java.io.Serializable;
+import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * The persistent class for the BUILDING database table.
  * 
  */
-@Entity
-@Table(name="BUILDING")
-@NamedQueries({
-	@NamedQuery(name="Building.findAll", query="SELECT b FROM BuildingEntity b"),
-	@NamedQuery(name="Building.findByUsername", query = "select b from BuildingEntity b where b.buildingusername=:busername")
-})
 
+@Document
 public class BuildingEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long buildingid;
 
 	private String name;
 	
 	private String buildingusername;
 
-	//bi-directional many-to-one association to Usersystem
-	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="userid")
-	private UsersystemEntity usersystem;
+	@DBRef
+	private List<DataLoggerEntity> dataLoggers;
 
 	public BuildingEntity() {
 	}
@@ -60,15 +45,15 @@ public class BuildingEntity implements Serializable {
 		this.name = name;
 	}
 
-	public UsersystemEntity getUsersystem() {
-		return this.usersystem;
-	}
+	public List<DataLoggerEntity> getDataLoggers() {
+        return dataLoggers;
+    }
 
-	public void setUsersystem(UsersystemEntity usersystem) {
-		this.usersystem = usersystem;
-	}
+    public void setDataLoggers( List<DataLoggerEntity> dataLoggers ) {
+        this.dataLoggers = dataLoggers;
+    }
 
-	public String getBuildingusername() {
+    public String getBuildingusername() {
 		return this.buildingusername;
 	}
 

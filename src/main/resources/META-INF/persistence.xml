@@ -5,11 +5,11 @@
 
 	<persistence-unit name="clbDatabase" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-		<class>clb.database.entities.AnalyzerRegistryEntity</class>
-		<class>clb.database.entities.AnalyzerEntity</class>
-		<class>clb.database.entities.BuildingEntity</class>
-		<class>clb.database.entities.DataLoggerEntity</class>
-		<class>clb.database.entities.UsersystemEntity</class>
+		<class>clb.database_derby.entities.AnalyzerRegistryEntity</class>
+		<class>clb.database_derby.entities.AnalyzerEntity</class>
+		<class>clb.database_derby.entities.BuildingEntity</class>
+		<class>clb.database_derby.entities.DataLoggerEntity</class>
+		<class>clb.database_derby.entities.UsersystemEntity</class>
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.DerbyDialect" />
 			<property name="hibernate.show_sql" value="false" />

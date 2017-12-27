@@ -1,4 +1,4 @@
-package clb.database;
+package clb.database_derby;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import clb.database.entities.AnalyzerRegistryEntity;
+import clb.database_derby.entities.AnalyzerRegistryEntity;
 
 public interface ClbDao<T extends Serializable> {
 

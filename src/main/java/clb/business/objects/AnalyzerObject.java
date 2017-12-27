@@ -1,6 +1,6 @@
 package clb.business.objects;
 
-import clb.database.entities.AnalyzerEntity;
+import clb.database_derby.entities.AnalyzerEntity;
 
 public class AnalyzerObject
 {

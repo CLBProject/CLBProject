@@ -1,6 +1,6 @@
-package clb.database;
+package clb.database_derby;
 
-import clb.database.entities.AnalyzerRegistryEntity;
+import clb.database_derby.entities.AnalyzerRegistryEntity;
 
 public class AnalyzerDao extends ClbDaoImpl<AnalyzerRegistryEntity>{
 

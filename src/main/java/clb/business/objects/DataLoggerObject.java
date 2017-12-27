@@ -1,6 +1,6 @@
 package clb.business.objects;
 
-import clb.database.entities.DataLoggerEntity;
+import clb.database_derby.entities.DataLoggerEntity;
 
 public class DataLoggerObject
 {

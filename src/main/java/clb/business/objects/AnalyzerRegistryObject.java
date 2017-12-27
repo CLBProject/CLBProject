@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import clb.database.entities.AnalyzerRegistryEntity;
+import clb.database_derby.entities.AnalyzerRegistryEntity;
 
 public class AnalyzerRegistryObject implements Serializable {
 

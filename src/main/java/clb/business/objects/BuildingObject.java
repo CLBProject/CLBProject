@@ -1,6 +1,6 @@
 package clb.business.objects;
 
-import clb.database.entities.BuildingEntity;
+import clb.database_derby.entities.BuildingEntity;
 
 public class BuildingObject
 {
