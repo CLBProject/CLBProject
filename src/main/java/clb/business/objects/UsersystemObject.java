@@ -1,6 +1,6 @@
 package clb.business.objects;
 
-import clb.database_derby.entities.UsersystemEntity;
+import clb.database.entities.UsersystemEntity;
 
 public class UsersystemObject
 {

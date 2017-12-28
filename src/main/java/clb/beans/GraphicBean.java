@@ -62,29 +62,31 @@ public class GraphicBean implements Serializable{
 
 	@PostConstruct
 	public void init(){
-
-		dayDate = new Date();
-		scaleSelected = ScaleGraphic.DAY;
-		scaleValues = ScaleGraphic.values();
+	    
+	    analyzerDataService.insertMongoData();
+	    
+//		dayDate = new Date();
+//		scaleSelected = ScaleGraphic.DAY;
+//		scaleValues = ScaleGraphic.values();
 		hours = getLoadHours();
-		months = Month.values();
-		years = analyzerDataService.getRegistryYears();
-		hourSelected = hours.size() > 0 ? (String) hours.get(0).getValue() : null;
-		yearSelected = years.size() > 0 ? years.get(0) : null;
-		monthSelected = months.length > 0 ? months[0] : null;
-
-		graphicDayPojo = new GraphicLinearPojo();
-		graphicDayHoursPojo = new GraphicLinearPojo();
-		graphicYearPojo = new GraphicBarPojo();
-		graphicMonthPojo = new GraphicLinearPojo();
-
-		enableAllVariables();
-
-		try {
-			changeScale();
-		} catch( IOException e ) {
-			e.printStackTrace();
-		}
+//		months = Month.values();
+//		years = analyzerDataService.getRegistryYears();
+//		hourSelected = hours.size() > 0 ? (String) hours.get(0).getValue() : null;
+//		yearSelected = years.size() > 0 ? years.get(0) : null;
+//		monthSelected = months.length > 0 ? months[0] : null;
+//
+//		graphicDayPojo = new GraphicLinearPojo();
+//		graphicDayHoursPojo = new GraphicLinearPojo();
+//		graphicYearPojo = new GraphicBarPojo();
+//		graphicMonthPojo = new GraphicLinearPojo();
+//
+//		enableAllVariables();
+//
+//		try {
+//			changeScale();
+//		} catch( IOException e ) {
+//			e.printStackTrace();
+//		}
 	}
 
 	public void changeScale() throws IOException{

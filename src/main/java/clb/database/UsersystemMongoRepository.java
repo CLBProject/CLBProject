@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 import clb.database.entities.UsersystemEntity;
 
 @Repository
-public interface ClbMongoRepository extends MongoRepository<UsersystemEntity, String>{
+public interface UsersystemMongoRepository extends MongoRepository<UsersystemEntity, String>{
+
 }

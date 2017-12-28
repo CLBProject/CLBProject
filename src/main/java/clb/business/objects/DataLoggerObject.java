@@ -1,6 +1,6 @@
 package clb.business.objects;
 
-import clb.database_derby.entities.DataLoggerEntity;
+import clb.database.entities.DataLoggerEntity;
 
 public class DataLoggerObject
 {
@@ -9,8 +9,6 @@ public class DataLoggerObject
 
     private String name;
 
-    private BuildingObject building;
-
     public DataLoggerObject(){
         
     }
@@ -18,13 +16,11 @@ public class DataLoggerObject
     public DataLoggerObject( DataLoggerEntity dataLogger ) {
         this.dataloggerid = dataLogger.getDataloggerid();
         this.name = dataLogger.getName();
-        this.building = dataLogger.getBuilding() != null ? new BuildingObject(dataLogger.getBuilding()) : new BuildingObject();
     }
     
     public DataLoggerEntity toEntity() {
         DataLoggerEntity dataLogEntity = new DataLoggerEntity();
         dataLogEntity.setDataloggerid( this.dataloggerid );
-        dataLogEntity.setBuilding( this.building != null ? this.building.toEntity() : null );
         return dataLogEntity;
     }
 
@@ -47,15 +43,5 @@ public class DataLoggerObject
     public void setName( String name ) {
         this.name = name;
     }
-    
-    public BuildingObject getBuilding() {
-        return building;
-    }
-
-
-    public void setBuilding( BuildingObject building ) {
-        this.building = building;
-    }
- 
     
 }

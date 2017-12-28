@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import clb.database_derby.entities.AnalyzerRegistryEntity;
+import clb.database.entities.AnalyzerRegistryEntity;
 
 public class AnalyzerRegistryObject implements Serializable {
 
@@ -197,7 +197,6 @@ public class AnalyzerRegistryObject implements Serializable {
         this.vl3n = analyzerRegEntity.getVl3n();
         this.vllsys = analyzerRegEntity.getVllsys();
         this.vlnsys = analyzerRegEntity.getVlnsys();
-        this.analyzer = analyzerRegEntity.getAnalyzer() != null ? new AnalyzerObject( analyzerRegEntity.getAnalyzer() ) : new AnalyzerObject();
     }
 
 
@@ -262,7 +261,6 @@ public class AnalyzerRegistryObject implements Serializable {
         anaRegEntity.setVl3n(thdvl3n);
         anaRegEntity.setVllsys(vllsys);
         anaRegEntity.setVlnsys(vlnsys);
-        anaRegEntity.setAnalyzer( analyzer != null ? analyzer.toEntity() : null);
         
         return anaRegEntity;
     }

@@ -10,6 +10,8 @@ import clb.business.objects.MonthAverageObject;
 
 public interface AnalyzerDataService {
 	
+    void insertMongoData();
+    
 	void fillDatabaseDataWithMoreThenOneYears()  throws IOException;
 	
 	List<AnalyzerRegistryObject> getDataByDayAndHours(Date day, String hour) throws IOException;

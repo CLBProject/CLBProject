@@ -1,14 +1,12 @@
 package clb.business.objects;
 
-import clb.database_derby.entities.BuildingEntity;
+import clb.database.entities.BuildingEntity;
 
 public class BuildingObject
 {
     private long buildingid;
 
     private String name;
-
-    private UsersystemObject usersystem;
 
     public BuildingObject(){
         
@@ -17,14 +15,12 @@ public class BuildingObject
     public BuildingObject( BuildingEntity building ) {
         this.buildingid = building.getBuildingid();
         this.name = building.getName();
-        this.usersystem = building.getUsersystem() != null ? new UsersystemObject(building.getUsersystem()) : new UsersystemObject();
     }
 
     public BuildingEntity toEntity() {
         BuildingEntity buildingEntity = new BuildingEntity();
         buildingEntity.setBuildingid( this.buildingid );
         buildingEntity.setName( this.name );
-        buildingEntity.setUsersystem( this.usersystem != null ? this.usersystem.toEntity() : null );
 
         return buildingEntity;
     }
@@ -43,13 +39,5 @@ public class BuildingObject
 
     public void setName( String name ) {
         this.name = name;
-    }
-
-    public UsersystemObject getUsersystem() {
-        return usersystem;
-    }
-
-    public void setUsersystem( UsersystemObject usersystem ) {
-        this.usersystem = usersystem;
     }
 }
