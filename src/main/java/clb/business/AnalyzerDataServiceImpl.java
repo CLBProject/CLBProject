@@ -30,7 +30,10 @@ import org.springframework.stereotype.Service;
 import clb.business.constants.Month;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.MonthAverageObject;
+import clb.database.AnalyzerMongoRepository;
+import clb.database.AnalyzerRegistryMongoRepository;
 import clb.database.BuildingsMongoRepository;
+import clb.database.DataLoggerMongoRepository;
 import clb.database.UsersystemMongoRepository;
 import clb.database.entities.AnalyzerEntity;
 import clb.database.entities.AnalyzerRegistryEntity;
@@ -52,6 +55,15 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
     
     @Autowired
     private BuildingsMongoRepository buildingsMongoRepository;
+    
+    @Autowired
+    private DataLoggerMongoRepository dataLoggerMongoRepository;
+    
+    @Autowired
+    private AnalyzerMongoRepository analyzerMongoRepository;
+    
+    @Autowired
+    private AnalyzerRegistryMongoRepository analyzerRegistryMongoRepository;
 
     @Autowired
     private TaskExecutor taskExecutor;
@@ -137,6 +149,8 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                         anaRegObj.setAl1(lowAl + (highAl - lowAl) * random.nextDouble());
                         anaRegObj.setAl2(lowAl + (highAl - lowAl) * random.nextDouble());
                         anaRegObj.setAl3(lowAl + (highAl - lowAl) * random.nextDouble());
+                        
+                        analyzerRegistryMongoRepository.insert(anaRegObj);
 
                         analyzer.addAnalyzerRegistry(anaRegObj);
                     }
@@ -227,10 +241,16 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                 analyzerRegistryEntity.setKvarl2(row.getCell(27).getNumericCellValue());
                 analyzerRegistryEntity.setKvarl3(row.getCell(28).getNumericCellValue());
                 analyzerRegistryEntity.setKvarsys(row.getCell(29).getNumericCellValue());
+                
+                analyzerRegistryMongoRepository.insert(analyzerRegistryEntity);
+                
                 ana.addAnalyzerRegistry(analyzerRegistryEntity);
             }
             
             persistDummyAnalyzerRegistries( ana, dataToExclueOnDummy);
+            
+            analyzerMongoRepository.insert(ana);
+            dataLoggerMongoRepository.insert(dl);
         }
         buildingsMongoRepository.insert(building);
     }
