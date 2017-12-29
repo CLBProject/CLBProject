@@ -1,6 +1,7 @@
 package clb.database.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -12,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * 
  */
 
-@Document
+@Document(collection="Buildings")
 public class BuildingEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -61,4 +62,11 @@ public class BuildingEntity implements Serializable {
 		this.buildingusername = buildingusername;
 	}
 
+	public void addDataLogger(DataLoggerEntity dataLogger) {
+		if(dataLoggers == null) {
+			dataLoggers = new ArrayList<DataLoggerEntity>();
+		}
+		
+		dataLoggers.add(dataLogger);
+	}
 }

@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * 
  */
 
-@Document
+@Document(collection="AnalyzersRegistries")
 public class AnalyzerRegistryEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 

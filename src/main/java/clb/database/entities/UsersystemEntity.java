@@ -1,6 +1,7 @@
 package clb.database.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -12,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * The persistent class for the USERSYSTEM database table.
  * 
  */
-@Document
+@Document(collection="Users")
 public class UsersystemEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -81,5 +82,12 @@ public class UsersystemEntity implements Serializable {
         this.buildings = buildings;
     }
 	
+    public void addBuilding(BuildingEntity building) {
+    	if(buildings == null) {
+    		buildings = new ArrayList<BuildingEntity>();
+    	}
+    	
+    	buildings.add(building);
+    }
 	
 }

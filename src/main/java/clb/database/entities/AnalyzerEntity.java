@@ -1,6 +1,7 @@
 package clb.database.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -11,7 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * The persistent class for the ANALYZER database table.
  * 
  */
-@Document
+@Document(collection="Analyzers")
 public class AnalyzerEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -21,7 +22,7 @@ public class AnalyzerEntity implements Serializable {
 	private String name;
 	
 	@DBRef
-	private List<DataLoggerEntity> analyzerRegistries;
+	private List<AnalyzerRegistryEntity> analyzerRegistries;
 
 	public AnalyzerEntity() {
 	}
@@ -42,13 +43,19 @@ public class AnalyzerEntity implements Serializable {
 		this.name = name;
 	}
 
-    public List<DataLoggerEntity> getAnalyzerRegistries() {
+    public List<AnalyzerRegistryEntity> getAnalyzerRegistries() {
         return analyzerRegistries;
     }
 
-    public void setAnalyzerRegistries( List<DataLoggerEntity> analyzerRegistries ) {
+    public void setAnalyzerRegistries( List<AnalyzerRegistryEntity> analyzerRegistries ) {
         this.analyzerRegistries = analyzerRegistries;
     }
 	
+    public void addAnalyzerRegistry(AnalyzerRegistryEntity analyzerRegistry) {
+    	if(this.analyzerRegistries == null)
+    		analyzerRegistries = new ArrayList<AnalyzerRegistryEntity>();
+    	
+    	analyzerRegistries.add(analyzerRegistry);
+    }
 	
 }

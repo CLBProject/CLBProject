@@ -63,8 +63,6 @@ public class GraphicBean implements Serializable{
 	@PostConstruct
 	public void init(){
 	    
-	    analyzerDataService.insertMongoData();
-	    
 //		dayDate = new Date();
 //		scaleSelected = ScaleGraphic.DAY;
 //		scaleValues = ScaleGraphic.values();
@@ -251,7 +249,7 @@ public class GraphicBean implements Serializable{
 	}
 
 	public void fillDatabaseScript() throws IOException{
-		analyzerDataService.fillDatabaseDataWithMoreThenOneYears();
+		analyzerDataService.persistScriptBigData();
 	}
 
 	public AnalyzerDataService getAnalyzerDataService() {
