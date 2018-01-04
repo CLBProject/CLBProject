@@ -119,13 +119,13 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
         Random random = new Random();
 
         int numberOfYears = 1;
-        int startingYear = 2017;
+        int startingYear = 2018;
         int lowAl = 200;
         int highAl = 450;
 
         Calendar calendar = GregorianCalendar.getInstance();
         calendar.set( startingYear, 0, 1);
-        
+
         System.out.println( "Starting persisting data... ");
         
         for(int a = 0 ;a<numberOfYears; a++){
@@ -149,7 +149,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                         anaRegObj.setAl1(lowAl + (highAl - lowAl) * random.nextDouble());
                         anaRegObj.setAl2(lowAl + (highAl - lowAl) * random.nextDouble());
                         anaRegObj.setAl3(lowAl + (highAl - lowAl) * random.nextDouble());
-                        
+ 
                         analyzerRegistryMongoRepository.insert(anaRegObj);
 
                         analyzer.addAnalyzerRegistry(anaRegObj);
