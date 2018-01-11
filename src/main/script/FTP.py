@@ -15,10 +15,13 @@ def processUserFtp(userStr, passStr):
     #cria lista com todos o ficheiros da pasta e depois escolher o mais recent
     data = []
     ftp.retrlines("LIST", (data.append))
+    
+    spamreader = csv.reader(data[-1], delimiter=' ', quotechar='|')
+    for row in spamreader:
+        print (', '.join(row))
+    
     words = data[-1].split(None, 8)
     filename = words[-1].lstrip()
-    print(filename)
-    
     print ('Ficheiro mais recente: ', filename)
     ftp.quit()
     return;
