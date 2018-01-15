@@ -2,7 +2,6 @@
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -32,9 +31,7 @@ public class AnalyzerRegistryEntity implements Serializable {
 
 	private int comport;
 
-	private Date currentdate;
-
-	private String currenttime;
+	private Timestamp currenttime;
 
 	private Timestamp epochformat;
 
@@ -235,19 +232,11 @@ public class AnalyzerRegistryEntity implements Serializable {
 		this.comport = comport;
 	}
 
-	public Date getCurrentdate() {
-		return this.currentdate;
-	}
-
-	public void setCurrentdate(Date currentdate) {
-		this.currentdate = currentdate;
-	}
-
-	public String getCurrenttime() {
+	public Timestamp getCurrenttime() {
 		return this.currenttime;
 	}
 
-	public void setCurrenttime(String currenttime) {
+	public void setCurrenttime(Timestamp currenttime) {
 		this.currenttime = currenttime;
 	}
 

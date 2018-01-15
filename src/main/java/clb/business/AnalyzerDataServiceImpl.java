@@ -143,8 +143,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                         }
                         
                         AnalyzerRegistryEntity anaRegObj = new AnalyzerRegistryEntity();
-                        anaRegObj.setCurrenttime( currentTime );
-                        anaRegObj.setCurrentdate( currentDate ); 
+                        //anaRegObj.setCurrenttime( currentTime );
 
                         anaRegObj.setAl1(lowAl + (highAl - lowAl) * random.nextDouble());
                         anaRegObj.setAl2(lowAl + (highAl - lowAl) * random.nextDouble());
@@ -211,8 +210,8 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                 
                 AnalyzerRegistryEntity analyzerRegistryEntity = new AnalyzerRegistryEntity();
                 
-                analyzerRegistryEntity.setCurrentdate( currentRowDate );
-                analyzerRegistryEntity.setCurrenttime( currentRowTime );
+                //analyzerRegistryEntity.setCurrentdate( currentRowDate );
+                //analyzerRegistryEntity.setCurrenttime( currentRowTime );
                 analyzerRegistryEntity.setAl1(row.getCell(2).getNumericCellValue());
                 analyzerRegistryEntity.setAl2(row.getCell(3).getNumericCellValue());
                 analyzerRegistryEntity.setAl3(row.getCell(4).getNumericCellValue());

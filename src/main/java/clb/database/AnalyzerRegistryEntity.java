@@ -1,15 +1,22 @@
-package clb.business.objects;
+  package clb.database;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Date;
 
-import clb.database.entities.AnalyzerRegistryEntity;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-public class AnalyzerRegistryObject implements Serializable {
 
+/**
+ * The persistent class for the ANALYZER_REGISTRY database table.
+ * 
+ */
+
+@Document(collection="AnalyzersRegistries")
+public class AnalyzerRegistryEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Id
 	private long regid;
 
 	private double al1;
@@ -52,6 +59,24 @@ public class AnalyzerRegistryObject implements Serializable {
 
 	private double kvarh;
 
+	private double kvarhc;
+
+	private double kvarhl;
+
+	private double kvarhl1;
+
+	private double kvarhl1negative;
+
+	private double kvarhl2;
+
+	private double kvarhl2negative;
+
+	private double kvarhl3;
+
+	private double kvarhl3negative;
+
+	private double kvarhnegative;
+
 	private double kvarl1;
 
 	private double kvarl2;
@@ -66,9 +91,17 @@ public class AnalyzerRegistryObject implements Serializable {
 
 	private double kwhl1;
 
+	private double kwhl1negative;
+
 	private double kwhl2;
 
+	private double kwhl2negative;
+
 	private double kwhl3;
+
+	private double kwhl3negative;
+
+	private double kwhnegative;
 
 	private double kwl1;
 
@@ -87,6 +120,8 @@ public class AnalyzerRegistryObject implements Serializable {
 	private double pfl3;
 
 	private double pfsys;
+
+	private double phasesequence;
 
 	private String producttype;
 
@@ -108,6 +143,12 @@ public class AnalyzerRegistryObject implements Serializable {
 
 	private double thdvl3n;
 
+	private double totalizer1;
+
+	private double totalizer2;
+
+	private double totalizer3;
+
 	private double vadmd;
 
 	private double vardmd;
@@ -128,139 +169,12 @@ public class AnalyzerRegistryObject implements Serializable {
 
 	private double vlnsys;
 
-	private AnalyzerObject analyzer;
+	private double wdmd;
 
-	public AnalyzerRegistryObject() {
+	private double wdmdmax;
+
+	public AnalyzerRegistryEntity() {
 	}
-
-
-    public AnalyzerRegistryObject(AnalyzerRegistryEntity analyzerRegEntity) {
-        super();
-        this.regid = analyzerRegEntity.getRegid();
-        this.al1 = analyzerRegEntity.getAl1();
-        this.al2 = analyzerRegEntity.getAl2();
-        this.al3 = analyzerRegEntity.getAl3();
-        this.an = analyzerRegEntity.getAn();
-        this.asys = analyzerRegEntity.getAsys();
-        this.comport = analyzerRegEntity.getComport();
-        this.currenttime = analyzerRegEntity.getCurrenttime();
-        this.epochformat = analyzerRegEntity.getEpochformat();
-        this.hourmeterkwh = analyzerRegEntity.getHourmeterkwh();
-        this.hourmeterkwhnegative = analyzerRegEntity.getHourmeterkwhnegative();
-        this.hz = analyzerRegEntity.getHz();
-        this.itemlabel = analyzerRegEntity.getItemlabel();
-        this.kvahl = analyzerRegEntity.getKvahl();
-        this.kvahl1 = analyzerRegEntity.getKvahl1();
-        this.kvahl2 = analyzerRegEntity.getKvahl2();
-        this.kvahl3 = analyzerRegEntity.getKvahl3();
-        this.kval1 = analyzerRegEntity.getKval1();
-        this.kval2 = analyzerRegEntity.getKval2();
-        this.kval3 = analyzerRegEntity.getKval3();
-        this.kvarh = analyzerRegEntity.getKvarh();
-        this.kvarl1 = analyzerRegEntity.getKvarl1();
-        this.kvarl2 = analyzerRegEntity.getKvarl2();
-        this.kvarl3 = analyzerRegEntity.getKvarl3();
-        this.kvarsys = analyzerRegEntity.getKvarsys();
-        this.kvasys = analyzerRegEntity.getKvasys();
-        this.kwh = analyzerRegEntity.getKwh();
-        this.kwhl1 = analyzerRegEntity.getKwhl1();
-        this.kwhl2 = analyzerRegEntity.getKwhl2();
-        this.kwhl3 = analyzerRegEntity.getKwhl3();
-        this.kwl1 = analyzerRegEntity.getKwl1();
-        this.kwl2 = analyzerRegEntity.getKwl2();
-        this.kwl3 = analyzerRegEntity.getKwl3();
-        this.modbusid = analyzerRegEntity.getModbusid();
-        this.pfl1 = analyzerRegEntity.getPfl1();
-        this.pfl2 = analyzerRegEntity.getPfl2();
-        this.pfl3 = analyzerRegEntity.getPfl3();
-        this.pfsys = analyzerRegEntity.getPfsys();
-        this.producttype = analyzerRegEntity.getProducttype();
-        this.recorttype = analyzerRegEntity.getRecorttype();
-        this.rfc3339format = analyzerRegEntity.getRfc3339format();
-        this.temperature = analyzerRegEntity.getTemperature();
-        this.thdal1 = analyzerRegEntity.getThdal1();
-        this.thdal2 = analyzerRegEntity.getThdal2();
-        this.thdal3 = analyzerRegEntity.getThdal3();
-        this.thdvl1n = analyzerRegEntity.getThdvl1n();
-        this.thdvl2n = analyzerRegEntity.getThdvl2n();
-        this.thdvl3n = analyzerRegEntity.getThdvl3n();
-        this.vadmd = analyzerRegEntity.getVadmd();
-        this.vardmd = analyzerRegEntity.getVardmd();
-        this.vl1l2 = analyzerRegEntity.getVl1l2();
-        this.vl1n = analyzerRegEntity.getVl1n();
-        this.vl2l3 = analyzerRegEntity.getVl2l3();
-        this.vl2n = analyzerRegEntity.getVl2n();
-        this.vl3l1 = analyzerRegEntity.getVl3l1();
-        this.vl3n = analyzerRegEntity.getVl3n();
-        this.vllsys = analyzerRegEntity.getVllsys();
-        this.vlnsys = analyzerRegEntity.getVlnsys();
-    }
-
-
-    public AnalyzerRegistryEntity toEntity() {
-        AnalyzerRegistryEntity anaRegEntity = new AnalyzerRegistryEntity();
-        anaRegEntity.setRegid(regid);
-        anaRegEntity.setAl1(al1);
-        anaRegEntity.setAl2(al2);
-        anaRegEntity.setAl3(al3);
-        anaRegEntity.setAn(an);
-        anaRegEntity.setAsys(asys);
-        anaRegEntity.setComport(comport);
-        anaRegEntity.setCurrenttime(currenttime);
-        anaRegEntity.setEpochformat(epochformat);
-        anaRegEntity.setHourmeterkwh(hourmeterkwh);
-        anaRegEntity.setHourmeterkwhnegative(hourmeterkwhnegative);
-        anaRegEntity.setHz(hz);
-        anaRegEntity.setItemlabel(itemlabel);
-        anaRegEntity.setKvahl(kvahl);
-        anaRegEntity.setKvahl2(kvahl2);
-        anaRegEntity.setKvahl3(kvahl3);
-        anaRegEntity.setKval1(kval1);
-        anaRegEntity.setKval2(kval2);
-        anaRegEntity.setKval3(kval3);
-        anaRegEntity.setKvarh(kvarh);
-        anaRegEntity.setKvarl1(kvarl1);
-        anaRegEntity.setKvarl2(kvarl2);
-        anaRegEntity.setKvarl3(kvarl3);
-        anaRegEntity.setKvarsys(kvarsys);
-        anaRegEntity.setKvasys(kvasys);
-        anaRegEntity.setKwh(kwh);
-        anaRegEntity.setKwhl1(kwhl1);
-        anaRegEntity.setKwhl2(kwhl2);
-        anaRegEntity.setKwhl3(kwhl3);
-        anaRegEntity.setKwl1(kwl1);
-        anaRegEntity.setKwl2(kwl2);
-        anaRegEntity.setKwl3(kwl3);
-        anaRegEntity.setKwsys(kwsys);
-        anaRegEntity.setModbusid(modbusid);
-        anaRegEntity.setPfl1(pfl1);
-        anaRegEntity.setPfl2(pfl2);
-        anaRegEntity.setPfl3(pfl3);
-        anaRegEntity.setPfsys(pfsys);
-        anaRegEntity.setProducttype(producttype);
-        anaRegEntity.setRecorttype(recorttype);
-        anaRegEntity.setRfc3339format(rfc3339format);
-        anaRegEntity.setTemperature(temperature);
-        anaRegEntity.setThdal1(thdal1);
-        anaRegEntity.setThdal2(thdal2);
-        anaRegEntity.setThdal3(thdal3);
-        anaRegEntity.setThdvl1n(thdvl1n);
-        anaRegEntity.setThdvl2n(thdvl2n);
-        anaRegEntity.setThdvl3n(thdvl3n);
-        anaRegEntity.setVadmd(vadmd);
-        anaRegEntity.setVardmd(vardmd);
-        anaRegEntity.setVl1l2(vl1l2);
-        anaRegEntity.setVl1n(vl1n);
-        anaRegEntity.setVl2l3(vl2l3);
-        anaRegEntity.setVl2n(vl2n);
-        anaRegEntity.setVl3l1(vl3l1);
-        anaRegEntity.setVl3n(thdvl3n);
-        anaRegEntity.setVllsys(vllsys);
-        anaRegEntity.setVlnsys(vlnsys);
-        
-        return anaRegEntity;
-    }
-
 
 	public long getRegid() {
 		return this.regid;
@@ -430,6 +344,78 @@ public class AnalyzerRegistryObject implements Serializable {
 		this.kvarh = kvarh;
 	}
 
+	public double getKvarhc() {
+		return this.kvarhc;
+	}
+
+	public void setKvarhc(double kvarhc) {
+		this.kvarhc = kvarhc;
+	}
+
+	public double getKvarhl() {
+		return this.kvarhl;
+	}
+
+	public void setKvarhl(double kvarhl) {
+		this.kvarhl = kvarhl;
+	}
+
+	public double getKvarhl1() {
+		return this.kvarhl1;
+	}
+
+	public void setKvarhl1(double kvarhl1) {
+		this.kvarhl1 = kvarhl1;
+	}
+
+	public double getKvarhl1negative() {
+		return this.kvarhl1negative;
+	}
+
+	public void setKvarhl1negative(double kvarhl1negative) {
+		this.kvarhl1negative = kvarhl1negative;
+	}
+
+	public double getKvarhl2() {
+		return this.kvarhl2;
+	}
+
+	public void setKvarhl2(double kvarhl2) {
+		this.kvarhl2 = kvarhl2;
+	}
+
+	public double getKvarhl2negative() {
+		return this.kvarhl2negative;
+	}
+
+	public void setKvarhl2negative(double kvarhl2negative) {
+		this.kvarhl2negative = kvarhl2negative;
+	}
+
+	public double getKvarhl3() {
+		return this.kvarhl3;
+	}
+
+	public void setKvarhl3(double kvarhl3) {
+		this.kvarhl3 = kvarhl3;
+	}
+
+	public double getKvarhl3negative() {
+		return this.kvarhl3negative;
+	}
+
+	public void setKvarhl3negative(double kvarhl3negative) {
+		this.kvarhl3negative = kvarhl3negative;
+	}
+
+	public double getKvarhnegative() {
+		return this.kvarhnegative;
+	}
+
+	public void setKvarhnegative(double kvarhnegative) {
+		this.kvarhnegative = kvarhnegative;
+	}
+
 	public double getKvarl1() {
 		return this.kvarl1;
 	}
@@ -486,6 +472,14 @@ public class AnalyzerRegistryObject implements Serializable {
 		this.kwhl1 = kwhl1;
 	}
 
+	public double getKwhl1negative() {
+		return this.kwhl1negative;
+	}
+
+	public void setKwhl1negative(double kwhl1negative) {
+		this.kwhl1negative = kwhl1negative;
+	}
+
 	public double getKwhl2() {
 		return this.kwhl2;
 	}
@@ -494,12 +488,36 @@ public class AnalyzerRegistryObject implements Serializable {
 		this.kwhl2 = kwhl2;
 	}
 
+	public double getKwhl2negative() {
+		return this.kwhl2negative;
+	}
+
+	public void setKwhl2negative(double kwhl2negative) {
+		this.kwhl2negative = kwhl2negative;
+	}
+
 	public double getKwhl3() {
 		return this.kwhl3;
 	}
 
 	public void setKwhl3(double kwhl3) {
 		this.kwhl3 = kwhl3;
+	}
+
+	public double getKwhl3negative() {
+		return this.kwhl3negative;
+	}
+
+	public void setKwhl3negative(double kwhl3negative) {
+		this.kwhl3negative = kwhl3negative;
+	}
+
+	public double getKwhnegative() {
+		return this.kwhnegative;
+	}
+
+	public void setKwhnegative(double kwhnegative) {
+		this.kwhnegative = kwhnegative;
 	}
 
 	public double getKwl1() {
@@ -572,6 +590,14 @@ public class AnalyzerRegistryObject implements Serializable {
 
 	public void setPfsys(double pfsys) {
 		this.pfsys = pfsys;
+	}
+
+	public double getPhasesequence() {
+		return this.phasesequence;
+	}
+
+	public void setPhasesequence(double phasesequence) {
+		this.phasesequence = phasesequence;
 	}
 
 	public String getProducttype() {
@@ -654,6 +680,30 @@ public class AnalyzerRegistryObject implements Serializable {
 		this.thdvl3n = thdvl3n;
 	}
 
+	public double getTotalizer1() {
+		return this.totalizer1;
+	}
+
+	public void setTotalizer1(double totalizer1) {
+		this.totalizer1 = totalizer1;
+	}
+
+	public double getTotalizer2() {
+		return this.totalizer2;
+	}
+
+	public void setTotalizer2(double totalizer2) {
+		this.totalizer2 = totalizer2;
+	}
+
+	public double getTotalizer3() {
+		return this.totalizer3;
+	}
+
+	public void setTotalizer3(double totalizer3) {
+		this.totalizer3 = totalizer3;
+	}
+
 	public double getVadmd() {
 		return this.vadmd;
 	}
@@ -734,12 +784,19 @@ public class AnalyzerRegistryObject implements Serializable {
 		this.vlnsys = vlnsys;
 	}
 
-    public AnalyzerObject getAnalyzer() {
-        return analyzer;
-    }
+	public double getWdmd() {
+		return this.wdmd;
+	}
 
-    public void setAnalyzer( AnalyzerObject analyzer ) {
-        this.analyzer = analyzer;
-    }
+	public void setWdmd(double wdmd) {
+		this.wdmd = wdmd;
+	}
 
+	public double getWdmdmax() {
+		return this.wdmdmax;
+	}
+
+	public void setWdmdmax(double wdmdmax) {
+		this.wdmdmax = wdmdmax;
+	}
 }
