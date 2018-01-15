@@ -1,9 +1,15 @@
 import glob
 import os
 import sys
-import csv
+import codecs, csv
 from ftplib import FTP
 import configparser
+
+def processFile(f):
+    c = f.decode("utf-8").split(";")
+    var1 = c[1]
+    print(var1)
+    
 
 def processUserFtp(userStr, passStr):
     # Ligar ao FTP e à pasta processed
@@ -14,15 +20,13 @@ def processUserFtp(userStr, passStr):
     
     #cria lista com todos o ficheiros da pasta e depois escolher o mais recent
     data = []
+
     ftp.retrlines("LIST", (data.append))
-    
-    spamreader = csv.reader(data[-1], delimiter=' ', quotechar='|')
-    for row in spamreader:
-        print (', '.join(row))
-    
     words = data[-1].split(None, 8)
     filename = words[-1].lstrip()
     print ('Ficheiro mais recente: ', filename)
+    
+    ftp.retrbinary('RETR '+filename, processFile)
     ftp.quit()
     return;
 
