@@ -14,34 +14,37 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 @Document(collection="Analyzers")
 public class AnalyzerEntity implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	private long analyzerid;
+    @Id
+    private long analyzerid;
 
-	private String name;
-	
-	@DBRef
-	private List<AnalyzerRegistryEntity> analyzerRegistries;
+    private String name;
 
-	public AnalyzerEntity() {
-	}
+    @DBRef
+    private List<AnalyzerRegistryEntity> analyzerRegistries;
 
-	public long getAnalyzerid() {
-		return this.analyzerid;
-	}
+    @DBRef
+    private List<AnalyzerRegistryAverageEntity> analyzerRegistriesAverage;
 
-	public void setAnalyzerid(long analyzerid) {
-		this.analyzerid = analyzerid;
-	}
+    public AnalyzerEntity() {
+    }
 
-	public String getName() {
-		return this.name;
-	}
+    public long getAnalyzerid() {
+        return this.analyzerid;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setAnalyzerid(long analyzerid) {
+        this.analyzerid = analyzerid;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public List<AnalyzerRegistryEntity> getAnalyzerRegistries() {
         return analyzerRegistries;
@@ -50,12 +53,23 @@ public class AnalyzerEntity implements Serializable {
     public void setAnalyzerRegistries( List<AnalyzerRegistryEntity> analyzerRegistries ) {
         this.analyzerRegistries = analyzerRegistries;
     }
-	
+
     public void addAnalyzerRegistry(AnalyzerRegistryEntity analyzerRegistry) {
-    	if(this.analyzerRegistries == null)
-    		analyzerRegistries = new ArrayList<AnalyzerRegistryEntity>();
-    	
-    	analyzerRegistries.add(analyzerRegistry);
+        if(this.analyzerRegistries == null)
+            analyzerRegistries = new ArrayList<AnalyzerRegistryEntity>();
+
+        analyzerRegistries.add(analyzerRegistry);
     }
-	
+    
+    public void setAnalyzerRegistriesAverage( List<AnalyzerRegistryAverageEntity> analyzerRegistriesAverage ) {
+        this.analyzerRegistriesAverage = analyzerRegistriesAverage;
+    }
+
+    public void addAnalyzerRegistryAverage(AnalyzerRegistryAverageEntity analyzerRegistryAverage) {
+        if(this.analyzerRegistriesAverage == null)
+            analyzerRegistriesAverage = new ArrayList<AnalyzerRegistryAverageEntity>();
+
+        analyzerRegistriesAverage.add(analyzerRegistryAverage);
+    }
+
 }

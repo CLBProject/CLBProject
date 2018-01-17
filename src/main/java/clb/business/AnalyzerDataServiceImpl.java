@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -32,11 +33,13 @@ import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.MonthAverageObject;
 import clb.database.AnalyzerMongoRepository;
 import clb.database.AnalyzerRegistryMongoRepository;
+import clb.database.AnalyzerRegistryAverageMongoRepository;
 import clb.database.BuildingsMongoRepository;
 import clb.database.DataLoggerMongoRepository;
 import clb.database.UsersystemMongoRepository;
 import clb.database.entities.AnalyzerEntity;
 import clb.database.entities.AnalyzerRegistryEntity;
+import clb.database.entities.AnalyzerRegistryAverageEntity;
 import clb.database.entities.BuildingEntity;
 import clb.database.entities.DataLoggerEntity;
 import clb.database.entities.UsersystemEntity;
@@ -52,25 +55,28 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
     @Autowired
     private UsersystemMongoRepository usersMongoRepository;
-    
+
     @Autowired
     private BuildingsMongoRepository buildingsMongoRepository;
-    
+
     @Autowired
     private DataLoggerMongoRepository dataLoggerMongoRepository;
-    
+
     @Autowired
     private AnalyzerMongoRepository analyzerMongoRepository;
-    
+
     @Autowired
     private AnalyzerRegistryMongoRepository analyzerRegistryMongoRepository;
 
+    @Autowired
+    private AnalyzerRegistryAverageMongoRepository analyzerRegistryAverageMongoRepository;
+    
     @Autowired
     private TaskExecutor taskExecutor;
 
     @Value(value = "classpath:documents")
     private Resource dataAnalyzerXls;
-   
+
 
     @Override
     public void persistScriptBigData() throws IOException{
@@ -97,23 +103,35 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
         userEntity3.setAddress( "No address at this point" );
         userEntity3.setUsername( "lsantos" );
         userEntity3.setPassword( "123" );
-        
+
         List<UsersystemEntity> users = new ArrayList<UsersystemEntity>();
-        
+
         users.add( userEntity );
         users.add( userEntity2 );
         users.add( userEntity3 );
-        
+
         int usersIndex = 0;
-        
+
         for(File file: dataAnalyzerXls.getFile().listFiles()){
             updateAnalyzerRegistriesForAnalyzer(file,users.get( usersIndex ));
             usersIndex = usersIndex +1 == users.size() ? 0 : usersIndex+1;
         }
-        
+
         usersMongoRepository.insert(users);
     }
-    
+
+    private boolean isAverageDate(Date currentDate) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+
+        Calendar calendarToday = GregorianCalendar.getInstance();
+        calendar.setTime(new Date());
+        
+        return calendarToday.get(Calendar.YEAR) == calendar.get(Calendar.YEAR) && 
+                calendarToday.get(Calendar.MONTH) == calendar.get(Calendar.MONTH);
+    }
+
     private void persistDummyAnalyzerRegistries(AnalyzerEntity analyzer, Set<String> dataToExclude){
 
         Random random = new Random();
@@ -127,42 +145,76 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
         calendar.set( startingYear, 0, 1);
 
         System.out.println( "Starting persisting data... ");
-        
+
         for(int a = 0 ;a<numberOfYears; a++){
-            int yearDays = calendar.getActualMaximum(Calendar.DAY_OF_YEAR);
-            for(int l = 0; l < yearDays; l++ ){
-                for(int b = 0; b < 24 ; b++){
-                    for(int k = 0; k < 60; k++){
-                        
-                        String currentTime = (b < 10 ? "0"+b : ""+b) + ":" + (k < 10 ? "0"+k : ""+k)+ ":00";
-                        Date currentDate = calendar.getTime();
-                        
-                        if(dataToExclude.contains( calendar.get(Calendar.YEAR) +"/"+calendar.get(Calendar.MONTH) + "/" + 
-                        		calendar.get(Calendar.DAY_OF_MONTH) + "_" + currentTime)){
-                            continue;
+            for(int l = 0; l < 12; l++ ){
+                for(int m=0; m < calendar.getActualMaximum(Calendar.DAY_OF_MONTH);m++) {
+                    
+                    double al1DailyAverage = 0;
+                    double al2DailyAverage = 0;
+                    double al3DailyAverage = 0;
+
+                    for(int b = 0; b < 24 ; b++){
+                        for(int k = 0; k < 60; k+=5){
+
+                            String currentTime = (b < 10 ? "0"+b : ""+b) + ":" + (k < 10 ? "0"+k : ""+k)+ ":00";
+
+                            if(dataToExclude.contains( calendar.get(Calendar.YEAR) +"/"+calendar.get(Calendar.MONTH) + "/" + 
+                                    calendar.get(Calendar.DAY_OF_MONTH) + "_" + currentTime)){
+                                continue;
+                            }
+
+                            Date time = new Date(a+startingYear, l, m, b, k , 0);
+
+                            //Test if reg all time or only 5 mins
+                            if(isAverageDate(time)) {
+
+                                AnalyzerRegistryEntity anaRegObj = new AnalyzerRegistryEntity();
+
+                                anaRegObj.setCurrenttime( new Timestamp(time.getTime()) );
+
+                                anaRegObj.setAl1(lowAl + (highAl - lowAl) * random.nextDouble());
+                                anaRegObj.setAl2(lowAl + (highAl - lowAl) * random.nextDouble());
+                                anaRegObj.setAl3(lowAl + (highAl - lowAl) * random.nextDouble());
+
+                                al1DailyAverage +=anaRegObj.getAl1();
+                                al2DailyAverage +=anaRegObj.getAl2();
+                                al3DailyAverage +=anaRegObj.getAl3();
+                                
+                                analyzerRegistryMongoRepository.insert(anaRegObj);
+                                analyzer.addAnalyzerRegistry(anaRegObj);
+                            }
+
+                            else {
+                                al1DailyAverage +=lowAl + (highAl - lowAl) * random.nextDouble();
+                                al2DailyAverage +=lowAl + (highAl - lowAl) * random.nextDouble();
+                                al3DailyAverage +=lowAl + (highAl - lowAl) * random.nextDouble();
+                            }
                         }
-                        
-                        AnalyzerRegistryEntity anaRegObj = new AnalyzerRegistryEntity();
-                        //anaRegObj.setCurrenttime( currentTime );
-
-                        anaRegObj.setAl1(lowAl + (highAl - lowAl) * random.nextDouble());
-                        anaRegObj.setAl2(lowAl + (highAl - lowAl) * random.nextDouble());
-                        anaRegObj.setAl3(lowAl + (highAl - lowAl) * random.nextDouble());
- 
-                        analyzerRegistryMongoRepository.insert(anaRegObj);
-
-                        analyzer.addAnalyzerRegistry(anaRegObj);
                     }
+                    
+                    AnalyzerRegistryAverageEntity anaRegAverageObj = new AnalyzerRegistryAverageEntity();
+
+                    anaRegAverageObj.setCurrenttime( new Timestamp(calendar.getTime().getTime()) );
+
+                    anaRegAverageObj.setAl1Average(al1DailyAverage/ (24*60));
+                    anaRegAverageObj.setAl2Average(al2DailyAverage/ (24*60));
+                    anaRegAverageObj.setAl3Average(al3DailyAverage/ (24*60));
+                    
+                    analyzerRegistryAverageMongoRepository.insert(anaRegAverageObj);
+                    analyzer.addAnalyzerRegistryAverage(anaRegAverageObj);
+
+                    calendar.add(Calendar.DATE, 1);
                 }
-                calendar.add(Calendar.DATE, 1);
+
             }
             System.out.println("Persisted Registries from year: " + (a+startingYear) + ", for analyzer: " + analyzer.getAnalyzerid());
         }
 
     }
-    
-    
-    
+
+
+
     private void updateAnalyzerRegistriesForAnalyzer(File file, UsersystemEntity userEntity) throws IOException {
 
         XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(file));
@@ -171,45 +223,45 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
         building.setName(file.getName().split("\\.")[0]);
         building.setBuildingusername(file.getName().split("\\.")[0]);
         userEntity.addBuilding(building);
-        
-        
-        
+
+
+
         for(int j = 0; j<workbook.getNumberOfSheets();j++){
-            
+
             DataLoggerEntity dl = new DataLoggerEntity();
             dl.setName( "Data Logger "+j );
             dl.setFtpaddress( "ftp://noftp" );
             building.addDataLogger(dl);
-            
+
             AnalyzerEntity ana = new AnalyzerEntity();
             ana.setName( "Analyzer " + j);
             dl.addAnalyzer(ana);
-            
+
             XSSFSheet worksheet = workbook.getSheetAt( j );
 
             Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
             calendar.setTime(new Date());
 
             Set<String> dataToExclueOnDummy = new HashSet<String>();
-            
+
             for(int i = 2;i<worksheet.getLastRowNum();i++){
 
                 XSSFRow row = worksheet.getRow(i);
-                
+
                 if(row.getCell(0) == null){
                     continue;
                 }
-                
+
                 Date currentRowDate = row.getCell(0).getDateCellValue();
                 String currentRowTime = row.getCell(1).getStringCellValue();
 
                 calendar.setTime(currentRowDate);   // assigns calendar to given date 
-                
+
                 dataToExclueOnDummy.add( calendar.get(Calendar.YEAR) +"/"+calendar.get(Calendar.MONTH) + "/" + 
-                					calendar.get(Calendar.DAY_OF_MONTH) + "_" + currentRowTime );
-                
+                        calendar.get(Calendar.DAY_OF_MONTH) + "_" + currentRowTime );
+
                 AnalyzerRegistryEntity analyzerRegistryEntity = new AnalyzerRegistryEntity();
-                
+
                 //analyzerRegistryEntity.setCurrentdate( currentRowDate );
                 //analyzerRegistryEntity.setCurrenttime( currentRowTime );
                 analyzerRegistryEntity.setAl1(row.getCell(2).getNumericCellValue());
@@ -240,14 +292,14 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                 analyzerRegistryEntity.setKvarl2(row.getCell(27).getNumericCellValue());
                 analyzerRegistryEntity.setKvarl3(row.getCell(28).getNumericCellValue());
                 analyzerRegistryEntity.setKvarsys(row.getCell(29).getNumericCellValue());
-                
-                analyzerRegistryMongoRepository.insert(analyzerRegistryEntity);
-                
+
+                //analyzerRegistryMongoRepository.insert(analyzerRegistryEntity);
+
                 ana.addAnalyzerRegistry(analyzerRegistryEntity);
             }
-            
+
             persistDummyAnalyzerRegistries( ana, dataToExclueOnDummy);
-            
+
             analyzerMongoRepository.insert(ana);
             dataLoggerMongoRepository.insert(dl);
         }
@@ -329,21 +381,21 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
         return new ArrayList<Integer>();
     }
 
-	public UsersystemMongoRepository getUsersMongoRepository() {
-		return usersMongoRepository;
-	}
+    public UsersystemMongoRepository getUsersMongoRepository() {
+        return usersMongoRepository;
+    }
 
-	public void setUsersMongoRepository(UsersystemMongoRepository usersMongoRepository) {
-		this.usersMongoRepository = usersMongoRepository;
-	}
+    public void setUsersMongoRepository(UsersystemMongoRepository usersMongoRepository) {
+        this.usersMongoRepository = usersMongoRepository;
+    }
 
-	public BuildingsMongoRepository getBuildingsMongoRepository() {
-		return buildingsMongoRepository;
-	}
+    public BuildingsMongoRepository getBuildingsMongoRepository() {
+        return buildingsMongoRepository;
+    }
 
-	public void setBuildingsMongoRepository(BuildingsMongoRepository buildingsMongoRepository) {
-		this.buildingsMongoRepository = buildingsMongoRepository;
-	}
+    public void setBuildingsMongoRepository(BuildingsMongoRepository buildingsMongoRepository) {
+        this.buildingsMongoRepository = buildingsMongoRepository;
+    }
 
-    
+
 }
