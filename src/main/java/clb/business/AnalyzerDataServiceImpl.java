@@ -70,7 +70,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
     @Autowired
     private AnalyzerRegistryAverageMongoRepository analyzerRegistryAverageMongoRepository;
-    
+
     @Autowired
     private TaskExecutor taskExecutor;
 
@@ -127,12 +127,12 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
         Calendar calendarToday = GregorianCalendar.getInstance();
         calendar.setTime(new Date());
-        
+
         return calendarToday.get(Calendar.YEAR) == calendar.get(Calendar.YEAR) && 
                 calendarToday.get(Calendar.MONTH) == calendar.get(Calendar.MONTH);
     }
 
-    private void persistDummyAnalyzerRegistries(AnalyzerEntity analyzer, Set<String> dataToExclude){
+    private void persistDummyAnalyzerRegistries(AnalyzerEntity analyzer, Set<Long> dataToExclude){
 
         Random random = new Random();
 
@@ -149,7 +149,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
         for(int a = 0 ;a<numberOfYears; a++){
             for(int l = 0; l < 12; l++ ){
                 for(int m=0; m < calendar.getActualMaximum(Calendar.DAY_OF_MONTH);m++) {
-                    
+
                     double al1DailyAverage = 0;
                     double al2DailyAverage = 0;
                     double al3DailyAverage = 0;
@@ -159,12 +159,11 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
                             String currentTime = (b < 10 ? "0"+b : ""+b) + ":" + (k < 10 ? "0"+k : ""+k)+ ":00";
 
-                            if(dataToExclude.contains( calendar.get(Calendar.YEAR) +"/"+calendar.get(Calendar.MONTH) + "/" + 
-                                    calendar.get(Calendar.DAY_OF_MONTH) + "_" + currentTime)){
+                            Date time = new Date(a+startingYear, l, m, b, k , 0);
+
+                            if(dataToExclude.contains( time.getTime())){
                                 continue;
                             }
-
-                            Date time = new Date(a+startingYear, l, m, b, k , 0);
 
                             //Test if reg all time or only 5 mins
                             if(isAverageDate(time)) {
@@ -180,7 +179,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                                 al1DailyAverage +=anaRegObj.getAl1();
                                 al2DailyAverage +=anaRegObj.getAl2();
                                 al3DailyAverage +=anaRegObj.getAl3();
-                                
+
                                 analyzerRegistryMongoRepository.insert(anaRegObj);
                                 analyzer.addAnalyzerRegistry(anaRegObj);
                             }
@@ -192,7 +191,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                             }
                         }
                     }
-                    
+
                     AnalyzerRegistryAverageEntity anaRegAverageObj = new AnalyzerRegistryAverageEntity();
 
                     anaRegAverageObj.setCurrenttime( new Timestamp(calendar.getTime().getTime()) );
@@ -200,7 +199,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                     anaRegAverageObj.setAl1Average(al1DailyAverage/ (24*60));
                     anaRegAverageObj.setAl2Average(al2DailyAverage/ (24*60));
                     anaRegAverageObj.setAl3Average(al3DailyAverage/ (24*60));
-                    
+
                     analyzerRegistryAverageMongoRepository.insert(anaRegAverageObj);
                     analyzer.addAnalyzerRegistryAverage(anaRegAverageObj);
 
@@ -240,9 +239,8 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
             XSSFSheet worksheet = workbook.getSheetAt( j );
 
             Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
-            calendar.setTime(new Date());
 
-            Set<String> dataToExclueOnDummy = new HashSet<String>();
+            Set<Long> dataToExclueOnDummy = new HashSet<Long>();
 
             for(int i = 2;i<worksheet.getLastRowNum();i++){
 
@@ -253,17 +251,18 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                 }
 
                 Date currentRowDate = row.getCell(0).getDateCellValue();
-                String currentRowTime = row.getCell(1).getStringCellValue();
+                String[] currentRowTime = row.getCell(1).getStringCellValue().split(":");
 
                 calendar.setTime(currentRowDate);   // assigns calendar to given date 
+                calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(currentRowTime[0]));
+                calendar.set(Calendar.MINUTE, Integer.parseInt(currentRowTime[1]));
 
-                dataToExclueOnDummy.add( calendar.get(Calendar.YEAR) +"/"+calendar.get(Calendar.MONTH) + "/" + 
-                        calendar.get(Calendar.DAY_OF_MONTH) + "_" + currentRowTime );
+                Timestamp currentTime = new Timestamp(calendar.getTime().getTime());
+                dataToExclueOnDummy.add( calendar.getTime().getTime() );
 
                 AnalyzerRegistryEntity analyzerRegistryEntity = new AnalyzerRegistryEntity();
 
-                //analyzerRegistryEntity.setCurrentdate( currentRowDate );
-                //analyzerRegistryEntity.setCurrenttime( currentRowTime );
+                analyzerRegistryEntity.setCurrenttime( new Timestamp(calendar.getTime().getTime()) );
                 analyzerRegistryEntity.setAl1(row.getCell(2).getNumericCellValue());
                 analyzerRegistryEntity.setAl2(row.getCell(3).getNumericCellValue());
                 analyzerRegistryEntity.setAl3(row.getCell(4).getNumericCellValue());
@@ -293,7 +292,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                 analyzerRegistryEntity.setKvarl3(row.getCell(28).getNumericCellValue());
                 analyzerRegistryEntity.setKvarsys(row.getCell(29).getNumericCellValue());
 
-                //analyzerRegistryMongoRepository.insert(analyzerRegistryEntity);
+                analyzerRegistryMongoRepository.insert(analyzerRegistryEntity);
 
                 ana.addAnalyzerRegistry(analyzerRegistryEntity);
             }
