@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 
 @Document(collection="Buildings")
-public class BuildingEntity implements Serializable {
+public class BuildingEntity implements ClbEntity,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id

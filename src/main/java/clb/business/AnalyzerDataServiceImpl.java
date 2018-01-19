@@ -31,15 +31,10 @@ import org.springframework.stereotype.Service;
 import clb.business.constants.Month;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.MonthAverageObject;
-import clb.database.AnalyzerMongoRepository;
-import clb.database.AnalyzerRegistryMongoRepository;
-import clb.database.AnalyzerRegistryAverageMongoRepository;
-import clb.database.BuildingsMongoRepository;
-import clb.database.DataLoggerMongoRepository;
-import clb.database.UsersystemMongoRepository;
+import clb.database.ClbDao;
 import clb.database.entities.AnalyzerEntity;
-import clb.database.entities.AnalyzerRegistryEntity;
 import clb.database.entities.AnalyzerRegistryAverageEntity;
+import clb.database.entities.AnalyzerRegistryEntity;
 import clb.database.entities.BuildingEntity;
 import clb.database.entities.DataLoggerEntity;
 import clb.database.entities.UsersystemEntity;
@@ -52,31 +47,14 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
      */
     private static final long serialVersionUID = 1L;
 
-
-    @Autowired
-    private UsersystemMongoRepository usersMongoRepository;
-
-    @Autowired
-    private BuildingsMongoRepository buildingsMongoRepository;
-
-    @Autowired
-    private DataLoggerMongoRepository dataLoggerMongoRepository;
-
-    @Autowired
-    private AnalyzerMongoRepository analyzerMongoRepository;
-
-    @Autowired
-    private AnalyzerRegistryMongoRepository analyzerRegistryMongoRepository;
-
-    @Autowired
-    private AnalyzerRegistryAverageMongoRepository analyzerRegistryAverageMongoRepository;
-
     @Autowired
     private TaskExecutor taskExecutor;
 
     @Value(value = "classpath:documents")
     private Resource dataAnalyzerXls;
 
+    @Autowired
+    private ClbDao clbDao;
 
     @Override
     public void persistScriptBigData() throws IOException{
@@ -117,7 +95,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
             usersIndex = usersIndex +1 == users.size() ? 0 : usersIndex+1;
         }
 
-        usersMongoRepository.insert(users);
+        //clbDao.insert(users);
     }
 
     private boolean isAverageDate(Date currentDate) {
@@ -180,7 +158,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                                 al2DailyAverage +=anaRegObj.getAl2();
                                 al3DailyAverage +=anaRegObj.getAl3();
 
-                                analyzerRegistryMongoRepository.insert(anaRegObj);
+                                //analyzerRegistryMongoRepository.insert(anaRegObj);
                                 analyzer.addAnalyzerRegistry(anaRegObj);
                             }
 
@@ -200,7 +178,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                     anaRegAverageObj.setAl2Average(al2DailyAverage/ (24*60));
                     anaRegAverageObj.setAl3Average(al3DailyAverage/ (24*60));
 
-                    analyzerRegistryAverageMongoRepository.insert(anaRegAverageObj);
+                    //analyzerRegistryAverageMongoRepository.insert(anaRegAverageObj);
                     analyzer.addAnalyzerRegistryAverage(anaRegAverageObj);
 
                     calendar.add(Calendar.DATE, 1);
@@ -292,17 +270,17 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                 analyzerRegistryEntity.setKvarl3(row.getCell(28).getNumericCellValue());
                 analyzerRegistryEntity.setKvarsys(row.getCell(29).getNumericCellValue());
 
-                analyzerRegistryMongoRepository.insert(analyzerRegistryEntity);
+                //analyzerRegistryMongoRepository.insert(analyzerRegistryEntity);
 
                 ana.addAnalyzerRegistry(analyzerRegistryEntity);
             }
 
             persistDummyAnalyzerRegistries( ana, dataToExclueOnDummy);
 
-            analyzerMongoRepository.insert(ana);
-            dataLoggerMongoRepository.insert(dl);
+            //analyzerMongoRepository.insert(ana);
+            //dataLoggerMongoRepository.insert(dl);
         }
-        buildingsMongoRepository.insert(building);
+        //buildingsMongoRepository.insert(building);
     }
 
     public void init(){
@@ -367,34 +345,10 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
         this.taskExecutor = taskExecutor;
     }
 
-    public UsersystemMongoRepository getMongoRepository() {
-        return usersMongoRepository;
-    }
-
-    public void setMongoRepository( UsersystemMongoRepository mongoRepository ) {
-        this.usersMongoRepository = mongoRepository;
-    }
-
-    @Override
-    public List<Integer> getRegistryYears() {
-        return new ArrayList<Integer>();
-    }
-
-    public UsersystemMongoRepository getUsersMongoRepository() {
-        return usersMongoRepository;
-    }
-
-    public void setUsersMongoRepository(UsersystemMongoRepository usersMongoRepository) {
-        this.usersMongoRepository = usersMongoRepository;
-    }
-
-    public BuildingsMongoRepository getBuildingsMongoRepository() {
-        return buildingsMongoRepository;
-    }
-
-    public void setBuildingsMongoRepository(BuildingsMongoRepository buildingsMongoRepository) {
-        this.buildingsMongoRepository = buildingsMongoRepository;
-    }
-
+	@Override
+	public List<Integer> getRegistryYears() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
