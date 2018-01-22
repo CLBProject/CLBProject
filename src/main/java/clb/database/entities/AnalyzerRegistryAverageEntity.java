@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 
 @Document(collection="AnalyzersAverageRegistries")
-public class AnalyzerRegistryAverageEntity implements ClbEntity,Serializable {
+public class AnalyzerRegistryAverageEntity implements ClbEntity, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id

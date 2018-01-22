@@ -87,6 +87,8 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
         users.add( userEntity );
         users.add( userEntity2 );
         users.add( userEntity3 );
+        
+        clbDao.insertUsers(users);
 
         int usersIndex = 0;
 
@@ -94,8 +96,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
             updateAnalyzerRegistriesForAnalyzer(file,users.get( usersIndex ));
             usersIndex = usersIndex +1 == users.size() ? 0 : usersIndex+1;
         }
-
-        //clbDao.insert(users);
     }
 
     private boolean isAverageDate(Date currentDate) {
@@ -135,8 +135,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                     for(int b = 0; b < 24 ; b++){
                         for(int k = 0; k < 60; k+=5){
 
-                            String currentTime = (b < 10 ? "0"+b : ""+b) + ":" + (k < 10 ? "0"+k : ""+k)+ ":00";
-
                             Date time = new Date(a+startingYear, l, m, b, k , 0);
 
                             if(dataToExclude.contains( time.getTime())){
@@ -158,7 +156,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                                 al2DailyAverage +=anaRegObj.getAl2();
                                 al3DailyAverage +=anaRegObj.getAl3();
 
-                                //analyzerRegistryMongoRepository.insert(anaRegObj);
+                                clbDao.insertAnalyzerRegistry(anaRegObj);
                                 analyzer.addAnalyzerRegistry(anaRegObj);
                             }
 
@@ -178,7 +176,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                     anaRegAverageObj.setAl2Average(al2DailyAverage/ (24*60));
                     anaRegAverageObj.setAl3Average(al3DailyAverage/ (24*60));
 
-                    //analyzerRegistryAverageMongoRepository.insert(anaRegAverageObj);
+                    clbDao.insertAnalyzerRegistryAverage(anaRegAverageObj);
                     analyzer.addAnalyzerRegistryAverage(anaRegAverageObj);
 
                     calendar.add(Calendar.DATE, 1);
@@ -235,7 +233,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                 calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(currentRowTime[0]));
                 calendar.set(Calendar.MINUTE, Integer.parseInt(currentRowTime[1]));
 
-                Timestamp currentTime = new Timestamp(calendar.getTime().getTime());
                 dataToExclueOnDummy.add( calendar.getTime().getTime() );
 
                 AnalyzerRegistryEntity analyzerRegistryEntity = new AnalyzerRegistryEntity();
@@ -270,17 +267,17 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                 analyzerRegistryEntity.setKvarl3(row.getCell(28).getNumericCellValue());
                 analyzerRegistryEntity.setKvarsys(row.getCell(29).getNumericCellValue());
 
-                //analyzerRegistryMongoRepository.insert(analyzerRegistryEntity);
+                clbDao.insertAnalyzerRegistry(analyzerRegistryEntity);
 
                 ana.addAnalyzerRegistry(analyzerRegistryEntity);
             }
 
             persistDummyAnalyzerRegistries( ana, dataToExclueOnDummy);
 
-            //analyzerMongoRepository.insert(ana);
-            //dataLoggerMongoRepository.insert(dl);
+            clbDao.insertAnalyzer(ana);
+            clbDao.insertDataLogger(dl);
         }
-        //buildingsMongoRepository.insert(building);
+        clbDao.insertBuilding(building);
     }
 
     public void init(){

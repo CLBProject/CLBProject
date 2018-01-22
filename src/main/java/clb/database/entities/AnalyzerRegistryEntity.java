@@ -13,11 +13,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 
 @Document(collection="AnalyzersRegistries")
-public class AnalyzerRegistryEntity implements ClbEntity,Serializable {
+public class AnalyzerRegistryEntity implements ClbEntity, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private long regid;
+	private String id;
 
 	private double al1;
 
@@ -175,13 +175,13 @@ public class AnalyzerRegistryEntity implements ClbEntity,Serializable {
 
 	public AnalyzerRegistryEntity() {
 	}
-
-	public long getRegid() {
-		return this.regid;
+	
+	public String getId() {
+		return id;
 	}
 
-	public void setRegid(long regid) {
-		this.regid = regid;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public double getAl1() {
