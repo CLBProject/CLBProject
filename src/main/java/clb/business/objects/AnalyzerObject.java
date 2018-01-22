@@ -8,7 +8,7 @@ import clb.database.entities.AnalyzerEntity;
 
 public class AnalyzerObject
 {
-	private long analyzerid;
+    private String id;
 
 	private String name;
 
@@ -21,7 +21,7 @@ public class AnalyzerObject
 	}
 
 	public AnalyzerObject(AnalyzerEntity analyzerEntity){
-		this.analyzerid = analyzerEntity.getAnalyzerid();
+		this.id = analyzerEntity.getId();
 		this.name = analyzerEntity.getName();
 		this.analyzerRegistries = analyzerEntity.getAnalyzerRegistries() != null ? 
 				analyzerEntity.getAnalyzerRegistries().stream().map(AnalyzerRegistryObject::new).collect(Collectors.toList()) : null;
@@ -31,7 +31,11 @@ public class AnalyzerObject
 
 	public AnalyzerEntity toEntity(){
 		AnalyzerEntity analyzerEntity = new AnalyzerEntity();
-		analyzerEntity.setAnalyzerid( this.analyzerid );
+		
+		if(this.id != null) {
+			analyzerEntity.setId( this.id );
+		}
+		
 		analyzerEntity.setName( this.name );
 		analyzerEntity.setAnalyzerRegistries(this.analyzerRegistries != null ?
 				this.analyzerRegistries.stream().map(AnalyzerRegistryObject::toEntity).collect(Collectors.toList()) : null);
@@ -57,12 +61,12 @@ public class AnalyzerObject
     	analyzerAverageRegistries.add(analyzerRegistryObject);
     }
 
-	public long getAnalyzerid() {
-		return analyzerid;
+	public String getId() {
+		return id;
 	}
 
-	public void setAnalyzerid( long analyzerid ) {
-		this.analyzerid = analyzerid;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getName() {

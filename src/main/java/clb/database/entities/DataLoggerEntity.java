@@ -18,7 +18,7 @@ public class DataLoggerEntity implements ClbEntity, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private long dataloggerid;
+	private String dataloggerid;
 
 	private String name;
 	
@@ -30,11 +30,11 @@ public class DataLoggerEntity implements ClbEntity, Serializable {
 	public DataLoggerEntity() {
 	}
 
-	public long getDataloggerid() {
+	public String getDataloggerid() {
 		return this.dataloggerid;
 	}
 
-	public void setDataloggerid(long dataloggerid) {
+	public void setDataloggerid(String dataloggerid) {
 		this.dataloggerid = dataloggerid;
 	}
 

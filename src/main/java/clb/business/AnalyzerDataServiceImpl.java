@@ -88,13 +88,15 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
         users.add( userObject3 );
         
         clbDao.insertUsers(users);
-
+        
         int usersIndex = 0;
 
         for(File file: dataAnalyzerXls.getFile().listFiles()){
             updateAnalyzerRegistriesForAnalyzer(file,users.get( usersIndex ));
             usersIndex = usersIndex +1 == users.size() ? 0 : usersIndex+1;
         }
+        
+        
     }
 
     private boolean isAverageDate(Date currentDate) {
@@ -190,7 +192,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                 }
 
             }
-            System.out.println("Persisted Registries from year: " + (a+startingYear) + ", for analyzer: " + analyzer.getAnalyzerid());
+            System.out.println("Persisted Registries from year: " + (a+startingYear) + ", for analyzer: " + analyzer.getId());
         }
 
     }
@@ -205,6 +207,8 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
         building.setName(file.getName().split("\\.")[0]);
         building.setBuildingusername(file.getName().split("\\.")[0]);
         userObject.addBuilding(building);
+        
+        clbDao.insertBuilding(building);
 
         for(int j = 0; j<workbook.getNumberOfSheets();j++){
 
@@ -212,10 +216,12 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
             dl.setName( "Data Logger "+j );
             dl.setFtpAddress( "ftp://noftp" );
             building.addDataLogger(dl);
-
+            clbDao.insertDataLogger(dl);
+            
             AnalyzerObject ana = new AnalyzerObject();
             ana.setName( "Analyzer " + j);
             dl.addAnalyzer(ana);
+            clbDao.insertAnalyzer(ana);
 
             XSSFSheet worksheet = workbook.getSheetAt( j );
 
@@ -278,11 +284,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
             }
 
             persistDummyAnalyzerRegistries( ana, dataToExclueOnDummy);
-
-            clbDao.insertAnalyzer(ana);
-            clbDao.insertDataLogger(dl);
         }
-        clbDao.insertBuilding(building);
     }
 
     public void init(){

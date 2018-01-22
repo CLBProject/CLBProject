@@ -8,7 +8,7 @@ import clb.database.entities.BuildingEntity;
 
 public class BuildingObject
 {
-    private long buildingid;
+    private String buildingid;
 
     private String name;
     
@@ -46,11 +46,11 @@ public class BuildingObject
     	dataLoggers.add(dataLoggerObject);
     }
 
-    public long getBuildingid() {
+    public String getBuildingid() {
         return buildingid;
     }
 
-    public void setBuildingid( long buildingid ) {
+    public void setBuildingid( String buildingid ) {
         this.buildingid = buildingid;
     }
 

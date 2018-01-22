@@ -16,8 +16,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class AnalyzerRegistryAverageEntity implements ClbEntity, Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	private String id;
+    @Id
+    private String id;
 
 	private double al1Average;
 

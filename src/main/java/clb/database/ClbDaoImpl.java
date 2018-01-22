@@ -3,6 +3,7 @@ package clb.database;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryAverageObject;
@@ -17,28 +18,33 @@ import clb.database.repository.BuildingsMongoRepository;
 import clb.database.repository.DataLoggerMongoRepository;
 import clb.database.repository.UsersystemMongoRepository;
 
+@Service
 public class ClbDaoImpl implements ClbDao{
 
 	@Autowired
-	AnalyzerMongoRepository analyzerMongoRepository;
+	private AnalyzerMongoRepository analyzerMongoRepository;
 	
 	@Autowired
-	AnalyzerRegistryAverageMongoRepository analyzerRegistryAverageMongoRepository;
+	private AnalyzerRegistryAverageMongoRepository analyzerRegistryAverageMongoRepository;
 	
 	@Autowired
-	AnalyzerRegistryMongoRepository analyzerRegistryMongoRepository;
+	private AnalyzerRegistryMongoRepository analyzerRegistryMongoRepository;
 	
 	@Autowired
-	BuildingsMongoRepository buildingsMongoRepository;
+	private BuildingsMongoRepository buildingsMongoRepository;
 	
 	@Autowired
-	DataLoggerMongoRepository dataLoggerMongoRepository;
+	private DataLoggerMongoRepository dataLoggerMongoRepository;
 	
 	@Autowired
-	UsersystemMongoRepository userSystemMongoRepository;
+	private UsersystemMongoRepository userSystemMongoRepository;
 	
 	@Autowired
-	AnalyzerRegistryMongoRepository averageRegistryMongoRespository;
+	private AnalyzerRegistryMongoRepository averageRegistryMongoRespository;
+	
+	public ClbDaoImpl() {
+	    
+	}
 	
 	@Override
 	public void insertAnalyzer(AnalyzerObject analyzerObject) {
