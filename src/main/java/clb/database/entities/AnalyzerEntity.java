@@ -72,4 +72,9 @@ public class AnalyzerEntity implements ClbEntity, Serializable {
         analyzerRegistriesAverage.add(analyzerRegistryAverage);
     }
 
+	public List<AnalyzerRegistryAverageEntity> getAnalyzerRegistriesAverage() {
+		return analyzerRegistriesAverage;
+	}
+
+    
 }

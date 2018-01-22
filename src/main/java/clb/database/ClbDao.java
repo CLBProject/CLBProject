@@ -2,26 +2,26 @@ package clb.database;
 
 import java.util.List;
 
-import clb.database.entities.AnalyzerEntity;
-import clb.database.entities.AnalyzerRegistryAverageEntity;
-import clb.database.entities.AnalyzerRegistryEntity;
-import clb.database.entities.BuildingEntity;
-import clb.database.entities.DataLoggerEntity;
-import clb.database.entities.UsersystemEntity;
+import clb.business.objects.AnalyzerObject;
+import clb.business.objects.AnalyzerRegistryAverageObject;
+import clb.business.objects.AnalyzerRegistryObject;
+import clb.business.objects.BuildingObject;
+import clb.business.objects.DataLoggerObject;
+import clb.business.objects.UsersystemObject;
 
 public interface ClbDao{
 
-	void insertAnalyzer(AnalyzerEntity analyzerEntity);
+	void insertAnalyzer(AnalyzerObject analyzerObject);
 	
-	void insertAnalyzerRegistry(AnalyzerRegistryEntity analyzerRegistryEntity);
+	void insertAnalyzerRegistry(AnalyzerRegistryObject analyzerRegistryObject);
 	
-	void insertAnalyzerRegistryAverage(AnalyzerRegistryAverageEntity analyzerRegistryAverageEntity);
+	void insertAnalyzerRegistryAverage(AnalyzerRegistryAverageObject analyzerRegistryAverageObject);
 	
-	void insertDataLogger(DataLoggerEntity dataLoggerEntity);
+	void insertDataLogger(DataLoggerObject dataLoggerObject);
 	
-	void insertBuilding(BuildingEntity buildingEntity);
+	void insertBuilding(BuildingObject buildingObject);
 	
-	void insertUsersystem(UsersystemEntity userSystemEntity);
+	void insertUsersystem(UsersystemObject userSystemObject);
 	
-	void insertUsers(List<UsersystemEntity> users);
+	void insertUsers(List<UsersystemObject> users);
 }

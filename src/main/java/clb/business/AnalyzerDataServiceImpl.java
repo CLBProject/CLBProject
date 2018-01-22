@@ -29,15 +29,14 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 
 import clb.business.constants.Month;
+import clb.business.objects.AnalyzerObject;
+import clb.business.objects.AnalyzerRegistryAverageObject;
 import clb.business.objects.AnalyzerRegistryObject;
+import clb.business.objects.BuildingObject;
+import clb.business.objects.DataLoggerObject;
 import clb.business.objects.MonthAverageObject;
+import clb.business.objects.UsersystemObject;
 import clb.database.ClbDao;
-import clb.database.entities.AnalyzerEntity;
-import clb.database.entities.AnalyzerRegistryAverageEntity;
-import clb.database.entities.AnalyzerRegistryEntity;
-import clb.database.entities.BuildingEntity;
-import clb.database.entities.DataLoggerEntity;
-import clb.database.entities.UsersystemEntity;
 
 @Service
 public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializable{
@@ -58,35 +57,35 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
     @Override
     public void persistScriptBigData() throws IOException{
-        UsersystemEntity userEntity = new UsersystemEntity();
+        UsersystemObject userObject = new UsersystemObject();
 
-        userEntity.setUserid( "nobreyeste@hotmail.com" );
-        userEntity.setName( "Carlos Nobre" );
-        userEntity.setAddress( "No address at this point" );
-        userEntity.setUsername( "cnobre" );
-        userEntity.setPassword( "123" );
+        userObject.setUserid( "nobreyeste@hotmail.com" );
+        userObject.setName( "Carlos Nobre" );
+        userObject.setAddress( "No address at this point" );
+        userObject.setUsername( "cnobre" );
+        userObject.setPassword( "123" );
 
-        UsersystemEntity userEntity2 = new UsersystemEntity();
+        UsersystemObject userObject2 = new UsersystemObject();
 
-        userEntity2.setUserid( "brunocatela@hotmail.com" );
-        userEntity2.setName( "Bruno Catela" );
-        userEntity2.setAddress( "No address at this point" );
-        userEntity2.setUsername( "bcatela" );
-        userEntity2.setPassword( "123" );
+        userObject2.setUserid( "brunocatela@hotmail.com" );
+        userObject2.setName( "Bruno Catela" );
+        userObject2.setAddress( "No address at this point" );
+        userObject2.setUsername( "bcatela" );
+        userObject2.setPassword( "123" );
 
-        UsersystemEntity userEntity3 = new UsersystemEntity();
+        UsersystemObject userObject3 = new UsersystemObject();
 
-        userEntity3.setUserid( "luissantos@hotmail.com" );
-        userEntity3.setName( "Luis Santos" );
-        userEntity3.setAddress( "No address at this point" );
-        userEntity3.setUsername( "lsantos" );
-        userEntity3.setPassword( "123" );
+        userObject3.setUserid( "luissantos@hotmail.com" );
+        userObject3.setName( "Luis Santos" );
+        userObject3.setAddress( "No address at this point" );
+        userObject3.setUsername( "lsantos" );
+        userObject3.setPassword( "123" );
 
-        List<UsersystemEntity> users = new ArrayList<UsersystemEntity>();
+        List<UsersystemObject> users = new ArrayList<UsersystemObject>();
 
-        users.add( userEntity );
-        users.add( userEntity2 );
-        users.add( userEntity3 );
+        users.add( userObject );
+        users.add( userObject2 );
+        users.add( userObject3 );
         
         clbDao.insertUsers(users);
 
@@ -110,7 +109,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                 calendarToday.get(Calendar.MONTH) == calendar.get(Calendar.MONTH);
     }
 
-    private void persistDummyAnalyzerRegistries(AnalyzerEntity analyzer, Set<Long> dataToExclude){
+    private void persistDummyAnalyzerRegistries(AnalyzerObject analyzer, Set<Long> dataToExclude){
 
         Random random = new Random();
 
@@ -135,7 +134,15 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                     for(int b = 0; b < 24 ; b++){
                         for(int k = 0; k < 60; k+=5){
 
-                            Date time = new Date(a+startingYear, l, m, b, k , 0);
+                        	Calendar currentTimeCalendar = Calendar.getInstance();
+                        	currentTimeCalendar.set(Calendar.YEAR, a+startingYear);
+                        	currentTimeCalendar.set(Calendar.MONTH, l);
+                        	currentTimeCalendar.set(Calendar.DAY_OF_MONTH, m);
+                        	currentTimeCalendar.set(Calendar.HOUR_OF_DAY, b);
+                        	currentTimeCalendar.set(Calendar.MINUTE, k);
+                        	currentTimeCalendar.set(Calendar.SECOND, 0);
+                        	
+                            Date time = currentTimeCalendar.getTime();
 
                             if(dataToExclude.contains( time.getTime())){
                                 continue;
@@ -144,7 +151,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                             //Test if reg all time or only 5 mins
                             if(isAverageDate(time)) {
 
-                                AnalyzerRegistryEntity anaRegObj = new AnalyzerRegistryEntity();
+                                AnalyzerRegistryObject anaRegObj = new AnalyzerRegistryObject();
 
                                 anaRegObj.setCurrenttime( new Timestamp(time.getTime()) );
 
@@ -168,7 +175,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                         }
                     }
 
-                    AnalyzerRegistryAverageEntity anaRegAverageObj = new AnalyzerRegistryAverageEntity();
+                    AnalyzerRegistryAverageObject anaRegAverageObj = new AnalyzerRegistryAverageObject();
 
                     anaRegAverageObj.setCurrenttime( new Timestamp(calendar.getTime().getTime()) );
 
@@ -190,25 +197,23 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
 
 
-    private void updateAnalyzerRegistriesForAnalyzer(File file, UsersystemEntity userEntity) throws IOException {
+    private void updateAnalyzerRegistriesForAnalyzer(File file, UsersystemObject userObject) throws IOException {
 
         XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(file));
 
-        BuildingEntity building = new BuildingEntity();
+        BuildingObject building = new BuildingObject();
         building.setName(file.getName().split("\\.")[0]);
         building.setBuildingusername(file.getName().split("\\.")[0]);
-        userEntity.addBuilding(building);
-
-
+        userObject.addBuilding(building);
 
         for(int j = 0; j<workbook.getNumberOfSheets();j++){
 
-            DataLoggerEntity dl = new DataLoggerEntity();
+            DataLoggerObject dl = new DataLoggerObject();
             dl.setName( "Data Logger "+j );
-            dl.setFtpaddress( "ftp://noftp" );
+            dl.setFtpAddress( "ftp://noftp" );
             building.addDataLogger(dl);
 
-            AnalyzerEntity ana = new AnalyzerEntity();
+            AnalyzerObject ana = new AnalyzerObject();
             ana.setName( "Analyzer " + j);
             dl.addAnalyzer(ana);
 
@@ -235,41 +240,41 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
                 dataToExclueOnDummy.add( calendar.getTime().getTime() );
 
-                AnalyzerRegistryEntity analyzerRegistryEntity = new AnalyzerRegistryEntity();
+                AnalyzerRegistryObject analyzerRegistryObject = new AnalyzerRegistryObject();
 
-                analyzerRegistryEntity.setCurrenttime( new Timestamp(calendar.getTime().getTime()) );
-                analyzerRegistryEntity.setAl1(row.getCell(2).getNumericCellValue());
-                analyzerRegistryEntity.setAl2(row.getCell(3).getNumericCellValue());
-                analyzerRegistryEntity.setAl3(row.getCell(4).getNumericCellValue());
-                analyzerRegistryEntity.setHz(row.getCell(5).getNumericCellValue());
-                analyzerRegistryEntity.setPfl1(row.getCell(6).getNumericCellValue());
-                analyzerRegistryEntity.setPfl2(row.getCell(7).getNumericCellValue());
-                analyzerRegistryEntity.setPfl3(row.getCell(8).getNumericCellValue());
-                analyzerRegistryEntity.setPfsys(row.getCell(9).getNumericCellValue());
-                analyzerRegistryEntity.setVl1l2(row.getCell(10).getNumericCellValue());
-                analyzerRegistryEntity.setVl1n(row.getCell(11).getNumericCellValue());
-                analyzerRegistryEntity.setVl2l3(row.getCell(12).getNumericCellValue());
-                analyzerRegistryEntity.setVl2n(row.getCell(13).getNumericCellValue());
-                analyzerRegistryEntity.setVl3l1(row.getCell(14).getNumericCellValue());
-                analyzerRegistryEntity.setVl3n(row.getCell(15).getNumericCellValue());
-                analyzerRegistryEntity.setVllsys(row.getCell(16).getNumericCellValue());
-                analyzerRegistryEntity.setVlnsys(row.getCell(17).getNumericCellValue());
-                analyzerRegistryEntity.setKval1(row.getCell(18).getNumericCellValue());
-                analyzerRegistryEntity.setKval2(row.getCell(19).getNumericCellValue());
-                analyzerRegistryEntity.setKval3(row.getCell(20).getNumericCellValue());
-                analyzerRegistryEntity.setKvasys(row.getCell(21).getNumericCellValue());
-                analyzerRegistryEntity.setKwl1(row.getCell(22).getNumericCellValue());
-                analyzerRegistryEntity.setKwl2(row.getCell(23).getNumericCellValue());
-                analyzerRegistryEntity.setKwl3(row.getCell(24).getNumericCellValue());
-                analyzerRegistryEntity.setKwsys(row.getCell(25).getNumericCellValue());
-                analyzerRegistryEntity.setKvarl1(row.getCell(26).getNumericCellValue());
-                analyzerRegistryEntity.setKvarl2(row.getCell(27).getNumericCellValue());
-                analyzerRegistryEntity.setKvarl3(row.getCell(28).getNumericCellValue());
-                analyzerRegistryEntity.setKvarsys(row.getCell(29).getNumericCellValue());
+                analyzerRegistryObject.setCurrenttime( new Timestamp(calendar.getTime().getTime()) );
+                analyzerRegistryObject.setAl1(row.getCell(2).getNumericCellValue());
+                analyzerRegistryObject.setAl2(row.getCell(3).getNumericCellValue());
+                analyzerRegistryObject.setAl3(row.getCell(4).getNumericCellValue());
+                analyzerRegistryObject.setHz(row.getCell(5).getNumericCellValue());
+                analyzerRegistryObject.setPfl1(row.getCell(6).getNumericCellValue());
+                analyzerRegistryObject.setPfl2(row.getCell(7).getNumericCellValue());
+                analyzerRegistryObject.setPfl3(row.getCell(8).getNumericCellValue());
+                analyzerRegistryObject.setPfsys(row.getCell(9).getNumericCellValue());
+                analyzerRegistryObject.setVl1l2(row.getCell(10).getNumericCellValue());
+                analyzerRegistryObject.setVl1n(row.getCell(11).getNumericCellValue());
+                analyzerRegistryObject.setVl2l3(row.getCell(12).getNumericCellValue());
+                analyzerRegistryObject.setVl2n(row.getCell(13).getNumericCellValue());
+                analyzerRegistryObject.setVl3l1(row.getCell(14).getNumericCellValue());
+                analyzerRegistryObject.setVl3n(row.getCell(15).getNumericCellValue());
+                analyzerRegistryObject.setVllsys(row.getCell(16).getNumericCellValue());
+                analyzerRegistryObject.setVlnsys(row.getCell(17).getNumericCellValue());
+                analyzerRegistryObject.setKval1(row.getCell(18).getNumericCellValue());
+                analyzerRegistryObject.setKval2(row.getCell(19).getNumericCellValue());
+                analyzerRegistryObject.setKval3(row.getCell(20).getNumericCellValue());
+                analyzerRegistryObject.setKvasys(row.getCell(21).getNumericCellValue());
+                analyzerRegistryObject.setKwl1(row.getCell(22).getNumericCellValue());
+                analyzerRegistryObject.setKwl2(row.getCell(23).getNumericCellValue());
+                analyzerRegistryObject.setKwl3(row.getCell(24).getNumericCellValue());
+                analyzerRegistryObject.setKwsys(row.getCell(25).getNumericCellValue());
+                analyzerRegistryObject.setKvarl1(row.getCell(26).getNumericCellValue());
+                analyzerRegistryObject.setKvarl2(row.getCell(27).getNumericCellValue());
+                analyzerRegistryObject.setKvarl3(row.getCell(28).getNumericCellValue());
+                analyzerRegistryObject.setKvarsys(row.getCell(29).getNumericCellValue());
 
-                clbDao.insertAnalyzerRegistry(analyzerRegistryEntity);
+                clbDao.insertAnalyzerRegistry(analyzerRegistryObject);
 
-                ana.addAnalyzerRegistry(analyzerRegistryEntity);
+                ana.addAnalyzerRegistry(analyzerRegistryObject);
             }
 
             persistDummyAnalyzerRegistries( ana, dataToExclueOnDummy);
@@ -348,4 +353,13 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		return null;
 	}
 
+	public ClbDao getClbDao() {
+		return clbDao;
+	}
+
+	public void setClbDao(ClbDao clbDao) {
+		this.clbDao = clbDao;
+	}
+
+	
 }
