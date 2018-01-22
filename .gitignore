@@ -1,1 +1,7 @@
-/target/
+.classpath
+.metadata/
+.project
+.pydevproject
+.settings/
+derby.log
+target/

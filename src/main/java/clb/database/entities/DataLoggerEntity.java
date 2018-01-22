@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 
 @Document(collection="DataLoggers")
-public class DataLoggerEntity implements Serializable {
+public class DataLoggerEntity implements ClbEntity, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id

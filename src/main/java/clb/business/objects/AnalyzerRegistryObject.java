@@ -2,7 +2,6 @@ package clb.business.objects;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Date;
 
 import clb.database.entities.AnalyzerRegistryEntity;
 
@@ -10,7 +9,7 @@ public class AnalyzerRegistryObject implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private long regid;
+	private String id;
 
 	private double al1;
 
@@ -136,7 +135,7 @@ public class AnalyzerRegistryObject implements Serializable {
 
     public AnalyzerRegistryObject(AnalyzerRegistryEntity analyzerRegEntity) {
         super();
-        this.regid = analyzerRegEntity.getRegid();
+        this.id = analyzerRegEntity.getId();
         this.al1 = analyzerRegEntity.getAl1();
         this.al2 = analyzerRegEntity.getAl2();
         this.al3 = analyzerRegEntity.getAl3();
@@ -199,7 +198,7 @@ public class AnalyzerRegistryObject implements Serializable {
 
     public AnalyzerRegistryEntity toEntity() {
         AnalyzerRegistryEntity anaRegEntity = new AnalyzerRegistryEntity();
-        anaRegEntity.setRegid(regid);
+        anaRegEntity.setId(id);
         anaRegEntity.setAl1(al1);
         anaRegEntity.setAl2(al2);
         anaRegEntity.setAl3(al3);
@@ -260,14 +259,14 @@ public class AnalyzerRegistryObject implements Serializable {
         
         return anaRegEntity;
     }
+    
 
-
-	public long getRegid() {
-		return this.regid;
+	public String getId() {
+		return id;
 	}
 
-	public void setRegid(long regid) {
-		this.regid = regid;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public double getAl1() {
