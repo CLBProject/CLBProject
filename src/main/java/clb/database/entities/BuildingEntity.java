@@ -18,7 +18,7 @@ public class BuildingEntity implements ClbEntity, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private long buildingid;
+	private String buildingid;
 
 	private String name;
 	
@@ -30,11 +30,11 @@ public class BuildingEntity implements ClbEntity, Serializable {
 	public BuildingEntity() {
 	}
 
-	public long getBuildingid() {
+	public String getBuildingid() {
 		return this.buildingid;
 	}
 
-	public void setBuildingid(long buildingid) {
+	public void setBuildingid(String buildingid) {
 		this.buildingid = buildingid;
 	}
 

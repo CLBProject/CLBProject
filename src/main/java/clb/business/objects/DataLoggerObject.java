@@ -5,7 +5,7 @@ import clb.database.entities.DataLoggerEntity;
 public class DataLoggerObject
 {
 
-    private long dataloggerid;
+    private String dataloggerid;
 
     private String name;
 
@@ -25,12 +25,12 @@ public class DataLoggerObject
     }
 
 
-    public long getDataloggerid() {
+    public String getDataloggerid() {
         return dataloggerid;
     }
 
 
-    public void setDataloggerid( long dataloggerid ) {
+    public void setDataloggerid( String dataloggerid ) {
         this.dataloggerid = dataloggerid;
     }
 

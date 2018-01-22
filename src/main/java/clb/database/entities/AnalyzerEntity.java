@@ -17,7 +17,7 @@ public class AnalyzerEntity implements ClbEntity, Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    private long analyzerid;
+    private String analyzerId;
 
     private String name;
 
@@ -30,12 +30,12 @@ public class AnalyzerEntity implements ClbEntity, Serializable {
     public AnalyzerEntity() {
     }
 
-    public long getAnalyzerid() {
-        return this.analyzerid;
+    public String getAnalyzerid() {
+        return this.analyzerId;
     }
 
-    public void setAnalyzerid(long analyzerid) {
-        this.analyzerid = analyzerid;
+    public void setAnalyzerid(String analyzerid) {
+        this.analyzerId = analyzerid;
     }
 
     public String getName() {

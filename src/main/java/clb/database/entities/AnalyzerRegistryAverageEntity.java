@@ -16,9 +16,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class AnalyzerRegistryAverageEntity implements ClbEntity, Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	private long regid;
-
+    @Id
+    private String id;
+    
 	private double al1Average;
 
 	private double al2Average;
@@ -176,13 +176,13 @@ public class AnalyzerRegistryAverageEntity implements ClbEntity, Serializable {
 	public AnalyzerRegistryAverageEntity() {
 	}
 
-	public long getRegid() {
-		return this.regid;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setRegid(long regid) {
-		this.regid = regid;
-	}
+    public void setId( String id ) {
+        this.id = id;
+    }
 
     public double getAl1Average() {
         return al1Average;

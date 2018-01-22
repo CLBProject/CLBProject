@@ -4,7 +4,7 @@ import clb.database.entities.AnalyzerEntity;
 
 public class AnalyzerObject
 {
-    private long analyzerid;
+    private String analyzerid;
 
     private String name;
     
@@ -24,11 +24,11 @@ public class AnalyzerObject
         return analyzerEntity;
     }
 
-    public long getAnalyzerid() {
+    public String getAnalyzerid() {
         return analyzerid;
     }
 
-    public void setAnalyzerid( long analyzerid ) {
+    public void setAnalyzerid( String analyzerid ) {
         this.analyzerid = analyzerid;
     }
 
