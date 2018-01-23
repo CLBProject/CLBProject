@@ -17,6 +17,12 @@ import clb.database.repository.AnalyzerRegistryMongoRepository;
 import clb.database.repository.BuildingsMongoRepository;
 import clb.database.repository.DataLoggerMongoRepository;
 import clb.database.repository.UsersystemMongoRepository;
+import clb.database.entities.BuildingEntity;
+import clb.database.entities.AnalyzerEntity;
+import clb.database.entities.AnalyzerRegistryEntity;
+import clb.database.entities.AnalyzerRegistryAverageEntity;
+import clb.database.entities.DataLoggerEntity;
+import clb.database.entities.UsersystemEntity;
 
 @Service
 public class ClbDaoImpl implements ClbDao{
@@ -48,32 +54,44 @@ public class ClbDaoImpl implements ClbDao{
 	
 	@Override
 	public void insertAnalyzer(AnalyzerObject analyzerObject) {
-		analyzerMongoRepository.insert(analyzerObject.toEntity());
+	    AnalyzerEntity analyzerEntity = analyzerObject.toEntity(); 
+		analyzerMongoRepository.insert(analyzerEntity);
+		analyzerObject.setId(analyzerEntity.getId());
 	}
 	
 	@Override
 	public void insertAnalyzerRegistry(AnalyzerRegistryObject analyzerRegistryObject) {
-		analyzerRegistryMongoRepository.insert(analyzerRegistryObject.toEntity());
+	    AnalyzerRegistryEntity analyzerRegistryEntity = analyzerRegistryObject.toEntity();
+		analyzerRegistryMongoRepository.insert(analyzerRegistryEntity);
+		analyzerRegistryObject.setId(analyzerRegistryEntity.getId());
 	}
 	
 	@Override
 	public void insertAnalyzerRegistryAverage(AnalyzerRegistryAverageObject analyzerRegistryAverageObject) {
-		analyzerRegistryAverageMongoRepository.insert(analyzerRegistryAverageObject.toEntity());
+	    AnalyzerRegistryAverageEntity analyzerRegistryAverageEntity = analyzerRegistryAverageObject.toEntity();
+		analyzerRegistryAverageMongoRepository.insert(analyzerRegistryAverageEntity);
+		analyzerRegistryAverageObject.setId(analyzerRegistryAverageEntity.getId());
 	}
 	
 	@Override
 	public void insertDataLogger(DataLoggerObject dataLoggerObject) {
-		dataLoggerMongoRepository.insert(dataLoggerObject.toEntity());
+	    DataLoggerEntity dataLoggerEntity = dataLoggerObject.toEntity(); 
+		dataLoggerMongoRepository.insert(dataLoggerEntity);
+		dataLoggerObject.setDataloggerid(dataLoggerEntity.getDataloggerid());
 	}
 	
 	@Override
 	public void insertBuilding(BuildingObject buildingObject) {
-		buildingsMongoRepository.insert(buildingObject.toEntity());
+	    BuildingEntity buildingEntity = buildingObject.toEntity();
+		buildingsMongoRepository.insert(buildingEntity);
+		buildingObject.setBuildingid(buildingEntity.getBuildingid());
 	}
 	
 	@Override
 	public void insertUsersystem(UsersystemObject userSystemObject) {
-		userSystemMongoRepository.insert(userSystemObject.toEntity());
+	    UsersystemEntity userSystemEntity = userSystemObject.toEntity();
+		userSystemMongoRepository.insert(userSystemEntity);
+		userSystemEntity.setUserid(userSystemObject.getUserid());
 	}
 	
 	@Override

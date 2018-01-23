@@ -86,17 +86,15 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
         users.add( userObject );
         users.add( userObject2 );
         users.add( userObject3 );
-        
-        clbDao.insertUsers(users);
-        
+
         int usersIndex = 0;
 
         for(File file: dataAnalyzerXls.getFile().listFiles()){
             updateAnalyzerRegistriesForAnalyzer(file,users.get( usersIndex ));
             usersIndex = usersIndex +1 == users.size() ? 0 : usersIndex+1;
         }
-        
-        
+
+        clbDao.insertUsers(users);
     }
 
     private boolean isAverageDate(Date currentDate) {
@@ -111,94 +109,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                 calendarToday.get(Calendar.MONTH) == calendar.get(Calendar.MONTH);
     }
 
-    private void persistDummyAnalyzerRegistries(AnalyzerObject analyzer, Set<Long> dataToExclude){
-
-        Random random = new Random();
-
-        int numberOfYears = 1;
-        int startingYear = 2018;
-        int lowAl = 200;
-        int highAl = 450;
-
-        Calendar calendar = GregorianCalendar.getInstance();
-        calendar.set( startingYear, 0, 1);
-
-        System.out.println( "Starting persisting data... ");
-
-        for(int a = 0 ;a<numberOfYears; a++){
-            for(int l = 0; l < 12; l++ ){
-                for(int m=0; m < calendar.getActualMaximum(Calendar.DAY_OF_MONTH);m++) {
-
-                    double al1DailyAverage = 0;
-                    double al2DailyAverage = 0;
-                    double al3DailyAverage = 0;
-
-                    for(int b = 0; b < 24 ; b++){
-                        for(int k = 0; k < 60; k+=5){
-
-                        	Calendar currentTimeCalendar = Calendar.getInstance();
-                        	currentTimeCalendar.set(Calendar.YEAR, a+startingYear);
-                        	currentTimeCalendar.set(Calendar.MONTH, l);
-                        	currentTimeCalendar.set(Calendar.DAY_OF_MONTH, m);
-                        	currentTimeCalendar.set(Calendar.HOUR_OF_DAY, b);
-                        	currentTimeCalendar.set(Calendar.MINUTE, k);
-                        	currentTimeCalendar.set(Calendar.SECOND, 0);
-                        	
-                            Date time = currentTimeCalendar.getTime();
-
-                            if(dataToExclude.contains( time.getTime())){
-                                continue;
-                            }
-
-                            //Test if reg all time or only 5 mins
-                            if(isAverageDate(time)) {
-
-                                AnalyzerRegistryObject anaRegObj = new AnalyzerRegistryObject();
-
-                                anaRegObj.setCurrenttime( new Timestamp(time.getTime()) );
-
-                                anaRegObj.setAl1(lowAl + (highAl - lowAl) * random.nextDouble());
-                                anaRegObj.setAl2(lowAl + (highAl - lowAl) * random.nextDouble());
-                                anaRegObj.setAl3(lowAl + (highAl - lowAl) * random.nextDouble());
-
-                                al1DailyAverage +=anaRegObj.getAl1();
-                                al2DailyAverage +=anaRegObj.getAl2();
-                                al3DailyAverage +=anaRegObj.getAl3();
-
-                                clbDao.insertAnalyzerRegistry(anaRegObj);
-                                analyzer.addAnalyzerRegistry(anaRegObj);
-                            }
-
-                            else {
-                                al1DailyAverage +=lowAl + (highAl - lowAl) * random.nextDouble();
-                                al2DailyAverage +=lowAl + (highAl - lowAl) * random.nextDouble();
-                                al3DailyAverage +=lowAl + (highAl - lowAl) * random.nextDouble();
-                            }
-                        }
-                    }
-
-                    AnalyzerRegistryAverageObject anaRegAverageObj = new AnalyzerRegistryAverageObject();
-
-                    anaRegAverageObj.setCurrenttime( new Timestamp(calendar.getTime().getTime()) );
-
-                    anaRegAverageObj.setAl1Average(al1DailyAverage/ (24*60));
-                    anaRegAverageObj.setAl2Average(al2DailyAverage/ (24*60));
-                    anaRegAverageObj.setAl3Average(al3DailyAverage/ (24*60));
-
-                    clbDao.insertAnalyzerRegistryAverage(anaRegAverageObj);
-                    analyzer.addAnalyzerRegistryAverage(anaRegAverageObj);
-
-                    calendar.add(Calendar.DATE, 1);
-                }
-
-            }
-            System.out.println("Persisted Registries from year: " + (a+startingYear) + ", for analyzer: " + analyzer.getId());
-        }
-
-    }
-
-
-
     private void updateAnalyzerRegistriesForAnalyzer(File file, UsersystemObject userObject) throws IOException {
 
         XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(file));
@@ -207,8 +117,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
         building.setName(file.getName().split("\\.")[0]);
         building.setBuildingusername(file.getName().split("\\.")[0]);
         userObject.addBuilding(building);
-        
-        clbDao.insertBuilding(building);
 
         for(int j = 0; j<workbook.getNumberOfSheets();j++){
 
@@ -216,12 +124,11 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
             dl.setName( "Data Logger "+j );
             dl.setFtpAddress( "ftp://noftp" );
             building.addDataLogger(dl);
-            clbDao.insertDataLogger(dl);
-            
+
+
             AnalyzerObject ana = new AnalyzerObject();
             ana.setName( "Analyzer " + j);
             dl.addAnalyzer(ana);
-            clbDao.insertAnalyzer(ana);
 
             XSSFSheet worksheet = workbook.getSheetAt( j );
 
@@ -284,8 +191,100 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
             }
 
             persistDummyAnalyzerRegistries( ana, dataToExclueOnDummy);
+
+            clbDao.insertAnalyzer(ana);
+            clbDao.insertDataLogger(dl);
         }
+
+        clbDao.insertBuilding(building);
     }
+
+    private void persistDummyAnalyzerRegistries(AnalyzerObject analyzer, Set<Long> dataToExclude){
+
+        Random random = new Random();
+
+        int numberOfYears = 1;
+        int startingYear = 2018;
+        int lowAl = 200;
+        int highAl = 450;
+
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.set( startingYear, 0, 1);
+
+        System.out.println( "Starting persisting data... ");
+
+        for(int a = 0 ;a<numberOfYears; a++){
+            for(int l = 0; l < 12; l++ ){
+                for(int m=0; m < calendar.getActualMaximum(Calendar.DAY_OF_MONTH);m++) {
+
+                    double al1DailyAverage = 0;
+                    double al2DailyAverage = 0;
+                    double al3DailyAverage = 0;
+
+                    for(int b = 0; b < 24 ; b++){
+                        for(int k = 0; k < 60; k+=5){
+
+                            Calendar currentTimeCalendar = Calendar.getInstance();
+                            currentTimeCalendar.set(Calendar.YEAR, a+startingYear);
+                            currentTimeCalendar.set(Calendar.MONTH, l);
+                            currentTimeCalendar.set(Calendar.DAY_OF_MONTH, m);
+                            currentTimeCalendar.set(Calendar.HOUR_OF_DAY, b);
+                            currentTimeCalendar.set(Calendar.MINUTE, k);
+                            currentTimeCalendar.set(Calendar.SECOND, 0);
+
+                            Date time = currentTimeCalendar.getTime();
+
+                            if(dataToExclude.contains( time.getTime())){
+                                continue;
+                            }
+
+                            //Test if reg all time or only 5 mins
+                            if(isAverageDate(time)) {
+
+                                AnalyzerRegistryObject anaRegObj = new AnalyzerRegistryObject();
+
+                                anaRegObj.setCurrenttime( new Timestamp(time.getTime()) );
+
+                                anaRegObj.setAl1(lowAl + (highAl - lowAl) * random.nextDouble());
+                                anaRegObj.setAl2(lowAl + (highAl - lowAl) * random.nextDouble());
+                                anaRegObj.setAl3(lowAl + (highAl - lowAl) * random.nextDouble());
+
+                                al1DailyAverage +=anaRegObj.getAl1();
+                                al2DailyAverage +=anaRegObj.getAl2();
+                                al3DailyAverage +=anaRegObj.getAl3();
+
+                                clbDao.insertAnalyzerRegistry(anaRegObj);
+                                analyzer.addAnalyzerRegistry(anaRegObj);
+                            }
+
+                            else {
+                                al1DailyAverage +=lowAl + (highAl - lowAl) * random.nextDouble();
+                                al2DailyAverage +=lowAl + (highAl - lowAl) * random.nextDouble();
+                                al3DailyAverage +=lowAl + (highAl - lowAl) * random.nextDouble();
+                            }
+                        }
+                    }
+
+                    AnalyzerRegistryAverageObject anaRegAverageObj = new AnalyzerRegistryAverageObject();
+
+                    anaRegAverageObj.setCurrenttime( new Timestamp(calendar.getTime().getTime()) );
+
+                    anaRegAverageObj.setAl1Average(al1DailyAverage/ (24*60));
+                    anaRegAverageObj.setAl2Average(al2DailyAverage/ (24*60));
+                    anaRegAverageObj.setAl3Average(al3DailyAverage/ (24*60));
+
+                    clbDao.insertAnalyzerRegistryAverage(anaRegAverageObj);
+                    analyzer.addAnalyzerRegistryAverage(anaRegAverageObj);
+
+                    calendar.add(Calendar.DATE, 1);
+                }
+
+            }
+            System.out.println("Persisted Registries from year: " + (a+startingYear) + ", for analyzer: " + analyzer.getId());
+        }
+
+    }
+
 
     public void init(){
         taskExecutor.execute(new Runnable() {
@@ -349,19 +348,19 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
         this.taskExecutor = taskExecutor;
     }
 
-	@Override
-	public List<Integer> getRegistryYears() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<Integer> getRegistryYears() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	public ClbDao getClbDao() {
-		return clbDao;
-	}
+    public ClbDao getClbDao() {
+        return clbDao;
+    }
 
-	public void setClbDao(ClbDao clbDao) {
-		this.clbDao = clbDao;
-	}
+    public void setClbDao(ClbDao clbDao) {
+        this.clbDao = clbDao;
+    }
 
-	
+
 }
