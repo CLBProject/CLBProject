@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="template/ui.xhtml">
+	<ui:define name="body">
+		<div class="mainDivClass">
+			<table width="100%" cellspacing="5">
+				<tr>
+					<td width="200px" align="center"><p:panel styleClass="logoPanel" >
+							<h:outputText value="CLBProject Logo"/>
+						</p:panel></td>
+					<td>
+						<div align="right">
+							<p:commandButton styleClass="signButton" value="Log In"></p:commandButton>
+							<p:spacer width="10" />
+							<p:commandButton styleClass="signButton" value="Sign Up"></p:commandButton>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td width="200px" valign="top"><h:form>
+							<p:commandButton styleClass="menuButton" value="Dashboard"></p:commandButton>
+							<p:spacer height="5" />
+							<p:commandButton styleClass="menuButton" value="Analysis"></p:commandButton>
+							<p:spacer height="5" />
+							<p:commandButton styleClass="menuButton"
+								value="Building Management"></p:commandButton>
+							<p:spacer height="5" />
+							<p:commandButton styleClass="menuButton" value="Forum"></p:commandButton>
+							<p:spacer height="5" />
+							<p:commandButton styleClass="menuButton" value="Account"></p:commandButton>
+						</h:form></td>
+					<td valign="top"><p:panel>
+							<h:panelGrid width="100%" columns="2"
+								columnClasses="mainPanelCol1, mainPanelCol2" cellspacing="10">
+								<p:column>
+									<div align="left" class="mainDivDetail">
+										<div align="right" class="mainDivDetailDate">
+											<h:outputLabel value="Last entry date: 06/11/2017 at 23:25"></h:outputLabel>
+										</div>
+										<h:outputText value="Building 1" class="mainDivDetailTitle" />
+										<br /> <br />
+										<h:outputText value="- Monitor 1" class="mainDivDetailText" />
+										<br />
+										<h:outputText value="- Monitor 2" class="mainDivDetailText" />
+										<br />
+										<h:outputText value="- Monitor 3" class="mainDivDetailText" />
+										<br />
+										<h:outputText value="- Monitor 4" class="mainDivDetailText" />
+									</div>
+									<p:spacer height="3" />
+									<div align="left" class="mainDivDetail">
+										<div align="right" class="mainDivDetailDate">
+											<h:outputLabel value="Last entry date: 06/11/2017 at 23:25"></h:outputLabel>
+										</div>
+										<h:outputText value="Building 2" class="mainDivDetailTitle" />
+										<br /> <br />
+										<h:outputText value="- Monitor 1" class="mainDivDetailText" />
+										<br />
+										<h:outputText value="- Monitor 2" class="mainDivDetailText" />
+										<br />
+										<h:outputText value="- Monitor 3" class="mainDivDetailText" />
+										<br />
+										<h:outputText value="- Monitor 4" class="mainDivDetailText" />
+									</div>
+								</p:column>
+								<p:column>
+									<p:gmap id="gmap" center="36.890257,30.707417" zoom="13"
+										type="HYBRID" style="width:100%;height:400px"
+										model="#{clbHomeBean.mapModel}" onPointClick=""
+										widgetVar="map" />
+								</p:column>
+							</h:panelGrid>
+						</p:panel></td>
+				</tr>
+			</table>
+			<div style="height: 800px"></div>
+		</div>
+	</ui:define>
+</ui:composition>

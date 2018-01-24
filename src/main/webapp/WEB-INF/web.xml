@@ -20,9 +20,8 @@
 	</context-param>
 <!-- 	<context-param> -->
 <!-- 		<param-name>primefaces.THEME</param-name> -->
-<!-- 		<param-value>cruze</param-value> -->
+<!-- 		<param-value>midnight</param-value> -->
 <!-- 	</context-param> -->
-
 	<welcome-file-list>
 		<welcome-file>index.xhtml</welcome-file>
 	</welcome-file-list>
