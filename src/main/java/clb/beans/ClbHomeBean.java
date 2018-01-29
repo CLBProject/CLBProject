@@ -22,10 +22,16 @@ public class ClbHomeBean implements Serializable{
     private double lat;
 
     private double lng;
+    
+    private String userNameReg;
 
     @PostConstruct
     public void init() {
         mapModel = new DefaultMapModel();
+    }
+    
+    public void registerUser() {
+        
     }
     
     public MapModel getMapModel() {
@@ -60,5 +66,13 @@ public class ClbHomeBean implements Serializable{
         this.lng = lng;
     }
 
+    public String getUserNameReg() {
+        return userNameReg;
+    }
 
+    public void setUserNameReg( String userNameReg ) {
+        this.userNameReg = userNameReg;
+    }
+    
+    
 }

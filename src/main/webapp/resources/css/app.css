@@ -4,7 +4,7 @@ body {
 	margin: 0px !important;
 }
 
-.mainDivClass{
+.mainDivClass {
 	background-color: #0A122A;
 	color: white !important;
 	padding-top: 10px;
@@ -12,15 +12,15 @@ body {
 	padding-right: 20px;
 }
 
-.mainDivClassHeader{
+.mainDivClassHeader {
 	color: white;
 	font-weight: bold;
 	font-size: 18px !important;
 	font-family: Arial, Helvetica, sans-serif;
 }
 
-.ui-button.menuButton{
-	width:100% !important;
+.ui-button.menuButton {
+	width: 100% !important;
 	padding: 5px !important;
 	background-color: #0B243B !important;
 	color: white !important;
@@ -30,79 +30,91 @@ body {
 	text-align: left !important;
 }
 
-.ui-button.signButton{
-	width:100px !important;
+.ui-button.signButton {
+	width: 100px !important;
 	padding: 5px !important;
 	background-color: orange !important;
 	color: white !important;
 	font-weight: bold;
 	font-family: Arial, Helvetica, sans-serif !important;
-	text-align: center!important;
+	text-align: center !important;
 }
 
-.ui-panel{
+.ui-panel {
 	background-color: #0B243B !important;
 }
 
-.ui-widget-content{
+.ui-widget-content {
 	color: white !important;
+	background-color: #0A122A !important;
 }
 
-.mainPanelCol1{
+.mainPanelCol1 {
 	vertical-align: top;
-	width:20%;
+	width: 20%;
 }
 
-.mainPanelCol2{
+.mainPanelCol2 {
 	vertical-align: top;
-	width:80%;
+	width: 80%;
 }
 
-.mainDivDetail{
-	padding:10px;
+.mainDivDetail {
+	padding: 10px;
 	border: 2px solid white;
 }
 
-.mainDivDetailDate{
+.mainDivDetailDate {
 	color: #CED8F6 !important;
 	font-size: 10px !important;
 }
 
-.mainDivDetailTitle{
+.mainDivDetailTitle {
 	color: yellow !important;
 	font-size: 12px !important;
 	font-weight: bold;
 }
 
-.mainDivDetailText{
+.mainDivDetailText {
 	color: white !important;
 	font-size: 12px !important;
 	font-weight: normal;
 }
 
-.ui-panel.logoPanel{
+.ui-panel.logoPanel {
 	color: white;
 	font-weight: bold;
 }
 
-.ui-dialog-titlebar{
-	color: white !important;
+.ui-dialog-titlebar {
+	color: yellow !important;
 	background-color: #0A122A !important;
-	font-size: 16px !important;
+	font-size: 14px !important;
+	font-weight: normal;
 }
-.ui-widget-content.registerDialog{
+
+.ui-widget-content.mainTable {
 	background-color: #0A122A !important;
 	border: 0;
 }
 
-.ui-widget{
-	color:yellow;
-	font-size: 14px !important;
+.ui-widget {
+	color: #CED8F6;
+	font-size: 12px !important;
 	font-family: Arial, Helvetica, sans-serif !important;
+	font-weight: bold;
 }
 
-.ui-panelGrid.mainTable{
+.ui-panelGrid.mainTable {
 	border-collapse: separate;
 	background-color: #0A122A !important;
-	border: 0;
+}
+
+.ui-panelgrid-cell {
+	border: none !important;
+	vertical-align: middle !important;
+}
+
+.ui-widget-overlay {
+   opacity: 0.8 !important;
 }

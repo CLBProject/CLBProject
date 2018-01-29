@@ -18,7 +18,7 @@
 						<div align="right">
 							<p:commandButton styleClass="signButton" value="Log In"></p:commandButton>
 							<p:spacer width="10" />
-							<p:commandButton styleClass="signButton" value="Sign Up" onclick="PF('registerPanel').show()"></p:commandButton>
+							<p:commandButton styleClass="signButton" value="Sign Up" oncomplete="PF('registerPanel').show()"></p:commandButton>
 						</div>
 					</td>
 				</tr>
@@ -35,8 +35,8 @@
 							<p:spacer height="5" />
 							<p:commandButton styleClass="menuButton" value="Account"></p:commandButton>
 						</h:form></td>
-					<td valign="top"><p:panel>
-							<h:panelGrid width="100%" columns="2"
+					<td valign="top"><p:panel widgetVar="mainPanel" id="mainPanel">
+							<h:panelGrid width="100%" columns="2" 
 								columnClasses="mainPanelCol1, mainPanelCol2" cellspacing="10">
 								<p:column>
 									<div align="left" class="mainDivDetail">
@@ -76,10 +76,11 @@
 										widgetVar="map" />
 								</p:column>
 							</h:panelGrid>
-						</p:panel></td>
+						</p:panel>
+					</td>
 				</tr>
 			</table>
-			<div style="height: 800px"></div>
+			<div style="height:500px"></div>
 		</div>
 		<ui:include src="register.xhtml" />
 	</ui:define>
