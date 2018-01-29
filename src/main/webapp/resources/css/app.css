@@ -84,3 +84,25 @@ body {
 	color: white;
 	font-weight: bold;
 }
+
+.ui-dialog-titlebar{
+	color: white !important;
+	background-color: #0A122A !important;
+	font-size: 16px !important;
+}
+.ui-widget-content.registerDialog{
+	background-color: #0A122A !important;
+	border: 0;
+}
+
+.ui-widget{
+	color:yellow;
+	font-size: 14px !important;
+	font-family: Arial, Helvetica, sans-serif !important;
+}
+
+.ui-panelGrid.mainTable{
+	border-collapse: separate;
+	background-color: #0A122A !important;
+	border: 0;
+}
