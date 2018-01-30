@@ -16,7 +16,7 @@
 						</p:panel></td>
 					<td>
 						<div align="right">
-							<p:commandButton styleClass="signButton" value="Log In"></p:commandButton>
+							<p:commandButton styleClass="signButton" value="Log In" oncomplete="PF('loginPanel').show()"></p:commandButton>
 							<p:spacer width="10" />
 							<p:commandButton styleClass="signButton" value="Sign Up" oncomplete="PF('registerPanel').show()"></p:commandButton>
 						</div>
@@ -83,5 +83,6 @@
 			<div style="height:500px"></div>
 		</div>
 		<ui:include src="register.xhtml" />
+		<ui:include src="login.xhtml" />
 	</ui:define>
 </ui:composition>

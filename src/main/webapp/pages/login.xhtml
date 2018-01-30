@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="template/ui.xhtml">
+	<ui:define name="body">
+		<p:dialog widgetVar="loginPanel" id="loginPanel" modal="true" position="center center"
+			header="Authenticate" draggable="false" closeOnEscape="true"
+			styleClass="registerDialog" resizable="false">
+			<h:form id="loginForm">
+				<p:spacer height="15" />
+				<p:panelGrid columns="3" styleClass="mainTable">
+					<p:column>
+						<p:outputLabel>Username :</p:outputLabel>
+					</p:column>
+					<p:column>
+						<p:inputText requiredMessage="Username is required!" id="emailUser" required="true" label="emailUser">
+						</p:inputText>
+					</p:column>
+					<p:column>
+						<p:message for="emailUser"/>
+					</p:column>
+					<p:column>
+						<p:outputLabel>Password :</p:outputLabel>
+					</p:column>
+					<p:column>
+						<p:inputText requiredMessage="Password is required!" label="passwordUser" id="passwordUser" required="true" type="password">
+						</p:inputText>
+					</p:column>
+					<p:column>
+						<p:message for="passwordUser"/>
+					</p:column>
+					<p:column>
+						<p:spacer height="5"/>
+					</p:column>
+					<p:column>
+					</p:column>
+					<p:column>
+					</p:column>
+					<p:column>
+						<p:commandLink value="Forgot your Password?" styleClass="linkClass"></p:commandLink>
+					</p:column>
+					<p:column>
+					</p:column>
+					<p:column>
+					</p:column>
+					
+				</p:panelGrid>
+				<p:spacer height="25" />
+				<div align="center">
+					<p:commandButton action="#{clbHomeBean.loginUser}" validateClient="true"
+						styleClass="signButton" value="Login" ajax="true" oncomplete="if (!args.validationFailed){ PF('loginPanel').hide() }"
+						update="@form"></p:commandButton>
+				</div>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

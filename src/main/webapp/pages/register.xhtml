@@ -8,11 +8,11 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	template="template/ui.xhtml">
 	<ui:define name="body">
-		<p:dialog widgetVar="registerPanel" id="registerPanel" modal="true"
+		<p:dialog widgetVar="registerPanel" id="registerPanel" modal="true" position="center center"
 			header="New User" draggable="false" closeOnEscape="true"
 			styleClass="registerDialog" resizable="false">
 			<h:form id="registerForm">
-				<p:spacer height="6" />
+				<p:spacer height="15" />
 				<p:panelGrid columns="3" styleClass="mainTable">
 					<p:column>
 						<p:outputLabel>Name* :</p:outputLabel>
@@ -59,10 +59,13 @@
 				<p:spacer height="25" />
 				<div align="center">
 					<p:commandButton action="#{clbHomeBean.registerUser}" validateClient="true"
-						styleClass="signButton" value="Register" ajax="true" oncomplete="if (!args.validationFailed){ PF('registerPanel').hide() }"
+						styleClass="signButton" value="Register" ajax="true" oncomplete="if (!args.validationFailed){ PF('successPanel').show() }"
 						update="@form"></p:commandButton>
 				</div>
 			</h:form>
 		</p:dialog>
+		<ui:include src="successDialog.xhtml">
+			<ui:param name="successMessage" value="User was created successfully!" />
+		</ui:include>
 	</ui:define>
 </ui:composition>
