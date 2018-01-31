@@ -8,11 +8,27 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	template="template/ui.xhtml">
 	<ui:define name="body">
-		<p:dialog widgetVar="successPanel" id="successPanel" modal="true" position="center center"
-			header="Success" draggable="false" closeOnEscape="true"
-			styleClass="registerDialog" resizable="false">
-			<p:graphicImage value=""></p:graphicImage>
-			<p:outputLabel value="#{successMessage}"></p:outputLabel>
+		<p:dialog widgetVar="successPanel" id="successPanel" modal="true"
+			position="center center" draggable="false" closable="false"
+			closeOnEscape="true" styleClass="registerDialog" resizable="false">
+			<h:form>
+				<div class="successDialogDiv">
+					<p:panelGrid columns="2" styleClass="successGrid">
+						<p:column>
+							<p:graphicImage value="${pageContext.request.contextPath}/resources/images/success.png"></p:graphicImage>
+						</p:column>
+						<p:column>
+							<p:outputLabel value="#{successMessage}"></p:outputLabel>
+						</p:column>
+					</p:panelGrid>
+					<br /> <br />
+					<div align="center">
+						<p:commandButton styleClass="signButton"
+							oncomplete="PF('#{hideDialog}').hide();PF('successPanel').hide();"
+							value="OK"></p:commandButton>
+					</div>
+				</div>
+			</h:form>
 		</p:dialog>
 	</ui:define>
 </ui:composition>

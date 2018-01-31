@@ -127,3 +127,12 @@ body {
 .linkClass{
 	color: white !important;
 }
+
+.successDialogDiv{
+	padding:10px;
+}
+
+.ui-panelGrid.successGrid {
+	border-collapse: separate;
+	background-color: #0A122A !important;
+}
