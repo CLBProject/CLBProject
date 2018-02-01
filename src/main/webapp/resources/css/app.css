@@ -4,6 +4,18 @@ body {
 	margin: 0px !important;
 }
 
+.homeMainDivClass{
+	background-color: #0A122A;
+	color: white !important;
+	width: 100%;
+	height:100vh;
+}
+
+.homeMainDivBannerClass{
+	height:60px;
+	background-color: #0B243B !important;
+}
+
 .mainDivClass {
 	background-color: #0A122A;
 	color: white !important;
