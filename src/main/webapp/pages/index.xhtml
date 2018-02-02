@@ -10,21 +10,50 @@
 	<ui:define name="body">
 		<div class="homeMainDivClass">
 			<h:form>
-				<div class="homeMainDivBannerClass">
-					<table width="100%">
+				<div>
+					<table width="100%" class="homeMainDivBannerClass">
 						<tr>
-							<td></td>
-							<td align="right"><p:outputLabel for="emailUser">Username:</p:outputLabel>
-								<p:spacer width="5"/>
-								<p:inputText id="emailUser" label="emailUser"/>
-									<p:spacer width="30" />
-									<p:outputLabel for="passwordUser">Password:</p:outputLabel>
-									<p:inputText label="passwordUser" id="passwordUser"
-										type="password"/>
-									<p:spacer width="20" />
-									<p:commandButton styleClass="signButton" value="Log In"
-										oncomplete="PF('loginPanel').show()"></p:commandButton>
-							</td>
+							<td width="1%"></td>
+							<td align="left" valign="middle"><p:outputLabel
+									styleClass="logoClass">LEnergy Logo</p:outputLabel></td>
+							<td align="right" valign="top">
+								<h:panelGrid columns="11" styleClass="homeMainDivBannerClass">
+									<p:column>
+										<p:outputLabel for="emailUser">Username:</p:outputLabel>
+									</p:column>
+									<p:column>
+										<p:spacer width="2" />
+									</p:column>
+									<p:column>
+										<p:inputText id="emailUser" label="emailUser" />
+									</p:column>
+									<p:column>
+										<p:spacer width="30" />
+									</p:column>
+									<p:column>
+										<p:outputLabel for="passwordUser">Password:</p:outputLabel>
+									</p:column>
+									<p:column>
+										<p:spacer width="2" />
+									</p:column>
+									<p:column>
+										<p:inputText label="passwordUser" id="passwordUser"
+											type="password" />
+									</p:column>
+									<p:column>
+										<p:spacer width="40" />
+									</p:column>
+									<p:column>
+										<p:commandButton styleClass="signButton" value="Log In"
+											oncomplete="PF('loginPanel').show()"></p:commandButton>
+									</p:column>
+									<p:column>
+										<p:spacer width="5" />
+									</p:column>
+									<p:column>
+										<p:commandButton styleClass="signButton" value="Sign Up" oncomplete="PF('registerPanel').show()"></p:commandButton>
+									</p:column>
+								</h:panelGrid></td>
 						</tr>
 					</table>
 				</div>
