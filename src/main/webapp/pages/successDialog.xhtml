@@ -9,7 +9,7 @@
 	template="template/ui.xhtml">
 	<ui:define name="body">
 		<p:dialog widgetVar="successPanel" id="successPanel" modal="true"
-			position="center center" draggable="false" closable="false"
+			position="center center" draggable="false" closable="false" header="Done"
 			closeOnEscape="true" styleClass="registerDialog" resizable="false">
 			<h:form>
 				<div class="successDialogDiv">
@@ -21,7 +21,7 @@
 							<p:outputLabel value="#{successMessage}"></p:outputLabel>
 						</p:column>
 					</p:panelGrid>
-					<br /> <br />
+					<br />
 					<div align="center">
 						<p:commandButton styleClass="signButton"
 							oncomplete="PF('#{hideDialog}').hide();PF('successPanel').hide();"

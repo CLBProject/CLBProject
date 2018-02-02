@@ -9,15 +9,15 @@
 	template="template/ui.xhtml">
 	<ui:define name="body">
 		<div class="homeMainDivClass">
-			<h:form>
-				<div>
+			<h:form id="bannerForm">
 					<table width="100%" class="homeMainDivBannerClass">
 						<tr>
 							<td width="1%"></td>
 							<td align="left" valign="middle"><p:outputLabel
 									styleClass="logoClass">LEnergy Logo</p:outputLabel></td>
 							<td align="right" valign="top">
-								<h:panelGrid columns="11" styleClass="homeMainDivBannerClass">
+								<h:panelGrid columns="11"
+									styleClass="homeMainDivBannerClass">
 									<p:column>
 										<p:outputLabel for="emailUser">Username:</p:outputLabel>
 									</p:column>
@@ -45,20 +45,19 @@
 									</p:column>
 									<p:column>
 										<p:commandButton styleClass="signButton" value="Log In"
-											oncomplete="PF('loginPanel').show()"></p:commandButton>
+											action="#{clbHomeBean.loginUser}" ajax="false" type="submit"></p:commandButton>
 									</p:column>
 									<p:column>
 										<p:spacer width="5" />
 									</p:column>
 									<p:column>
-										<p:commandButton styleClass="signButton" value="Sign Up" oncomplete="PF('registerPanel').show()"></p:commandButton>
+										<p:commandButton styleClass="signButton" value="Sign Up" ajax="true" oncomplete="PF('registerPanel').show()"></p:commandButton>
 									</p:column>
 								</h:panelGrid></td>
 						</tr>
 					</table>
-				</div>
 			</h:form>
-			<div></div>
 		</div>
+		<ui:include src="register.xhtml" />
 	</ui:define>
 </ui:composition>

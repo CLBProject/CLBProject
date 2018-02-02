@@ -34,8 +34,8 @@ public class ClbHomeBean implements Serializable{
         
     }
     
-    public void loginUser() {
-        
+    public String loginUser() {
+        return "clb.xhtml";
     }
     
     public MapModel getMapModel() {
