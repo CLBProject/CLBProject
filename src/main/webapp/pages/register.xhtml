@@ -18,7 +18,7 @@
 						<p:outputLabel>Name* :</p:outputLabel>
 					</p:column>
 					<p:column>
-						<p:inputText validatorMessage="Name too short!" requiredMessage="Name is required!" id="nameUser" value="#{clbHomeBean.userNameReg}" required="true" label="nameUser">
+						<p:inputText validatorMessage="Name too short!" requiredMessage="Name is required!" id="nameUser" value="#{clbHomeBean.user.name}" required="true" label="nameUser">
 							<f:validateLength minimum="3"></f:validateLength>
 						</p:inputText>
 					</p:column>
@@ -29,7 +29,8 @@
 						<p:outputLabel>Email* :</p:outputLabel>
 					</p:column>
 					<p:column>
-						<p:inputText requiredMessage="Email is required!" validatorMessage="Email is not valid!" required="true" label="emailUser" id="emailUser">
+						<p:inputText requiredMessage="Email is required!" validatorMessage="Email is not valid!" value="#{clbHomeBean.user.username}"
+							required="true" label="emailUser" id="emailUser">
 							<f:validateRegex pattern="([^.@]+)(\.[^.@]+)*@([^.@]+\.)+([^.@]+)" />
 						</p:inputText>
 					</p:column>
@@ -40,7 +41,7 @@
 						<p:outputLabel>Password* :</p:outputLabel>
 					</p:column>
 					<p:column>
-						<p:inputText requiredMessage="Password is required!" label="passwordUser" id="passwordUser" required="true" type="password" validatorMessage="Al least 6 characters are needed!">
+						<p:inputText requiredMessage="Password is required!" value="#{clbHomeBean.user.password}" label="passwordUser" id="passwordUser" required="true" type="password" validatorMessage="Al least 6 characters are needed!">
 							<f:validateLength minimum="6"></f:validateLength>
 						</p:inputText>
 					</p:column>
@@ -51,7 +52,7 @@
 						<p:outputLabel>Address :</p:outputLabel>
 					</p:column>
 					<p:column>
-						<p:inputTextarea rows="5"></p:inputTextarea>
+						<p:inputTextarea rows="5" value="#{clbHomeBean.user.address}"></p:inputTextarea>
 					</p:column>
 					<p:column>
 					</p:column>
@@ -60,7 +61,7 @@
 				<div align="center">
 					<p:commandButton action="#{clbHomeBean.registerUser}" validateClient="true"
 						styleClass="signButton" value="Register" ajax="true" oncomplete="if (!args.validationFailed){ PF('successPanel').show() }"
-						update="@form"></p:commandButton>
+						update="registerForm"></p:commandButton>
 				</div>
 			</h:form>
 		</p:dialog>

@@ -9,6 +9,8 @@ import javax.faces.bean.ViewScoped;
 import org.primefaces.model.map.DefaultMapModel;
 import org.primefaces.model.map.MapModel;
 
+import clb.beans.pojos.UsersystemPojo;
+
 @ViewScoped
 @ManagedBean
 public class ClbHomeBean implements Serializable{
@@ -16,14 +18,8 @@ public class ClbHomeBean implements Serializable{
     private static final long serialVersionUID = 1L;
     
     private MapModel mapModel;
-
-    private String title;
-
-    private double lat;
-
-    private double lng;
     
-    private String userNameReg;
+    private UsersystemPojo user;
 
     @PostConstruct
     public void init() {
@@ -31,7 +27,7 @@ public class ClbHomeBean implements Serializable{
     }
     
     public void registerUser() {
-        
+        System.out.println( user.getName() );
     }
     
     public String loginUser() {
@@ -46,36 +42,12 @@ public class ClbHomeBean implements Serializable{
         this.mapModel = mapModel;
     }
 
-    public String getTitle() {
-        return title;
+    public UsersystemPojo getUser() {
+        return user;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public double getLat() {
-        return lat;
-    }
-
-    public void setLat(double lat) {
-        this.lat = lat;
-    }
-
-    public double getLng() {
-        return lng;
-    }
-
-    public void setLng(double lng) {
-        this.lng = lng;
-    }
-
-    public String getUserNameReg() {
-        return userNameReg;
-    }
-
-    public void setUserNameReg( String userNameReg ) {
-        this.userNameReg = userNameReg;
+    public void setUser( UsersystemPojo user ) {
+        this.user = user;
     }
     
     
