@@ -1,4 +1,4 @@
-package clb.beans;
+package clb.deprecated;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -16,11 +16,6 @@ import javax.faces.model.SelectItem;
 
 import org.primefaces.event.SelectEvent;
 
-import clb.beans.enums.ScaleGraphic;
-import clb.beans.pojos.GraphicBarPojo;
-import clb.beans.pojos.GraphicLinearPojo;
-import clb.business.AnalyzerDataService;
-import clb.business.constants.Month;
 
 @ViewScoped
 @ManagedBean

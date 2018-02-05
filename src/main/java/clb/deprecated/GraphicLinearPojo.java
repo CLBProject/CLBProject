@@ -1,4 +1,4 @@
-package clb.beans.pojos;
+package clb.deprecated;
 
 import java.util.Collection;
 import java.util.List;
@@ -10,7 +10,6 @@ import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
 
 import clb.business.objects.AnalyzerRegistryObject;
-import clb.business.objects.MonthAverageObject;
 
 public class GraphicLinearPojo {
 
@@ -86,8 +85,8 @@ public class GraphicLinearPojo {
 
         Axis yAxis = lineModel.getAxis(AxisType.Y);
         yAxis.setLabel("Power");
-        yAxis.setMin(new Double(minValue - minValue*0.05).intValue());
-        yAxis.setMax(new Double(maxValue + maxValue*0.05).intValue());
+        //yAxis.setMin(new Double(minValue - minValue*0.05).intValue());
+        //yAxis.setMax(new Double(maxValue + maxValue*0.05).intValue());
 
     }
 
@@ -134,8 +133,8 @@ public class GraphicLinearPojo {
 
         Axis yAxis = lineModel.getAxis(AxisType.Y);
         yAxis.setLabel("Power");
-        yAxis.setMin(new Double(minValue - minValue*0.05).intValue());
-        yAxis.setMax(new Double(maxValue + maxValue*0.05).intValue());
+        //yAxis.setMin(new Double(minValue - minValue*0.05).intValue());
+        //yAxis.setMax(new Double(maxValue + maxValue*0.05).intValue());
 
     }
 
@@ -189,8 +188,8 @@ public class GraphicLinearPojo {
         Axis yAxis = lineModel.getAxis(AxisType.Y);
         yAxis.setLabel("Power");
 
-        yAxis.setMin(new Double(minValue - minValue*0.05).intValue());;
-        yAxis.setMax(new Double(maxValue + maxValue*0.05).intValue());
+       // yAxis.setMin(new Double(minValue - minValue*0.05).intValue());;
+      //  yAxis.setMax(new Double(maxValue + maxValue*0.05).intValue());
 
     }
 

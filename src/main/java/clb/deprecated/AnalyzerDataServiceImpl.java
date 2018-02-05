@@ -1,4 +1,4 @@
-package clb.business;
+package clb.deprecated;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,7 +32,6 @@ import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryAverageObject;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.BuildingObject;
-import clb.business.objects.ClbObject;
 import clb.business.objects.DataLoggerObject;
 import clb.business.objects.UsersystemObject;
 import clb.database.ClbDao;
@@ -95,12 +94,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
         clbDao.insertUsers(users);
     }
-    
-	@Override
-	public void persistObject(ClbObject clbObject) {
-		// TODO Auto-generated method stub
-		
-	}
 
     private boolean isAverageDate(Date currentDate) {
 
@@ -315,6 +308,10 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
         });
     }
 
+    public void destroy(){
+
+    }
+
     public Resource getDataAnalyzerXls() {
         return dataAnalyzerXls;
     }
@@ -323,12 +320,36 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
         this.dataAnalyzerXls = dataAnalyzerXls;
     }
 
+    public List<AnalyzerRegistryObject> getDataByDay(Date day) {
+        return new ArrayList<AnalyzerRegistryObject>();
+    }
+
+    @Override
+    public List<AnalyzerRegistryObject> getDataByDayAndHours( Date day, String hour ) throws IOException {
+        return new ArrayList<AnalyzerRegistryObject>();
+    }
+
+    @Override
+    public List<MonthAverageObject> getDataByYear(Integer year) {
+        return new ArrayList<MonthAverageObject>();
+    }
+
+    @Override
+    public List<MonthAverageObject> getDataByYearAndMonths( Integer yearSelected, Month monthSelected ) {
+        return new ArrayList<MonthAverageObject>();
+    }
     public TaskExecutor getTaskExecutor() {
         return taskExecutor;
     }
 
     public void setTaskExecutor(TaskExecutor taskExecutor) {
         this.taskExecutor = taskExecutor;
+    }
+
+    @Override
+    public List<Integer> getRegistryYears() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     public ClbDao getClbDao() {

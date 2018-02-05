@@ -1,6 +1,4 @@
-package clb.business.objects;
-
-import clb.business.constants.Month;
+package clb.deprecated;
 
 public class MonthAverageObject
 {

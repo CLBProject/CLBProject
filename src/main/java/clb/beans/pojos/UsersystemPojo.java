@@ -1,5 +1,7 @@
 package clb.beans.pojos;
 
+import clb.business.objects.UsersystemObject;
+
 public class UsersystemPojo
 {
     private String address;
@@ -7,6 +9,9 @@ public class UsersystemPojo
     private String password;
     private String username;
     
+    public UsersystemPojo() {
+    	
+    }
     
     public String getAddress() {
         return address;
@@ -33,5 +38,14 @@ public class UsersystemPojo
         this.username = username;
     }
     
-    
+    public UsersystemObject toObject() {
+    	UsersystemObject userObj = new UsersystemObject();
+    	userObj.setAddress(this.address);
+    	userObj.setName(this.name);
+    	userObj.setUsername(this.username);
+    	userObj.setPassword(this.password);
+    	userObj.setUserid(this.username);
+    	
+    	return userObj;
+    }
 }

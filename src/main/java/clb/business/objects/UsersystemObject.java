@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import clb.database.entities.UsersystemEntity;
 
-public class UsersystemObject
+public class UsersystemObject implements ClbObject
 {
     private String userid;
     private String address;

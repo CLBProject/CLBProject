@@ -1,4 +1,4 @@
-package clb.beans.pojos;
+package clb.deprecated;
 
 import java.util.List;
 
@@ -6,8 +6,6 @@ import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.ChartSeries;
-
-import clb.business.objects.MonthAverageObject;
 
 public class GraphicBarPojo {
 
@@ -72,7 +70,7 @@ public class GraphicBarPojo {
         yAxis.setLabel("Power");
 
         yAxis.setMin(0);
-        yAxis.setMax(new Double(maxValue + maxValue*0.05).intValue());
+        //yAxis.setMax(new Double(maxValue + maxValue*0.05).intValue());
 
     }
 

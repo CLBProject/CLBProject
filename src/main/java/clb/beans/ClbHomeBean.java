@@ -4,12 +4,14 @@ import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
 import org.primefaces.model.map.DefaultMapModel;
 import org.primefaces.model.map.MapModel;
 
 import clb.beans.pojos.UsersystemPojo;
+import clb.business.AnalyzerDataService;
 
 @ViewScoped
 @ManagedBean
@@ -20,14 +22,18 @@ public class ClbHomeBean implements Serializable{
     private MapModel mapModel;
     
     private UsersystemPojo user;
+    
+	@ManagedProperty("#{analyzerDataService}")
+	private AnalyzerDataService analyzerDataService;
 
     @PostConstruct
     public void init() {
+    	user = new UsersystemPojo();
         mapModel = new DefaultMapModel();
     }
     
     public void registerUser() {
-        System.out.println( user.getName() );
+    	analyzerDataService.persistObject(user.toObject());
     }
     
     public String loginUser() {
@@ -49,6 +55,14 @@ public class ClbHomeBean implements Serializable{
     public void setUser( UsersystemPojo user ) {
         this.user = user;
     }
+
+	public AnalyzerDataService getAnalyzerDataService() {
+		return analyzerDataService;
+	}
+
+	public void setAnalyzerDataService(AnalyzerDataService analyzerDataService) {
+		this.analyzerDataService = analyzerDataService;
+	}
     
     
 }

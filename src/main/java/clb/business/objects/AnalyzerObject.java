@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import clb.database.entities.AnalyzerEntity;
 
-public class AnalyzerObject
+public class AnalyzerObject implements ClbObject
 {
     private String id;
 
