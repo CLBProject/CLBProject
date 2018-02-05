@@ -1,14 +1,20 @@
 package clb.business.objects;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import clb.database.entities.UsersystemEntity;
 
-public class UsersystemObject implements ClbObject
+public class UsersystemObject implements ClbObject, Serializable
 {
-    private String userid;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private String userid;
     private String address;
     private String name;
     private String password;

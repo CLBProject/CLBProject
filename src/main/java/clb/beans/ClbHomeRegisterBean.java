@@ -26,7 +26,7 @@ public class ClbHomeRegisterBean implements Serializable{
     }   
 
     public void registerUser() {
-        System.out.println( user.getName() );
+        analyzerDataService.persistObject(user.toObject());
     }
     public UsersystemPojo getUser() {
         return user;

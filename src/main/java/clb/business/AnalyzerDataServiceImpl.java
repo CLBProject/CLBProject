@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryAverageObject;
@@ -98,10 +99,20 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	}
 
 	@Override
+	@Transactional
 	public void persistObject(ClbObject clbObject) {
-		// TODO Auto-generated method stub
-
+		if(clbObject instanceof UsersystemObject)
+			clbDao.insertUsersystem((UsersystemObject)clbObject);
 	}
+
+	@Override
+	@Transactional
+	public UsersystemObject userCanLogin( String userName, String password ) {
+		UsersystemEntity userEntity = clbDao.userCanLogin(userName, password);
+
+		return userEntity != null ? new UsersystemObject(userEntity) : null;
+	}
+
 
 	private boolean isAverageDate(Date currentDate) {
 
@@ -290,6 +301,10 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		}
 
 	}
+	
+    public void destroy(){
+
+    }
 
 
 	public void init(){
@@ -316,12 +331,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		});
 	}
 
-	@Override
-	public UsersystemObject userCanLogin( String userName, String password ) {
-		UsersystemEntity userEntity = clbDao.userCanLogin(userName, password);
-
-		return userEntity != null ? new UsersystemObject(userEntity) : null;
-	}
 
 	public Resource getDataAnalyzerXls() {
 		return dataAnalyzerXls;

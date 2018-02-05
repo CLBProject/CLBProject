@@ -37,8 +37,7 @@ public class ClbHomeLoginBean implements Serializable{
         UsersystemObject userLoggedIn = analyzerDataService.userCanLogin( userName, password );
         RequestContext context = RequestContext.getCurrentInstance();  
         
-        if (userLoggedIn == null) {
-        //if (userLoggedIn != null) {
+        if (userLoggedIn != null) {
             // get Http Session and store username
             HttpSession session = (HttpSession)
                     FacesContext.
@@ -58,13 +57,8 @@ public class ClbHomeLoginBean implements Serializable{
     }
     
     public String logout() {
-        HttpSession session = (HttpSession)
-                FacesContext.
-                getCurrentInstance().
-                getExternalContext().
-                getSession(false);
-        session.invalidate();
-        return "index";
+    	FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        return "index.xhtml?faces-redirect=true";
      }
 
     public AnalyzerDataService getAnalyzerDataService() {
