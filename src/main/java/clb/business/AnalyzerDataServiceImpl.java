@@ -37,11 +37,12 @@ import clb.business.objects.DataLoggerObject;
 import clb.business.objects.MonthAverageObject;
 import clb.business.objects.UsersystemObject;
 import clb.database.ClbDao;
+import clb.database.entities.UsersystemEntity;
 
 @Service
 public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializable{
 
-    /**
+    /** 
      * 
      */
     private static final long serialVersionUID = 1L;
@@ -360,6 +361,13 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
     public void setClbDao(ClbDao clbDao) {
         this.clbDao = clbDao;
+    }
+
+    @Override
+    public UsersystemObject userCanLogin( String userName, String password ) {
+        UsersystemEntity userEntity = clbDao.userCanLogin(userName, password);
+        
+        return userEntity != null ? new UsersystemObject(userEntity) : null;
     }
 
 

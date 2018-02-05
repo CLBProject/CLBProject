@@ -7,6 +7,7 @@ import java.util.List;
 import clb.business.constants.Month;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.MonthAverageObject;
+import clb.business.objects.UsersystemObject;
 
 public interface AnalyzerDataService {
     
@@ -21,4 +22,6 @@ public interface AnalyzerDataService {
 	List<MonthAverageObject> getDataByYear(Integer year);
 
     List<MonthAverageObject> getDataByYearAndMonths( Integer yearSelected, Month monthSelected );
+    
+    public UsersystemObject userCanLogin(String userName, String password);
 }

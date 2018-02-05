@@ -30,6 +30,7 @@ body {
 	padding-top: 10px;
 	padding-left: 20px;
 	padding-right: 20px;
+	height:100vh;
 }
 
 .mainDivClassHeader {
@@ -150,4 +151,5 @@ body {
 	border-collapse: separate;
 	background-color: #CED8F6 !important;
 	font-size: 12px !important;
+	padding: 0 !important;
 }

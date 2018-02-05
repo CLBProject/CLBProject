@@ -94,6 +94,12 @@ public class ClbDaoImpl implements ClbDao{
 		userSystemEntity.setUserid(userSystemObject.getUserid());
 	}
 	
+
+    @Override
+    public UsersystemEntity userCanLogin( String userName, String password ) {
+       return userSystemMongoRepository.findUserbyusernameAndPassword( userName, password );
+    }
+	
 	@Override
 	public void insertUsers(List<UsersystemObject> userSystemObjectList) {
 		userSystemObjectList.stream().forEach(userSObj -> userSystemMongoRepository.insert(userSObj.toEntity()));
@@ -155,5 +161,6 @@ public class ClbDaoImpl implements ClbDao{
 	public void setAverageRegistryMongoRespository(AnalyzerRegistryMongoRepository averageRegistryMongoRespository) {
 		this.averageRegistryMongoRespository = averageRegistryMongoRespository;
 	}
+
 	
 }

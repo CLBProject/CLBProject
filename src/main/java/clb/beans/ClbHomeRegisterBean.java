@@ -4,44 +4,30 @@ import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
-import org.primefaces.model.map.DefaultMapModel;
-import org.primefaces.model.map.MapModel;
-
 import clb.beans.pojos.UsersystemPojo;
+import clb.business.AnalyzerDataService;
 
 @ViewScoped
 @ManagedBean
-public class ClbHomeBean implements Serializable{
+public class ClbHomeRegisterBean implements Serializable{
 
     private static final long serialVersionUID = 1L;
-    
-    private MapModel mapModel;
-    
     private UsersystemPojo user;
+
+    @ManagedProperty("#{analyzerDataService}")
+    private AnalyzerDataService analyzerDataService;
 
     @PostConstruct
     public void init() {
-        mapModel = new DefaultMapModel();
-    }
-    
+        user = new UsersystemPojo();
+    }   
+
     public void registerUser() {
         System.out.println( user.getName() );
     }
-    
-    public String loginUser() {
-        return "clb.xhtml";
-    }
-    
-    public MapModel getMapModel() {
-        return mapModel;
-    }
-
-    public void setMapModel( MapModel mapModel ) {
-        this.mapModel = mapModel;
-    }
-
     public UsersystemPojo getUser() {
         return user;
     }
@@ -49,6 +35,13 @@ public class ClbHomeBean implements Serializable{
     public void setUser( UsersystemPojo user ) {
         this.user = user;
     }
-    
-    
+
+    public AnalyzerDataService getAnalyzerDataService() {
+        return analyzerDataService;
+    }
+
+    public void setAnalyzerDataService( AnalyzerDataService analyzerDataService ) {
+        this.analyzerDataService = analyzerDataService;
+    }
+
 }
