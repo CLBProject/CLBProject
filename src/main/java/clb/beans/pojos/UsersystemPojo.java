@@ -1,12 +1,21 @@
 package clb.beans.pojos;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 import clb.business.objects.UsersystemObject;
 
 public class UsersystemPojo
 {
     private String address;
+    
+    @NotNull(message="Name can't be empty")
     private String name;
+    
+    @NotNull(message="Password can't be empty")
     private String password;
+    
+    @Pattern(regexp = "[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z0-9]+", message = "Email format is invalid.")
     private String username;
     
     public UsersystemPojo() {
