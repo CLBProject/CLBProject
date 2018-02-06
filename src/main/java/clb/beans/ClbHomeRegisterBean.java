@@ -7,6 +7,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+
 import clb.beans.pojos.UsersystemPojo;
 import clb.business.AnalyzerDataService;
 
@@ -19,6 +22,9 @@ public class ClbHomeRegisterBean implements Serializable{
 
     @ManagedProperty("#{analyzerDataService}")
     private AnalyzerDataService analyzerDataService;
+    
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     @PostConstruct
     public void init() {
@@ -27,6 +33,7 @@ public class ClbHomeRegisterBean implements Serializable{
 
     public void registerUser() {
         analyzerDataService.persistObject(user.toObject());
+        //eventPublisher.publishEvent(new OnRegistrationCompleteEvent (user, request.getLocale(), appUrl));
     }
     public UsersystemPojo getUser() {
         return user;

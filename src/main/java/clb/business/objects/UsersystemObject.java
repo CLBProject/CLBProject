@@ -2,6 +2,7 @@ package clb.business.objects;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +20,9 @@ public class UsersystemObject implements ClbObject, Serializable
     private String name;
     private String password;
     private String username;
+    private String token;
+    private Date expiryDate;
+    private boolean enabled;
 
     private List<BuildingObject> buildings;
     
@@ -31,6 +35,9 @@ public class UsersystemObject implements ClbObject, Serializable
         this.address = usersystem.getAddress();
         this.name = usersystem.getName();
         this.password = usersystem.getPassword();
+        this.token = usersystem.getToken();
+        this.expiryDate = usersystem.getExpiryDate();
+        this.enabled = usersystem.isEnabled();
         this.buildings = usersystem.getBuildings() != null ? 
         		usersystem.getBuildings().stream().map(BuildingObject::new).collect(Collectors.toList()) : null;
     }
@@ -42,6 +49,9 @@ public class UsersystemObject implements ClbObject, Serializable
         userSystemEntity.setName( this.name );
         userSystemEntity.setPassword( this.password );
         userSystemEntity.setUsername( this.username );
+        userSystemEntity.setToken( this.token );
+        userSystemEntity.setExpiryDate( this.expiryDate );
+        userSystemEntity.setEnabled( this.enabled );
         userSystemEntity.setBuildings( this.buildings != null ?
         		this.buildings.stream().map(BuildingObject::toEntity).collect(Collectors.toList()) : null);
         
@@ -103,6 +113,30 @@ public class UsersystemObject implements ClbObject, Serializable
 	public void setBuildings(List<BuildingObject> buildings) {
 		this.buildings = buildings;
 	}
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken( String token ) {
+        this.token = token;
+    }
+
+    public Date getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate( Date expiryDate ) {
+        this.expiryDate = expiryDate;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled( boolean enabled ) {
+        this.enabled = enabled;
+    }
     
     
 }
