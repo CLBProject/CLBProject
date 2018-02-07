@@ -24,7 +24,7 @@ public class GraphicBean implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@ManagedProperty("#{analyzerDataService}")
-	private AnalyzerDataService analyzerDataService;
+	private AnalyzerDataService2 analyzerDataService;
 
 	private GraphicLinearPojo graphicDayHoursPojo;
 	private GraphicLinearPojo graphicDayPojo;
@@ -247,12 +247,12 @@ public class GraphicBean implements Serializable{
 		analyzerDataService.persistScriptBigData();
 	}
 
-	public AnalyzerDataService getAnalyzerDataService() {
+	public AnalyzerDataService2 getAnalyzerDataService() {
 		return analyzerDataService;
 	}
 
 
-	public void setAnalyzerDataService(AnalyzerDataService analyzerDataService) {
+	public void setAnalyzerDataService(AnalyzerDataService2 analyzerDataService) {
 		this.analyzerDataService = analyzerDataService;
 	}
 

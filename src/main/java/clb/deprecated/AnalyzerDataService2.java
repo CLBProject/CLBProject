@@ -6,7 +6,7 @@ import java.util.List;
 
 import clb.business.objects.AnalyzerRegistryObject;
 
-public interface AnalyzerDataService {
+public interface AnalyzerDataService2 {
 	
     public void persistScriptBigData() throws IOException;
 	

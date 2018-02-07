@@ -8,6 +8,8 @@ body {
 	padding-left:10px;
 }
 
+
+
 .mainDiv {
 	background-color: #F2F2F2;
 	padding-top: 15px !important;
@@ -18,12 +20,12 @@ body {
 
 .mainTable {
 	background-color: white !important;
-	font-size: 12px;
-	width: 100%;
+	font-size: 22px;
 }
 
 .mainTable.ui-panelgrid {
 	background-color: white !important;
+	width: 22% !important;
 }
 
 .defaultFont {

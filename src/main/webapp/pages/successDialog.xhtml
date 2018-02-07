@@ -23,9 +23,7 @@
 					</p:panelGrid>
 					<br />
 					<div align="center">
-						<p:commandButton styleClass="signButton"
-							oncomplete="PF('#{hideDialog}').hide();PF('successPanel').hide();"
-							value="OK"></p:commandButton>
+						<p:commandButton styleClass="signButton" action="#{redirectBean.redirect(path)}" value="OK"></p:commandButton>
 					</div>
 				</div>
 			</h:form>

@@ -12,19 +12,21 @@ import clb.database.entities.UsersystemEntity;
 
 public interface ClbDao{
 
-	void insertAnalyzer(AnalyzerObject analyzerObject);
+	void saveAnalyzer(AnalyzerObject analyzerObject);
 	
-	void insertAnalyzerRegistry(AnalyzerRegistryObject analyzerRegistryObject);
+	void saveAnalyzerRegistry(AnalyzerRegistryObject analyzerRegistryObject);
 	
-	void insertAnalyzerRegistryAverage(AnalyzerRegistryAverageObject analyzerRegistryAverageObject);
+	void saveAnalyzerRegistryAverage(AnalyzerRegistryAverageObject analyzerRegistryAverageObject);
 	
-	void insertDataLogger(DataLoggerObject dataLoggerObject);
+	void saveDataLogger(DataLoggerObject dataLoggerObject);
 	
-	void insertBuilding(BuildingObject buildingObject);
+	void saveBuilding(BuildingObject buildingObject);
 	
-	void insertUsersystem(UsersystemObject userSystemObject);
+	void saveUsersystem(UsersystemObject userSystemObject);
 	
-	void insertUsers(List<UsersystemObject> users);
+	void saveUsers(List<UsersystemObject> users);
 
     UsersystemEntity userCanLogin( String username, String password );
+
+    UsersystemEntity findUserByToken( String token );
 }

@@ -53,56 +53,60 @@ public class ClbDaoImpl implements ClbDao{
 	}
 	
 	@Override
-	public void insertAnalyzer(AnalyzerObject analyzerObject) {
+	public void saveAnalyzer(AnalyzerObject analyzerObject) {
 	    AnalyzerEntity analyzerEntity = analyzerObject.toEntity(); 
-		analyzerMongoRepository.insert(analyzerEntity);
+		analyzerMongoRepository.save(analyzerEntity);
 		analyzerObject.setId(analyzerEntity.getId());
 	}
 	
 	@Override
-	public void insertAnalyzerRegistry(AnalyzerRegistryObject analyzerRegistryObject) {
+	public void saveAnalyzerRegistry(AnalyzerRegistryObject analyzerRegistryObject) {
 	    AnalyzerRegistryEntity analyzerRegistryEntity = analyzerRegistryObject.toEntity();
-		analyzerRegistryMongoRepository.insert(analyzerRegistryEntity);
+		analyzerRegistryMongoRepository.save(analyzerRegistryEntity);
 		analyzerRegistryObject.setId(analyzerRegistryEntity.getId());
 	}
 	
 	@Override
-	public void insertAnalyzerRegistryAverage(AnalyzerRegistryAverageObject analyzerRegistryAverageObject) {
+	public void saveAnalyzerRegistryAverage(AnalyzerRegistryAverageObject analyzerRegistryAverageObject) {
 	    AnalyzerRegistryAverageEntity analyzerRegistryAverageEntity = analyzerRegistryAverageObject.toEntity();
-		analyzerRegistryAverageMongoRepository.insert(analyzerRegistryAverageEntity);
+		analyzerRegistryAverageMongoRepository.save(analyzerRegistryAverageEntity);
 		analyzerRegistryAverageObject.setId(analyzerRegistryAverageEntity.getId());
 	}
 	
 	@Override
-	public void insertDataLogger(DataLoggerObject dataLoggerObject) {
+	public void saveDataLogger(DataLoggerObject dataLoggerObject) {
 	    DataLoggerEntity dataLoggerEntity = dataLoggerObject.toEntity(); 
-		dataLoggerMongoRepository.insert(dataLoggerEntity);
+		dataLoggerMongoRepository.save(dataLoggerEntity);
 		dataLoggerObject.setDataloggerid(dataLoggerEntity.getDataloggerid());
 	}
 	
 	@Override
-	public void insertBuilding(BuildingObject buildingObject) {
+	public void saveBuilding(BuildingObject buildingObject) {
 	    BuildingEntity buildingEntity = buildingObject.toEntity();
-		buildingsMongoRepository.insert(buildingEntity);
+		buildingsMongoRepository.save(buildingEntity);
 		buildingObject.setBuildingid(buildingEntity.getBuildingid());
 	}
 	
 	@Override
-	public void insertUsersystem(UsersystemObject userSystemObject) {
+	public void saveUsersystem(UsersystemObject userSystemObject) {
 	    UsersystemEntity userSystemEntity = userSystemObject.toEntity();
-		userSystemMongoRepository.insert(userSystemEntity);
+		userSystemMongoRepository.save(userSystemEntity);
 		userSystemEntity.setUserid(userSystemObject.getUserid());
 	}
-	
 
     @Override
     public UsersystemEntity userCanLogin( String userName, String password ) {
-       return userSystemMongoRepository.findUserbyusernameAndPassword( userName, password );
+       return userSystemMongoRepository.findUserbyUsernameAndPassword( userName, password );
+    }
+    
+    @Override
+    public UsersystemEntity findUserByToken( String token) {
+       return userSystemMongoRepository.findUserbyToken( token );
     }
 	
 	@Override
-	public void insertUsers(List<UsersystemObject> userSystemObjectList) {
-		userSystemObjectList.stream().forEach(userSObj -> userSystemMongoRepository.insert(userSObj.toEntity()));
+	public void saveUsers(List<UsersystemObject> userSystemObjectList) {
+		userSystemObjectList.stream().forEach(userSObj -> userSystemMongoRepository.save(userSObj.toEntity()));
 	}
 
 	public AnalyzerMongoRepository getAnalyzerMongoRepository() {

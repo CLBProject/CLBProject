@@ -37,7 +37,7 @@ import clb.business.objects.UsersystemObject;
 import clb.database.ClbDao;
 
 @Service
-public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializable{
+public class AnalyzerDataServiceImpl2 implements AnalyzerDataService2, Serializable{
 
     /**
      * 
@@ -92,7 +92,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
             usersIndex = usersIndex +1 == users.size() ? 0 : usersIndex+1;
         }
 
-        clbDao.insertUsers(users);
+        clbDao.saveUsers(users);
     }
 
     private boolean isAverageDate(Date currentDate) {
@@ -183,18 +183,18 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                 analyzerRegistryObject.setKvarl3(row.getCell(28).getNumericCellValue());
                 analyzerRegistryObject.setKvarsys(row.getCell(29).getNumericCellValue());
 
-                clbDao.insertAnalyzerRegistry(analyzerRegistryObject);
+                clbDao.saveAnalyzerRegistry(analyzerRegistryObject);
 
                 ana.addAnalyzerRegistry(analyzerRegistryObject);
             }
 
             persistDummyAnalyzerRegistries( ana, dataToExclueOnDummy);
 
-            clbDao.insertAnalyzer(ana);
-            clbDao.insertDataLogger(dl);
+            clbDao.saveAnalyzer(ana);
+            clbDao.saveDataLogger(dl);
         }
 
-        clbDao.insertBuilding(building);
+        clbDao.saveBuilding(building);
     }
 
     private void persistDummyAnalyzerRegistries(AnalyzerObject analyzer, Set<Long> dataToExclude){
@@ -251,7 +251,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                                 al2DailyAverage +=anaRegObj.getAl2();
                                 al3DailyAverage +=anaRegObj.getAl3();
 
-                                clbDao.insertAnalyzerRegistry(anaRegObj);
+                                clbDao.saveAnalyzerRegistry(anaRegObj);
                                 analyzer.addAnalyzerRegistry(anaRegObj);
                             }
 
@@ -271,7 +271,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                     anaRegAverageObj.setAl2Average(al2DailyAverage/ (24*60));
                     anaRegAverageObj.setAl3Average(al3DailyAverage/ (24*60));
 
-                    clbDao.insertAnalyzerRegistryAverage(anaRegAverageObj);
+                    clbDao.saveAnalyzerRegistryAverage(anaRegAverageObj);
                     analyzer.addAnalyzerRegistryAverage(anaRegAverageObj);
 
                     calendar.add(Calendar.DATE, 1);
