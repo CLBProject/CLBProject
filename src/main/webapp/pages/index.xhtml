@@ -47,17 +47,17 @@
 									<p:commandButton styleClass="signButton" value="Sign In"
 										action="#{clbHomeLoginBean.loginUser}" ajax="true"
 										update="@form"
-										oncomplete="if (args.cantLogin === true ){ PF('unSuccessPanel').show()}"></p:commandButton>
+										oncomplete="if (args.cantLogin === true ){ PF('unSuccessPaneldoesnexistUnsuccess').show()}"></p:commandButton>
 								</p:column>
 							</h:panelGrid></td>
 					</tr>
 				</table>
 			</h:form>
-			<p:spacer height="100"/>
+			<p:spacer height="100" />
 			<div align="center">
 				<h:form id="registerForm">
 					<p:panel header="Sign Up" styleClass="signUpPanel">
-						<p:spacer height="10"/>
+						<p:spacer height="10" />
 						<p:panelGrid columns="3" styleClass="mainTable">
 							<p:column>
 								<p:outputLabel>Name</p:outputLabel>
@@ -113,27 +113,43 @@
 							<p:column>
 							</p:column>
 						</p:panelGrid>
-						<p:spacer height="25" />
+						<p:spacer height="40" />
 						<div align="center">
 							<p:commandButton
 								action="#{clbHomeRegisterBean.registerUserAccount}"
-								validateClient="true" styleClass="signButtonExtended" value="Register"
-								ajax="true"
-								oncomplete="if (!args.validationFailed){ PF('successPanel').show() }"
+								validateClient="true" styleClass="signButtonExtended"
+								value="Register" ajax="true"
+								oncomplete="if (!args.validationFailed){ 
+												if (args.userExists === true ){ 
+													PF('unSuccessPanelalexistsUnsuccess').show();
+												}
+												else if (args.unexpectedError === true ){ 
+													PF('unSuccessPanelunexpectedUnsuccess').show();
+												}
+												else PF('successPanel').show(); 
+											}"
 								update="registerForm"></p:commandButton>
 						</div>
 					</p:panel>
 				</h:form>
 			</div>
 		</div>
-		<ui:include src="successDialog.xhtml">
+		<ui:include src="./popups/successDialog.xhtml">
 			<ui:param name="successMessage"
 				value="User was created successfully! Check your Email to Confirm Registration, if you dont receive an email in 24h please contact the staff." />
-			<ui:param name="hideDialog" value="registerPanel" />
+			<ui:param name="path" value="index.xhtml?faces-redirect=true" />
 		</ui:include>
-		<ui:include src="unSuccessDialog.xhtml">
+		<ui:include src="./popups/unSuccessDialog.xhtml">
+			<ui:param name="idUnsuccess" value="doesnexistUnsuccess" />
 			<ui:param name="unSuccessMessage" value="User does not exist!" />
-			<ui:param name="hideDialog" value="registerPanel" />
+		</ui:include>
+		<ui:include src="./popups/unSuccessDialog.xhtml">
+			<ui:param name="idUnsuccess" value="alexistsUnsuccess" />
+			<ui:param name="unSuccessMessage" value="User can't be registered because already exists" />
+		</ui:include>
+		<ui:include src="./popups/unSuccessDialog.xhtml">
+			<ui:param name="idUnsuccess" value="unexpectedUnsuccess" />
+			<ui:param name="unSuccessMessage" value="An unexpected error ocurred while registring the user" />
 		</ui:include>
 	</ui:define>
 </ui:composition>

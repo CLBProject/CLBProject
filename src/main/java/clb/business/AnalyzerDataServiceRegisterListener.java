@@ -33,13 +33,11 @@ public class AnalyzerDataServiceRegisterListener implements
          
         String recipientAddress = user.getUsername();
         String subject = "Registration Confirmation";
-        String confirmationUrl 
-          = event.getAppUrl() + "/pages/registerComplete.xhtml?token=" + token;
-         
+
         SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(recipientAddress);
         email.setSubject(subject);
-        email.setText( "Access Link @ " + "http://localhost:8080" + confirmationUrl);
+        email.setText( "Access Link @ " + event.getAppUrl() + token);
         mailSender.send( email );
     }
 

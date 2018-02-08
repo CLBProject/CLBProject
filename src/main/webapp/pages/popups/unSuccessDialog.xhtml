@@ -6,24 +6,26 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
-	template="template/ui.xhtml">
+	template="../template/ui.xhtml">
 	<ui:define name="body">
-		<p:dialog widgetVar="successPanel" id="successPanel" modal="true"
+		<p:dialog widgetVar="unSuccessPanel#{idUnsuccess}" id="unSuccessPanel#{idUnsuccess}" modal="true"
 			position="center center" draggable="false" closable="false" header="Done"
 			closeOnEscape="true" styleClass="registerDialog" resizable="false">
 			<h:form>
 				<div class="successDialogDiv">
 					<p:panelGrid columns="2" styleClass="successGrid">
 						<p:column>
-							<p:graphicImage value="${pageContext.request.contextPath}/resources/images/success.png"></p:graphicImage>
+							<p:graphicImage value="${pageContext.request.contextPath}/resources/images/error.png"></p:graphicImage>
 						</p:column>
 						<p:column>
-							<p:outputLabel value="#{successMessage}"></p:outputLabel>
+							<p:outputLabel value="#{unSuccessMessage}"></p:outputLabel>
 						</p:column>
 					</p:panelGrid>
 					<br />
 					<div align="center">
-						<p:commandButton styleClass="signButton" action="#{redirectBean.redirect(path)}" value="OK"></p:commandButton>
+						<p:commandButton styleClass="signButton"
+							oncomplete="PF('unSuccessPanel#{idUnsuccess}').hide();"
+							value="OK"></p:commandButton>
 					</div>
 				</div>
 			</h:form>

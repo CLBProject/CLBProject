@@ -9,6 +9,9 @@ import clb.database.entities.UsersystemEntity;
 @Repository
 public interface UsersystemMongoRepository extends MongoRepository<UsersystemEntity, String>{
 
+    @Query(value="{ 'username' : ?0 }", fields="{ 'username' : 1}")
+    UsersystemEntity findUserbyUsername(String username);
+    
     @Query(value="{ 'token' : ?0 }", fields="{ 'token' : 1}")
     UsersystemEntity findUserbyToken(String token);
     

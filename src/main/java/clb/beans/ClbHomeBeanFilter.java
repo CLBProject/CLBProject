@@ -15,6 +15,10 @@ import javax.servlet.http.HttpSession;
 @WebFilter(filterName = "AuthFilter", urlPatterns = {"*.xhtml"})
 public class ClbHomeBeanFilter implements Filter {
      
+    
+    private final static String HOME_PAGE = "index.xhtml";
+    private final static String REGISTER_COMPLETE_PAGE = "registerComplete.xhtml";
+    
     public ClbHomeBeanFilter() {
     }
  
@@ -33,11 +37,11 @@ public class ClbHomeBeanFilter implements Filter {
             HttpSession ses = req.getSession(false);
             //  allow user to proccede if url is login.xhtml or user logged in or user is accessing any page in //public folder
             String reqURI = req.getRequestURI();
-            if ( reqURI.indexOf("/index.xhtml") >= 0 || (ses != null && ses.getAttribute("username") != null)
-                                       || reqURI.indexOf("/public/") >= 0 || reqURI.contains("javax.faces.resource") )
+            if ( reqURI.indexOf("/" + HOME_PAGE) >= 0 || (ses != null && ses.getAttribute("username") != null)
+                    || reqURI.contains("javax.faces.resource") || reqURI.contains(REGISTER_COMPLETE_PAGE) )
                    chain.doFilter(request, response);
             else   // user didn't log in but asking for a page that is not allowed so take user to login page
-                   res.sendRedirect(req.getContextPath() + "/index.xhtml");  // Anonymous user. Redirect to login page
+                   res.sendRedirect(req.getContextPath() + "/" + HOME_PAGE);  // Anonymous user. Redirect to login page
       }
      catch(Throwable t) {
          System.out.println( t.getMessage());

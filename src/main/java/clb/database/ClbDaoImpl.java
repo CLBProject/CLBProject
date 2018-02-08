@@ -1,5 +1,6 @@
 package clb.database;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,23 +12,29 @@ import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.BuildingObject;
 import clb.business.objects.DataLoggerObject;
 import clb.business.objects.UsersystemObject;
+import clb.database.entities.AnalyzerEntity;
+import clb.database.entities.AnalyzerRegistryAverageEntity;
+import clb.database.entities.AnalyzerRegistryEntity;
+import clb.database.entities.BuildingEntity;
+import clb.database.entities.DataLoggerEntity;
+import clb.database.entities.UsersystemEntity;
 import clb.database.repository.AnalyzerMongoRepository;
 import clb.database.repository.AnalyzerRegistryAverageMongoRepository;
 import clb.database.repository.AnalyzerRegistryMongoRepository;
 import clb.database.repository.BuildingsMongoRepository;
 import clb.database.repository.DataLoggerMongoRepository;
 import clb.database.repository.UsersystemMongoRepository;
-import clb.database.entities.BuildingEntity;
-import clb.database.entities.AnalyzerEntity;
-import clb.database.entities.AnalyzerRegistryEntity;
-import clb.database.entities.AnalyzerRegistryAverageEntity;
-import clb.database.entities.DataLoggerEntity;
-import clb.database.entities.UsersystemEntity;
 
 @Service
-public class ClbDaoImpl implements ClbDao{
+public class ClbDaoImpl implements ClbDao, Serializable{
 
-	@Autowired
+	/**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    
+
+    @Autowired
 	private AnalyzerMongoRepository analyzerMongoRepository;
 	
 	@Autowired
@@ -93,6 +100,11 @@ public class ClbDaoImpl implements ClbDao{
 		userSystemMongoRepository.save(userSystemEntity);
 		userSystemEntity.setUserid(userSystemObject.getUserid());
 	}
+
+    @Override
+    public UsersystemEntity userCanRegister( String username ) {
+        return userSystemMongoRepository.findUserbyUsername( username );
+    }
 
     @Override
     public UsersystemEntity userCanLogin( String userName, String password ) {
@@ -165,6 +177,5 @@ public class ClbDaoImpl implements ClbDao{
 	public void setAverageRegistryMongoRespository(AnalyzerRegistryMongoRepository averageRegistryMongoRespository) {
 		this.averageRegistryMongoRespository = averageRegistryMongoRespository;
 	}
-
 	
 }

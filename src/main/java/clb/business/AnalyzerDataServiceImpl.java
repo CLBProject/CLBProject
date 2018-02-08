@@ -31,6 +31,8 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import clb.business.exceptions.UserExistsException;
+import clb.business.exceptions.UserNotPersistedException;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryAverageObject;
 import clb.business.objects.AnalyzerRegistryObject;
@@ -118,6 +120,21 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
         return userEntity != null ? new UsersystemObject(userEntity) : null;
     }
+    
+    @Override
+    @Transactional
+    public void registerUser( UsersystemObject user ) throws UserExistsException, UserNotPersistedException{
+        UsersystemEntity userEntity = clbDao.userCanRegister(user.getUsername());
+        
+        if(userEntity != null)
+            throw new UserExistsException();
+        
+        clbDao.saveUsersystem( user );
+        
+        if(user.getUserid() == null)
+            throw new UserNotPersistedException();
+    }
+
 
     @Override
     public UsersystemObject getUsersystemByToken( String token ) {
