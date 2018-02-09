@@ -1,5 +1,6 @@
 package clb.beans.pojos;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.validation.constraints.NotNull;
@@ -9,8 +10,13 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import clb.business.objects.UsersystemObject;
 
-public class UsersystemPojo
+public class UsersystemPojo implements Serializable
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     private String address;
     
     @NotNull(message="Name can't be empty")

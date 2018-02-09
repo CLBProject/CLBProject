@@ -1,6 +1,6 @@
 package clb.business.exceptions;
 
-public class UserExistsException extends Exception
+public class UserNotFoundByTokenOnCompleteRegistration extends Exception
 {
 
     /**

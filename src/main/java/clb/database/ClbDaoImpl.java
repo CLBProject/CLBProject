@@ -102,18 +102,15 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	}
 
     @Override
-    public UsersystemEntity userCanRegister( String username ) {
-        return userSystemMongoRepository.findUserbyUsername( username );
+    public UsersystemObject findUserByToken( String token) {
+        UsersystemEntity userEntity = userSystemMongoRepository.findUserbyToken( token );
+        return userEntity != null ? new UsersystemObject(userEntity) : null;
     }
 
     @Override
-    public UsersystemEntity userCanLogin( String userName, String password ) {
-       return userSystemMongoRepository.findUserbyUsernameAndPassword( userName, password );
-    }
-    
-    @Override
-    public UsersystemEntity findUserByToken( String token) {
-       return userSystemMongoRepository.findUserbyToken( token );
+    public UsersystemObject findUserByUserName( String userName ) {
+        UsersystemEntity userEntity = userSystemMongoRepository.findUserbyUsername( userName );
+        return userEntity != null ? new UsersystemObject(userEntity) : null;
     }
 	
 	@Override

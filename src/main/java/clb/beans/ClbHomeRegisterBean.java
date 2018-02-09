@@ -1,20 +1,23 @@
 package clb.beans;
 
 import java.io.Serializable;
-import java.util.Calendar;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 
 import org.primefaces.context.RequestContext;
 
 import clb.beans.pojos.UsersystemPojo;
-import clb.business.AnalyzerDataService;
-import clb.business.exceptions.UserExistsException;
+import clb.business.UserRegistryService;
+import clb.business.exceptions.UserExistsOnRegistryException;
+import clb.business.exceptions.UserNotFoundByTokenOnCompleteRegistration;
 import clb.business.exceptions.UserNotPersistedException;
+import clb.business.exceptions.UserTokenHasExpiredOnCompleteRegistration;
+import clb.business.exceptions.UserTokenIsNullOnCompleteRegistrationException;
 import clb.business.objects.UsersystemObject;
 
 @ViewScoped
@@ -24,11 +27,12 @@ public class ClbHomeRegisterBean implements Serializable{
     private static final long serialVersionUID = 1L;
     private UsersystemPojo user;
 
-    @ManagedProperty("#{analyzerDataService}")
-    private AnalyzerDataService analyzerDataService;
+    @ManagedProperty("#{userRegistryService}")
+    private UserRegistryService userRegistryService;
 
-    private String tokenRegistred;
+    private String registerResult;
 
+    private final static int SESSION_TIME_MINUTES = 15;
     private final static String USER_EXISTS_PARAM = "userExists";
     private final static String UNEXPECTED_ERROR_PARAM = "unexpectedError";
 
@@ -41,15 +45,13 @@ public class ClbHomeRegisterBean implements Serializable{
 
         try {
 
-            UsersystemObject userObj = user.toObject();
+            String appUrl = "http://localhost:8080" + FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() +
+                    "/pages/registerComplete.xhtml?token=";
 
-            analyzerDataService.registerUser(userObj);
+            userRegistryService.registerUser(user.toObject(), SESSION_TIME_MINUTES,
+                    FacesContext.getCurrentInstance().getExternalContext().getRequestLocale(),appUrl);
 
-            analyzerDataService.publishEvent(userObj,FacesContext.getCurrentInstance().getExternalContext().getRequestLocale(),
-                    "http://localhost:8080" + FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() +
-                    "/pages/registerComplete.xhtml?token=");
-
-        }catch(UserExistsException uee) {
+        }catch(UserExistsOnRegistryException uee) {
             RequestContext.getCurrentInstance().addCallbackParam( USER_EXISTS_PARAM, true );
         }catch(UserNotPersistedException unpe) {
             RequestContext.getCurrentInstance().addCallbackParam( UNEXPECTED_ERROR_PARAM, true );
@@ -57,31 +59,24 @@ public class ClbHomeRegisterBean implements Serializable{
 
     }
 
-    public String registerUser() {
-        
-        //Token is null
-        if(this.tokenRegistred == null) {
-            return "badUser";
+    public void registerUser() {
+        String token = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get( "token" );
+
+        try {
+            UsersystemObject userRegistered = userRegistryService.completeUserRegistration( token );
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put( "username", userRegistered.getUsername() );
+            
+        } catch( UserTokenIsNullOnCompleteRegistrationException e ) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch( UserNotFoundByTokenOnCompleteRegistration e ) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch( UserTokenHasExpiredOnCompleteRegistration e ) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
-        
-        UsersystemObject userWithToken = analyzerDataService.getUsersystemByToken(this.tokenRegistred);
-        if (userWithToken.getToken() == null) {
-            //String message = messages.getMessage("auth.message.invalidToken", null, locale);
-            //model.addAttribute("message", message);
-            return "badUser";
-        }
 
-        Calendar cal = Calendar.getInstance();
-        if ((userWithToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
-            //String messageValue = messages.getMessage("auth.message.expired", null, locale)
-            //model.addAttribute("message", messageValue);
-            return "badUser";
-        } 
-
-        user.setEnabled(true); 
-
-
-        return "clb";
     }
     public UsersystemPojo getUser() {
         return user;
@@ -91,20 +86,21 @@ public class ClbHomeRegisterBean implements Serializable{
         this.user = user;
     }
 
-    public AnalyzerDataService getAnalyzerDataService() {
-        return analyzerDataService;
+    public UserRegistryService getUserRegistryService() {
+        return userRegistryService;
     }
 
-    public void setAnalyzerDataService( AnalyzerDataService analyzerDataService ) {
-        this.analyzerDataService = analyzerDataService;
+    public void setUserRegistryService( UserRegistryService userRegistryService ) {
+        this.userRegistryService = userRegistryService;
     }
 
-    public String getTokenRegistred() {
-        return tokenRegistred;
+    public String getRegisterResult() {
+        return registerResult;
     }
 
-    public void setTokenRegistred( String tokenRegistred ) {
-        this.tokenRegistred = tokenRegistred;
+    public void setRegisterResult( String registerResult ) {
+        this.registerResult = registerResult;
     }
+
 
 }

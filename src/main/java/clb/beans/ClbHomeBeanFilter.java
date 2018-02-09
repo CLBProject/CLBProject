@@ -1,6 +1,7 @@
 package clb.beans;
 
 import java.io.IOException;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -30,11 +31,13 @@ public class ClbHomeBeanFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
          try {
- 
+             
             // check whether session variable is set
             HttpServletRequest req = (HttpServletRequest) request;
             HttpServletResponse res = (HttpServletResponse) response;
+
             HttpSession ses = req.getSession(false);
+   
             //  allow user to proccede if url is login.xhtml or user logged in or user is accessing any page in //public folder
             String reqURI = req.getRequestURI();
             if ( reqURI.indexOf("/" + HOME_PAGE) >= 0 || (ses != null && ses.getAttribute("username") != null)

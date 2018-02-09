@@ -13,7 +13,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
@@ -31,8 +30,6 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import clb.business.exceptions.UserExistsException;
-import clb.business.exceptions.UserNotPersistedException;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryAverageObject;
 import clb.business.objects.AnalyzerRegistryObject;
@@ -41,7 +38,6 @@ import clb.business.objects.ClbObject;
 import clb.business.objects.DataLoggerObject;
 import clb.business.objects.UsersystemObject;
 import clb.database.ClbDao;
-import clb.database.entities.UsersystemEntity;
 
 @Service
 public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializable{
@@ -111,40 +107,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
         if(clbObject instanceof UsersystemObject) {
             clbDao.saveUsersystem((UsersystemObject)clbObject);
         }
-    }
-
-    @Override
-    @Transactional
-    public UsersystemObject userCanLogin( String userName, String password ) {
-        UsersystemEntity userEntity = clbDao.userCanLogin(userName, password);
-
-        return userEntity != null ? new UsersystemObject(userEntity) : null;
-    }
-    
-    @Override
-    @Transactional
-    public void registerUser( UsersystemObject user ) throws UserExistsException, UserNotPersistedException{
-        UsersystemEntity userEntity = clbDao.userCanRegister(user.getUsername());
-        
-        if(userEntity != null)
-            throw new UserExistsException();
-        
-        clbDao.saveUsersystem( user );
-        
-        if(user.getUserid() == null)
-            throw new UserNotPersistedException();
-    }
-
-
-    @Override
-    public UsersystemObject getUsersystemByToken( String token ) {
-        return new UsersystemObject(clbDao.findUserByToken(token));
-    }
-
-
-    @Override
-    public void publishEvent( UsersystemObject object, Locale requestLocale, String requestContextPath ) {
-        eventPublisher.publishEvent(new AnalyzerDataServiceRegisterOnCompleteEvent(object, requestLocale, requestContextPath));
     }
 
     private boolean isAverageDate(Date currentDate) {

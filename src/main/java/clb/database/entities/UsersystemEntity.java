@@ -1,9 +1,7 @@
 package clb.database.entities;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -44,13 +42,6 @@ public class UsersystemEntity implements ClbEntity, Serializable {
 
 	public UsersystemEntity() {
 	}
-	
-	public Date calculateExpiryDate(int expiryTimeInMinutes) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Timestamp(cal.getTime().getTime()));
-        cal.add(Calendar.MINUTE, expiryTimeInMinutes);
-        return new Date(cal.getTime().getTime());
-    }
 
 	public String getUserid() {
 		return this.userid;

@@ -11,62 +11,60 @@ import javax.servlet.http.HttpSession;
 
 import org.primefaces.context.RequestContext;
 
-import clb.business.AnalyzerDataService;
-import clb.business.objects.UsersystemObject;
+import clb.business.UserRegistryService;
+import clb.business.exceptions.UserDoesNotExistOnLoginException;
 
 @SessionScoped
 @ManagedBean
 public class ClbHomeLoginBean implements Serializable{
 
     private static final long serialVersionUID = 1L;
-    
+
     private String userName;
     private String password;
 
-    @ManagedProperty("#{analyzerDataService}")
-    private AnalyzerDataService analyzerDataService;
-    
+    @ManagedProperty("#{UserRegistryService}")
+    private UserRegistryService userRegistryService;
+
     private final static String CANT_LOGIN_PARAM = "cantLogin";
 
     @PostConstruct
     public void init() {
     }
-    
+
     public String loginUser() {
 
-        UsersystemObject userLoggedIn = analyzerDataService.userCanLogin( userName, password );
         RequestContext context = RequestContext.getCurrentInstance();  
-        
-        if (userLoggedIn != null) {
-            // get Http Session and store username
+
+        try {
+            userRegistryService.validateUserLogin( userName );
+            context.addCallbackParam(CANT_LOGIN_PARAM, true);
+            return "clb";
+        } catch( UserDoesNotExistOnLoginException e ) {
+
             HttpSession session = (HttpSession)
                     FacesContext.
                     getCurrentInstance().
                     getExternalContext().
                     getSession(false);
-            
+
             session.setAttribute("username",userName);
             context.addCallbackParam(CANT_LOGIN_PARAM, false);
-
-            return "clb";
-        } else {
-           
-            context.addCallbackParam(CANT_LOGIN_PARAM, true);
             return "index";
         }
     }
-    
-    public String logout() {
-    	FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-        return "index.xhtml?faces-redirect=true";
-     }
 
-    public AnalyzerDataService getAnalyzerDataService() {
-        return analyzerDataService;
+    public String logout() {
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        return "index.xhtml?faces-redirect=true";
     }
 
-    public void setAnalyzerDataService( AnalyzerDataService analyzerDataService ) {
-        this.analyzerDataService = analyzerDataService;
+    public UserRegistryService getUserRegistryService() {
+        return userRegistryService;
+    }
+
+    public void setUserRegistryService( UserRegistryService userRegistryService ) {
+        this.userRegistryService = userRegistryService;
     }
 
     public String getUserName() {
@@ -85,5 +83,5 @@ public class ClbHomeLoginBean implements Serializable{
         this.password = password;
     }
 
-    
+
 }

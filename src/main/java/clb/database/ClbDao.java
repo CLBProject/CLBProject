@@ -8,7 +8,6 @@ import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.BuildingObject;
 import clb.business.objects.DataLoggerObject;
 import clb.business.objects.UsersystemObject;
-import clb.database.entities.UsersystemEntity;
 
 public interface ClbDao{
 
@@ -26,9 +25,7 @@ public interface ClbDao{
 	
 	void saveUsers(List<UsersystemObject> users);
 
-    UsersystemEntity userCanLogin( String username, String password );
-    
-    UsersystemEntity userCanRegister( String username);
+    UsersystemObject findUserByToken( String token );
 
-    UsersystemEntity findUserByToken( String token );
+    UsersystemObject findUserByUserName( String userName );
 }

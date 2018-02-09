@@ -9,8 +9,39 @@
 	template="template/ui.xhtml">
 	<ui:define name="body">
 		<f:metadata>
-			<f:event type="preRenderView" listener="#{clbHomeRegisterBean.registerUser}" />
+			<f:event type="preRenderView"
+				listener="#{clbHomeRegisterBean.registerUser}" />
 		</f:metadata>
-		<h2>Registration Complete!</h2>
+		<div class="homeMainDivClass">
+			<h:form id="bannerForm">
+				<table width="100%" class="homeMainDivBannerClass">
+					<tr>
+						<td width="1%"></td>
+						<td align="left" valign="middle"><p:outputLabel
+								styleClass="logoClass">LEnergy Logo</p:outputLabel></td>
+						<td align="right" valign="top"></td>
+					</tr>
+				</table>
+			</h:form>
+			<c:choose>
+				<c:when test="#{clbHomeRegisterBean.registerResult != ''}">
+					<div align="center">
+						<h:form id="registerForm">
+							<p:panel styleClass="signUpPanel">
+								<p:outputLabel
+									value="User was registered! Please click on the link below to enter in the application:"></p:outputLabel>
+								<br />
+								<br/>
+								<p:commandLink value="CLB" ajax="true" udpate="@form :bannerForm"
+									action="#{redirectBean.redirectTo('clb.xhtml?faces-redirect=true')}"></p:commandLink>
+							</p:panel>
+						</h:form>
+					</div>
+				</c:when>
+				<c:otherwise>
+					<h2>#{clbHomeRegisterBean.registerResult}</h2>
+				</c:otherwise>
+			</c:choose>
+		</div>
 	</ui:define>
 </ui:composition>

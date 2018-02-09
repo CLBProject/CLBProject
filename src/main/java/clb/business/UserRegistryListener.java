@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 import clb.business.objects.UsersystemObject;
 
 @Component
-public class AnalyzerDataServiceRegisterListener implements
-  ApplicationListener<AnalyzerDataServiceRegisterOnCompleteEvent> {
+public class UserRegistryListener implements
+  ApplicationListener<UserRegistryOnCompleteEvent> {
   
     @Autowired
     private AnalyzerDataService analyzerDataService;
@@ -21,11 +21,11 @@ public class AnalyzerDataServiceRegisterListener implements
     private JavaMailSender mailSender;
  
     @Override
-    public void onApplicationEvent(AnalyzerDataServiceRegisterOnCompleteEvent event) {
+    public void onApplicationEvent(UserRegistryOnCompleteEvent event) {
         this.confirmRegistration(event);
     }
  
-    private void confirmRegistration(AnalyzerDataServiceRegisterOnCompleteEvent event) {
+    private void confirmRegistration(UserRegistryOnCompleteEvent event) {
         UsersystemObject user = event.getUser();
         String token = UUID.randomUUID().toString();
         user.setToken( token );

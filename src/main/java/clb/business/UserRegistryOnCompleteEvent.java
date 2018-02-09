@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationEvent;
 
 import clb.business.objects.UsersystemObject;
 
-public class AnalyzerDataServiceRegisterOnCompleteEvent extends ApplicationEvent {
+public class UserRegistryOnCompleteEvent extends ApplicationEvent {
     /**
      * 
      */
@@ -16,7 +16,7 @@ public class AnalyzerDataServiceRegisterOnCompleteEvent extends ApplicationEvent
     private UsersystemObject user;
     private Locale locale;
  
-    public AnalyzerDataServiceRegisterOnCompleteEvent(
+    public UserRegistryOnCompleteEvent(
             UsersystemObject user, Locale locale, String appUrl) {
         super(user);
          
