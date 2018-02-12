@@ -32,6 +32,7 @@ public class UsersystemObject implements ClbObject, Serializable
     
     public UsersystemObject( UsersystemEntity usersystem ) {
         this.userid = usersystem.getUserid();
+        this.username = usersystem.getUsername();
         this.address = usersystem.getAddress();
         this.name = usersystem.getName();
         this.password = usersystem.getPassword();

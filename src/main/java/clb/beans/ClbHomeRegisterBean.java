@@ -29,7 +29,10 @@ public class ClbHomeRegisterBean implements Serializable{
 
     @ManagedProperty("#{userRegistryService}")
     private UserRegistryService userRegistryService;
-
+    
+    @ManagedProperty("#{clbHomeLoginBean}")
+    private ClbHomeLoginBean clbHomeLoginBean;
+    
     private String registerResult;
 
     private final static int SESSION_TIME_MINUTES = 15;
@@ -64,7 +67,8 @@ public class ClbHomeRegisterBean implements Serializable{
 
         try {
             UsersystemObject userRegistered = userRegistryService.completeUserRegistration( token );
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put( "username", userRegistered.getUsername() );
+            
+            clbHomeLoginBean.setUserName( userRegistered.getUsername() );
             
         } catch( UserTokenIsNullOnCompleteRegistrationException e ) {
             // TODO Auto-generated catch block
@@ -102,5 +106,13 @@ public class ClbHomeRegisterBean implements Serializable{
         this.registerResult = registerResult;
     }
 
+    public ClbHomeLoginBean getClbHomeLoginBean() {
+        return clbHomeLoginBean;
+    }
 
+    public void setClbHomeLoginBean( ClbHomeLoginBean clbHomeLoginBean ) {
+        this.clbHomeLoginBean = clbHomeLoginBean;
+    }
+
+    
 }
