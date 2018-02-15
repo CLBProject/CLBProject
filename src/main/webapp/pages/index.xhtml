@@ -90,7 +90,7 @@
 									value="#{clbHomeRegisterBean.user.username}" required="true"
 									label="emailUser" id="emailUser">
 									<f:validateRegex
-										pattern="([^.@]+)(\.[^.@]+)*@([^.@]+\.)+([^.@]+)" />
+										pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
 								</p:inputText>
 							</p:column>
 							<p:column>
@@ -123,6 +123,9 @@
 						</p:panelGrid>
 						<p:spacer height="40" />
 						<div align="center">
+							<p:commandLink oncomplete="PF('recoverPassword').show()" value="Forget your password?" styleClass="recoverLinkPassword"></p:commandLink>
+							<br/>
+							<br/>
 							<p:commandButton
 								action="#{clbHomeRegisterBean.registerUserAccount}"
 								validateClient="true" styleClass="signButtonExtended"
@@ -142,6 +145,7 @@
 				</h:form>
 			</div>
 		</div>
+		<ui:include src="./popups/recoverPassword.xhtml"/>
 		<ui:include src="./popups/successDialog.xhtml">
 			<ui:param name="successMessage"
 				value="User was created successfully! Check your Email to Confirm Registration, if you dont receive an email in 24h please contact the staff." />

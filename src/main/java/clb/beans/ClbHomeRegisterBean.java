@@ -1,5 +1,6 @@
 package clb.beans;
 
+import java.io.IOException;
 import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
@@ -41,6 +42,16 @@ public class ClbHomeRegisterBean implements Serializable{
 
     @PostConstruct
     public void init() {
+        
+        //If user is logged in redirect
+        if(clbHomeLoginBean != null && clbHomeLoginBean.getUserName() != null && !clbHomeLoginBean.getUserName().equals( "" )) {
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().redirect( "clb.xhtml" );
+            } catch( IOException e ) {
+                e.printStackTrace();
+            }
+        }
+        
         user = new UsersystemPojo();
     }
 
