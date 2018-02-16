@@ -130,14 +130,16 @@
 								action="#{clbHomeRegisterBean.registerUserAccount}"
 								validateClient="true" styleClass="signButtonExtended"
 								value="Register" ajax="true"
-								oncomplete="if (!args.validationFailed){ 
+								onstart="document.body.style.cursor = 'wait';"
+								oncomplete="if (!args.validationFailed){
+												document.body.style.cursor = 'default'; 
 												if (args.userExists === true ){ 
 													PF('unSuccessPanelalexistsUnsuccess').show();
 												}
 												else if (args.unexpectedError === true ){ 
 													PF('unSuccessPanelunexpectedUnsuccess').show();
 												}
-												else PF('successPanel').show(); 
+												else PF('successPanelregistry').show(); 
 											}"
 								update="registerForm"></p:commandButton>
 						</div>
@@ -147,6 +149,7 @@
 		</div>
 		<ui:include src="./popups/recoverPassword.xhtml"/>
 		<ui:include src="./popups/successDialog.xhtml">
+			<ui:param name="id" value="registry"></ui:param>
 			<ui:param name="successMessage"
 				value="User was created successfully! Check your Email to Confirm Registration, if you dont receive an email in 24h please contact the staff." />
 			<ui:param name="path" value="index.xhtml?faces-redirect=true" />

@@ -8,7 +8,7 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	template="../template/ui.xhtml">
 	<ui:define name="body">
-		<p:dialog widgetVar="successPanel" id="successPanel" modal="true"
+		<p:dialog widgetVar="successPanel#{id}" id="successPanel#{id}" modal="true"
 			position="center center" draggable="false" closable="false" header="Done"
 			closeOnEscape="true" styleClass="registerDialog" resizable="false">
 			<h:form>

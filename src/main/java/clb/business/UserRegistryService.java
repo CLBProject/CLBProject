@@ -1,7 +1,5 @@
 package clb.business;
 
-import java.util.Locale;
-
 import clb.business.exceptions.UserDoesNotExistOnLoginException;
 import clb.business.exceptions.UserDoesNotMatchPasswordLoginException;
 import clb.business.exceptions.UserExistsOnRegistryException;
@@ -15,11 +13,13 @@ public interface UserRegistryService {
     
     void validateUserLogin( String userName , String password ) throws UserDoesNotExistOnLoginException,UserDoesNotMatchPasswordLoginException;
 
-    void registerUser( UsersystemObject user, int timeOfSession, Locale requestLocale, String requestContextPath  ) 
+    void registerUser( UsersystemObject user, int timeOfSession ) 
             throws UserExistsOnRegistryException, UserNotPersistedException;
 
     UsersystemObject completeUserRegistration(String token) 
             throws UserTokenIsNullOnCompleteRegistrationException,
                    UserNotFoundByTokenOnCompleteRegistration, 
                    UserTokenHasExpiredOnCompleteRegistration;
+
+    void makeNewUserRegistration( String username ) throws UserDoesNotExistOnLoginException;
 }

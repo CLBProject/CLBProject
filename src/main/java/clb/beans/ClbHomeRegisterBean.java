@@ -8,12 +8,12 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
 
 import org.primefaces.context.RequestContext;
 
 import clb.beans.pojos.UsersystemPojo;
 import clb.business.UserRegistryService;
+import clb.business.exceptions.UserDoesNotExistOnLoginException;
 import clb.business.exceptions.UserExistsOnRegistryException;
 import clb.business.exceptions.UserNotFoundByTokenOnCompleteRegistration;
 import clb.business.exceptions.UserNotPersistedException;
@@ -39,6 +39,7 @@ public class ClbHomeRegisterBean implements Serializable{
     private final static int SESSION_TIME_MINUTES = 15;
     private final static String USER_EXISTS_PARAM = "userExists";
     private final static String UNEXPECTED_ERROR_PARAM = "unexpectedError";
+    private final static String CANT_RECOVER_PASSWORD_NOT_FOUND_PARAM = "cantRecoverPasswordNotFound";
 
     @PostConstruct
     public void init() {
@@ -59,11 +60,7 @@ public class ClbHomeRegisterBean implements Serializable{
 
         try {
 
-            String appUrl = "http://localhost:8080" + FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() +
-                    "/pages/registerComplete.xhtml?token=";
-
-            userRegistryService.registerUser(user.toObject(), SESSION_TIME_MINUTES,
-                    FacesContext.getCurrentInstance().getExternalContext().getRequestLocale(),appUrl);
+            userRegistryService.registerUser(user.toObject(), SESSION_TIME_MINUTES);
 
         }catch(UserExistsOnRegistryException uee) {
             RequestContext.getCurrentInstance().addCallbackParam( USER_EXISTS_PARAM, true );
@@ -82,17 +79,22 @@ public class ClbHomeRegisterBean implements Serializable{
             clbHomeLoginBean.setUserName( userRegistered.getUsername() );
             
         } catch( UserTokenIsNullOnCompleteRegistrationException e ) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            // return badUser
         } catch( UserNotFoundByTokenOnCompleteRegistration e ) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+         // return badUser
         } catch( UserTokenHasExpiredOnCompleteRegistration e ) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+         // return badUser
         }
-
     }
+    
+    public void recoverPassword() {
+        try {
+            userRegistryService.makeNewUserRegistration(user.getUsername());
+        } catch( UserDoesNotExistOnLoginException e ) {
+            RequestContext.getCurrentInstance().addCallbackParam( CANT_RECOVER_PASSWORD_NOT_FOUND_PARAM, true );
+        }
+    }
+    
     public UsersystemPojo getUser() {
         return user;
     }
