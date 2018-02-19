@@ -69,6 +69,10 @@ public class ClbHomeRegisterBean implements Serializable{
         }
 
     }
+    
+    public void resendEmail() {
+        
+    }
 
     public void registerUser() {
         String token = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get( "token" );

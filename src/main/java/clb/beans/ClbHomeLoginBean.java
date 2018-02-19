@@ -58,6 +58,10 @@ public class ClbHomeLoginBean implements Serializable{
     }
 
     public String logout() {
+        
+        this.userName = null;
+        this.password = null;
+        
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "index.xhtml?faces-redirect=true";
     }

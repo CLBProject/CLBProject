@@ -123,11 +123,13 @@
 						</p:panelGrid>
 						<p:spacer height="40" />
 						<div align="center">
+							<p:commandLink oncomplete="PF('resendEmail').show()" value="Resend Registration Email" styleClass="recoverLinkPassword"></p:commandLink>
+							<br/>
 							<p:commandLink oncomplete="PF('recoverPassword').show()" value="Forget your password?" styleClass="recoverLinkPassword"></p:commandLink>
 							<br/>
 							<br/>
 							<p:commandButton
-								action="#{clbHomeRegisterBean.registerUserAccount}"
+								action="#{clbHomeRegisterBean.resendEmail}"
 								validateClient="true" styleClass="signButtonExtended"
 								value="Register" ajax="true"
 								onclick="document.body.style.cursor='wait'"
@@ -148,6 +150,7 @@
 			</div>
 		</div>
 		<ui:include src="./popups/recoverPassword.xhtml"/>
+		<ui:include src="./popups/resendEmail.xhtml"/>
 		<ui:include src="./popups/successDialog.xhtml">
 			<ui:param name="id" value="registry"></ui:param>
 			<ui:param name="successMessage"
