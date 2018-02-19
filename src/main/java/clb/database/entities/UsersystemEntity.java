@@ -17,8 +17,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection="Users")
 public class UsersystemEntity implements ClbEntity, Serializable {
 	private static final long serialVersionUID = 1L;
-
-	private static final int EXPIRATION = 60 * 24;
 	
 	@Id
 	private String userid;

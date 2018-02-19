@@ -130,7 +130,7 @@
 								action="#{clbHomeRegisterBean.registerUserAccount}"
 								validateClient="true" styleClass="signButtonExtended"
 								value="Register" ajax="true"
-								onstart="document.body.style.cursor = 'wait';"
+								onclick="document.body.style.cursor='wait'"
 								oncomplete="if (!args.validationFailed){
 												document.body.style.cursor = 'default'; 
 												if (args.userExists === true ){ 
