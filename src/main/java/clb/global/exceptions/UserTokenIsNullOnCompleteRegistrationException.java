@@ -1,4 +1,4 @@
-package clb.business.exceptions;
+package clb.global.exceptions;
 
 public class UserTokenIsNullOnCompleteRegistrationException extends Exception
 {

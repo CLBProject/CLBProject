@@ -33,6 +33,8 @@ public class UsersystemEntity implements ClbEntity, Serializable {
 	
 	private Date expiryDate;
 	
+	private Date lastSentEmail;
+	
 	private boolean enabled;
 	
 	@DBRef
@@ -119,6 +121,14 @@ public class UsersystemEntity implements ClbEntity, Serializable {
 
     public void setEnabled( boolean enabled ) {
         this.enabled = enabled;
+    }
+
+    public Date getLastSentEmail() {
+        return lastSentEmail;
+    }
+
+    public void setLastSentEmail( Date lastSentEmail ) {
+        this.lastSentEmail = lastSentEmail;
     }
 	
     

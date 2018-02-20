@@ -14,8 +14,8 @@ import org.primefaces.context.RequestContext;
 import com.sun.istack.NotNull;
 
 import clb.business.UserRegistryService;
-import clb.business.exceptions.UserDoesNotExistOnLoginException;
-import clb.business.exceptions.UserDoesNotMatchPasswordLoginException;
+import clb.global.exceptions.UserDoesNotExistException;
+import clb.global.exceptions.UserDoesNotMatchPasswordLoginException;
 
 @SessionScoped
 @ManagedBean
@@ -48,7 +48,7 @@ public class ClbHomeLoginBean implements Serializable{
         try {
             userRegistryService.validateUserLogin( userName, password );
             return "clb";
-        } catch( UserDoesNotExistOnLoginException e ) {
+        } catch( UserDoesNotExistException e ) {
             context.addCallbackParam(CANT_LOGIN_USER_NOT_FOUND_PARAM, true);
             return "index";
         } catch( UserDoesNotMatchPasswordLoginException e ) {

@@ -13,13 +13,14 @@ import org.primefaces.context.RequestContext;
 
 import clb.beans.pojos.UsersystemPojo;
 import clb.business.UserRegistryService;
-import clb.business.exceptions.UserDoesNotExistOnLoginException;
-import clb.business.exceptions.UserExistsOnRegistryException;
-import clb.business.exceptions.UserNotFoundByTokenOnCompleteRegistration;
-import clb.business.exceptions.UserNotPersistedException;
-import clb.business.exceptions.UserTokenHasExpiredOnCompleteRegistration;
-import clb.business.exceptions.UserTokenIsNullOnCompleteRegistrationException;
 import clb.business.objects.UsersystemObject;
+import clb.global.exceptions.UserCantResendEmailException;
+import clb.global.exceptions.UserDoesNotExistException;
+import clb.global.exceptions.UserExistsOnRegistryException;
+import clb.global.exceptions.UserNotFoundByTokenOnCompleteRegistration;
+import clb.global.exceptions.UserNotPersistedException;
+import clb.global.exceptions.UserTokenHasExpiredOnCompleteRegistration;
+import clb.global.exceptions.UserTokenIsNullOnCompleteRegistrationException;
 
 @ViewScoped
 @ManagedBean
@@ -37,9 +38,13 @@ public class ClbHomeRegisterBean implements Serializable{
     private String registerResult;
 
     private final static int SESSION_TIME_MINUTES = 15;
+    private final static int MINUTES_NECESSARY_TO_RESEND_EMAIL = 15;
     private final static String USER_EXISTS_PARAM = "userExists";
     private final static String UNEXPECTED_ERROR_PARAM = "unexpectedError";
     private final static String CANT_RECOVER_PASSWORD_NOT_FOUND_PARAM = "cantRecoverPasswordNotFound";
+    
+    private final static String USER_NOT_FOUND_ON_RESEND_EMAIL = "userNotFoundResendEmail";
+    private final static String TIME_NOT_PASSED_SINCE_LAST_EMAIL = "timeNotPassedLastEmail";
 
     @PostConstruct
     public void init() {
@@ -59,9 +64,7 @@ public class ClbHomeRegisterBean implements Serializable{
     public void registerUserAccount() {
 
         try {
-
             userRegistryService.registerUser(user.toObject(), SESSION_TIME_MINUTES);
-
         }catch(UserExistsOnRegistryException uee) {
             RequestContext.getCurrentInstance().addCallbackParam( USER_EXISTS_PARAM, true );
         }catch(UserNotPersistedException unpe) {
@@ -71,7 +74,13 @@ public class ClbHomeRegisterBean implements Serializable{
     }
     
     public void resendEmail() {
-        
+        try {
+            userRegistryService.resendEmail(user.getUsername(), MINUTES_NECESSARY_TO_RESEND_EMAIL);
+        } catch( UserDoesNotExistException e ) {
+            RequestContext.getCurrentInstance().addCallbackParam( USER_NOT_FOUND_ON_RESEND_EMAIL, true );
+        } catch( UserCantResendEmailException e ) {
+            RequestContext.getCurrentInstance().addCallbackParam( TIME_NOT_PASSED_SINCE_LAST_EMAIL, true );
+        }
     }
 
     public void registerUser() {
@@ -93,9 +102,11 @@ public class ClbHomeRegisterBean implements Serializable{
     
     public void recoverPassword() {
         try {
-            userRegistryService.makeNewUserRegistration(user.getUsername());
-        } catch( UserDoesNotExistOnLoginException e ) {
+            userRegistryService.makeNewUserRegistration(user.getUsername(), MINUTES_NECESSARY_TO_RESEND_EMAIL);
+        } catch( UserDoesNotExistException e ) {
             RequestContext.getCurrentInstance().addCallbackParam( CANT_RECOVER_PASSWORD_NOT_FOUND_PARAM, true );
+        } catch( UserCantResendEmailException e ) {
+            RequestContext.getCurrentInstance().addCallbackParam( TIME_NOT_PASSED_SINCE_LAST_EMAIL, true );
         }
     }
     

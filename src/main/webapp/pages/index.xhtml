@@ -121,7 +121,7 @@
 							<p:column>
 							</p:column>
 						</p:panelGrid>
-						<p:spacer height="40" />
+						<p:spacer height="20" />
 						<div align="center">
 							<p:commandLink oncomplete="PF('resendEmail').show()" value="Resend Registration Email" styleClass="recoverLinkPassword"></p:commandLink>
 							<br/>
@@ -129,7 +129,7 @@
 							<br/>
 							<br/>
 							<p:commandButton
-								action="#{clbHomeRegisterBean.resendEmail}"
+								action="#{clbHomeRegisterBean.registerUserAccount}"
 								validateClient="true" styleClass="signButtonExtended"
 								value="Register" ajax="true"
 								onclick="document.body.style.cursor='wait'"
@@ -168,10 +168,6 @@
 		<ui:include src="./popups/unSuccessDialog.xhtml">
 			<ui:param name="idUnsuccess" value="alexistsUnsuccess" />
 			<ui:param name="unSuccessMessage" value="User can't be registered because already exists" />
-		</ui:include>
-		<ui:include src="./popups/unSuccessDialog.xhtml">
-			<ui:param name="idUnsuccess" value="unexpectedUnsuccess" />
-			<ui:param name="unSuccessMessage" value="An unexpected error ocurred while registring the user" />
 		</ui:include>
 	</ui:define>
 </ui:composition>

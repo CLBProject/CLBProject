@@ -22,12 +22,21 @@ public class UsersystemObject implements ClbObject, Serializable
     private String username;
     private String token;
     private Date expiryDate;
+    private Date lastSentEmail;
     private boolean enabled;
 
     private List<BuildingObject> buildings;
     
     public UsersystemObject(){
         
+    }
+    
+    public boolean emailSentItHasntAlreadyPassedEnoughTimeSince(Date currentDateMinusHours) {
+        return getLastSentEmail().getTime() - currentDateMinusHours.getTime() > 0;
+    }
+    
+    public boolean hasExpiredDate(Date currentDate) {
+        return getExpiryDate().getTime() - currentDate.getTime() <= 0;
     }
     
     public UsersystemObject( UsersystemEntity usersystem ) {
@@ -38,6 +47,7 @@ public class UsersystemObject implements ClbObject, Serializable
         this.password = usersystem.getPassword();
         this.token = usersystem.getToken();
         this.expiryDate = usersystem.getExpiryDate();
+        this.lastSentEmail = usersystem.getLastSentEmail();
         this.enabled = usersystem.isEnabled();
         this.buildings = usersystem.getBuildings() != null ? 
         		usersystem.getBuildings().stream().map(BuildingObject::new).collect(Collectors.toList()) : null;
@@ -53,6 +63,7 @@ public class UsersystemObject implements ClbObject, Serializable
         userSystemEntity.setToken( this.token );
         userSystemEntity.setExpiryDate( this.expiryDate );
         userSystemEntity.setEnabled( this.enabled );
+        userSystemEntity.setLastSentEmail( this.lastSentEmail );
         userSystemEntity.setBuildings( this.buildings != null ?
         		this.buildings.stream().map(BuildingObject::toEntity).collect(Collectors.toList()) : null);
         
@@ -137,6 +148,14 @@ public class UsersystemObject implements ClbObject, Serializable
 
     public void setEnabled( boolean enabled ) {
         this.enabled = enabled;
+    }
+
+    public Date getLastSentEmail() {
+        return lastSentEmail;
+    }
+
+    public void setLastSentEmail( Date lastSentEmail ) {
+        this.lastSentEmail = lastSentEmail;
     }
     
     

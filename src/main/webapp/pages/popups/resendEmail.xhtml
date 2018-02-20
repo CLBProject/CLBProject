@@ -32,14 +32,18 @@
 					<br />
 					<div align="center">
 						<p:commandButton styleClass="signButton"
-							action="#{clbHomeRegisterBean.recoverPassword}" value="Resend"
-							onclick="document.body.style.cursor='wait'"
+							action="#{clbHomeRegisterBean.resendEmail}" value="Resend"
+							onstart="document.body.style.cursor='wait'" ajax="true" update="@form"
 							oncomplete="
+									document.body.style.cursor='default';
 									if (!args.validationFailed){ 
-										if (args.cantRecoverPasswordNotFound=== true ){ 
-											PF('unSuccessPaneldoesnexistResendEmailUnsuccess').show();
+										if (args.userNotFoundResendEmail === true ){ 
+											PF('unSuccessPaneluserNotFoundResendEmail').show();
 										}
-										else PF('successPanelresendEmail').show(); 
+										else if (args.timeNotPassedLastEmail === true ){ 
+											PF('unSuccessPaneltimeNotPassedLastEmail').show();
+										}
+										else PF('successPanelresendEmail').show();  
 									}"></p:commandButton>
 					</div>
 				</div>
@@ -52,9 +56,12 @@
 			<ui:param name="path" value="index.xhtml?faces-redirect=true" />
 		</ui:include>
 		<ui:include src="unSuccessDialog.xhtml">
-			<ui:param name="idUnsuccess" value="doesnexistResendEmailUnsuccess" />
-			<ui:param name="unSuccessMessage"
-				value="User does not exist to recover Password!" />
+			<ui:param name="idUnsuccess" value="userNotFoundResendEmail" />
+			<ui:param name="unSuccessMessage" value="User not found, cant resend the email!" />
+		</ui:include>
+		<ui:include src="unSuccessDialog.xhtml">
+			<ui:param name="idUnsuccess" value="timeNotPassedLastEmail" />
+			<ui:param name="unSuccessMessage" value="Wait some time before send a new email" />
 		</ui:include>
 	</ui:define>
 </ui:composition>
