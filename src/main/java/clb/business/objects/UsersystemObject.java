@@ -32,10 +32,18 @@ public class UsersystemObject implements ClbObject, Serializable
     }
     
     public boolean emailSentItHasntAlreadyPassedEnoughTimeSince(Date currentDateMinusHours) {
+        
+        if(getLastSentEmail() == null)
+            return false;
+        
         return getLastSentEmail().getTime() - currentDateMinusHours.getTime() > 0;
     }
     
     public boolean hasExpiredDate(Date currentDate) {
+        
+        if(getExpiryDate() == null)
+            return false;
+        
         return getExpiryDate().getTime() - currentDate.getTime() <= 0;
     }
     

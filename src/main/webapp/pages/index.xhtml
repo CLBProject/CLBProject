@@ -132,8 +132,10 @@
 								action="#{clbHomeRegisterBean.registerUserAccount}"
 								validateClient="true" styleClass="signButtonExtended"
 								value="Register" ajax="true"
-								onclick="document.body.style.cursor='wait'"
-								oncomplete="if (!args.validationFailed){
+								onstart="document.body.style.cursor='wait'"
+								oncomplete="
+											document.body.style.cursor='default';
+											if (!args.validationFailed){
 												document.body.style.cursor = 'default'; 
 												if (args.userExists === true ){ 
 													PF('unSuccessPanelalexistsUnsuccess').show();

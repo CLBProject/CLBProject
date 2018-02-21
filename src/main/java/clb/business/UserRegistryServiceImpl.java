@@ -21,7 +21,6 @@ import clb.global.exceptions.UserCantResendEmailException;
 import clb.global.exceptions.UserDoesNotExistException;
 import clb.global.exceptions.UserDoesNotMatchPasswordLoginException;
 import clb.global.exceptions.UserExistsOnRegistryException;
-import clb.global.exceptions.UserNotFoundByTokenOnCompleteRegistration;
 import clb.global.exceptions.UserNotPersistedException;
 import clb.global.exceptions.UserTokenHasExpiredOnCompleteRegistration;
 import clb.global.exceptions.UserTokenIsNullOnCompleteRegistrationException;
@@ -83,7 +82,6 @@ public class UserRegistryServiceImpl implements UserRegistryService, Serializabl
 
         user.setPassword( passwordEncoder.encode( user.getPassword() ) );
         user.setToken( generateUserToken() );
-        user.setLastSentEmail( new Date() );
         
         clbDao.saveUsersystem( user );
 
@@ -103,22 +101,18 @@ public class UserRegistryServiceImpl implements UserRegistryService, Serializabl
     @Override
     @Transactional
     public UsersystemObject completeUserRegistration(String token) throws UserTokenIsNullOnCompleteRegistrationException,
-    UserNotFoundByTokenOnCompleteRegistration, 
     UserTokenHasExpiredOnCompleteRegistration{
         //Token is null
         if(token == null) {
             throw new UserTokenIsNullOnCompleteRegistrationException();
         }
 
-        UsersystemObject userObject = clbDao.findUserByToken(token);
+        UsersystemObject userObject = clbDao.findUserByToken( token );
 
-        if (userObject == null || userObject.getToken() == null) {
-            throw new UserNotFoundByTokenOnCompleteRegistration();
-        }
-
-        if (userObject.hasExpiredDate(new Date())) {
+        if (userObject == null || userObject.getToken() == null || userObject.hasExpiredDate(new Date())) {
             throw new UserTokenHasExpiredOnCompleteRegistration();
         }
+
         //Persist enabled user
         userObject.setEnabled(true);
         clbDao.saveUsersystem( userObject );

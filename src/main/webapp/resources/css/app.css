@@ -10,6 +10,11 @@ body {
 	font-family: Arial, Helvetica, sans-serif;
 }
 
+.ui-message-error-detail{
+	font-size: 12px !important;
+	width:100%;
+}
+
 .homeMainDivClass{
 	background-color: #0A122A;
 	color: white !important;
@@ -176,7 +181,7 @@ body {
 }
 
 .signUpPanel.ui-panel{
-	width: 600px;
+	width: 650px;
 	font-size: 20px !important;
 	font-weight: normal !important;
 	padding: 0;
@@ -185,4 +190,8 @@ body {
 .signUpPanel.ui-panel .ui-panel-titlebar{
 	background-color: #0A122A !important;
 	color: white;
+}
+
+.badUserText{
+	font-size: 16px !important;
 }

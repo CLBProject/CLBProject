@@ -5,7 +5,6 @@ import clb.global.exceptions.UserCantResendEmailException;
 import clb.global.exceptions.UserDoesNotExistException;
 import clb.global.exceptions.UserDoesNotMatchPasswordLoginException;
 import clb.global.exceptions.UserExistsOnRegistryException;
-import clb.global.exceptions.UserNotFoundByTokenOnCompleteRegistration;
 import clb.global.exceptions.UserNotPersistedException;
 import clb.global.exceptions.UserTokenHasExpiredOnCompleteRegistration;
 import clb.global.exceptions.UserTokenIsNullOnCompleteRegistrationException;
@@ -19,7 +18,6 @@ public interface UserRegistryService {
 
     UsersystemObject completeUserRegistration(String token) 
             throws UserTokenIsNullOnCompleteRegistrationException,
-                   UserNotFoundByTokenOnCompleteRegistration, 
                    UserTokenHasExpiredOnCompleteRegistration;
 
     void makeNewUserRegistration( String username, int nrOfMinutesNecessaryToResend ) throws UserDoesNotExistException, UserCantResendEmailException;

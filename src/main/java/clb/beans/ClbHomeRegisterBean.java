@@ -17,7 +17,6 @@ import clb.business.objects.UsersystemObject;
 import clb.global.exceptions.UserCantResendEmailException;
 import clb.global.exceptions.UserDoesNotExistException;
 import clb.global.exceptions.UserExistsOnRegistryException;
-import clb.global.exceptions.UserNotFoundByTokenOnCompleteRegistration;
 import clb.global.exceptions.UserNotPersistedException;
 import clb.global.exceptions.UserTokenHasExpiredOnCompleteRegistration;
 import clb.global.exceptions.UserTokenIsNullOnCompleteRegistrationException;
@@ -45,6 +44,10 @@ public class ClbHomeRegisterBean implements Serializable{
     
     private final static String USER_NOT_FOUND_ON_RESEND_EMAIL = "userNotFoundResendEmail";
     private final static String TIME_NOT_PASSED_SINCE_LAST_EMAIL = "timeNotPassedLastEmail";
+    
+    private final static String USER_TOKEN_NOT_FOUND_RESULT = "Token wasnt found for User Registry!";
+    private final static String USER_TOKEN_HAS_EXPIRED = "Token has expired for this User!";
+    
 
     @PostConstruct
     public void init() {
@@ -87,16 +90,17 @@ public class ClbHomeRegisterBean implements Serializable{
         String token = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get( "token" );
 
         try {
-            UsersystemObject userRegistered = userRegistryService.completeUserRegistration( token );
             
-            clbHomeLoginBean.setUserName( userRegistered.getUsername() );
+            registerResult = null;
+            
+            UsersystemObject userRegistered = userRegistryService.completeUserRegistration( token);
+            
+            clbHomeLoginBean.setUserName( userRegistered.getUsername() );       
             
         } catch( UserTokenIsNullOnCompleteRegistrationException e ) {
-            // return badUser
-        } catch( UserNotFoundByTokenOnCompleteRegistration e ) {
-         // return badUser
+            registerResult = USER_TOKEN_NOT_FOUND_RESULT;
         } catch( UserTokenHasExpiredOnCompleteRegistration e ) {
-         // return badUser
+            registerResult = USER_TOKEN_HAS_EXPIRED;
         }
     }
     

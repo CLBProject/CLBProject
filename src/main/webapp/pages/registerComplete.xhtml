@@ -22,26 +22,30 @@
 						<td align="right" valign="top"></td>
 					</tr>
 				</table>
+				<div align="center">
+					<p:spacer height="20"></p:spacer>
+					<p:panel styleClass="signUpPanel" rendered="#{empty clbHomeRegisterBean.registerResult}">
+						<p:outputLabel
+							value="User was registered! Please click on the link below to enter in the application:"></p:outputLabel>
+						<br />
+						<br />
+						<p:commandLink value="CLB" ajax="true" udpate="@form :bannerForm"
+							action="#{redirectBean.redirectTo('clb.xhtml?faces-redirect=true')}"></p:commandLink>
+					</p:panel>
+					<p:panel styleClass="signUpPanel" rendered="#{not empty clbHomeRegisterBean.registerResult}">
+						<p:panelGrid columns="2" styleClass="successGrid">
+							<p:column>
+								<p:graphicImage
+									value="${pageContext.request.contextPath}/resources/images/error.png"></p:graphicImage>
+							</p:column>
+							<p:column>
+								<p:outputLabel styleClass="badUserText"
+									value="#{clbHomeRegisterBean.registerResult}"></p:outputLabel>
+							</p:column>
+						</p:panelGrid>
+					</p:panel>
+				</div>
 			</h:form>
-			<c:choose>
-				<c:when test="#{clbHomeRegisterBean.registerResult != ''}">
-					<div align="center">
-						<h:form id="registerForm">
-							<p:panel styleClass="signUpPanel">
-								<p:outputLabel
-									value="User was registered! Please click on the link below to enter in the application:"></p:outputLabel>
-								<br />
-								<br/>
-								<p:commandLink value="CLB" ajax="true" udpate="@form :bannerForm"
-									action="#{redirectBean.redirectTo('clb.xhtml?faces-redirect=true')}"></p:commandLink>
-							</p:panel>
-						</h:form>
-					</div>
-				</c:when>
-				<c:otherwise>
-					<h2>#{clbHomeRegisterBean.registerResult}</h2>
-				</c:otherwise>
-			</c:choose>
 		</div>
 	</ui:define>
 </ui:composition>
