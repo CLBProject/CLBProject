@@ -85,6 +85,16 @@ form {
 	text-align: center !important;
 }
 
+.ui-button.simpleButton {
+	width: 100px !important;
+	background-color: #CED8F6 !important;
+	color: #0A122A !important;
+	font-weight: normal;
+	font-size: 12px !important;
+	font-family: Arial, Helvetica, sans-serif !important;
+	text-align: center !important;
+}
+
 .ui-button.signButtonExtended {
 	width: 300px !important;
 	padding: 5px !important;
@@ -218,15 +228,33 @@ form {
 
 .analysisDiv{
 	background-color: #0A122A !important;
+	height: 100vh;
 }
 
 .analysisDivClass{
 	color:white !important;
 	font-size: 12px !important;
 	font-family: Arial, Helvetica, sans-serif !important;
+	padding-right: 20px !important;
+	padding-left: 10px !important;
 }
 
 .analysisDivClassMainCell{
-	font-size: 14px !important;
+	font-size: 18px !important;
 	font-weight: bold;
+}
+
+.analysisChartCSS {
+	font-size: 12px;
+	width: 100% !important;
+	height: 450px !important;
+}
+
+.selectOneMenuAnalysis.ui-selectonemenu{
+	width: 90% !important;
+}
+
+.ui-selectonemenu .ui-selectonemenu-label{
+	background: #CED8F6 !important;
+	color:#0A122A !important;
 }

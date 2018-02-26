@@ -11,19 +11,39 @@
 		<ui:include src="./general/menutab.xhtml" />
 		<div class="analysisDiv">
 			<h:form>
-				<p:spacer height="10" />
-				<table width="100%" class="analysisDivClass" cellpadding="5">
+				<p:spacer height="20" />
+				<table width="100%" class="analysisDivClass">
 					<tr>
-						<td width="300px" class="analysisDivClassMainCell"><h:outputLabel
+						<td width="200px" class="analysisDivClassMainCell"><h:outputLabel
 								value="Analysis Menu"></h:outputLabel>
 							<hr /></td>
-						<td><p:calendar value="#{analysisBean.analysisDate}"></p:calendar>
-							<p:spacer width="15"></p:spacer> <p:commandButton value="|"></p:commandButton>
-							<p:outputLabel value="Daily View"></p:outputLabel> <p:commandButton
-								value="|"></p:commandButton> <p:spacer width="10"></p:spacer> <p:commandButton
-								value="|"></p:commandButton> <p:outputLabel value="Average"></p:outputLabel>
-							<p:commandButton value="|"></p:commandButton> <p:spacer
-								width="30" /> <p:commandButton value="Save As"></p:commandButton>
+						<td align="right">
+							<p:outputLabel value="Time Frame:" for="scaleList"></p:outputLabel>
+							<p:spacer width="5"></p:spacer> 
+							<p:calendar value="#{analysisBean.analysisDate}"></p:calendar>
+							<p:spacer width="25"></p:spacer> 
+							<p:outputLabel value="Scale:" for="scaleList"></p:outputLabel>
+							<p:spacer width="5"></p:spacer> 
+							<p:selectOneMenu id="scaleList" widgetVar="scaleList" value="#{analysisBean.scaleGraphic}">
+            					<f:selectItems value="#{analysisBean.scalesGraphic}" 
+            							var="analysisScale" itemValue="#{analysisScale}" itemLabel="#{analysisScale.label}"/>
+							</p:selectOneMenu>
+							<p:spacer width="10"></p:spacer> 
+							<p:spacer
+								width="30" /> <p:commandButton styleClass="simpleButton" value="Export"></p:commandButton>
+							<p:spacer width="10"/>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top">
+							<p:selectOneMenu styleClass="selectOneMenuAnalysis" value="#{analysisBean.analysisType}">
+            					<f:selectItems value="#{analysisBean.analysisTypes}" 
+            							var="analysisTyp" itemValue="#{analysisTyp}" itemLabel="#{analysisTyp.label}"/>
+							</p:selectOneMenu>
+						</td>
+						<td valign="top" align="right">
+							<p:chart styleClass="analysisChartCSS" id="chartDayId" widgetVar="chartDayId" 
+								model="#{analysisBean.analysisBarDayPojo.lineModel}" type="line"/>
 						</td>
 					</tr>
 				</table>
