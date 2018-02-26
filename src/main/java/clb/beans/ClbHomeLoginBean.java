@@ -49,9 +49,17 @@ public class ClbHomeLoginBean implements Serializable{
             userRegistryService.validateUserLogin( userName, password );
             return "clb";
         } catch( UserDoesNotExistException e ) {
+           
+            userName = null;
+            password = null;
+           
             context.addCallbackParam(CANT_LOGIN_USER_NOT_FOUND_PARAM, true);
             return "index";
         } catch( UserDoesNotMatchPasswordLoginException e ) {
+            
+            userName = null;
+            password = null;
+            
             context.addCallbackParam(CANT_LOGIN_PASSWORD_DOESNT_MATCH_PARAM, true);
             return "index";
         }
