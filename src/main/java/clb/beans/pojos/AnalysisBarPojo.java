@@ -1,8 +1,5 @@
 package clb.beans.pojos;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.ChartSeries;
@@ -37,10 +34,10 @@ public class AnalysisBarPojo {
         lineModel.addSeries(chartSeriesAl2);
         lineModel.addSeries(chartSeriesAl3);
         
-        fillGraphicForYearData(new ArrayList());
+        fillGraphicForYearData();
     }
 
-    public void fillGraphicForYearData(List monthAverage){
+    public void fillGraphicForYearData(/*List monthAverage*/){
 
         chartSeriesAl1.getData().clear();
         chartSeriesAl2.getData().clear();
