@@ -123,11 +123,13 @@
 						</p:panelGrid>
 						<p:spacer height="20" />
 						<div align="center">
-							<p:commandLink oncomplete="PF('resendEmail').show()" value="Resend Registration Email" styleClass="recoverLinkPassword"></p:commandLink>
-							<br/>
-							<p:commandLink oncomplete="PF('recoverPassword').show()" value="Forget your password?" styleClass="recoverLinkPassword"></p:commandLink>
-							<br/>
-							<br/>
+							<p:commandLink oncomplete="PF('resendEmail').show()"
+								value="Resend Registration Email"
+								styleClass="recoverLinkPassword"></p:commandLink>
+							<br />
+							<p:commandLink oncomplete="PF('recoverPassword').show()"
+								value="Forget your password?" styleClass="recoverLinkPassword"></p:commandLink>
+							<br /> <br />
 							<p:commandButton
 								action="#{clbHomeRegisterBean.registerUserAccount}"
 								validateClient="true" styleClass="signButtonExtended"
@@ -151,8 +153,8 @@
 				</h:form>
 			</div>
 		</div>
-		<ui:include src="./popups/recoverPassword.xhtml"/>
-		<ui:include src="./popups/resendEmail.xhtml"/>
+		<ui:include src="./popups/recoverPassword.xhtml" />
+		<ui:include src="./popups/resendEmail.xhtml" />
 		<ui:include src="./popups/successDialog.xhtml">
 			<ui:param name="id" value="registry"></ui:param>
 			<ui:param name="successMessage"
@@ -169,7 +171,9 @@
 		</ui:include>
 		<ui:include src="./popups/unSuccessDialog.xhtml">
 			<ui:param name="idUnsuccess" value="alexistsUnsuccess" />
-			<ui:param name="unSuccessMessage" value="User can't be registered because already exists" />
+			<ui:param name="unSuccessMessage"
+				value="User can't be registered because already exists" />
 		</ui:include>
+		<ui:include src="./general/footer.xhtml" />
 	</ui:define>
 </ui:composition>

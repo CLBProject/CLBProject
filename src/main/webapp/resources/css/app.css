@@ -4,37 +4,52 @@ body {
 	margin: 0px !important;
 }
 
-form {
-    margin-bottom: 0;
+footer {
+	background-color: #CED8F6;
+	width: 100%;
+	bottom: 0;
+	color: #0A122A !important;
+	text-decoration: none !important;
+	font-size: 14px !important;
+	padding-top: 10px !important;
+	padding-bottom: 10px !important;
 }
 
-.menuSeparator{
-	position: relative; 
+form {
+	margin-bottom: 0;
+}
+
+.ui-widget-content {
+	background: #CED8F6 !important;
+}
+
+.menuSeparator {
+	position: relative;
 	bottom: -2px;
 	background-color: #0A122A;
 	margin-left: 10px;
 	margin-right: 10px
 }
 
-.logoClass{
+.logoClass {
 	color: #DF7401 !important;
 	font-size: 22px ! important;
 	font-family: Arial, Helvetica, sans-serif;
 }
 
-.ui-message-error-detail{
+.ui-message-error-detail {
 	font-size: 12px !important;
-	width:100%;
+	width: 100%;
 }
 
-.homeMainDivClass{
+.homeMainDivClass {
 	background-color: #0A122A;
 	color: white !important;
 	width: 100%;
-	height:100vh;
+	height: 100vh;
 }
 
-.homeMainDivBannerClass{
+.homeMainDivBannerClass {
 	background-color: #CED8F6 !important;
 	color: #0A122A !important;
 	font-size: 12px;
@@ -42,7 +57,7 @@ form {
 	border-spacing: 0;
 }
 
-.menuLink{
+.menuLink {
 	color: #0A122A !important;
 	text-decoration: none !important;
 	font-size: 12px !important;
@@ -54,7 +69,7 @@ form {
 	padding-top: 10px;
 	padding-left: 20px;
 	padding-right: 20px;
-	height:100vh;
+	height: 100vh;
 }
 
 .mainDivClassHeader {
@@ -87,8 +102,18 @@ form {
 
 .ui-button.simpleButton {
 	width: 100px !important;
-	background-color: #CED8F6 !important;
-	color: #0A122A !important;
+	background-color: #0B3861 !important;
+	color: white !important;
+	font-weight: normal;
+	font-size: 12px !important;
+	font-family: Arial, Helvetica, sans-serif !important;
+	text-align: center !important;
+}
+
+.menuAnalysisButton {
+	width: 100% !important;
+	background-color: #0B3861 !important;
+	color: white !important;
 	font-weight: normal;
 	font-size: 12px !important;
 	font-family: Arial, Helvetica, sans-serif !important;
@@ -106,8 +131,8 @@ form {
 	text-align: center !important;
 }
 
-.ui-widget-content {
-	background-color: #CED8F6 !important;
+.signUpPanel.ui-widget-content {
+	background: #CED8F6 !important;
 }
 
 .mainPanelCol1 {
@@ -155,16 +180,17 @@ form {
 }
 
 .ui-dialog-title-dialog {
-	text-align: center;	
+	text-align: center;
 }
 
-.ui-widget-content.mainTable {
+.mainTable.ui-widget-content {
 	background-color: #CED8F6 !important;
 	border: 0;
 }
 
 .ui-widget.mainTable {
 	color: #0A122A;
+	background-color: #CED8F6 !important;
 	font-family: Arial, Helvetica, sans-serif !important;
 	font-weight: bold;
 }
@@ -182,24 +208,24 @@ form {
 }
 
 .ui-widget-overlay {
-   opacity: 0.7 !important;
+	opacity: 0.7 !important;
 }
 
-.linkClass{
+.linkClass {
 	color: white !important;
 }
 
-.successDialogDiv{
-	padding:5px;
+.successDialogDiv {
+	padding: 5px;
 }
 
-.recoverPasswordDiv{
+.recoverPasswordDiv {
 	font-size: 16px !important;
 }
 
-.recoverLinkPassword{
+.recoverLinkPassword {
 	color: #013ADF !important;
-	font-size:16px !important;
+	font-size: 16px !important;
 }
 
 .ui-panelGrid.successGrid {
@@ -209,37 +235,36 @@ form {
 	padding: 0 !important;
 }
 
-.signUpPanel.ui-panel{
+.signUpPanel.ui-panel {
 	width: 650px;
 	font-size: 20px !important;
 	font-weight: normal !important;
 	padding: 0;
 }
 
-.signUpPanel.ui-panel .ui-panel-titlebar{
+.signUpPanel.ui-panel .ui-panel-titlebar {
 	background-color: #0A122A !important;
 	color: white;
 }
 
-.badUserText{
+.badUserText {
 	font-size: 16px !important;
 }
 
-
-.analysisDiv{
+.analysisDiv {
 	background-color: #0A122A !important;
 	height: 100vh;
 }
 
-.analysisDivClass{
-	color:white !important;
+.analysisDivClass {
+	color: white !important;
 	font-size: 12px !important;
 	font-family: Arial, Helvetica, sans-serif !important;
-	padding-right: 20px !important;
-	padding-left: 10px !important;
+	padding-right: 30px !important;
+	padding-left: 30px !important;
 }
 
-.analysisDivClassMainCell{
+.analysisDivClassMainCell {
 	font-size: 18px !important;
 	font-weight: bold;
 }
@@ -250,11 +275,25 @@ form {
 	height: 450px !important;
 }
 
-.selectOneMenuAnalysis.ui-selectonemenu{
+.selectOneMenuAnalysis.ui-selectonemenu {
 	width: 90% !important;
 }
 
-.ui-selectonemenu .ui-selectonemenu-label{
+.ui-datepicker {
+	background: white !important;
+	font-size: 12px !important;
+}
+
+.ui-datepicker-header {
+	background: #0A122A !important;
+	color: #CED8F6 !important;
+}
+
+.hasDatePicker.ui-inputfield {
 	background: #CED8F6 !important;
-	color:#0A122A !important;
+}
+
+.ui-selectonemenu .ui-selectonemenu-label {
+	background: #CED8F6 !important;
+	color: #0A122A !important;
 }
