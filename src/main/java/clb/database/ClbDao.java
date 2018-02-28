@@ -28,4 +28,6 @@ public interface ClbDao{
     UsersystemObject findUserByToken( String token );
 
     UsersystemObject findUserByUserName( String userName );
+
+    List<BuildingObject> findUserBuildings( String userName );
 }

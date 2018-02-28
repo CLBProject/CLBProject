@@ -7,12 +7,10 @@ import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
@@ -34,7 +32,6 @@ import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryAverageObject;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.BuildingObject;
-import clb.business.objects.ClbObject;
 import clb.business.objects.DataLoggerObject;
 import clb.business.objects.UsersystemObject;
 import clb.database.ClbDao;
@@ -60,53 +57,20 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
     private ApplicationEventPublisher eventPublisher;
 
     @Override
-    public void persistScriptBigData() throws IOException{
-        UsersystemObject userObject = new UsersystemObject();
-
-        userObject.setUserid( "nobreyeste@hotmail.com" );
-        userObject.setName( "Carlos Nobre" );
-        userObject.setAddress( "No address at this point" );
-        userObject.setUsername( "cnobre" );
-        userObject.setPassword( "123" );
-
-        UsersystemObject userObject2 = new UsersystemObject();
-
-        userObject2.setUserid( "brunocatela@hotmail.com" );
-        userObject2.setName( "Bruno Catela" );
-        userObject2.setAddress( "No address at this point" );
-        userObject2.setUsername( "bcatela" );
-        userObject2.setPassword( "123" );
-
-        UsersystemObject userObject3 = new UsersystemObject();
-
-        userObject3.setUserid( "luissantos@hotmail.com" );
-        userObject3.setName( "Luis Santos" );
-        userObject3.setAddress( "No address at this point" );
-        userObject3.setUsername( "lsantos" );
-        userObject3.setPassword( "123" );
-
-        List<UsersystemObject> users = new ArrayList<UsersystemObject>();
-
-        users.add( userObject );
-        users.add( userObject2 );
-        users.add( userObject3 );
-
-        int usersIndex = 0;
-
+    @Transactional
+    public void persistDataForUser(String userName) throws IOException{
         for(File file: dataAnalyzerXls.getFile().listFiles()){
-            updateAnalyzerRegistriesForAnalyzer(file,users.get( usersIndex ));
-            usersIndex = usersIndex +1 == users.size() ? 0 : usersIndex+1;
+            updateAnalyzerRegistriesForAnalyzer(file,clbDao.findUserByUserName( userName ));
         }
-
-        clbDao.saveUsers(users);
     }
+    
 
     @Override
-    @Transactional
-    public void saveObject(ClbObject clbObject) {
-        if(clbObject instanceof UsersystemObject) {
-            clbDao.saveUsersystem((UsersystemObject)clbObject);
-        }
+    public UsersystemObject getUserData( String username ) {
+        UsersystemObject user = clbDao.findUserByUserName( username );
+        user.setBuildings( clbDao.findUserBuildings(username));
+        
+        return user;
     }
 
     private boolean isAverageDate(Date currentDate) {
@@ -209,6 +173,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
         }
 
         clbDao.saveBuilding(building);
+        clbDao.saveUsersystem( userObject );
     }
 
     private void persistDummyAnalyzerRegistries(AnalyzerObject analyzer, Set<Long> dataToExclude){

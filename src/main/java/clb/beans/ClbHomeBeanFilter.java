@@ -46,7 +46,7 @@ public class ClbHomeBeanFilter implements Filter {
                     || reqURI.contains("javax.faces.resource") || reqURI.contains(REGISTER_COMPLETE_PAGE) )
                    chain.doFilter(request, response);
             else   // user didn't log in but asking for a page that is not allowed so take user to login page
-                   res.sendRedirect(req.getContextPath() + "/" + HOME_PAGE);  // Anonymous user. Redirect to login page
+                   res.sendRedirect(req.getContextPath() + "/pages/" + HOME_PAGE);  // Anonymous user. Redirect to login page
       }
      catch(Throwable t) {
          System.out.println( t.getMessage());

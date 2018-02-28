@@ -97,6 +97,4 @@ public class ClbHomeLoginBean implements Serializable{
     public void setPassword( String password ) {
         this.password = password;
     }
-
-
 }

@@ -2,6 +2,7 @@ package clb.database;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -174,5 +175,10 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	public void setAverageRegistryMongoRespository(AnalyzerRegistryMongoRepository averageRegistryMongoRespository) {
 		this.averageRegistryMongoRespository = averageRegistryMongoRespository;
 	}
+
+    @Override
+    public List<BuildingObject> findUserBuildings( String userName ) {
+        return buildingsMongoRepository.findBuildingsByUsername( userName ).stream().map(BuildingObject::new).collect(Collectors.toList());
+    }
 	
 }

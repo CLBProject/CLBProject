@@ -50,6 +50,11 @@
 							model="#{clbUserBean.mapModel}" onPointClick="" widgetVar="map" />
 					</p:column>
 				</h:panelGrid>
+				<div class="mainDivClass">
+					<p:commandButton value="Fill User"
+						action="#{clbUserBean.runUserDataFill}" type="submit"
+						ajax="false"></p:commandButton>
+				</div>
 			</div>
 		</h:form>
 		<ui:include src="./general/footer.xhtml" />

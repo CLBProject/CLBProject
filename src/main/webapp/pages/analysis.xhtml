@@ -39,16 +39,23 @@
 								<f:selectItems value="#{analysisBean.analysisTypes}"
 									var="analysisTyp" itemValue="#{analysisTyp}"
 									itemLabel="#{analysisTyp.label}" />
-							</p:selectOneMenu> <p:spacer height="20"></p:spacer> <p:commandButton
-								value="Building | Ritz" icon="fa fa-fw fa-building"
-								styleClass="menuAnalysisButton" /> <p:spacer height="5"></p:spacer>
-							<p:commandButton value="Meter | General"
-								icon="fa fa-fw fa-tachometer" styleClass="menuAnalysisButton" />
+							</p:selectOneMenu> <p:spacer height="20"></p:spacer> <c:choose>
+								<c:when test="#{empty analysisBean.buildingSelected}">
+									<p:commandButton value="No Buildings"
+										icon="fa fa-fw fa-building" styleClass="menuAnalysisButton" />
+								</c:when>
+								<c:otherwise>
+									<p:commandButton value="Building | #{analysisBean.buildingSelected.name}"
+										icon="fa fa-fw fa-building" styleClass="menuAnalysisButton" />
+								</c:otherwise>
+							</c:choose> 
 							<p:spacer height="5"></p:spacer> <p:commandButton
-								value="Measure | Power (kW)" icon="fa fa-fw fa-database"
+								value="Meter | General" icon="fa fa-fw fa-tachometer"
 								styleClass="menuAnalysisButton" /> <p:spacer height="5"></p:spacer>
-							<p:commandButton value="Saved" icon="fa fa-fw fa-save"
-								styleClass="menuAnalysisButton" /></td>
+							<p:commandButton value="Measure | Power (kW)"
+								icon="fa fa-fw fa-database" styleClass="menuAnalysisButton" />
+							<p:spacer height="5"></p:spacer> <p:commandButton value="Saved"
+								icon="fa fa-fw fa-save" styleClass="menuAnalysisButton" /></td>
 						<td valign="top" align="right"><p:chart
 								styleClass="analysisChartCSS" id="chartDayId"
 								widgetVar="chartDayId"

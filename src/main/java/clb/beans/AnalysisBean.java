@@ -5,11 +5,15 @@ import java.util.Date;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
 import clb.beans.enums.AnalysisTypes;
 import clb.beans.enums.ScaleGraphic;
 import clb.beans.pojos.AnalysisBarPojo;
+import clb.business.AnalyzerDataService;
+import clb.business.objects.BuildingObject;
+import clb.business.objects.UsersystemObject;
 
 @ViewScoped
 @ManagedBean
@@ -17,8 +21,18 @@ public class AnalysisBean implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
+    @ManagedProperty("#{clbHomeLoginBean}")
+    private ClbHomeLoginBean clbHomeLoginBean;
+    
+    @ManagedProperty("#{analyzerDataService}")
+    private AnalyzerDataService analyzerDataService;
+    
+    private UsersystemObject userObjectSelected;
+    
     private Date analysisDate;
     private AnalysisBarPojo analysisBarDayPojo;
+    
+    private BuildingObject buildingSelected;
     
     private AnalysisTypes analysisType;
     private AnalysisTypes[] analysisTypes;
@@ -32,6 +46,10 @@ public class AnalysisBean implements Serializable{
         analysisBarDayPojo = new AnalysisBarPojo();
         analysisTypes = AnalysisTypes.values();
         scalesGraphic = ScaleGraphic.values();
+        
+        userObjectSelected = analyzerDataService.getUserData( clbHomeLoginBean.getUserName() );
+        
+        buildingSelected = userObjectSelected.getBuildings().size() > 0 ? userObjectSelected.getBuildings().get( 0 ) : null;
     }
 
     public Date getAnalysisDate() {
@@ -80,6 +98,38 @@ public class AnalysisBean implements Serializable{
 
     public void setScaleGraphic( ScaleGraphic scaleGraphic ) {
         this.scaleGraphic = scaleGraphic;
+    }
+
+    public BuildingObject getBuildingSelected() {
+        return buildingSelected;
+    }
+
+    public void setBuildingSelected( BuildingObject buildingSelected ) {
+        this.buildingSelected = buildingSelected;
+    }
+
+    public ClbHomeLoginBean getClbHomeLoginBean() {
+        return clbHomeLoginBean;
+    }
+
+    public void setClbHomeLoginBean( ClbHomeLoginBean clbHomeLoginBean ) {
+        this.clbHomeLoginBean = clbHomeLoginBean;
+    }
+
+    public UsersystemObject getUserObjectSelected() {
+        return userObjectSelected;
+    }
+
+    public void setUserObjectSelected( UsersystemObject userObjectSelected ) {
+        this.userObjectSelected = userObjectSelected;
+    }
+
+    public AnalyzerDataService getAnalyzerDataService() {
+        return analyzerDataService;
+    }
+
+    public void setAnalyzerDataService( AnalyzerDataService analyzerDataService ) {
+        this.analyzerDataService = analyzerDataService;
     }
     
     
