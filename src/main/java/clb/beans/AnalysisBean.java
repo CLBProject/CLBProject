@@ -12,8 +12,9 @@ import clb.beans.enums.AnalysisTypes;
 import clb.beans.enums.ScaleGraphic;
 import clb.beans.pojos.AnalysisBarPojo;
 import clb.business.AnalyzerDataService;
+import clb.business.objects.AnalyzerObject;
 import clb.business.objects.BuildingObject;
-import clb.business.objects.UsersystemObject;
+import clb.business.objects.DataLoggerObject;
 
 @ViewScoped
 @ManagedBean
@@ -23,23 +24,23 @@ public class AnalysisBean implements Serializable{
 
     @ManagedProperty("#{clbHomeLoginBean}")
     private ClbHomeLoginBean clbHomeLoginBean;
-    
+
     @ManagedProperty("#{analyzerDataService}")
     private AnalyzerDataService analyzerDataService;
-    
-    private UsersystemObject userObjectSelected;
-    
+
     private Date analysisDate;
     private AnalysisBarPojo analysisBarDayPojo;
-    
+
     private BuildingObject buildingSelected;
-    
+    private DataLoggerObject dataLoggerSelected;
+    private AnalyzerObject analyzerSelected;
+
     private AnalysisTypes analysisType;
     private AnalysisTypes[] analysisTypes;
-    
+
     private ScaleGraphic scaleGraphic;
     private ScaleGraphic[] scalesGraphic;
-    
+
     @PostConstruct
     public void init() {
         analysisDate = new Date();
@@ -47,9 +48,21 @@ public class AnalysisBean implements Serializable{
         analysisTypes = AnalysisTypes.values();
         scalesGraphic = ScaleGraphic.values();
         
-        userObjectSelected = analyzerDataService.getUserData( clbHomeLoginBean.getUserName() );
-        
-        buildingSelected = userObjectSelected.getBuildings().size() > 0 ? userObjectSelected.getBuildings().get( 0 ) : null;
+        //Set Initial Selected Building, DataLogger and Analyzer
+        if(clbHomeLoginBean.getUserLoginPojo().getCurrentUser().getBuildings() != null && 
+                clbHomeLoginBean.getUserLoginPojo().getCurrentUser().getBuildings().size() > 0 ) {
+            
+            buildingSelected = clbHomeLoginBean.getUserLoginPojo().getCurrentUser().getBuildings().get( 0 );
+            
+            if(buildingSelected.getDataLoggers() != null && buildingSelected.getDataLoggers().size() > 0) {
+                
+                dataLoggerSelected = buildingSelected.getDataLoggers().get( 0 );
+                
+                if(dataLoggerSelected.getAnalyzers() != null && dataLoggerSelected.getAnalyzers().size() > 0) {
+                    analyzerSelected = dataLoggerSelected.getAnalyzers().get( 0 );
+                }
+            }
+        }
     }
 
     public Date getAnalysisDate() {
@@ -116,14 +129,6 @@ public class AnalysisBean implements Serializable{
         this.clbHomeLoginBean = clbHomeLoginBean;
     }
 
-    public UsersystemObject getUserObjectSelected() {
-        return userObjectSelected;
-    }
-
-    public void setUserObjectSelected( UsersystemObject userObjectSelected ) {
-        this.userObjectSelected = userObjectSelected;
-    }
-
     public AnalyzerDataService getAnalyzerDataService() {
         return analyzerDataService;
     }
@@ -131,6 +136,22 @@ public class AnalysisBean implements Serializable{
     public void setAnalyzerDataService( AnalyzerDataService analyzerDataService ) {
         this.analyzerDataService = analyzerDataService;
     }
-    
+
+    public DataLoggerObject getDataLoggerSelected() {
+        return dataLoggerSelected;
+    }
+
+    public void setDataLoggerSelected( DataLoggerObject dataLoggerSelected ) {
+        this.dataLoggerSelected = dataLoggerSelected;
+    }
+
+    public AnalyzerObject getAnalyzerSelected() {
+        return analyzerSelected;
+    }
+
+    public void setAnalyzerSelected( AnalyzerObject analyzerSelected ) {
+        this.analyzerSelected = analyzerSelected;
+    }
+
     
 }

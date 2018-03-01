@@ -39,16 +39,39 @@
 								<f:selectItems value="#{analysisBean.analysisTypes}"
 									var="analysisTyp" itemValue="#{analysisTyp}"
 									itemLabel="#{analysisTyp.label}" />
-							</p:selectOneMenu> <p:spacer height="20"></p:spacer> <c:choose>
+							</p:selectOneMenu> <p:spacer height="20"></p:spacer> 
+							<c:choose>
 								<c:when test="#{empty analysisBean.buildingSelected}">
 									<p:commandButton value="No Buildings"
 										icon="fa fa-fw fa-building" styleClass="menuAnalysisButton" />
 								</c:when>
 								<c:otherwise>
-									<p:commandButton value="Building | #{analysisBean.buildingSelected.name}"
+									<p:commandButton value="Building | #{analysisBean.buildingSelected.name}" onclick="PF('selectionPopup').show()"
+										icon="fa fa-fw fa-building" styleClass="menuAnalysisButton" />
+								</c:otherwise>
+							</c:choose>
+							<p:spacer height="5"/>
+							<c:choose>
+								<c:when test="#{empty analysisBean.dataLoggerSelected}">
+									<p:commandButton value="No Data Loggers"
+										icon="fa fa-fw fa-building" styleClass="menuAnalysisButton" />
+								</c:when>
+								<c:otherwise>
+									<p:commandButton value="Data Logger | #{analysisBean.dataLoggerSelected.name}" onclick="PF('selectionPopup').show()"
 										icon="fa fa-fw fa-building" styleClass="menuAnalysisButton" />
 								</c:otherwise>
 							</c:choose> 
+							<p:spacer height="5"/>
+							<c:choose>
+								<c:when test="#{empty analysisBean.analyzerSelected}">
+									<p:commandButton value="No Analyzers"
+										icon="fa fa-fw fa-building" styleClass="menuAnalysisButton" />
+								</c:when>
+								<c:otherwise>
+									<p:commandButton value="Analyzer | #{analysisBean.analyzerSelected.name}" onclick="PF('selectionPopup').show()"
+										icon="fa fa-fw fa-building" styleClass="menuAnalysisButton" />
+								</c:otherwise>
+							</c:choose>  
 							<p:spacer height="5"></p:spacer> <p:commandButton
 								value="Meter | General" icon="fa fa-fw fa-tachometer"
 								styleClass="menuAnalysisButton" /> <p:spacer height="5"></p:spacer>
@@ -66,5 +89,6 @@
 			</h:form>
 		</div>
 		<ui:include src="./general/footer.xhtml" />
+		<ui:include src="./popups/selectionPopup.xhtml" />
 	</ui:define>
 </ui:composition>

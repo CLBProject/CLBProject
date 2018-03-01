@@ -10,7 +10,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import clb.business.objects.UsersystemObject;
 
-public class UsersystemPojo implements Serializable
+public class UserRegisterPojo implements Serializable
 {
     /**
      * 
@@ -38,7 +38,7 @@ public class UsersystemPojo implements Serializable
     
     private boolean enabled;
     
-    public UsersystemPojo() {
+    public UserRegisterPojo() {
     	
     }
     

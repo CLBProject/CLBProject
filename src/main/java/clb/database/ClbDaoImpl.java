@@ -110,7 +110,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
     @Override
     public UsersystemObject findUserByUserName( String userName ) {
-        UsersystemEntity userEntity = userSystemMongoRepository.findUserbyUsername( userName );
+        UsersystemEntity userEntity = userSystemMongoRepository.findUserbyUsername( userName ); 
         return userEntity != null ? new UsersystemObject(userEntity) : null;
     }
 	

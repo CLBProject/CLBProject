@@ -34,9 +34,9 @@ public class ClbUserBean implements Serializable{
     }
 
     public void runUserDataFill() {
-        if(clbHomeLoginBean.getUserName() != null) {
+        if(clbHomeLoginBean.getUserLoginPojo().getUsername() != null) {
             try {
-                analyzerDataService.persistDataForUser( clbHomeLoginBean.getUserName() );
+                analyzerDataService.persistDataForUser( clbHomeLoginBean.getUserLoginPojo().getUsername() );
             } catch( IOException e ) {
                 e.printStackTrace();
             }

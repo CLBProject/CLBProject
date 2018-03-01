@@ -1,7 +1,6 @@
 package clb.business;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
@@ -52,9 +51,12 @@ public class UserRegistryServiceImpl implements UserRegistryService, Serializabl
 
     @Override
     @Transactional
-    public void validateUserLogin( String userName , String password) throws UserDoesNotExistException, UserDoesNotMatchPasswordLoginException{
+    public UsersystemObject validateUserLogin( String userName , String password) throws UserDoesNotExistException, UserDoesNotMatchPasswordLoginException{
+        
+        UsersystemObject userObject = null;
+        
         if(userName != null && password != null) {
-            UsersystemObject userObject = clbDao.findUserByUserName(userName);
+            userObject = clbDao.findUserByUserName(userName);
 
             if (userObject == null)
                 throw new UserDoesNotExistException();
@@ -63,7 +65,8 @@ public class UserRegistryServiceImpl implements UserRegistryService, Serializabl
                 throw new UserDoesNotMatchPasswordLoginException();
             }
         }
-
+        
+        return userObject;
     }
 
     @Override
@@ -76,7 +79,7 @@ public class UserRegistryServiceImpl implements UserRegistryService, Serializabl
             throw new UserExistsOnRegistryException();
 
         Calendar cal = Calendar.getInstance();
-        cal.setTime(new Timestamp(cal.getTime().getTime()));
+        cal.setTime(cal.getTime());
         cal.add(Calendar.MINUTE, timeOfSession);
         user.setExpiryDate(cal.getTime());
 

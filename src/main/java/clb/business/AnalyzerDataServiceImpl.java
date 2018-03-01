@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -131,7 +130,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
                 AnalyzerRegistryObject analyzerRegistryObject = new AnalyzerRegistryObject();
 
-                analyzerRegistryObject.setCurrenttime( new Timestamp(calendar.getTime().getTime()) );
+                analyzerRegistryObject.setCurrenttime( calendar.getTime() );
                 analyzerRegistryObject.setAl1(row.getCell(2).getNumericCellValue());
                 analyzerRegistryObject.setAl2(row.getCell(3).getNumericCellValue());
                 analyzerRegistryObject.setAl3(row.getCell(4).getNumericCellValue());
@@ -163,7 +162,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
                 clbDao.saveAnalyzerRegistry(analyzerRegistryObject);
 
-                ana.addAnalyzerRegistry(analyzerRegistryObject);
+                ana.addAnalyzerRegistry(analyzerRegistryObject.getId());
             }
 
             persistDummyAnalyzerRegistries( ana, dataToExclueOnDummy);
@@ -220,7 +219,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
                                 AnalyzerRegistryObject anaRegObj = new AnalyzerRegistryObject();
 
-                                anaRegObj.setCurrenttime( new Timestamp(time.getTime()) );
+                                anaRegObj.setCurrenttime( time);
 
                                 anaRegObj.setAl1(lowAl + (highAl - lowAl) * random.nextDouble());
                                 anaRegObj.setAl2(lowAl + (highAl - lowAl) * random.nextDouble());
@@ -231,7 +230,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                                 al3DailyAverage +=anaRegObj.getAl3();
 
                                 clbDao.saveAnalyzerRegistry(anaRegObj);
-                                analyzer.addAnalyzerRegistry(anaRegObj);
+                                analyzer.addAnalyzerRegistry(anaRegObj.getId());
                             }
 
                             else {
@@ -244,14 +243,14 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
                     AnalyzerRegistryAverageObject anaRegAverageObj = new AnalyzerRegistryAverageObject();
 
-                    anaRegAverageObj.setCurrenttime( new Timestamp(calendar.getTime().getTime()) );
+                    anaRegAverageObj.setCurrenttime( calendar.getTime() );
 
                     anaRegAverageObj.setAl1Average(al1DailyAverage/ (24*60));
                     anaRegAverageObj.setAl2Average(al2DailyAverage/ (24*60));
                     anaRegAverageObj.setAl3Average(al3DailyAverage/ (24*60));
 
                     clbDao.saveAnalyzerRegistryAverage(anaRegAverageObj);
-                    analyzer.addAnalyzerRegistryAverage(anaRegAverageObj);
+                    analyzer.addAnalyzerRegistryAverage(anaRegAverageObj.getId());
 
                     calendar.add(Calendar.DATE, 1);
                 }

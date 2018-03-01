@@ -42,7 +42,8 @@ public class ClbHomeBeanFilter implements Filter {
    
             //  allow user to proccede if url is login.xhtml or user logged in or user is accessing any page in //public folder
             String reqURI = req.getRequestURI();
-            if ( reqURI.indexOf("/" + HOME_PAGE) >= 0 || (bean != null && bean.getUserName() != null && !bean.getUserName().equals( "" ))
+            if ( reqURI.indexOf("/" + HOME_PAGE) >= 0 || (bean != null &&  bean.getUserLoginPojo().getUsername() != null && 
+                    !bean.getUserLoginPojo().getUsername().equals( "" ))
                     || reqURI.contains("javax.faces.resource") || reqURI.contains(REGISTER_COMPLETE_PAGE) )
                    chain.doFilter(request, response);
             else   // user didn't log in but asking for a page that is not allowed so take user to login page

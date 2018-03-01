@@ -1,11 +1,9 @@
 package clb.database.entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -21,11 +19,9 @@ public class AnalyzerEntity implements ClbEntity, Serializable {
 
     private String name;
 
-    @DBRef
-    private List<AnalyzerRegistryEntity> analyzerRegistries;
+    private List<String> analyzerRegistriesIds;
 
-    @DBRef
-    private List<AnalyzerRegistryAverageEntity> analyzerRegistriesAverage;
+    private List<String> analyzerRegistriesAverageIds;
 
     public AnalyzerEntity() {
     }
@@ -46,35 +42,21 @@ public class AnalyzerEntity implements ClbEntity, Serializable {
         this.name = name;
     }
 
-    public List<AnalyzerRegistryEntity> getAnalyzerRegistries() {
-        return analyzerRegistries;
+    public List<String> getAnalyzerRegistriesIds() {
+        return analyzerRegistriesIds;
     }
 
-    public void setAnalyzerRegistries( List<AnalyzerRegistryEntity> analyzerRegistries ) {
-        this.analyzerRegistries = analyzerRegistries;
+    public void setAnalyzerRegistriesIds( List<String> analyzerRegistriesIds ) {
+        this.analyzerRegistriesIds = analyzerRegistriesIds;
     }
 
-    public void addAnalyzerRegistry(AnalyzerRegistryEntity analyzerRegistry) {
-        if(this.analyzerRegistries == null)
-            analyzerRegistries = new ArrayList<AnalyzerRegistryEntity>();
+    public List<String> getAnalyzerRegistriesAverageIds() {
+        return analyzerRegistriesAverageIds;
+    }
 
-        analyzerRegistries.add(analyzerRegistry);
+    public void setAnalyzerRegistriesAverageIds( List<String> analyzerRegistriesAverageIds ) {
+        this.analyzerRegistriesAverageIds = analyzerRegistriesAverageIds;
     }
     
-    public void setAnalyzerRegistriesAverage( List<AnalyzerRegistryAverageEntity> analyzerRegistriesAverage ) {
-        this.analyzerRegistriesAverage = analyzerRegistriesAverage;
-    }
-
-    public void addAnalyzerRegistryAverage(AnalyzerRegistryAverageEntity analyzerRegistryAverage) {
-        if(this.analyzerRegistriesAverage == null)
-            analyzerRegistriesAverage = new ArrayList<AnalyzerRegistryAverageEntity>();
-
-        analyzerRegistriesAverage.add(analyzerRegistryAverage);
-    }
-
-	public List<AnalyzerRegistryAverageEntity> getAnalyzerRegistriesAverage() {
-		return analyzerRegistriesAverage;
-	}
-
     
 }

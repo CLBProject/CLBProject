@@ -25,7 +25,7 @@
 								</p:column>
 								<p:column>
 									<p:inputText id="emailUser" label="emailUser"
-										value="#{clbHomeLoginBean.userName}" />
+										value="#{clbHomeLoginBean.userLoginPojo.username}" />
 								</p:column>
 								<p:column>
 									<p:spacer width="30" />
@@ -38,7 +38,7 @@
 								</p:column>
 								<p:column>
 									<p:inputText label="passwordUser" id="passwordUser"
-										value="#{clbHomeLoginBean.password}" type="password" />
+										value="#{clbHomeLoginBean.userLoginPojo.password}" type="password" />
 								</p:column>
 								<p:column>
 									<p:spacer width="40" />

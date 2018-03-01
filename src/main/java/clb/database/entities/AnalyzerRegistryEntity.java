@@ -1,7 +1,7 @@
   package clb.database.entities;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -31,9 +31,9 @@ public class AnalyzerRegistryEntity implements ClbEntity, Serializable {
 
 	private int comport;
 
-	private Timestamp currenttime;
+	private Date currenttime;
 
-	private Timestamp epochformat;
+	private Date epochformat;
 
 	private double hourmeterkwh;
 
@@ -127,7 +127,7 @@ public class AnalyzerRegistryEntity implements ClbEntity, Serializable {
 
 	private String recorttype;
 
-	private Timestamp rfc3339format;
+	private Date rfc3339format;
 
 	private double temperature;
 
@@ -232,19 +232,19 @@ public class AnalyzerRegistryEntity implements ClbEntity, Serializable {
 		this.comport = comport;
 	}
 
-	public Timestamp getCurrenttime() {
+	public Date getCurrenttime() {
 		return this.currenttime;
 	}
 
-	public void setCurrenttime(Timestamp currenttime) {
+	public void setCurrenttime(Date currenttime) {
 		this.currenttime = currenttime;
 	}
 
-	public Timestamp getEpochformat() {
+	public Date getEpochformat() {
 		return this.epochformat;
 	}
 
-	public void setEpochformat(Timestamp epochformat) {
+	public void setEpochformat(Date epochformat) {
 		this.epochformat = epochformat;
 	}
 
@@ -616,11 +616,11 @@ public class AnalyzerRegistryEntity implements ClbEntity, Serializable {
 		this.recorttype = recorttype;
 	}
 
-	public Timestamp getRfc3339format() {
+	public Date getRfc3339format() {
 		return this.rfc3339format;
 	}
 
-	public void setRfc3339format(Timestamp rfc3339format) {
+	public void setRfc3339format(Date rfc3339format) {
 		this.rfc3339format = rfc3339format;
 	}
 

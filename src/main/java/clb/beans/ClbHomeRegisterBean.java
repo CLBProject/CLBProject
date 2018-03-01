@@ -11,7 +11,7 @@ import javax.faces.context.FacesContext;
 
 import org.primefaces.context.RequestContext;
 
-import clb.beans.pojos.UsersystemPojo;
+import clb.beans.pojos.UserRegisterPojo;
 import clb.business.UserRegistryService;
 import clb.business.objects.UsersystemObject;
 import clb.global.exceptions.UserCantResendEmailException;
@@ -26,7 +26,7 @@ import clb.global.exceptions.UserTokenIsNullOnCompleteRegistrationException;
 public class ClbHomeRegisterBean implements Serializable{
 
     private static final long serialVersionUID = 1L;
-    private UsersystemPojo user;
+    private UserRegisterPojo user;
 
     @ManagedProperty("#{userRegistryService}")
     private UserRegistryService userRegistryService;
@@ -53,7 +53,8 @@ public class ClbHomeRegisterBean implements Serializable{
     public void init() {
         
         //If user is logged in redirect
-        if(clbHomeLoginBean != null && clbHomeLoginBean.getUserName() != null && !clbHomeLoginBean.getUserName().equals( "" )) {
+        if(clbHomeLoginBean != null && clbHomeLoginBean.getUserLoginPojo().getUsername() != null && 
+                !clbHomeLoginBean.getUserLoginPojo().getUsername().equals( "" )) {
             try {
                 FacesContext.getCurrentInstance().getExternalContext().redirect( "clb.xhtml" );
             } catch( IOException e ) {
@@ -61,7 +62,7 @@ public class ClbHomeRegisterBean implements Serializable{
             }
         }
         
-        user = new UsersystemPojo();
+        user = new UserRegisterPojo();
     }
 
     public void registerUserAccount() {
@@ -95,7 +96,7 @@ public class ClbHomeRegisterBean implements Serializable{
             
             UsersystemObject userRegistered = userRegistryService.completeUserRegistration( token);
             
-            clbHomeLoginBean.setUserName( userRegistered.getUsername() );       
+            clbHomeLoginBean.getUserLoginPojo().setUsername( userRegistered.getUsername() );       
             
         } catch( UserTokenIsNullOnCompleteRegistrationException e ) {
             registerResult = USER_TOKEN_NOT_FOUND_RESULT;
@@ -114,11 +115,11 @@ public class ClbHomeRegisterBean implements Serializable{
         }
     }
     
-    public UsersystemPojo getUser() {
+    public UserRegisterPojo getUser() {
         return user;
     }
 
-    public void setUser( UsersystemPojo user ) {
+    public void setUser( UserRegisterPojo user ) {
         this.user = user;
     }
 

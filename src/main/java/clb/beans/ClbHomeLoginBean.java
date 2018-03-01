@@ -8,11 +8,9 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
-import org.hibernate.validator.constraints.NotEmpty;
 import org.primefaces.context.RequestContext;
 
-import com.sun.istack.NotNull;
-
+import clb.beans.pojos.UserLoginPojo;
 import clb.business.UserRegistryService;
 import clb.global.exceptions.UserDoesNotExistException;
 import clb.global.exceptions.UserDoesNotMatchPasswordLoginException;
@@ -22,23 +20,18 @@ import clb.global.exceptions.UserDoesNotMatchPasswordLoginException;
 public class ClbHomeLoginBean implements Serializable{
 
     private static final long serialVersionUID = 1L;
-    
-    @NotNull
-    @NotEmpty(message="Username can't be empty")
-    private String userName;
-    
-    @NotNull
-    @NotEmpty(message="Password can't be empty")
-    private String password;
 
     @ManagedProperty("#{userRegistryService}")
     private UserRegistryService userRegistryService;
+    
+    private UserLoginPojo userLoginPojo;
 
     private final static String CANT_LOGIN_USER_NOT_FOUND_PARAM = "cantLoginUserNotFound";
     private final static String CANT_LOGIN_PASSWORD_DOESNT_MATCH_PARAM = "cantLoginPasswordDoesntMatch";
 
     @PostConstruct
     public void init() {
+        userLoginPojo = new UserLoginPojo();
     }
 
     public String loginUser() {
@@ -46,19 +39,21 @@ public class ClbHomeLoginBean implements Serializable{
         RequestContext context = RequestContext.getCurrentInstance();  
 
         try {
-            userRegistryService.validateUserLogin( userName, password );
+            userLoginPojo.setCurrentUser( userRegistryService.validateUserLogin( userLoginPojo.getUsername(), userLoginPojo.getPassword() ));
             return "clb";
         } catch( UserDoesNotExistException e ) {
            
-            userName = null;
-            password = null;
+            userLoginPojo.setUsername( null );
+            userLoginPojo.setPassword( null );
+            userLoginPojo.setCurrentUser( null );
            
             context.addCallbackParam(CANT_LOGIN_USER_NOT_FOUND_PARAM, true);
             return "index";
         } catch( UserDoesNotMatchPasswordLoginException e ) {
             
-            userName = null;
-            password = null;
+            userLoginPojo.setUsername( null );
+            userLoginPojo.setPassword( null );
+            userLoginPojo.setCurrentUser( null );
             
             context.addCallbackParam(CANT_LOGIN_PASSWORD_DOESNT_MATCH_PARAM, true);
             return "index";
@@ -67,8 +62,9 @@ public class ClbHomeLoginBean implements Serializable{
 
     public String logout() {
         
-        this.userName = null;
-        this.password = null;
+        userLoginPojo.setUsername( null );
+        userLoginPojo.setPassword( null );
+        userLoginPojo.setCurrentUser( null );
         
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "index.xhtml?faces-redirect=true";
@@ -82,19 +78,13 @@ public class ClbHomeLoginBean implements Serializable{
         this.userRegistryService = userRegistryService;
     }
 
-    public String getUserName() {
-        return userName;
+    public UserLoginPojo getUserLoginPojo() {
+        return userLoginPojo;
     }
 
-    public void setUserName( String userName ) {
-        this.userName = userName;
+    public void setUserLoginPojo( UserLoginPojo userLoginPojo ) {
+        this.userLoginPojo = userLoginPojo;
     }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword( String password ) {
-        this.password = password;
-    }
+    
+    
 }

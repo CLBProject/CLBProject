@@ -69,6 +69,14 @@ public class BuildingObject
 	public void setBuildingusername(String buildingusername) {
 		this.buildingusername = buildingusername;
 	}
+
+    public List<DataLoggerObject> getDataLoggers() {
+        return dataLoggers;
+    }
+
+    public void setDataLoggers( List<DataLoggerObject> dataLoggers ) {
+        this.dataLoggers = dataLoggers;
+    }
     
     
 }
