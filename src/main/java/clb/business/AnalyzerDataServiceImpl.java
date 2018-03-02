@@ -91,6 +91,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
         BuildingObject building = new BuildingObject();
         building.setName(file.getName().split("\\.")[0]);
         building.setBuildingusername(file.getName().split("\\.")[0]);
+        building.setImgPath( "building1.jpg" );
         userObject.addBuilding(building);
 
         for(int j = 0; j<workbook.getNumberOfSheets();j++){

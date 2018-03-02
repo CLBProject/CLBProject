@@ -32,6 +32,7 @@ public class DataLoggerObject
     public DataLoggerEntity toEntity() {
         DataLoggerEntity dataLogEntity = new DataLoggerEntity();
         dataLogEntity.setDataloggerid( this.dataloggerid );
+        dataLogEntity.setName( this.name );
         dataLogEntity.setFtpaddress(this.ftpAddress);
         dataLogEntity.setAnalyzers( this.analyzers != null ? 
         		this.analyzers.stream().map(AnalyzerObject::toEntity).collect(Collectors.toList()) : null);

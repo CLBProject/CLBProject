@@ -14,6 +14,8 @@ public class BuildingObject
     
     private String buildingusername;
     
+    private String imgPath;
+    
     private List<DataLoggerObject> dataLoggers;
 
     public BuildingObject(){
@@ -24,6 +26,7 @@ public class BuildingObject
         this.buildingid = building.getBuildingid();
         this.name = building.getName();
         this.buildingusername = building.getBuildingusername();
+        this.imgPath = building.getImgPath();
         this.dataLoggers = building.getDataLoggers() != null ? 
         		building.getDataLoggers().stream().map(DataLoggerObject::new).collect(Collectors.toList()) : null;
     }
@@ -32,6 +35,7 @@ public class BuildingObject
         BuildingEntity buildingEntity = new BuildingEntity();
         buildingEntity.setBuildingid( this.buildingid );
         buildingEntity.setName( this.name );
+        buildingEntity.setImgPath( this.imgPath );
         buildingEntity.setDataLoggers(this.dataLoggers != null ?
         		this.dataLoggers.stream().map(DataLoggerObject::toEntity).collect(Collectors.toList()) : null);
 
@@ -76,6 +80,14 @@ public class BuildingObject
 
     public void setDataLoggers( List<DataLoggerObject> dataLoggers ) {
         this.dataLoggers = dataLoggers;
+    }
+
+    public String getImgPath() {
+        return imgPath;
+    }
+
+    public void setImgPath( String imgPath ) {
+        this.imgPath = imgPath;
     }
     
     

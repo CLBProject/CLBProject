@@ -23,6 +23,8 @@ public class BuildingEntity implements ClbEntity, Serializable {
 	private String name;
 	
 	private String buildingusername;
+	
+	private String imgPath;
 
 	@DBRef
 	private List<DataLoggerEntity> dataLoggers;
@@ -69,4 +71,14 @@ public class BuildingEntity implements ClbEntity, Serializable {
 		
 		dataLoggers.add(dataLogger);
 	}
+
+    public String getImgPath() {
+        return imgPath;
+    }
+
+    public void setImgPath( String imgPath ) {
+        this.imgPath = imgPath;
+    }
+	
+	
 }

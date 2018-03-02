@@ -12,9 +12,9 @@
 		<div class="analysisDiv">
 			<h:form>
 				<p:spacer height="20" />
-				<table width="100%" class="analysisDivClass">
+				<table width="100%" class="analysisDivClass" cellpadding="3">
 					<tr>
-						<td width="175px" class="analysisDivClassMainCell"><h:outputLabel
+						<td width="175px" align="left" class="analysisDivClassMainCell"><h:outputLabel
 								value="Analysis Menu"></h:outputLabel>
 							<hr /></td>
 						<td align="right"><p:outputLabel value="Time Frame:"
@@ -30,7 +30,8 @@
 							</p:selectOneMenu> <p:spacer width="40" /> <p:commandButton
 								styleClass="simpleButton" value="Export"
 								icon="fa fa-fw fa-file-image-o" type="button">
-							</p:commandButton> <p:spacer width="10" /></td>
+							</p:commandButton></td>
+						<td></td>
 					</tr>
 					<tr>
 						<td valign="top" width="175px"><p:selectOneMenu
@@ -39,51 +40,46 @@
 								<f:selectItems value="#{analysisBean.analysisTypes}"
 									var="analysisTyp" itemValue="#{analysisTyp}"
 									itemLabel="#{analysisTyp.label}" />
-							</p:selectOneMenu> <p:spacer height="20"></p:spacer> 
-							<c:choose>
-								<c:when test="#{empty analysisBean.buildingSelected}">
-									<p:commandButton value="No Buildings"
-										icon="fa fa-fw fa-building" styleClass="menuAnalysisButton" />
-								</c:when>
-								<c:otherwise>
-									<p:commandButton value="Building | #{analysisBean.buildingSelected.name}" onclick="PF('selectionPopup').show()"
-										icon="fa fa-fw fa-building" styleClass="menuAnalysisButton" />
-								</c:otherwise>
-							</c:choose>
-							<p:spacer height="5"/>
-							<c:choose>
-								<c:when test="#{empty analysisBean.dataLoggerSelected}">
-									<p:commandButton value="No Data Loggers"
-										icon="fa fa-fw fa-building" styleClass="menuAnalysisButton" />
-								</c:when>
-								<c:otherwise>
-									<p:commandButton value="Data Logger | #{analysisBean.dataLoggerSelected.name}" onclick="PF('selectionPopup').show()"
-										icon="fa fa-fw fa-building" styleClass="menuAnalysisButton" />
-								</c:otherwise>
-							</c:choose> 
-							<p:spacer height="5"/>
-							<c:choose>
-								<c:when test="#{empty analysisBean.analyzerSelected}">
-									<p:commandButton value="No Analyzers"
-										icon="fa fa-fw fa-building" styleClass="menuAnalysisButton" />
-								</c:when>
-								<c:otherwise>
-									<p:commandButton value="Analyzer | #{analysisBean.analyzerSelected.name}" onclick="PF('selectionPopup').show()"
-										icon="fa fa-fw fa-building" styleClass="menuAnalysisButton" />
-								</c:otherwise>
-							</c:choose>  
-							<p:spacer height="5"></p:spacer> <p:commandButton
+							</p:selectOneMenu> <p:spacer height="20"></p:spacer> <p:commandButton
 								value="Meter | General" icon="fa fa-fw fa-tachometer"
 								styleClass="menuAnalysisButton" /> <p:spacer height="5"></p:spacer>
 							<p:commandButton value="Measure | Power (kW)"
 								icon="fa fa-fw fa-database" styleClass="menuAnalysisButton" />
 							<p:spacer height="5"></p:spacer> <p:commandButton value="Saved"
 								icon="fa fa-fw fa-save" styleClass="menuAnalysisButton" /></td>
-						<td valign="top" align="right"><p:chart
-								styleClass="analysisChartCSS" id="chartDayId"
-								widgetVar="chartDayId"
-								model="#{analysisBean.analysisBarDayPojo.lineModel}" type="line" />
-						</td>
+						<td valign="top" align="right"><p:panel
+								styleClass="chartPanel">
+								<p:outputLabel styleClass="analysisTitle"
+									value="#{analysisBean.analyzerSelected.name}"></p:outputLabel>
+								<p:spacer height="5" />
+								<p:chart styleClass="analysisChartCSS" id="chartDayId"
+									widgetVar="chartDayId"
+									model="#{analysisBean.analysisBarDayPojo.lineModel}"
+									type="line" />
+							</p:panel></td>
+						<td valign="top" width="200px"><p:panel>
+								<div align="center">
+									<c:choose>
+										<c:when test="#{empty analysisBean.buildingSelected}">
+											<p:outputLabel value="No Buildings to Select"></p:outputLabel>
+										</c:when>
+										<c:otherwise>
+											<p:outputLabel styleClass="analysisPanelTitle"
+												value="Building: "></p:outputLabel>
+											<b><p:outputLabel styleClass="analysisPanelTitle"
+													value="#{analysisBean.buildingSelected.name}"></p:outputLabel></b>
+											<p:graphicImage width="150px"
+												styleClass="buildingImgAnalysis"
+												value="#{request.contextPath}/../resources/images/buildings/#{analysisBean.buildingSelected.imgPath}">
+											</p:graphicImage>
+											<p:commandButton value="Change"
+												onclick="PF('selectionPopup').show()"
+												icon="fa fa-fw fa-building" styleClass="simpleButton" />
+										</c:otherwise>
+									</c:choose>
+								</div>
+							</p:panel> 
+							</td>
 					</tr>
 				</table>
 			</h:form>
