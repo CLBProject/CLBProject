@@ -19,6 +19,10 @@ form {
 	margin-bottom: 0;
 }
 
+.ui-paginator {
+	font-size: 12px !important;
+}
+
 .ui-widget-content {
 	background: #CED8F6 !important;
 }
@@ -298,22 +302,22 @@ form {
 	color: #0A122A !important;
 }
 
-.analysisPanelTitle{
+.analysisPanelTitle {
 	font-size: 14px !important;
 	color: #0A122A !important;
 }
 
-.analysisTitle{
+.analysisTitle {
 	font-size: 12px !important;
 	color: #0A122A !important;
 	font-weight: bold;
 }
 
-.buildingImgAnalysis{
+.buildingImgAnalysis {
 	padding: 5px !important;
 }
 
-.chartPanel.ui-widget-content{
+.chartPanel.ui-widget-content {
 	background-color: #E0ECF8 !important;
 	width: 99% !important;
 }

@@ -8,12 +8,22 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	template="../template/ui.xhtml">
 	<ui:define name="body">
-		<p:dialog widgetVar="selectionPopup" id="selectionPopup" width="400px"
+		<p:dialog widgetVar="selectionPopup#{id}" id="selectionPopup#{id}" width="400px"
 			modal="true" position="center center" draggable="false"
 			closable="true" header="Select Building" closeOnEscape="true"  resizable="false">
 			<h:form>
 				<div>
-					<p:dataTable id="buildingsDtSelection">
+					<p:dataTable id="paginatorSelector" value="#{clbHomeLoginBean.userLoginPojo.currentUser.buildings}" var="value"
+						paginator="true" 
+						paginatorPosition="bottom"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15">
+						<p:column>
+							<h:outputText value="#{value.name}"></h:outputText>
+						</p:column>
+						<p:column>
+							<h:outputText value="#{value.name}"></h:outputText>
+						</p:column>
 					</p:dataTable>
 				</div>
 			</h:form>
