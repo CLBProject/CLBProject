@@ -94,6 +94,12 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
         building.setImgPath( "building1.jpg" );
         userObject.addBuilding(building);
 
+        BuildingObject building2 = new BuildingObject();
+        building2.setName("Dummy Byulding");
+        building2.setBuildingusername(file.getName().split("\\.")[0]);
+        building2.setImgPath( "building2.jpg" );
+        userObject.addBuilding(building2);
+        
         for(int j = 0; j<workbook.getNumberOfSheets();j++){
 
             DataLoggerObject dl = new DataLoggerObject();
@@ -173,6 +179,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
         }
 
         clbDao.saveBuilding(building);
+        clbDao.saveBuilding(building2);
         clbDao.saveUsersystem( userObject );
     }
 
@@ -257,9 +264,8 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                 }
 
             }
-            System.out.println("Persisted Registries from year: " + (a+startingYear) + ", for analyzer: " + analyzer.getId());
         }
-
+        System.out.println("Data Persisted");
     }
 
     public void destroy(){

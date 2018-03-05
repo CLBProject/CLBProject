@@ -8,6 +8,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
+import org.primefaces.event.SelectEvent;
+
 import clb.beans.enums.AnalysisTypes;
 import clb.beans.enums.ScaleGraphic;
 import clb.beans.pojos.AnalysisBarPojo;
@@ -31,8 +33,8 @@ public class AnalysisBean implements Serializable{
     private Date analysisDate;
     private AnalysisBarPojo analysisBarDayPojo;
 
+    private BuildingObject tempBuildingSelected;
     private BuildingObject buildingSelected;
-    private DataLoggerObject dataLoggerSelected;
     private AnalyzerObject analyzerSelected;
 
     private AnalysisTypes analysisType;
@@ -53,16 +55,26 @@ public class AnalysisBean implements Serializable{
                 clbHomeLoginBean.getUserLoginPojo().getCurrentUser().getBuildings().size() > 0 ) {
             
             buildingSelected = clbHomeLoginBean.getUserLoginPojo().getCurrentUser().getBuildings().get( 0 );
+            tempBuildingSelected = buildingSelected;
             
             if(buildingSelected.getDataLoggers() != null && buildingSelected.getDataLoggers().size() > 0) {
                 
-                dataLoggerSelected = buildingSelected.getDataLoggers().get( 0 );
+                DataLoggerObject dataLoggerSelected = buildingSelected.getDataLoggers().get( 0 );
                 
                 if(dataLoggerSelected.getAnalyzers() != null && dataLoggerSelected.getAnalyzers().size() > 0) {
                     analyzerSelected = dataLoggerSelected.getAnalyzers().get( 0 );
                 }
             }
         }
+    }
+    
+    public void selectBuilding() {
+        buildingSelected = tempBuildingSelected;
+    }
+    
+    public void buildingSelectionTriggered(SelectEvent event) {
+        BuildingObject building = (BuildingObject) event.getObject();
+        System.out.println( building.getName() );
     }
 
     public Date getAnalysisDate() {
@@ -137,14 +149,6 @@ public class AnalysisBean implements Serializable{
         this.analyzerDataService = analyzerDataService;
     }
 
-    public DataLoggerObject getDataLoggerSelected() {
-        return dataLoggerSelected;
-    }
-
-    public void setDataLoggerSelected( DataLoggerObject dataLoggerSelected ) {
-        this.dataLoggerSelected = dataLoggerSelected;
-    }
-
     public AnalyzerObject getAnalyzerSelected() {
         return analyzerSelected;
     }
@@ -153,5 +157,12 @@ public class AnalysisBean implements Serializable{
         this.analyzerSelected = analyzerSelected;
     }
 
+    public BuildingObject getTempBuildingSelected() {
+        return tempBuildingSelected;
+    }
+
+    public void setTempBuildingSelected( BuildingObject tempBuildingSelected ) {
+        this.tempBuildingSelected = tempBuildingSelected;
+    }
     
 }

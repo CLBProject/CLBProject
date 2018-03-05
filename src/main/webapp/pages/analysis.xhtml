@@ -64,16 +64,15 @@
 											<p:outputLabel value="No Buildings to Select"></p:outputLabel>
 										</c:when>
 										<c:otherwise>
-											<p:outputLabel styleClass="analysisPanelTitle"
-												value="Building: "></p:outputLabel>
 											<b><p:outputLabel styleClass="analysisPanelTitle"
 													value="#{analysisBean.buildingSelected.name}"></p:outputLabel></b>
+											<br/>
 											<p:graphicImage width="150px"
 												styleClass="buildingImgAnalysis"
 												value="#{request.contextPath}/../resources/images/buildings/#{analysisBean.buildingSelected.imgPath}">
 											</p:graphicImage>
 											<p:commandButton value="Change"
-												onclick="PF('selectionPopupbuildings').show()" ajax="true"
+												oncomplete="PF('selectionPopupBuilding').show()" ajax="true"
 												icon="fa fa-fw fa-building" styleClass="simpleButton" />
 										</c:otherwise>
 									</c:choose>
@@ -85,8 +84,6 @@
 		</div>
 		<ui:include src="./general/footer.xhtml" />
 		<ui:include src="./popups/selectionPopup.xhtml" >
-			<ui:param name="id" value="buildings"></ui:param>
-			<ui:param name="valuesPassed" value="#{clbHomeLoginBean.userLoginPojo.currentUser.buildings}" />
 		</ui:include>
 	</ui:define>
 </ui:composition>
