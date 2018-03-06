@@ -2,13 +2,12 @@ package clb.beans;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-
-import org.primefaces.event.SelectEvent;
 
 import clb.beans.enums.AnalysisTypes;
 import clb.beans.enums.ScaleGraphic;
@@ -33,8 +32,12 @@ public class AnalysisBean implements Serializable{
     private Date analysisDate;
     private AnalysisBarPojo analysisBarDayPojo;
 
+    private List<BuildingObject> buildingsToSelect;
     private BuildingObject tempBuildingSelected;
     private BuildingObject buildingSelected;
+
+    private List<AnalyzerObject> analyzersSelected;
+    private AnalyzerObject tempAnalyzerSelected;
     private AnalyzerObject analyzerSelected;
 
     private AnalysisTypes analysisType;
@@ -49,32 +52,43 @@ public class AnalysisBean implements Serializable{
         analysisBarDayPojo = new AnalysisBarPojo();
         analysisTypes = AnalysisTypes.values();
         scalesGraphic = ScaleGraphic.values();
-        
+
         //Set Initial Selected Building, DataLogger and Analyzer
         if(clbHomeLoginBean.getUserLoginPojo().getCurrentUser().getBuildings() != null && 
                 clbHomeLoginBean.getUserLoginPojo().getCurrentUser().getBuildings().size() > 0 ) {
-            
-            buildingSelected = clbHomeLoginBean.getUserLoginPojo().getCurrentUser().getBuildings().get( 0 );
-            tempBuildingSelected = buildingSelected;
-            
-            if(buildingSelected.getDataLoggers() != null && buildingSelected.getDataLoggers().size() > 0) {
-                
-                DataLoggerObject dataLoggerSelected = buildingSelected.getDataLoggers().get( 0 );
-                
-                if(dataLoggerSelected.getAnalyzers() != null && dataLoggerSelected.getAnalyzers().size() > 0) {
-                    analyzerSelected = dataLoggerSelected.getAnalyzers().get( 0 );
+
+            buildingsToSelect = clbHomeLoginBean.getUserLoginPojo().getCurrentUser().getBuildings();
+
+            boolean firstTime = false;
+
+            for(BuildingObject bObj: clbHomeLoginBean.getUserLoginPojo().getCurrentUser().getBuildings()) {
+                if(bObj.getDataLoggers() != null) {
+                    for(DataLoggerObject dlObj: bObj.getDataLoggers()) {
+                        if(dlObj.getAnalyzers() != null) {
+                            for(AnalyzerObject aObj : dlObj.getAnalyzers()) {
+                                if(!firstTime) {
+                                    buildingSelected = bObj;
+                                    tempBuildingSelected = buildingSelected;
+                                    analyzersSelected = dlObj.getAnalyzers(); 
+                                    analyzerSelected = aObj;
+                                    tempAnalyzerSelected = analyzerSelected;
+
+                                    firstTime = true;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
     }
-    
+
     public void selectBuilding() {
         buildingSelected = tempBuildingSelected;
     }
-    
-    public void buildingSelectionTriggered(SelectEvent event) {
-        BuildingObject building = (BuildingObject) event.getObject();
-        System.out.println( building.getName() );
+
+    public void selectAnalyzer() {
+        analyzerSelected = tempAnalyzerSelected;
     }
 
     public Date getAnalysisDate() {
@@ -164,5 +178,30 @@ public class AnalysisBean implements Serializable{
     public void setTempBuildingSelected( BuildingObject tempBuildingSelected ) {
         this.tempBuildingSelected = tempBuildingSelected;
     }
-    
+
+    public AnalyzerObject getTempAnalyzerSelected() {
+        return tempAnalyzerSelected;
+    }
+
+    public void setTempAnalyzerSelected( AnalyzerObject tempAnalyzerSelected ) {
+        this.tempAnalyzerSelected = tempAnalyzerSelected;
+    }
+
+    public List<BuildingObject> getBuildingsToSelect() {
+        return buildingsToSelect;
+    }
+
+    public void setBuildingsToSelect( List<BuildingObject> buildingsToSelect ) {
+        this.buildingsToSelect = buildingsToSelect;
+    }
+
+    public List<AnalyzerObject> getAnalyzersSelected() {
+        return analyzersSelected;
+    }
+
+    public void setAnalyzersSelected( List<AnalyzerObject> analyzersSelected ) {
+        this.analyzersSelected = analyzersSelected;
+    }
+
+
 }

@@ -51,6 +51,8 @@
 								styleClass="chartPanel">
 								<p:outputLabel styleClass="analysisTitle"
 									value="#{analysisBean.analyzerSelected.name}"></p:outputLabel>
+								<br />
+								<p:commandLink value="Change" style="font-size: 10px" oncomplete="PF('selectionPopupAnalyzer').show()"/>
 								<p:spacer height="5" />
 								<p:chart styleClass="analysisChartCSS" id="chartDayId"
 									widgetVar="chartDayId"
@@ -64,13 +66,14 @@
 											<p:outputLabel value="No Buildings to Select"></p:outputLabel>
 										</c:when>
 										<c:otherwise>
-											<b><p:outputLabel styleClass="analysisPanelTitle"
+											<p:graphicImage width="150px" styleClass="buildingImgAnalysis"
+												value="#{request.contextPath}/../resources/images/buildings/#{analysisBean.buildingSelected.imgPath}"/>
+											<br />
+											<b>
+											<p:outputLabel styleClass="analysisPanelTitle"
 													value="#{analysisBean.buildingSelected.name}"></p:outputLabel></b>
+											<br />
 											<br/>
-											<p:graphicImage width="150px"
-												styleClass="buildingImgAnalysis"
-												value="#{request.contextPath}/../resources/images/buildings/#{analysisBean.buildingSelected.imgPath}">
-											</p:graphicImage>
 											<p:commandButton value="Change"
 												oncomplete="PF('selectionPopupBuilding').show()" ajax="true"
 												icon="fa fa-fw fa-building" styleClass="simpleButton" />
@@ -83,7 +86,7 @@
 			</h:form>
 		</div>
 		<ui:include src="./general/footer.xhtml" />
-		<ui:include src="./popups/selectionPopup.xhtml" >
-		</ui:include>
+		<ui:include src="./popups/selectionPopupBuilding.xhtml"/>
+		<ui:include src="./popups/selectionPopupAnalyzer.xhtml"/>
 	</ui:define>
 </ui:composition>

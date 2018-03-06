@@ -315,6 +315,7 @@ form {
 
 .buildingImgAnalysis {
 	padding: 5px !important;
+	border: 1px solid #0A122A;
 }
 
 .chartPanel.ui-widget-content {
@@ -322,7 +323,24 @@ form {
 	width: 99% !important;
 }
 
-.ui-state-hover{
+.ui-datatable-selectable{
+	font-size: 14px !important;
+}
+
+.ui-datatable-selectable.ui-state-hover{
+	background-color: #81BEF7 !important;
+	color: white !important;
+}
+
+.ui-datatable-selectable.ui-state-highlight{
 	background-color: #0B3861 !important;
 	color: white !important;
+}
+
+.ui-datatable-tablewrapper thead{
+	display:none;
+}
+
+.dataTableColumn{
+	text-align: center;
 }

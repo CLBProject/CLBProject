@@ -107,10 +107,18 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
             dl.setFtpAddress( "ftp://noftp" );
             building.addDataLogger(dl);
 
-
             AnalyzerObject ana = new AnalyzerObject();
-            ana.setName( "Analyzer " + j);
+            ana.setName( "Analyzer 2 " + j);
             dl.addAnalyzer(ana);
+            
+            AnalyzerObject ana2 = new AnalyzerObject();
+            ana2.setName( "Analyzer 2 " + j);
+            dl.addAnalyzer(ana2);
+            
+
+            AnalyzerObject ana3 = new AnalyzerObject();
+            ana3.setName( "Analyzer 3 " + j);
+            dl.addAnalyzer(ana3);
 
             XSSFSheet worksheet = workbook.getSheetAt( j );
 
@@ -170,11 +178,15 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                 clbDao.saveAnalyzerRegistry(analyzerRegistryObject);
 
                 ana.addAnalyzerRegistry(analyzerRegistryObject.getId());
+                ana2.addAnalyzerRegistry(analyzerRegistryObject.getId());
+                ana3.addAnalyzerRegistry(analyzerRegistryObject.getId());
             }
 
             persistDummyAnalyzerRegistries( ana, dataToExclueOnDummy);
 
             clbDao.saveAnalyzer(ana);
+            clbDao.saveAnalyzer(ana2);
+            clbDao.saveAnalyzer(ana3);
             clbDao.saveDataLogger(dl);
         }
 

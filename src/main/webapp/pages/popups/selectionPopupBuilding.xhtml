@@ -13,23 +13,22 @@
 			position="center center" draggable="false" closable="true"
 			header="Select Building" closeOnEscape="true" resizable="false">
 			<h:form id="selectionBuildingForm">
-				<p:dataTable id="paginatorSelector" widgetVar="paginatorSelector" scrollable="true" scrollHeight="50"
-					value="#{clbHomeLoginBean.userLoginPojo.currentUser.buildings}"
-					rows="5"
-					rowKey="#{building.name}" 
-					var="building" 
+				<p:dataTable id="paginatorSelector" widgetVar="paginatorSelector"
+					styleClass="buildingSelectionCSS" paginator="true"
+					paginatorPosition="bottom"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					value="#{analysisBean.buildingsToSelect}"
+					rows="10" rowKey="#{building.buildingid}" var="building"
 					selectionMode="single"
 					selection="#{analysisBean.tempBuildingSelected}">
-					<p:ajax event="rowSelect" update=":selectionBuildingForm:paginatorSelector"  listener="#{analysisBean.buildingSelectionTriggered}"></p:ajax>
-					<p:column>
-						<div align="center">
-							<h:outputText value="#{building.name}"></h:outputText>
-						</div>
+					<p:column styleClass="dataTableColumn">
+						<h:outputText value="#{building.name}"></h:outputText>
 					</p:column>
 				</p:dataTable>
 				<br />
 				<div align="center">
-					<p:commandButton value="Select" ajax="false" type="submit" action="#{analysisBean.selectBuilding}"/>
+					<p:commandButton value="Select" ajax="false" type="submit" styleClass="signButton"
+						action="#{analysisBean.selectBuilding}" />
 				</div>
 			</h:form>
 		</p:dialog>
