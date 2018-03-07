@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
@@ -63,6 +64,12 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
         }
     }
     
+
+    @Override
+    public List<AnalyzerRegistryObject> getHourRegistriesFromAnalyzer( String analyzerId, Date dayFrame ) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
     @Override
     public UsersystemObject getUserData( String username ) {
@@ -340,4 +347,5 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
     public void setEventPublisher( ApplicationEventPublisher eventPublisher ) {
         this.eventPublisher = eventPublisher;
     }
+
 }

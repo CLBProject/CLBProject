@@ -1,6 +1,7 @@
 package clb.beans;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,7 +12,8 @@ import javax.faces.bean.ViewScoped;
 
 import clb.beans.enums.AnalysisTypes;
 import clb.beans.enums.ScaleGraphic;
-import clb.beans.pojos.AnalysisBarPojo;
+import clb.beans.pojos.AnalysisGraphicPojo;
+import clb.beans.pojos.GraphicTimeValuePojo;
 import clb.business.AnalyzerDataService;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.BuildingObject;
@@ -30,7 +32,7 @@ public class AnalysisBean implements Serializable{
     private AnalyzerDataService analyzerDataService;
 
     private Date analysisDate;
-    private AnalysisBarPojo analysisBarDayPojo;
+    private AnalysisGraphicPojo analysisBarDayPojo;
 
     private List<BuildingObject> buildingsToSelect;
     private BuildingObject tempBuildingSelected;
@@ -49,7 +51,7 @@ public class AnalysisBean implements Serializable{
     @PostConstruct
     public void init() {
         analysisDate = new Date();
-        analysisBarDayPojo = new AnalysisBarPojo();
+        analysisBarDayPojo = new AnalysisGraphicPojo(new ArrayList<GraphicTimeValuePojo>());
         analysisTypes = AnalysisTypes.values();
         scalesGraphic = ScaleGraphic.values();
 
@@ -99,11 +101,11 @@ public class AnalysisBean implements Serializable{
         this.analysisDate = analysisDate;
     }
 
-    public AnalysisBarPojo getAnalysisBarDayPojo() {
+    public AnalysisGraphicPojo getAnalysisBarDayPojo() {
         return analysisBarDayPojo;
     }
 
-    public void setAnalysisBarDayPojo( AnalysisBarPojo analysisBarDayPojo ) {
+    public void setAnalysisBarDayPojo( AnalysisGraphicPojo analysisBarDayPojo ) {
         this.analysisBarDayPojo = analysisBarDayPojo;
     }
 
