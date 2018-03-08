@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
- * The persistent class for the BUILDING database table.
+ * The persistent class for the BuildingMeters database table.
  * 
  */
 
@@ -25,6 +25,9 @@ public class BuildingEntity implements ClbEntity, Serializable {
 	private String buildingusername;
 	
 	private String imgPath;
+	
+	@DBRef
+	private List<BuildingMeterEntity> buildingMeters;
 
 	@DBRef
 	private List<DataLoggerEntity> dataLoggers;
@@ -79,6 +82,21 @@ public class BuildingEntity implements ClbEntity, Serializable {
     public void setImgPath( String imgPath ) {
         this.imgPath = imgPath;
     }
-	
-	
+    
+
+    public List<BuildingMeterEntity> getBuildingMeters() {
+        return buildingMeters;
+    }
+
+    public void setBuildingMeters( List<BuildingMeterEntity> buildingMeters ) {
+        this.buildingMeters = buildingMeters;
+    }
+
+    public void addBuildingMeter(BuildingMeterEntity buildingMeterEntity) {
+        if(buildingMeters == null) {
+            buildingMeters = new ArrayList<BuildingMeterEntity>();
+        }
+        
+        buildingMeters.add(buildingMeterEntity);
+    }
 }

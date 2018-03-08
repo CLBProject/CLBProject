@@ -31,6 +31,8 @@ import org.springframework.transaction.annotation.Transactional;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryAverageObject;
 import clb.business.objects.AnalyzerRegistryObject;
+import clb.business.objects.BuildingMeterObject;
+import clb.business.objects.BuildingMeterParameterObject;
 import clb.business.objects.BuildingObject;
 import clb.business.objects.DataLoggerObject;
 import clb.business.objects.UsersystemObject;
@@ -107,6 +109,31 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
         building2.setImgPath( "building2.jpg" );
         userObject.addBuilding(building2);
         
+        BuildingMeterObject buildingMeterObject = new BuildingMeterObject();
+        buildingMeterObject.setName( "Power" );
+        
+        BuildingMeterParameterObject buildingMeterParameterObject = new BuildingMeterParameterObject();
+        buildingMeterParameterObject.setName( "AL1" );
+        
+        BuildingMeterParameterObject buildingMeterParameterObject2 = new BuildingMeterParameterObject();
+        buildingMeterParameterObject2.setName( "AL2" );
+        
+        BuildingMeterParameterObject buildingMeterParameterObject3 = new BuildingMeterParameterObject();
+        buildingMeterParameterObject3.setName( "AL3" );
+        
+        clbDao.saveBuildingMeterParameter( buildingMeterParameterObject );
+        clbDao.saveBuildingMeterParameter( buildingMeterParameterObject2 );
+        clbDao.saveBuildingMeterParameter( buildingMeterParameterObject3 );
+        
+        buildingMeterObject.addBuildingMeterParameter( buildingMeterParameterObject );
+        buildingMeterObject.addBuildingMeterParameter( buildingMeterParameterObject2 );
+        buildingMeterObject.addBuildingMeterParameter( buildingMeterParameterObject3 );
+        
+        clbDao.saveBuildingMeter( buildingMeterObject );
+        
+        building.addBuildingMeter( buildingMeterObject);
+        building2.addBuildingMeter( buildingMeterObject);
+        
         for(int j = 0; j<workbook.getNumberOfSheets();j++){
 
             DataLoggerObject dl = new DataLoggerObject();
@@ -122,7 +149,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
             ana2.setName( "Analyzer 2 " + j);
             dl.addAnalyzer(ana2);
             
-
             AnalyzerObject ana3 = new AnalyzerObject();
             ana3.setName( "Analyzer 3 " + j);
             dl.addAnalyzer(ana3);

@@ -31,7 +31,6 @@
 								styleClass="simpleButton" value="Export"
 								icon="fa fa-fw fa-file-image-o" type="button">
 							</p:commandButton></td>
-						<td></td>
 					</tr>
 					<tr>
 						<td valign="top" width="175px"><p:selectOneMenu
@@ -40,51 +39,69 @@
 								<f:selectItems value="#{analysisBean.analysisTypes}"
 									var="analysisTyp" itemValue="#{analysisTyp}"
 									itemLabel="#{analysisTyp.label}" />
-							</p:selectOneMenu> <p:spacer height="20"></p:spacer>
-							<p:commandButton value="Measure | Power (kW)"
-								icon="fa fa-fw fa-database" styleClass="menuAnalysisButton" />
-							<p:spacer height="5"></p:spacer> <p:commandButton value="Saved"
-								icon="fa fa-fw fa-save" styleClass="menuAnalysisButton" /></td>
-						<td valign="top" align="right"><p:panel
-								styleClass="chartPanel">
-								<p:outputLabel styleClass="analysisTitle"
-									value="#{analysisBean.analyzerSelected.name}"></p:outputLabel>
-								<br />
-								<p:commandLink value="Change" style="font-size: 10px" oncomplete="PF('selectionPopupAnalyzer').show()"/>
-								<p:spacer height="5" />
-								<p:chart styleClass="analysisChartCSS" id="chartDayId"
-									widgetVar="chartDayId"
-									model="#{analysisBean.analysisBarDayPojo.lineModel}"
-									type="line" />
-							</p:panel></td>
-						<td valign="top" width="200px"><p:panel>
+							</p:selectOneMenu> <p:spacer height="20"></p:spacer> <p:panel>
 								<div align="center">
 									<c:choose>
 										<c:when test="#{empty analysisBean.buildingSelected}">
 											<p:outputLabel value="No Buildings to Select"></p:outputLabel>
 										</c:when>
 										<c:otherwise>
-											<p:graphicImage width="150px" styleClass="buildingImgAnalysis"
-												value="#{request.contextPath}/../resources/images/buildings/#{analysisBean.buildingSelected.imgPath}"/>
+											<p:outputLabel value="Building"></p:outputLabel>
+											<br/>
+											<p:graphicImage width="150px"
+												styleClass="buildingImgAnalysis"
+												value="#{request.contextPath}/../resources/images/buildings/#{analysisBean.buildingSelected.imgPath}" />
 											<br />
-											<b>
-											<p:outputLabel styleClass="analysisPanelTitle"
+											<b> <p:outputLabel styleClass="analysisPanelTitle"
 													value="#{analysisBean.buildingSelected.name}"></p:outputLabel></b>
 											<br />
-											<br/>
+											<br />
 											<p:commandButton value="Change"
 												oncomplete="PF('selectionPopupBuilding').show()" ajax="true"
 												icon="fa fa-fw fa-building" styleClass="simpleButton" />
 										</c:otherwise>
 									</c:choose>
 								</div>
+							</p:panel> 
+							<p:spacer height="5" /> <p:panel>
+								<div align="center">
+									<c:choose>
+										<c:when test="#{empty analysisBean.buildingSelected.buildingMeters}">
+											<p:outputLabel value="No Meters to Select"></p:outputLabel>
+										</c:when>
+										<c:otherwise>
+											<p:outputLabel value="Meters"></p:outputLabel>
+											<br />
+											<br/>
+											<c:forEach items="#{analysisBean.buildingSelected.buildingMeters}" var="buildingMeter">
+												<c:forEach items="#{buildingMeter.buildingMeterParameters}" var="buildingMeterParameter">
+													<h:outputText value="#{buildingMeterParameter.name}"></h:outputText>
+													<br/>
+												</c:forEach>
+											</c:forEach>
+										</c:otherwise>
+									</c:choose>
+								</div>
+							</p:panel></td>
+						<td valign="top" align="right"><p:panel
+								styleClass="chartPanel">
+								<p:outputLabel styleClass="analysisTitle"
+									value="#{analysisBean.analyzerSelected.name}"></p:outputLabel>
+								<br />
+								<p:commandLink value="Change" style="font-size: 10px"
+									oncomplete="PF('selectionPopupAnalyzer').show()" />
+								<p:spacer height="5" />
+								<p:chart styleClass="analysisChartCSS" id="chartDayId"
+									widgetVar="chartDayId"
+									model="#{analysisBean.analysisBarDayPojo.lineModel}"
+									type="line" />
 							</p:panel></td>
 					</tr>
 				</table>
 			</h:form>
 		</div>
 		<ui:include src="./general/footer.xhtml" />
-		<ui:include src="./popups/selectionPopupBuilding.xhtml"/>
-		<ui:include src="./popups/selectionPopupAnalyzer.xhtml"/>
+		<ui:include src="./popups/selectionPopupBuilding.xhtml" />
+		<ui:include src="./popups/selectionPopupAnalyzer.xhtml" />
 	</ui:define>
 </ui:composition>

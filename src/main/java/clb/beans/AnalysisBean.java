@@ -64,7 +64,7 @@ public class AnalysisBean implements Serializable{
             boolean firstTime = false;
 
             for(BuildingObject bObj: clbHomeLoginBean.getUserLoginPojo().getCurrentUser().getBuildings()) {
-                if(bObj.getDataLoggers() != null) {
+                if(bObj.getBuildingMeters() != null && bObj.getBuildingMeters().size() > 0 && bObj.getDataLoggers() != null) {
                     for(DataLoggerObject dlObj: bObj.getDataLoggers()) {
                         if(dlObj.getAnalyzers() != null) {
                             for(AnalyzerObject aObj : dlObj.getAnalyzers()) {

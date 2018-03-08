@@ -276,7 +276,7 @@ form {
 .analysisChartCSS {
 	font-size: 12px;
 	width: 100% !important;
-	height: 700px !important;
+	height: 70vh !important;
 }
 
 .selectOneMenuAnalysis.ui-selectonemenu {

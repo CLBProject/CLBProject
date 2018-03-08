@@ -11,24 +11,28 @@ public class BuildingObject
     private String buildingid;
 
     private String name;
-    
+
     private String buildingusername;
-    
+
     private String imgPath;
-    
+
     private List<DataLoggerObject> dataLoggers;
 
+    private List<BuildingMeterObject> buildingMeters;
+
     public BuildingObject(){
-        
+
     }
-    
+
     public BuildingObject( BuildingEntity building ) {
         this.buildingid = building.getBuildingid();
         this.name = building.getName();
         this.buildingusername = building.getBuildingusername();
         this.imgPath = building.getImgPath();
         this.dataLoggers = building.getDataLoggers() != null ? 
-        		building.getDataLoggers().stream().map(DataLoggerObject::new).collect(Collectors.toList()) : null;
+                building.getDataLoggers().stream().map(DataLoggerObject::new).collect(Collectors.toList()) : null;
+                this.buildingMeters = building.getBuildingMeters() != null ?
+                        building.getBuildingMeters().stream().map(BuildingMeterObject::new).collect( Collectors.toList()) : null;
     }
 
     public BuildingEntity toEntity() {
@@ -37,17 +41,27 @@ public class BuildingObject
         buildingEntity.setName( this.name );
         buildingEntity.setImgPath( this.imgPath );
         buildingEntity.setDataLoggers(this.dataLoggers != null ?
-        		this.dataLoggers.stream().map(DataLoggerObject::toEntity).collect(Collectors.toList()) : null);
+                this.dataLoggers.stream().map(DataLoggerObject::toEntity).collect(Collectors.toList()) : null);
+        buildingEntity.setBuildingMeters( this.buildingMeters != null ? 
+                this.buildingMeters.stream().map( BuildingMeterObject::toEntity ).collect( Collectors.toList() ) : null);
 
         return buildingEntity;
     }
     
     public void addDataLogger(DataLoggerObject dataLoggerObject) {
-    	if(dataLoggers == null) {
-    		dataLoggers = new ArrayList<DataLoggerObject>();
-    	}
-    	
-    	dataLoggers.add(dataLoggerObject);
+        if(dataLoggers == null) {
+            dataLoggers = new ArrayList<DataLoggerObject>();
+        }
+
+        dataLoggers.add(dataLoggerObject);
+    }
+
+    public void addBuildingMeter(BuildingMeterObject buildingMeterObj) {
+        if(buildingMeters == null) {
+            buildingMeters = new ArrayList<BuildingMeterObject>();
+        }
+
+        buildingMeters.add(buildingMeterObj);
     }
 
     public String getBuildingid() {
@@ -66,13 +80,13 @@ public class BuildingObject
         this.name = name;
     }
 
-	public String getBuildingusername() {
-		return buildingusername;
-	}
+    public String getBuildingusername() {
+        return buildingusername;
+    }
 
-	public void setBuildingusername(String buildingusername) {
-		this.buildingusername = buildingusername;
-	}
+    public void setBuildingusername(String buildingusername) {
+        this.buildingusername = buildingusername;
+    }
 
     public List<DataLoggerObject> getDataLoggers() {
         return dataLoggers;
@@ -89,6 +103,14 @@ public class BuildingObject
     public void setImgPath( String imgPath ) {
         this.imgPath = imgPath;
     }
-    
-    
+
+    public List<BuildingMeterObject> getBuildingMeters() {
+        return buildingMeters;
+    }
+
+    public void setBuildingMeters( List<BuildingMeterObject> buildingMeters ) {
+        this.buildingMeters = buildingMeters;
+    }
+
+
 }
