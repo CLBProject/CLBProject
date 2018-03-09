@@ -10,7 +10,7 @@
 	<ui:define name="body">
 		<ui:include src="./general/menutab.xhtml" />
 		<div class="analysisDiv">
-			<h:form>
+			<h:form id="analysisForm">
 				<p:spacer height="20" />
 				<table width="100%" class="analysisDivClass" cellpadding="3">
 					<tr>
@@ -46,14 +46,14 @@
 											<p:outputLabel value="No Buildings to Select"></p:outputLabel>
 										</c:when>
 										<c:otherwise>
-											<p:outputLabel value="Building"></p:outputLabel>
-											<br/>
+											<b><p:outputLabel value="Building"></p:outputLabel></b>
+											<br />
 											<p:graphicImage width="150px"
 												styleClass="buildingImgAnalysis"
 												value="#{request.contextPath}/../resources/images/buildings/#{analysisBean.buildingSelected.imgPath}" />
 											<br />
-											<b> <p:outputLabel styleClass="analysisPanelTitle"
-													value="#{analysisBean.buildingSelected.name}"></p:outputLabel></b>
+											<p:outputLabel styleClass="analysisPanelTitle"
+												value="#{analysisBean.buildingSelected.name}"></p:outputLabel>
 											<br />
 											<br />
 											<p:commandButton value="Change"
@@ -62,23 +62,39 @@
 										</c:otherwise>
 									</c:choose>
 								</div>
-							</p:panel> 
-							<p:spacer height="5" /> <p:panel>
+							</p:panel> <p:spacer height="5" /> <p:panel>
 								<div align="center">
 									<c:choose>
-										<c:when test="#{empty analysisBean.buildingSelected.buildingMeters}">
+										<c:when
+											test="#{empty analysisBean.buildingSelected.buildingMeters}">
 											<p:outputLabel value="No Meters to Select"></p:outputLabel>
 										</c:when>
 										<c:otherwise>
-											<p:outputLabel value="Meters"></p:outputLabel>
-											<br />
-											<br/>
-											<c:forEach items="#{analysisBean.buildingSelected.buildingMeters}" var="buildingMeter">
-												<c:forEach items="#{buildingMeter.buildingMeterParameters}" var="buildingMeterParameter">
-													<h:outputText value="#{buildingMeterParameter.name}"></h:outputText>
-													<br/>
+											<p:accordionPanel>
+												<c:forEach
+													items="#{analysisBean.buildingSelected.buildingMeters}"
+													var="buildingMeter">
+													<p:tab title="#{buildingMeter.name}">
+														<div align="left">
+															<h:panelGrid columns="2" cellpadding="2">
+																<c:forEach
+																	items="#{buildingMeter.buildingMeterParameters}"
+																	var="buildingMeterParameter">
+																	<p:column>
+																		<p:selectBooleanCheckbox>
+																			<p:ajax update="@form" listener="#{analysisBean.updateMeterSelection(buildingMeter,buildingMeterParameter)}" />
+																		</p:selectBooleanCheckbox>
+																	</p:column>
+																	<p:column>
+																		<h:outputText value="#{buildingMeterParameter.name}"
+																			styleClass="accPanelMeters"></h:outputText>
+																	</p:column>
+																</c:forEach>
+															</h:panelGrid>
+														</div>
+													</p:tab>
 												</c:forEach>
-											</c:forEach>
+											</p:accordionPanel>
 										</c:otherwise>
 									</c:choose>
 								</div>

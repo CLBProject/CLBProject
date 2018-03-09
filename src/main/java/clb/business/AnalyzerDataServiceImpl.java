@@ -68,9 +68,8 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
     
 
     @Override
-    public List<AnalyzerRegistryObject> getHourRegistriesFromAnalyzer( String analyzerId, Date dayFrame ) {
-        // TODO Auto-generated method stub
-        return null;
+    public List<AnalyzerRegistryObject> getHourRegistriesFromAnalyzer( String analyzerId , Date timeFrame) {
+        return clbDao.getHourRegistriesFromAnalyzer( analyzerId, timeFrame );
     }
 
     @Override

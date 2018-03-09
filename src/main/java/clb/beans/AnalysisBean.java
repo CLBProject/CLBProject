@@ -16,6 +16,8 @@ import clb.beans.pojos.AnalysisGraphicPojo;
 import clb.beans.pojos.GraphicTimeValuePojo;
 import clb.business.AnalyzerDataService;
 import clb.business.objects.AnalyzerObject;
+import clb.business.objects.BuildingMeterObject;
+import clb.business.objects.BuildingMeterParameterObject;
 import clb.business.objects.BuildingObject;
 import clb.business.objects.DataLoggerObject;
 
@@ -51,7 +53,6 @@ public class AnalysisBean implements Serializable{
     @PostConstruct
     public void init() {
         analysisDate = new Date();
-        analysisBarDayPojo = new AnalysisGraphicPojo(new ArrayList<GraphicTimeValuePojo>());
         analysisTypes = AnalysisTypes.values();
         scalesGraphic = ScaleGraphic.values();
 
@@ -74,6 +75,8 @@ public class AnalysisBean implements Serializable{
                                     analyzersSelected = dlObj.getAnalyzers(); 
                                     analyzerSelected = aObj;
                                     tempAnalyzerSelected = analyzerSelected;
+                                    
+                                    analyzerDataService.getLatestHourRegistriesFromAnalyzer( analyzerSelected.getId());
 
                                     firstTime = true;
                                 }
@@ -93,6 +96,10 @@ public class AnalysisBean implements Serializable{
         analyzerSelected = tempAnalyzerSelected;
     }
 
+    public void updateMeterSelection(BuildingMeterObject buildingMeterObj, BuildingMeterParameterObject buildingParameterObj) {
+        System.out.println( buildingMeterObj );
+    }
+    
     public Date getAnalysisDate() {
         return analysisDate;
     }

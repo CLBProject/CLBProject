@@ -344,3 +344,12 @@ form {
 .dataTableColumn{
 	text-align: center;
 }
+
+.accPanelMeters{
+	font-size: 12px !important;
+	color: #0A122A;
+}
+
+.meterPanelCss{
+	text-align: left;
+}

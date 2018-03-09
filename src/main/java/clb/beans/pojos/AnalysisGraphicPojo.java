@@ -8,7 +8,7 @@ import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.LineChartModel;
 
-import clb.global.QuickAnalysisVariables;
+import clb.business.objects.BuildingMeterObject;
 
 public class AnalysisGraphicPojo {
 
@@ -16,7 +16,7 @@ public class AnalysisGraphicPojo {
 
     private List<ChartSeries> chartSeries;
 
-    public AnalysisGraphicPojo(List<GraphicTimeValuePojo> values){
+    public AnalysisGraphicPojo(List<BuildingMeterObject> meters){
 
         lineModel = new LineChartModel();
         lineModel.setZoom(true);
@@ -25,17 +25,17 @@ public class AnalysisGraphicPojo {
         
         chartSeries = new ArrayList<ChartSeries>();
 
-        for(QuickAnalysisVariables variable : QuickAnalysisVariables.values()) {
-            ChartSeries chartSerie = new ChartSeries(variable.getLabel());
+        for(BuildingMeterObject meter : meters) {
+            ChartSeries chartSerie = new ChartSeries(meter.getName());
             chartSeries.add(chartSerie);
             lineModel.addSeries( chartSerie );
             
         }
         
-        fillGraphicForYearData(values);
+        fillGraphicForYearData(meters);
     }
 
-    public void fillGraphicForYearData(List<GraphicTimeValuePojo> values){
+    public void fillGraphicForYearData(List<BuildingMeterObject> meters){
 
         chartSeries.stream().forEach(  serie -> {
 
@@ -48,8 +48,6 @@ public class AnalysisGraphicPojo {
             serie.set(5,300);
             
         });
-
-        values.stream().forEach( value -> value.getGraphicVariableValues() );
 
         Axis xAxis = lineModel.getAxis(AxisType.X);
         xAxis.setLabel("Month Average");

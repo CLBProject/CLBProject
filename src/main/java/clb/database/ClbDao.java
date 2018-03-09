@@ -1,5 +1,6 @@
 package clb.database;
 
+import java.util.Date;
 import java.util.List;
 
 import clb.business.objects.AnalyzerObject;
@@ -36,4 +37,6 @@ public interface ClbDao{
     UsersystemObject findUserByUserName( String userName );
 
     List<BuildingObject> findUserBuildings( String userName );
+
+    List<AnalyzerRegistryObject> getHourRegistriesFromAnalyzer( String analyzerId , Date timeFrame);
 }

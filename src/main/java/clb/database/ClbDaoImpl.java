@@ -1,6 +1,7 @@
 package clb.database;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -222,6 +223,13 @@ public class ClbDaoImpl implements ClbDao, Serializable{
     public void setBuildingsMetersParametersMongoRepository(
             BuildingsMetersParametersMongoRepository buildingsMetersParametersMongoRepository ) {
         this.buildingsMetersParametersMongoRepository = buildingsMetersParametersMongoRepository;
+    }
+
+    @Override
+    public List<AnalyzerRegistryObject> getHourRegistriesFromAnalyzer( String analyzerId, Date timeFrame ) {
+        List<AnalyzerRegistryEntity> hourRegistries = this.analyzerRegistryMongoRepository.getHourRegistriesFromTimeFrame(analyzerId, timeFrame);
+        
+        return hourRegistries.stream().map( AnalyzerRegistryObject::new ).collect( Collectors.toList() );
     }
 
     

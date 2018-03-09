@@ -1,26 +1,22 @@
 package clb.beans.pojos;
 
 import java.util.Date;
-import java.util.Map;
-
-import clb.global.QuickAnalysisVariables;
 
 public class GraphicTimeValuePojo
 {
-    public Date graphicTiem;
-    public Map<QuickAnalysisVariables,Object> graphicVariableValues;
+    public Date graphicTime;
 
-    public GraphicTimeValuePojo( Date graphicTiem, Map<QuickAnalysisVariables, Object> graphicVariableValues ) {
+    public GraphicTimeValuePojo( Date graphicTiem) {
         super();
-        this.graphicTiem = graphicTiem;
-        this.graphicVariableValues = graphicVariableValues;
     }
-    
-    public Date getGraphicTiem() {
-        return graphicTiem;
+
+    public Date getGraphicTime() {
+        return graphicTime;
     }
-    public Map<QuickAnalysisVariables, Object> getGraphicVariableValues() {
-        return graphicVariableValues;
+
+    public void setGraphicTime( Date graphicTime ) {
+        this.graphicTime = graphicTime;
     }
+
     
 }
