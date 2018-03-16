@@ -76,7 +76,7 @@ public class AnalysisBean implements Serializable{
                                     analyzerSelected = aObj;
                                     tempAnalyzerSelected = analyzerSelected;
                                     
-                                    analyzerDataService.getLatestHourRegistriesFromAnalyzer( analyzerSelected.getId());
+                                    analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
 
                                     firstTime = true;
                                 }

@@ -17,8 +17,10 @@
 
 	<context:component-scan base-package="clb.business" />
 	<context:component-scan base-package="clb.database" />
-	
-	<bean id="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+	<context:component-scan base-package="clb.database.entities" />
+
+	<bean id="bcryptEncoder"
+		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
 
 	<!-- Default bean name is 'mongo' -->
 	<mongo:db-factory host="localhost" port="27017"
@@ -44,9 +46,13 @@
 	<bean id="analyzerDataService" class="clb.business.AnalyzerDataServiceImpl"
 		init-method="init" destroy-method="destroy">
 	</bean>
-	
-	<bean id="userRegistryService" class="clb.business.UserRegistryServiceImpl"/>
-	
+
+	<bean id="userRegistryService" class="clb.business.UserRegistryServiceImpl" />
+
+	<bean id="analyzerRegistryEntityCollectionManager" class="clb.database.entities.AnalyzerRegistryEntityCollectionManagerImpl">
+		<property name="collectionName" value="analyzerRegistries" />
+	</bean>
+
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="host" value="smtp.gmail.com" />
 		<property name="port" value="25" />

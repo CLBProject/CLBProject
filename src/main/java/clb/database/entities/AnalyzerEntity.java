@@ -3,6 +3,7 @@ package clb.database.entities;
 import java.io.Serializable;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -13,7 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection="Analyzers")
 public class AnalyzerEntity implements ClbEntity, Serializable {
     private static final long serialVersionUID = 1L;
-
+    
     @Id
     private String id;
 
@@ -57,6 +58,5 @@ public class AnalyzerEntity implements ClbEntity, Serializable {
     public void setAnalyzerRegistriesAverageIds( List<String> analyzerRegistriesAverageIds ) {
         this.analyzerRegistriesAverageIds = analyzerRegistriesAverageIds;
     }
-    
     
 }

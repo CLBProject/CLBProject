@@ -1,6 +1,7 @@
 package clb.database;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,6 +20,7 @@ import clb.business.objects.UsersystemObject;
 import clb.database.entities.AnalyzerEntity;
 import clb.database.entities.AnalyzerRegistryAverageEntity;
 import clb.database.entities.AnalyzerRegistryEntity;
+import clb.database.entities.AnalyzerRegistryEntityCollectionManager;
 import clb.database.entities.BuildingEntity;
 import clb.database.entities.BuildingMeterEntity;
 import clb.database.entities.BuildingMeterParameterEntity;
@@ -50,6 +52,9 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
     @Autowired
     private AnalyzerRegistryMongoRepository analyzerRegistryMongoRepository;
+    
+    @Autowired
+    private AnalyzerRegistryEntityCollectionManager analyzerRegistryEntityCollectionManager;
 
     @Autowired
     private BuildingsMongoRepository buildingsMongoRepository;
@@ -66,9 +71,6 @@ public class ClbDaoImpl implements ClbDao, Serializable{
     @Autowired
     private UsersystemMongoRepository userSystemMongoRepository;
 
-    @Autowired
-    private AnalyzerRegistryMongoRepository averageRegistryMongoRespository;
-
     public ClbDaoImpl() {
 
     }
@@ -83,6 +85,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
     @Override
     public void saveAnalyzerRegistry(AnalyzerRegistryObject analyzerRegistryObject) {
         AnalyzerRegistryEntity analyzerRegistryEntity = analyzerRegistryObject.toEntity();
+        analyzerRegistryEntityCollectionManager.setCollectionName( analyzerRegistryObject.getCurrenttime().toString() );
         analyzerRegistryMongoRepository.save(analyzerRegistryEntity);
         analyzerRegistryObject.setId(analyzerRegistryEntity.getId());
     }
@@ -195,14 +198,6 @@ public class ClbDaoImpl implements ClbDao, Serializable{
         this.userSystemMongoRepository = userSystemMongoRepository;
     }
 
-    public AnalyzerRegistryMongoRepository getAverageRegistryMongoRespository() {
-        return averageRegistryMongoRespository;
-    }
-
-    public void setAverageRegistryMongoRespository(AnalyzerRegistryMongoRepository averageRegistryMongoRespository) {
-        this.averageRegistryMongoRespository = averageRegistryMongoRespository;
-    }
-
     @Override
     public List<BuildingObject> findUserBuildings( String userName ) {
         return buildingsMongoRepository.findBuildingsByUsername( userName ).stream().map(BuildingObject::new).collect(Collectors.toList());
@@ -227,9 +222,18 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
     @Override
     public List<AnalyzerRegistryObject> getHourRegistriesFromAnalyzer( String analyzerId, Date timeFrame ) {
-        List<AnalyzerRegistryEntity> hourRegistries = this.analyzerRegistryMongoRepository.getHourRegistriesFromTimeFrame(analyzerId, timeFrame);
-        
-        return hourRegistries.stream().map( AnalyzerRegistryObject::new ).collect( Collectors.toList() );
+        return new ArrayList<AnalyzerRegistryObject>();
+        //List<AnalyzerRegistryEntity> hourRegistries = this.analyzerRegistryMongoRepository.getHourRegistriesFromAnalyzer(analyzerId, timeFrame);
+        //return hourRegistries.stream().map( AnalyzerRegistryObject::new ).collect( Collectors.toList() );
+    }
+
+    public AnalyzerRegistryEntityCollectionManager getAnalyzerRegistryEntityCollectionManager() {
+        return analyzerRegistryEntityCollectionManager;
+    }
+
+    public void setAnalyzerRegistryEntityCollectionManager(
+            AnalyzerRegistryEntityCollectionManager analyzerRegistryEntityCollectionManager ) {
+        this.analyzerRegistryEntityCollectionManager = analyzerRegistryEntityCollectionManager;
     }
 
     

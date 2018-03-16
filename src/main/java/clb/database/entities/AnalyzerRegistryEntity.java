@@ -12,10 +12,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * 
  */
 
-@Document(collection="AnalyzersRegistries")
+@Document(collection="#{analyzerRegistryEntityCollectionManager.getCollectionName()}")
 public class AnalyzerRegistryEntity implements ClbEntity, Serializable {
 	private static final long serialVersionUID = 1L;
-
+	
 	@Id
 	private String id;
 
@@ -799,4 +799,5 @@ public class AnalyzerRegistryEntity implements ClbEntity, Serializable {
 	public void setWdmdmax(double wdmdmax) {
 		this.wdmdmax = wdmdmax;
 	}
+	
 }
