@@ -10,6 +10,8 @@ public class AnalyzerRegistryAverageObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String id;
+	
+	private AnalyzerObject analyzer;
 
 	private double al1Average;
 
@@ -134,6 +136,7 @@ public class AnalyzerRegistryAverageObject implements Serializable {
     public AnalyzerRegistryAverageObject(AnalyzerRegistryAverageEntity analyzerRegEntity) {
         super();
         this.id = analyzerRegEntity.getId();
+        this.analyzer = new AnalyzerObject(analyzerRegEntity.getAnalyzer());
         this.al1Average = analyzerRegEntity.getAl1Average();
         this.al2Average = analyzerRegEntity.getAl2Average();
         this.al3Average = analyzerRegEntity.getAl3Average();
@@ -197,6 +200,7 @@ public class AnalyzerRegistryAverageObject implements Serializable {
     public AnalyzerRegistryAverageEntity toEntity() {
     	AnalyzerRegistryAverageEntity anaRegEntity = new AnalyzerRegistryAverageEntity();
         anaRegEntity.setId(id);
+        anaRegEntity.setAnalyzer(analyzer.toEntity());
         anaRegEntity.setAl1Average(al1Average);
         anaRegEntity.setAl2Average(al2Average);
         anaRegEntity.setAl3Average(al3Average);
@@ -842,11 +846,20 @@ public class AnalyzerRegistryAverageObject implements Serializable {
 		return vlnsysAverage;
 	}
 
-
 	public void setVlnsysAverage(double vlnsysAverage) {
 		this.vlnsysAverage = vlnsysAverage;
 	}
 
+
+	public AnalyzerObject getAnalyzer() {
+		return analyzer;
+	}
+
+
+	public void setAnalyzer(AnalyzerObject analyzer) {
+		this.analyzer = analyzer;
+	}
+	
 	
 	
 }

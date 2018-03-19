@@ -136,6 +136,7 @@ public class AnalyzerRegistryObject implements Serializable {
     public AnalyzerRegistryObject(AnalyzerRegistryEntity analyzerRegEntity) {
         super();
         this.id = analyzerRegEntity.getId();
+        this.analyzer = new AnalyzerObject(analyzerRegEntity.getAnalyzer());
         this.al1 = analyzerRegEntity.getAl1();
         this.al2 = analyzerRegEntity.getAl2();
         this.al3 = analyzerRegEntity.getAl3();
@@ -199,6 +200,7 @@ public class AnalyzerRegistryObject implements Serializable {
     public AnalyzerRegistryEntity toEntity() {
         AnalyzerRegistryEntity anaRegEntity = new AnalyzerRegistryEntity();
         anaRegEntity.setId(id);
+        anaRegEntity.setAnalyzer(analyzer.toEntity());
         anaRegEntity.setAl1(al1);
         anaRegEntity.setAl2(al2);
         anaRegEntity.setAl3(al3);
@@ -740,5 +742,6 @@ public class AnalyzerRegistryObject implements Serializable {
     public void setAnalyzer( AnalyzerObject analyzer ) {
         this.analyzer = analyzer;
     }
-
+    
+    
 }

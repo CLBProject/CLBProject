@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
@@ -18,6 +19,9 @@ public class AnalyzerRegistryEntity implements ClbEntity, Serializable {
 	
 	@Id
 	private String id;
+	
+    @DBRef
+	private AnalyzerEntity analyzer;
 
 	private double al1;
 
@@ -798,6 +802,14 @@ public class AnalyzerRegistryEntity implements ClbEntity, Serializable {
 
 	public void setWdmdmax(double wdmdmax) {
 		this.wdmdmax = wdmdmax;
+	}
+
+	public AnalyzerEntity getAnalyzer() {
+		return analyzer;
+	}
+
+	public void setAnalyzer(AnalyzerEntity analyzer) {
+		this.analyzer = analyzer;
 	}
 	
 }

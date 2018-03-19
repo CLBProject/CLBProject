@@ -157,6 +157,10 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
             Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
 
             Set<Long> dataToExclueOnDummy = new HashSet<Long>();
+            
+            clbDao.saveAnalyzer(ana);
+            clbDao.saveAnalyzer(ana2);
+            clbDao.saveAnalyzer(ana3);
 
             for(int i = 2;i<worksheet.getLastRowNum();i++){
 
@@ -206,19 +210,16 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                 analyzerRegistryObject.setKvarl2(row.getCell(27).getNumericCellValue());
                 analyzerRegistryObject.setKvarl3(row.getCell(28).getNumericCellValue());
                 analyzerRegistryObject.setKvarsys(row.getCell(29).getNumericCellValue());
+                analyzerRegistryObject.setAnalyzer(ana);
 
                 clbDao.saveAnalyzerRegistry(analyzerRegistryObject);
 
                 ana.addAnalyzerRegistry(analyzerRegistryObject.getId());
-                ana2.addAnalyzerRegistry(analyzerRegistryObject.getId());
-                ana3.addAnalyzerRegistry(analyzerRegistryObject.getId());
             }
 
             persistDummyAnalyzerRegistries( ana, dataToExclueOnDummy);
 
-            clbDao.saveAnalyzer(ana);
-            clbDao.saveAnalyzer(ana2);
-            clbDao.saveAnalyzer(ana3);
+
             clbDao.saveDataLogger(dl);
         }
 

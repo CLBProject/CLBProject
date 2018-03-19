@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
@@ -18,6 +19,9 @@ public class AnalyzerRegistryAverageEntity implements ClbEntity, Serializable {
 
     @Id
     private String id;
+    
+    @DBRef
+	private AnalyzerEntity analyzer;
 
 	private double al1Average;
 
@@ -804,5 +808,14 @@ public class AnalyzerRegistryAverageEntity implements ClbEntity, Serializable {
         return serialVersionUID;
     }
 
+	public AnalyzerEntity getAnalyzer() {
+		return analyzer;
+	}
+
+	public void setAnalyzer(AnalyzerEntity analyzer) {
+		this.analyzer = analyzer;
+	}
+    
+    
 	
 }
