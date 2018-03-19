@@ -10,6 +10,8 @@ public class AnalyzerRegistryObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String id;
+	
+	private String analyzerId;
 
 	private double al1;
 
@@ -127,7 +129,6 @@ public class AnalyzerRegistryObject implements Serializable {
 
 	private double vlnsys;
 
-	private AnalyzerObject analyzer;
 
 	public AnalyzerRegistryObject() {
 	}
@@ -136,7 +137,7 @@ public class AnalyzerRegistryObject implements Serializable {
     public AnalyzerRegistryObject(AnalyzerRegistryEntity analyzerRegEntity) {
         super();
         this.id = analyzerRegEntity.getId();
-        this.analyzer = new AnalyzerObject(analyzerRegEntity.getAnalyzer());
+        this.analyzerId = analyzerRegEntity.getAnalyzerId();
         this.al1 = analyzerRegEntity.getAl1();
         this.al2 = analyzerRegEntity.getAl2();
         this.al3 = analyzerRegEntity.getAl3();
@@ -200,7 +201,7 @@ public class AnalyzerRegistryObject implements Serializable {
     public AnalyzerRegistryEntity toEntity() {
         AnalyzerRegistryEntity anaRegEntity = new AnalyzerRegistryEntity();
         anaRegEntity.setId(id);
-        anaRegEntity.setAnalyzer(analyzer.toEntity());
+        anaRegEntity.setAnalyzerId( this.analyzerId );
         anaRegEntity.setAl1(al1);
         anaRegEntity.setAl2(al2);
         anaRegEntity.setAl3(al3);
@@ -735,13 +736,16 @@ public class AnalyzerRegistryObject implements Serializable {
 		this.vlnsys = vlnsys;
 	}
 
-    public AnalyzerObject getAnalyzer() {
-        return analyzer;
+
+    public String getAnalyzerId() {
+        return analyzerId;
     }
 
-    public void setAnalyzer( AnalyzerObject analyzer ) {
-        this.analyzer = analyzer;
+
+    public void setAnalyzerId( String analyzerId ) {
+        this.analyzerId = analyzerId;
     }
-    
+	
+	
     
 }

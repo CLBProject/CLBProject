@@ -1,7 +1,6 @@
 package clb.beans;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +12,6 @@ import javax.faces.bean.ViewScoped;
 import clb.beans.enums.AnalysisTypes;
 import clb.beans.enums.ScaleGraphic;
 import clb.beans.pojos.AnalysisGraphicPojo;
-import clb.beans.pojos.GraphicTimeValuePojo;
 import clb.business.AnalyzerDataService;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.BuildingMeterObject;
@@ -34,7 +32,7 @@ public class AnalysisBean implements Serializable{
     private AnalyzerDataService analyzerDataService;
 
     private Date analysisDate;
-    private AnalysisGraphicPojo analysisBarDayPojo;
+    private AnalysisGraphicPojo analysisDayPojo;
 
     private List<BuildingObject> buildingsToSelect;
     private BuildingObject tempBuildingSelected;
@@ -76,7 +74,8 @@ public class AnalysisBean implements Serializable{
                                     analyzerSelected = aObj;
                                     tempAnalyzerSelected = analyzerSelected;
                                     
-                                    analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
+                                    analysisDayPojo = new AnalysisGraphicPojo( 
+                                            analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate),buildingSelected.getBuildingMeters());
 
                                     firstTime = true;
                                 }
@@ -107,13 +106,13 @@ public class AnalysisBean implements Serializable{
     public void setAnalysisDate( Date analysisDate ) {
         this.analysisDate = analysisDate;
     }
-
-    public AnalysisGraphicPojo getAnalysisBarDayPojo() {
-        return analysisBarDayPojo;
+    
+    public AnalysisGraphicPojo getAnalysisDayPojo() {
+        return analysisDayPojo;
     }
 
-    public void setAnalysisBarDayPojo( AnalysisGraphicPojo analysisBarDayPojo ) {
-        this.analysisBarDayPojo = analysisBarDayPojo;
+    public void setAnalysisDayPojo( AnalysisGraphicPojo analysisDayPojo ) {
+        this.analysisDayPojo = analysisDayPojo;
     }
 
     public AnalysisTypes getAnalysisType() {

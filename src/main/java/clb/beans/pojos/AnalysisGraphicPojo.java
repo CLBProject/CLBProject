@@ -7,53 +7,58 @@ import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.LineChartModel;
+import org.primefaces.model.chart.LineChartSeries;
 
+import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.BuildingMeterObject;
+import clb.global.BuildingMeterParameterValues;
 
 public class AnalysisGraphicPojo {
 
     private LineChartModel lineModel;
 
-    private List<ChartSeries> chartSeries;
-
-    public AnalysisGraphicPojo(List<BuildingMeterObject> meters){
+    public AnalysisGraphicPojo(List<AnalyzerRegistryObject> registries, List<BuildingMeterObject> buildingMetersObject){
 
         lineModel = new LineChartModel();
         lineModel.setZoom(true);
         lineModel.setTitle( "" );
         lineModel.setLegendPosition("se");
-        
-        chartSeries = new ArrayList<ChartSeries>();
 
-        for(BuildingMeterObject meter : meters) {
-            ChartSeries chartSerie = new ChartSeries(meter.getName());
-            chartSeries.add(chartSerie);
-            lineModel.addSeries( chartSerie );
-            
-        }
-        
-        fillGraphicForYearData(meters);
+        fillGraphicForYearData(registries, buildingMetersObject);
     }
 
-    public void fillGraphicForYearData(List<BuildingMeterObject> meters){
+    private void fillGraphicForYearData(List<AnalyzerRegistryObject> registries, List<BuildingMeterObject> buildingMetersObject){
 
-        chartSeries.stream().forEach(  serie -> {
+        buildingMetersObject.stream().forEach(  
+                buildingMeterObject -> buildingMeterObject.getBuildingMeterParameters().stream().forEach(  
+                        buildingMeterParameterObject -> registries.stream().forEach(  
+                                registry -> {
+                                    if(registry!= null && !registry.equals( "" )) {
+                                        BuildingMeterParameterValues bmpValue = BuildingMeterParameterValues.valueOf( buildingMeterParameterObject.getName()  );
 
-            serie.getData().clear();
-            
-            serie.set(1,300);
-            serie.set(2,600);
-            serie.set(3,300);
-            serie.set(4,900);
-            serie.set(5,300);
-            
-        });
+                                        if(bmpValue != null) {
+                                            final ChartSeries serie = new LineChartSeries();
+                                            
+                                            switch(bmpValue) {
+                                                case AL1:
+                                                    serie.set(registry.getCurrenttime(),registry.getAl1());
+                                                    break;
+                                                default: break;
+                                            }
+                                            
+                                            lineModel.addSeries( serie );
+                                        }
+                                    }
+                                }
+                                )
+                        )
+                );
 
         Axis xAxis = lineModel.getAxis(AxisType.X);
-        xAxis.setLabel("Month Average");
+        xAxis.setLabel("Date Time");
 
         Axis yAxis = lineModel.getAxis(AxisType.Y);
-        yAxis.setLabel("Power");
+        yAxis.setLabel("Energy Values");
 
         yAxis.setMin(0);
         //yAxis.setMax(new Double(maxValue + maxValue*0.05).intValue());

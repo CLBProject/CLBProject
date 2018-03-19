@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 
 
 /**
@@ -13,15 +15,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * 
  */
 
-@Document(collection="#{analyzerRegistryEntityCollectionManager.getCollectionName()}")
+@Document
 public class AnalyzerRegistryEntity implements ClbEntity, Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	private String id;
-	
-    @DBRef
-	private AnalyzerEntity analyzer;
+
+	private String analyzerId;
 
 	private double al1;
 
@@ -178,6 +179,11 @@ public class AnalyzerRegistryEntity implements ClbEntity, Serializable {
 	private double wdmdmax;
 
 	public AnalyzerRegistryEntity() {
+	}
+	
+	public DBObject toDbObject() {
+	    DBObject dbObj = new BasicDBObject("id",this.id).append( "al1", al1 ).append( "analyzerId", analyzerId );
+	    return dbObj;
 	}
 	
 	public String getId() {
@@ -804,12 +810,14 @@ public class AnalyzerRegistryEntity implements ClbEntity, Serializable {
 		this.wdmdmax = wdmdmax;
 	}
 
-	public AnalyzerEntity getAnalyzer() {
-		return analyzer;
-	}
+    public String getAnalyzerId() {
+        return analyzerId;
+    }
 
-	public void setAnalyzer(AnalyzerEntity analyzer) {
-		this.analyzer = analyzer;
-	}
+    public void setAnalyzerId( String analyzerId ) {
+        this.analyzerId = analyzerId;
+    }
+	
+	
 	
 }

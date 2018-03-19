@@ -24,7 +24,7 @@
 
 	<!-- Default bean name is 'mongo' -->
 	<mongo:db-factory host="localhost" port="27017"
-		dbname="test" />
+		dbname="clb" />
 
 	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
 		<constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
@@ -48,11 +48,7 @@
 	</bean>
 
 	<bean id="userRegistryService" class="clb.business.UserRegistryServiceImpl" />
-
-	<bean id="analyzerRegistryEntityCollectionManager" class="clb.database.entities.AnalyzerRegistryEntityCollectionManagerImpl">
-		<property name="collectionName" value="analyzerRegistries" />
-	</bean>
-
+	
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="host" value="smtp.gmail.com" />
 		<property name="port" value="25" />

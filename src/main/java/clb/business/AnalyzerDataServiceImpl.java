@@ -210,7 +210,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                 analyzerRegistryObject.setKvarl2(row.getCell(27).getNumericCellValue());
                 analyzerRegistryObject.setKvarl3(row.getCell(28).getNumericCellValue());
                 analyzerRegistryObject.setKvarsys(row.getCell(29).getNumericCellValue());
-                analyzerRegistryObject.setAnalyzer(ana);
+                analyzerRegistryObject.setAnalyzerId(ana.getId());
 
                 clbDao.saveAnalyzerRegistry(analyzerRegistryObject);
 
@@ -281,15 +281,11 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                                 al1DailyAverage +=anaRegObj.getAl1();
                                 al2DailyAverage +=anaRegObj.getAl2();
                                 al3DailyAverage +=anaRegObj.getAl3();
-
+                                
+                                anaRegObj.setAnalyzerId( analyzer.getId() );
+                                
                                 clbDao.saveAnalyzerRegistry(anaRegObj);
                                 analyzer.addAnalyzerRegistry(anaRegObj.getId());
-                            }
-
-                            else {
-                                al1DailyAverage +=lowAl + (highAl - lowAl) * random.nextDouble();
-                                al2DailyAverage +=lowAl + (highAl - lowAl) * random.nextDouble();
-                                al3DailyAverage +=lowAl + (highAl - lowAl) * random.nextDouble();
                             }
                         }
                     }
@@ -301,8 +297,8 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                     anaRegAverageObj.setAl1Average(al1DailyAverage/ (24*60));
                     anaRegAverageObj.setAl2Average(al2DailyAverage/ (24*60));
                     anaRegAverageObj.setAl3Average(al3DailyAverage/ (24*60));
+                    anaRegAverageObj.setAnalyzerId( analyzer.getId() );
 
-                    clbDao.saveAnalyzerRegistryAverage(anaRegAverageObj);
                     analyzer.addAnalyzerRegistryAverage(anaRegAverageObj.getId());
 
                     calendar.add(Calendar.DATE, 1);
