@@ -15,6 +15,8 @@ public interface ClbDao{
 
 	void saveAnalyzer(AnalyzerObject analyzerObject);
 	
+    void saveAnalyzerRegistries( List<AnalyzerRegistryObject> analyzersRegistries );
+	
 	void saveAnalyzerRegistry(AnalyzerRegistryObject analyzerRegistryObject);
 	
 	void saveDataLogger(DataLoggerObject dataLoggerObject);
@@ -36,4 +38,5 @@ public interface ClbDao{
     List<BuildingObject> findUserBuildings( String userName );
 
     List<AnalyzerRegistryObject> getHourRegistriesFromAnalyzer( String analyzerId , Date timeFrame);
+
 }

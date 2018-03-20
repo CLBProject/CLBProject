@@ -36,6 +36,7 @@ import clb.database.repository.BuildingsMetersParametersMongoRepository;
 import clb.database.repository.BuildingsMongoRepository;
 import clb.database.repository.DataLoggerMongoRepository;
 import clb.database.repository.UsersystemMongoRepository;
+import clb.global.DateUtils;
 
 @Service
 public class ClbDaoImpl implements ClbDao, Serializable{
@@ -65,7 +66,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
     private UsersystemMongoRepository userSystemMongoRepository;
 
     private static final String ANALYZER_REGISTIES_COLL_NAME = "AnalyzerRegistries";
-    
+
     @Autowired
     private MongoTemplate mongoTemplate;
 
@@ -82,30 +83,48 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
     @Override
     public void saveAnalyzerRegistry(AnalyzerRegistryObject analyzerRegistryObject) {
-        AnalyzerRegistryEntity analyzerRegistryEntity = analyzerRegistryObject.toEntity();
 
-        String collectionName = formatTimeToAnalyzerRegistryCollectionName(analyzerRegistryObject.getCurrenttime());
+        String collectionName = DateUtils.getInstance().concatTimeWithString(ANALYZER_REGISTIES_COLL_NAME,analyzerRegistryObject.getCurrenttime());
 
         DBCollection analyzerRegCol = null;
-        
+
         if(mongoTemplate.collectionExists( collectionName )) {
             analyzerRegCol = mongoTemplate.getCollection( collectionName);
         }
         else analyzerRegCol = mongoTemplate.createCollection(collectionName );
-        
+
+        AnalyzerRegistryEntity analyzerRegistryEntity = analyzerRegistryObject.toEntity();
+
         analyzerRegCol.insert( analyzerRegistryEntity.toDbObject() );
         analyzerRegistryObject.setId(analyzerRegistryEntity.getId());
     }
-    
-    private String formatTimeToAnalyzerRegistryCollectionName(Date time) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime( time );
-        
-        String year = cal.get(Calendar.YEAR) + "";
-        String month = cal.get(Calendar.MONTH) >= 10 ? "" + cal.get(Calendar.MONTH) : "0" + cal.get(Calendar.MONTH);
-        String day = cal.get(Calendar.DAY_OF_MONTH) >= 10 ? "" + cal.get(Calendar.DAY_OF_MONTH) : "0" + cal.get(Calendar.DAY_OF_MONTH);
-        
-        return ANALYZER_REGISTIES_COLL_NAME + "_"+ year+month+day;
+
+
+    @Override
+    public void saveAnalyzerRegistries( List<AnalyzerRegistryObject> analyzersRegistries ) {
+
+        DBCollection analyzerRegCol = null;
+        String currentCollectionName = "";
+
+        for(AnalyzerRegistryObject analyzerRegistryObject : analyzersRegistries) {
+            String collectionName =  DateUtils.getInstance().concatTimeWithString(ANALYZER_REGISTIES_COLL_NAME,analyzerRegistryObject.getCurrenttime());
+
+            if(!currentCollectionName.equals( collectionName )) {
+
+                if(mongoTemplate.collectionExists( collectionName )) {
+                    analyzerRegCol = mongoTemplate.getCollection( collectionName);
+                }
+                else {
+                    analyzerRegCol = mongoTemplate.createCollection(collectionName );
+                    currentCollectionName = collectionName;
+                }
+            }
+
+            AnalyzerRegistryEntity analyzerRegistryEntity = analyzerRegistryObject.toEntity();
+
+            analyzerRegCol.insert( analyzerRegistryEntity.toDbObject() );
+            analyzerRegistryObject.setId(analyzerRegistryEntity.getId());
+        }
     }
 
     @Override
@@ -167,7 +186,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
     public void setAnalyzerMongoRepository(AnalyzerMongoRepository analyzerMongoRepository) {
         this.analyzerMongoRepository = analyzerMongoRepository;
     }
-    
+
     public BuildingsMongoRepository getBuildingsMongoRepository() {
         return buildingsMongoRepository;
     }
@@ -216,24 +235,34 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
     @Override
     public List<AnalyzerRegistryObject> getHourRegistriesFromAnalyzer( String analyzerId, Date timeFrame ) {
-        
-        final String collectionName = formatTimeToAnalyzerRegistryCollectionName( timeFrame );
-        
+
+        final String collectionName =  DateUtils.getInstance().concatTimeWithString(ANALYZER_REGISTIES_COLL_NAME, timeFrame );
+
         DBCollection collection = this.mongoTemplate.getCollection( collectionName );
-        
         DBObject dbObj = new BasicDBObject("analyzerId",analyzerId);
-        
+
         //Missing Reset Dates
-        //dbObj.put( "currenttime", BasicDBObjectBuilder.start("$gte", fromDate).add("$lte", toDate).get() );
-        
+
+        Calendar timeFrameCalToday = Calendar.getInstance();
+        timeFrameCalToday.setTime( timeFrame );
+        timeFrameCalToday.set( Calendar.MINUTE, 0 );
+        timeFrameCalToday.set( Calendar.SECOND, 0 );
+
+        Calendar timeFrameCalTomorrow = Calendar.getInstance();
+        timeFrameCalTomorrow.setTime( timeFrameCalToday.getTime() );
+        timeFrameCalTomorrow.add( Calendar.HOUR_OF_DAY, 1 );
+
+        dbObj.put( "currenttime", BasicDBObjectBuilder.start("$gte", timeFrameCalToday.getTime()).add("$lte", timeFrameCalTomorrow.getTime()).get() );
+
         final List<AnalyzerRegistryObject> analyzerRegistries = new ArrayList<AnalyzerRegistryObject>();
-        
+
         collection.find(dbObj).forEach( result -> {
             AnalyzerRegistryEntity analyzerReg = new AnalyzerRegistryEntity();
             analyzerReg.setId((String)result.get("id") );
             analyzerReg.setAnalyzerId((String)result.get("analyzerId")); 
             analyzerReg.setAl1( (Double)result.get("al1")  );
-            
+            analyzerReg.setCurrenttime( (Date)result.get( "currenttime" ) );
+
             analyzerRegistries.add( new AnalyzerRegistryObject(analyzerReg) );
         });
 
@@ -247,5 +276,4 @@ public class ClbDaoImpl implements ClbDao, Serializable{
     public void setMongoTemplate( MongoTemplate mongoTemplate ) {
         this.mongoTemplate = mongoTemplate;
     }
-
 }

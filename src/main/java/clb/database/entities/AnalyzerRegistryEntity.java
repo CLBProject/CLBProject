@@ -182,7 +182,10 @@ public class AnalyzerRegistryEntity implements ClbEntity, Serializable {
 	}
 	
 	public DBObject toDbObject() {
-	    DBObject dbObj = new BasicDBObject("id",this.id).append( "al1", al1 ).append( "analyzerId", analyzerId );
+	    DBObject dbObj = new BasicDBObject("id",this.id)
+	            .append( "al1", al1 )
+	            .append( "analyzerId", analyzerId )
+	            .append( "currenttime", currenttime );
 	    return dbObj;
 	}
 	

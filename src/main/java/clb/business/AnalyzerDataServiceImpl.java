@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -161,7 +162,9 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
             clbDao.saveAnalyzer(ana);
             clbDao.saveAnalyzer(ana2);
             clbDao.saveAnalyzer(ana3);
-
+            
+            List<AnalyzerRegistryObject> analyzerRegistries = new ArrayList<AnalyzerRegistryObject>();
+            
             for(int i = 2;i<worksheet.getLastRowNum();i++){
 
                 XSSFRow row = worksheet.getRow(i);
@@ -211,15 +214,18 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                 analyzerRegistryObject.setKvarl3(row.getCell(28).getNumericCellValue());
                 analyzerRegistryObject.setKvarsys(row.getCell(29).getNumericCellValue());
                 analyzerRegistryObject.setAnalyzerId(ana.getId());
-
-                clbDao.saveAnalyzerRegistry(analyzerRegistryObject);
-
-                ana.addAnalyzerRegistry(analyzerRegistryObject.getId());
+                
+                analyzerRegistries.add( analyzerRegistryObject );
             }
+            
 
+            clbDao.saveAnalyzerRegistries(analyzerRegistries);
+
+            analyzerRegistries.stream().forEach( analyzerRegistry -> ana.addAnalyzerRegistry( analyzerRegistry.getId() ) );
+            
             persistDummyAnalyzerRegistries( ana, dataToExclueOnDummy);
-
-
+            
+            clbDao.saveAnalyzer(ana);
             clbDao.saveDataLogger(dl);
         }
 
@@ -249,6 +255,8 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                     double al1DailyAverage = 0;
                     double al2DailyAverage = 0;
                     double al3DailyAverage = 0;
+                    
+                    List<AnalyzerRegistryObject> analyzersRegistries = new ArrayList<AnalyzerRegistryObject>();
 
                     for(int b = 0; b < 24 ; b++){
                         for(int k = 0; k < 60; k+=5){
@@ -283,12 +291,14 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                                 al3DailyAverage +=anaRegObj.getAl3();
                                 
                                 anaRegObj.setAnalyzerId( analyzer.getId() );
-                                
-                                clbDao.saveAnalyzerRegistry(anaRegObj);
-                                analyzer.addAnalyzerRegistry(anaRegObj.getId());
+                                analyzersRegistries.add( anaRegObj );
                             }
                         }
                     }
+                    
+                    clbDao.saveAnalyzerRegistries(analyzersRegistries);
+                    
+                    analyzersRegistries.stream().forEach( analyzerRegistry -> analyzer.addAnalyzerRegistry( analyzerRegistry.getId() ) );
 
                     AnalyzerRegistryAverageObject anaRegAverageObj = new AnalyzerRegistryAverageObject();
 
