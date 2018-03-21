@@ -14,4 +14,6 @@ public interface AnalyzerDataService {
     public UsersystemObject getUserData(String username);
     
     public List<AnalyzerRegistryObject> getHourRegistriesFromAnalyzer( String analyzerId , Date timeFrame);
+    
+    public List<AnalyzerRegistryObject> getDayRegistriesFromAnalyzer( String analyzerId, Date timeFrame );
 }

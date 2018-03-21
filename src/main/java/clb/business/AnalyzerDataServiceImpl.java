@@ -72,6 +72,11 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
     public List<AnalyzerRegistryObject> getHourRegistriesFromAnalyzer( String analyzerId , Date timeFrame) {
         return clbDao.getHourRegistriesFromAnalyzer( analyzerId, timeFrame );
     }
+    
+    @Override
+    public List<AnalyzerRegistryObject> getDayRegistriesFromAnalyzer( String analyzerId , Date timeFrame) {
+        return clbDao.getDayRegistriesFromAnalyzer( analyzerId, timeFrame );
+    }
 
     @Override
     public UsersystemObject getUserData( String username ) {

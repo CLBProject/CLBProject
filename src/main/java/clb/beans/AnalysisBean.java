@@ -53,6 +53,7 @@ public class AnalysisBean implements Serializable{
         analysisDate = new Date();
         analysisTypes = AnalysisTypes.values();
         scalesGraphic = ScaleGraphic.values();
+        scaleGraphic = ScaleGraphic.HOUR;
 
         //Set Initial Selected Building, DataLogger and Analyzer
         if(clbHomeLoginBean.getUserLoginPojo().getCurrentUser().getBuildings() != null && 
@@ -73,7 +74,7 @@ public class AnalysisBean implements Serializable{
                                     analyzersSelected = dlObj.getAnalyzers(); 
                                     analyzerSelected = aObj;
                                     tempAnalyzerSelected = analyzerSelected;
-                                    
+
                                     analysisDayPojo = new AnalysisGraphicPojo( 
                                             analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate),buildingSelected.getBuildingMeters());
 
@@ -95,10 +96,24 @@ public class AnalysisBean implements Serializable{
         analyzerSelected = tempAnalyzerSelected;
     }
 
+    public void updateScaleValues() {
+        switch(scaleGraphic) {
+            case HOUR:
+                analysisDayPojo.fillGraphicForYearData( analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate), scaleGraphic );
+                break;
+            case DAY:
+                analysisDayPojo.fillGraphicForYearData( analyzerDataService.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate), scaleGraphic );
+                break;
+            default:
+                analysisDayPojo.fillGraphicForYearData( analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate), scaleGraphic );
+                break;
+        }
+    }
+
     public void updateMeterSelection(BuildingMeterObject buildingMeterObj, BuildingMeterParameterObject buildingParameterObj) {
         System.out.println( buildingMeterObj );
     }
-    
+
     public Date getAnalysisDate() {
         return analysisDate;
     }
@@ -106,7 +121,7 @@ public class AnalysisBean implements Serializable{
     public void setAnalysisDate( Date analysisDate ) {
         this.analysisDate = analysisDate;
     }
-    
+
     public AnalysisGraphicPojo getAnalysisDayPojo() {
         return analysisDayPojo;
     }

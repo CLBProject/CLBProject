@@ -12,25 +12,24 @@
 		<div class="analysisDiv">
 			<h:form id="analysisForm">
 				<p:spacer height="20" />
-				<table width="100%" class="analysisDivClass" cellpadding="3">
+				<table width="100%" class="analysisDivClass" cellpadding="5">
 					<tr>
 						<td width="175px" align="left" class="analysisDivClassMainCell"><h:outputLabel
 								value="Analysis Menu"></h:outputLabel>
 							<hr /></td>
-						<td align="right"><p:outputLabel value="Time Frame:"
-								for="scaleList"></p:outputLabel> <p:spacer width="5"></p:spacer>
+						<td align="right"><b><p:outputLabel value="Time Frame:"
+									for="scaleList"></p:outputLabel></b> <p:spacer width="5"></p:spacer>
 							<p:calendar value="#{analysisBean.analysisDate}"
-								styleClass="timeFrame"></p:calendar> <p:spacer width="30"></p:spacer>
-							<p:outputLabel value="Scale:" for="scaleList"></p:outputLabel> <p:spacer
-								width="5"></p:spacer> <p:selectOneMenu id="scaleList"
-								widgetVar="scaleList" value="#{analysisBean.scaleGraphic}">
+								pattern="dd-MM-yyyy" styleClass="timeFrame"></p:calendar> <p:spacer
+								width="30"></p:spacer> <b><p:outputLabel value="Scale:"
+									for="scaleList"></p:outputLabel></b> <p:spacer width="5"></p:spacer>
+							<p:selectOneMenu id="scaleList" widgetVar="scaleList"
+								value="#{analysisBean.scaleGraphic}">
+								<p:ajax event="change" listener="#{analysisBean.updateScaleValues}" update=":analysisForm"></p:ajax>
 								<f:selectItems value="#{analysisBean.scalesGraphic}"
 									var="analysisScale" itemValue="#{analysisScale}"
 									itemLabel="#{analysisScale.label}" />
-							</p:selectOneMenu> <p:spacer width="40" /> <p:commandButton
-								styleClass="simpleButton" value="Export"
-								icon="fa fa-fw fa-file-image-o" type="button">
-							</p:commandButton></td>
+							</p:selectOneMenu></td>
 					</tr>
 					<tr>
 						<td valign="top" width="175px"><p:selectOneMenu
@@ -47,7 +46,7 @@
 										</c:when>
 										<c:otherwise>
 											<b><p:outputLabel value="Building"></p:outputLabel></b>
-											<br />
+											<hr/>
 											<p:graphicImage width="150px"
 												styleClass="buildingImgAnalysis"
 												value="#{request.contextPath}/../resources/images/buildings/#{analysisBean.buildingSelected.imgPath}" />
@@ -70,6 +69,8 @@
 											<p:outputLabel value="No Meters to Select"></p:outputLabel>
 										</c:when>
 										<c:otherwise>
+											<b><p:outputLabel value="Meters"></p:outputLabel></b>
+											<hr/>
 											<p:accordionPanel>
 												<c:forEach
 													items="#{analysisBean.buildingSelected.buildingMeters}"
@@ -82,7 +83,8 @@
 																	var="buildingMeterParameter">
 																	<p:column>
 																		<p:selectBooleanCheckbox>
-																			<p:ajax update="@form" listener="#{analysisBean.updateMeterSelection(buildingMeter,buildingMeterParameter)}" />
+																			<p:ajax update="@form"
+																				listener="#{analysisBean.updateMeterSelection(buildingMeter,buildingMeterParameter)}" />
 																		</p:selectBooleanCheckbox>
 																	</p:column>
 																	<p:column>
@@ -99,18 +101,16 @@
 									</c:choose>
 								</div>
 							</p:panel></td>
-						<td valign="top" align="right"><p:panel
+						<td valign="top" align="center"><p:panel
 								styleClass="chartPanel">
 								<p:outputLabel styleClass="analysisTitle"
 									value="#{analysisBean.analyzerSelected.name}"></p:outputLabel>
 								<br />
 								<p:commandLink value="Change" style="font-size: 10px"
 									oncomplete="PF('selectionPopupAnalyzer').show()" />
-								<p:spacer height="5" />
-								<p:chart styleClass="analysisChartCSS" id="chartDayId"
+								<p:chart styleClass="analysisChartCSS" id="chartDayId" responsive="true"
 									widgetVar="chartDayId"
-									model="#{analysisBean.analysisDayPojo.lineModel}"
-									type="line" />
+									model="#{analysisBean.analysisDayPojo.lineModel}" type="line" />
 							</p:panel></td>
 					</tr>
 				</table>

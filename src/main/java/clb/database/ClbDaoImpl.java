@@ -236,11 +236,6 @@ public class ClbDaoImpl implements ClbDao, Serializable{
     @Override
     public List<AnalyzerRegistryObject> getHourRegistriesFromAnalyzer( String analyzerId, Date timeFrame ) {
 
-        final String collectionName =  DateUtils.getInstance().concatTimeWithString(ANALYZER_REGISTIES_COLL_NAME, timeFrame );
-
-        DBCollection collection = this.mongoTemplate.getCollection( collectionName );
-        DBObject dbObj = new BasicDBObject("analyzerId",analyzerId);
-
         //Missing Reset Dates
 
         Calendar timeFrameCalToday = Calendar.getInstance();
@@ -251,8 +246,37 @@ public class ClbDaoImpl implements ClbDao, Serializable{
         Calendar timeFrameCalTomorrow = Calendar.getInstance();
         timeFrameCalTomorrow.setTime( timeFrameCalToday.getTime() );
         timeFrameCalTomorrow.add( Calendar.HOUR_OF_DAY, 1 );
+        
 
-        dbObj.put( "currenttime", BasicDBObjectBuilder.start("$gte", timeFrameCalToday.getTime()).add("$lte", timeFrameCalTomorrow.getTime()).get() );
+        return  processRegistries(timeFrame, analyzerId, timeFrameCalToday.getTime(), timeFrameCalTomorrow.getTime());
+    }
+    
+    @Override
+    public List<AnalyzerRegistryObject> getDayRegistriesFromAnalyzer( String analyzerId, Date timeFrame ) {
+
+        //Missing Reset Dates
+
+        Calendar timeFrameCalToday = Calendar.getInstance();
+        timeFrameCalToday.setTime( timeFrame );
+        timeFrameCalToday.set( Calendar.MINUTE, 0 );
+        timeFrameCalToday.set( Calendar.SECOND, 0 );
+        timeFrameCalToday.set( Calendar.HOUR_OF_DAY, 0 );
+
+        Calendar timeFrameCalTomorrow = Calendar.getInstance();
+        timeFrameCalTomorrow.setTime( timeFrameCalToday.getTime() );
+        timeFrameCalTomorrow.add( Calendar.DAY_OF_MONTH, 1 );
+
+        return  processRegistries(timeFrame, analyzerId, timeFrameCalToday.getTime(), timeFrameCalTomorrow.getTime());
+    }
+    
+    private List<AnalyzerRegistryObject> processRegistries(final Date timeFrame, final String analyzerId, 
+            final Date timeFrameToday, final Date timeFrameTomorrow){
+        
+        final String collectionName =  DateUtils.getInstance().concatTimeWithString(ANALYZER_REGISTIES_COLL_NAME, timeFrame );
+
+        DBCollection collection = this.mongoTemplate.getCollection( collectionName );
+        DBObject dbObj = new BasicDBObject("analyzerId",analyzerId);
+        dbObj.put( "currenttime", BasicDBObjectBuilder.start("$gte", timeFrameToday).add("$lte", timeFrameTomorrow).get() );
 
         final List<AnalyzerRegistryObject> analyzerRegistries = new ArrayList<AnalyzerRegistryObject>();
 
