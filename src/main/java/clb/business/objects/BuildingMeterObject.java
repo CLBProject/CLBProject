@@ -11,8 +11,10 @@ public class BuildingMeterObject
     private String buildingMeterId;
 
     private String name;
+    
+    private String labelKey;
 
-    private List<BuildingMeterParameterObject> buildingMeterParameters;
+    private List<BuildingMeterObject> buildingMeterParameters;
     
     public BuildingMeterObject(){
         
@@ -21,23 +23,25 @@ public class BuildingMeterObject
     public BuildingMeterObject( BuildingMeterEntity buildingMeterEntity ) {
         this.buildingMeterId = buildingMeterEntity.getBuildingMeterId();
         this.name = buildingMeterEntity.getName();
+        this.labelKey = buildingMeterEntity.getLabelKey();
         this.buildingMeterParameters = buildingMeterEntity.getBuildingMeterParameters() != null ?
-                buildingMeterEntity.getBuildingMeterParameters().stream().map(BuildingMeterParameterObject::new).collect( Collectors.toList()) : null;
+                buildingMeterEntity.getBuildingMeterParameters().stream().map(BuildingMeterObject::new).collect( Collectors.toList()) : null;
     }
 
     public BuildingMeterEntity toEntity() {
         BuildingMeterEntity buildingMeterEntity = new BuildingMeterEntity();
         buildingMeterEntity.setBuildingMeterId( this.buildingMeterId );
         buildingMeterEntity.setName( this.name );
+        buildingMeterEntity.setLabelKey( this.labelKey );
         buildingMeterEntity.setBuildingMeterParameters( this.buildingMeterParameters != null ?
-                this.buildingMeterParameters.stream().map(BuildingMeterParameterObject::toEntity).collect(Collectors.toList()) : null);
+                this.buildingMeterParameters.stream().map(BuildingMeterObject::toEntity).collect(Collectors.toList()) : null);
         
         return buildingMeterEntity;
     }
 
-    public void addBuildingMeterParameter(BuildingMeterParameterObject buildingMeterParameterObj) {
+    public void addBuildingMeterParameter(BuildingMeterObject buildingMeterParameterObj) {
         if(buildingMeterParameters == null) {
-            buildingMeterParameters = new ArrayList<BuildingMeterParameterObject>();
+            buildingMeterParameters = new ArrayList<BuildingMeterObject>();
         }
         
         buildingMeterParameters.add(buildingMeterParameterObj);
@@ -59,12 +63,20 @@ public class BuildingMeterObject
         this.name = name;
     }
 
-    public List<BuildingMeterParameterObject> getBuildingMeterParameters() {
+    public List<BuildingMeterObject> getBuildingMeterParameters() {
         return buildingMeterParameters;
     }
 
-    public void setBuildingMeterParameters( List<BuildingMeterParameterObject> buildingMeterParameters ) {
+    public void setBuildingMeterParameters( List<BuildingMeterObject> buildingMeterParameters ) {
         this.buildingMeterParameters = buildingMeterParameters;
+    }
+
+    public String getLabelKey() {
+        return labelKey;
+    }
+
+    public void setLabelKey( String labelKey ) {
+        this.labelKey = labelKey;
     }
     
     

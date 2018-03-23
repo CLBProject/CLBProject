@@ -2,9 +2,14 @@ package clb.global;
 
 public enum BuildingMeterParameterValues
 {
-    AL1("AL1"),
-    AL2("AL2"),
-    AL3("AL3");
+    VOLTAGE("Voltage"),
+    VOLTAGE_BETWEEN_PHASES("Voltage Between Phases"),
+    POWER("Power"),
+    REACTIVE_POWER("Reactive Power"),
+    VOLT_AMPERE("Volt-Ampere"),
+    POWER_FACTOR("Power Factor"),
+    FREQUENCY("Frequency"),
+    CURRENT("Current");
     
     private String label;
     

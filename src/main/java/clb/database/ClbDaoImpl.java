@@ -19,7 +19,6 @@ import com.mongodb.DBObject;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.BuildingMeterObject;
-import clb.business.objects.BuildingMeterParameterObject;
 import clb.business.objects.BuildingObject;
 import clb.business.objects.DataLoggerObject;
 import clb.business.objects.UsersystemObject;
@@ -27,12 +26,10 @@ import clb.database.entities.AnalyzerEntity;
 import clb.database.entities.AnalyzerRegistryEntity;
 import clb.database.entities.BuildingEntity;
 import clb.database.entities.BuildingMeterEntity;
-import clb.database.entities.BuildingMeterParameterEntity;
 import clb.database.entities.DataLoggerEntity;
 import clb.database.entities.UsersystemEntity;
 import clb.database.repository.AnalyzerMongoRepository;
 import clb.database.repository.BuildingsMetersMongoRepository;
-import clb.database.repository.BuildingsMetersParametersMongoRepository;
 import clb.database.repository.BuildingsMongoRepository;
 import clb.database.repository.DataLoggerMongoRepository;
 import clb.database.repository.UsersystemMongoRepository;
@@ -55,9 +52,6 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
     @Autowired
     private BuildingsMetersMongoRepository buildingsMetersMongoRepository;
-
-    @Autowired
-    private BuildingsMetersParametersMongoRepository buildingsMetersParametersMongoRepository;
 
     @Autowired
     private DataLoggerMongoRepository dataLoggerMongoRepository;
@@ -149,13 +143,6 @@ public class ClbDaoImpl implements ClbDao, Serializable{
     }
 
     @Override
-    public void saveBuildingMeterParameter(BuildingMeterParameterObject buildingMeterParameterObject) {
-        BuildingMeterParameterEntity buildingMeterParameterEntity = buildingMeterParameterObject.toEntity();
-        buildingsMetersParametersMongoRepository.save(buildingMeterParameterEntity);
-        buildingMeterParameterObject.setBuildingMeterParameterId( buildingMeterParameterEntity.getBuildingMeterParameterId());
-    }
-
-    @Override
     public void saveUsersystem(UsersystemObject userSystemObject) {
         UsersystemEntity userSystemEntity = userSystemObject.toEntity();
         userSystemMongoRepository.save(userSystemEntity);
@@ -224,15 +211,6 @@ public class ClbDaoImpl implements ClbDao, Serializable{
         this.buildingsMetersMongoRepository = buildingsMetersMongoRepository;
     }
 
-    public BuildingsMetersParametersMongoRepository getBuildingsMetersParametersMongoRepository() {
-        return buildingsMetersParametersMongoRepository;
-    }
-
-    public void setBuildingsMetersParametersMongoRepository(
-            BuildingsMetersParametersMongoRepository buildingsMetersParametersMongoRepository ) {
-        this.buildingsMetersParametersMongoRepository = buildingsMetersParametersMongoRepository;
-    }
-
     @Override
     public List<AnalyzerRegistryObject> getHourRegistriesFromAnalyzer( String analyzerId, Date timeFrame ) {
 
@@ -246,11 +224,11 @@ public class ClbDaoImpl implements ClbDao, Serializable{
         Calendar timeFrameCalTomorrow = Calendar.getInstance();
         timeFrameCalTomorrow.setTime( timeFrameCalToday.getTime() );
         timeFrameCalTomorrow.add( Calendar.HOUR_OF_DAY, 1 );
-        
+
 
         return  processRegistries(timeFrame, analyzerId, timeFrameCalToday.getTime(), timeFrameCalTomorrow.getTime());
     }
-    
+
     @Override
     public List<AnalyzerRegistryObject> getDayRegistriesFromAnalyzer( String analyzerId, Date timeFrame ) {
 
@@ -268,10 +246,10 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
         return  processRegistries(timeFrame, analyzerId, timeFrameCalToday.getTime(), timeFrameCalTomorrow.getTime());
     }
-    
+
     private List<AnalyzerRegistryObject> processRegistries(final Date timeFrame, final String analyzerId, 
             final Date timeFrameToday, final Date timeFrameTomorrow){
-        
+
         final String collectionName =  DateUtils.getInstance().concatTimeWithString(ANALYZER_REGISTIES_COLL_NAME, timeFrame );
 
         DBCollection collection = this.mongoTemplate.getCollection( collectionName );
@@ -284,9 +262,15 @@ public class ClbDaoImpl implements ClbDao, Serializable{
             AnalyzerRegistryEntity analyzerReg = new AnalyzerRegistryEntity();
             analyzerReg.setId((String)result.get("id") );
             analyzerReg.setAnalyzerId((String)result.get("analyzerId")); 
-            analyzerReg.setAl1( (Double)result.get("al1")  );
+            analyzerReg.setVlnsys( (Double)result.get("vlnsys") );
+            analyzerReg.setVllsys( (Double)result.get("vllsys") );
+            analyzerReg.setKwsys( (Double)result.get("kwsys")  );
+            analyzerReg.setKvarsys( (Double)result.get("kvarsys")  );
+            analyzerReg.setPfsys( (Double)result.get("pfsys")  );
+            analyzerReg.setHz( (Double)result.get("hz")  );
+            analyzerReg.setAsys( (Double)result.get("asys")  );
             analyzerReg.setCurrenttime( (Date)result.get( "currenttime" ) );
-
+            
             analyzerRegistries.add( new AnalyzerRegistryObject(analyzerReg) );
         });
 

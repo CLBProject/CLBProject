@@ -40,20 +40,46 @@ public class AnalysisGraphicPojo {
         chartSeries = new ArrayList<ChartSeries>();
 
         buildingMetersObject.stream().forEach(  
-                buildingMeterObject -> buildingMeterObject.getBuildingMeterParameters().stream().forEach(  
-                        buildingMeterParameterObject -> {
-                            final LineChartSeries serie = new LineChartSeries(buildingMeterParameterObject.getName());
-                            serie.setShowMarker( false );
-                            chartSeries.add( serie );
-                            lineModel.addSeries( serie );
-                        }
-                        )
+                buildingMeterObject -> {
+                        final LineChartSeries serie = new LineChartSeries(buildingMeterObject.getLabelKey());
+                        serie.setShowMarker( false );
+                        chartSeries.add( serie );
+                        lineModel.addSeries( serie );
+                }
                 );
 
         fillGraphicForYearData(registries, ScaleGraphic.HOUR);
     }
 
     public void fillGraphicForYearData(List<AnalyzerRegistryObject> registries, ScaleGraphic currentScale){
+
+
+        Axis xAxis = new DateAxis("Time");
+        xAxis.setTickAngle(STICK_ANGLE_GRAPHIC_LINE);
+
+        switch(currentScale) {
+            case HOUR:
+                //5 minutes interval
+                xAxis.setTickInterval( DATE_HOUR_INTERVAL_GRAPHIC );
+                xAxis.setTickFormat(DATE_FORMAT_GRAPHIC);
+
+                break;
+            case DAY:
+                //5 minutes interval
+                xAxis.setTickInterval( DATE_DAY_INTERVAL_GRAPHIC );
+                xAxis.setTickFormat(DATE_FORMAT_GRAPHIC);
+                break;
+            default:
+                break;
+
+        }
+
+        lineModel.getAxes().put(AxisType.X,xAxis);
+
+        Axis yAxis = lineModel.getAxis(AxisType.Y);
+        yAxis.setLabel("Energy Values");
+
+        yAxis.setMin(0.0);
 
         //Clear All Data
         lineModel.getSeries().stream().forEach( serie -> serie.getData().clear() );
@@ -62,8 +88,29 @@ public class AnalysisGraphicPojo {
                 registry -> {
                     if(registry!= null && !registry.equals( "" )) {
                         switch(BuildingMeterParameterValues.valueOf(serie.getLabel())) {
-                            case AL1:
-                                serie.set(DateUtils.getInstance().convertDateToSimpleStringFormat( registry.getCurrenttime()),registry.getAl1());
+                            case CURRENT:
+                                serie.set(DateUtils.getInstance().convertDateToSimpleStringFormat( registry.getCurrenttime()),registry.getAsys());
+                                break;
+                            case FREQUENCY:
+                                serie.set(DateUtils.getInstance().convertDateToSimpleStringFormat( registry.getCurrenttime()),registry.getHz());
+                                break;
+                            case POWER:
+                                serie.set(DateUtils.getInstance().convertDateToSimpleStringFormat( registry.getCurrenttime()),registry.getKwsys());
+                                break;
+                            case POWER_FACTOR:
+                                serie.set(DateUtils.getInstance().convertDateToSimpleStringFormat( registry.getCurrenttime()),registry.getPfsys());
+                                break;
+                            case REACTIVE_POWER:
+                                serie.set(DateUtils.getInstance().convertDateToSimpleStringFormat( registry.getCurrenttime()),registry.getKvarsys());
+                                break;
+                            case VOLT_AMPERE:
+                                serie.set(DateUtils.getInstance().convertDateToSimpleStringFormat( registry.getCurrenttime()),registry.getKvasys());
+                                break;
+                            case VOLTAGE:
+                                serie.set(DateUtils.getInstance().convertDateToSimpleStringFormat( registry.getCurrenttime()),registry.getVlnsys());
+                                break;
+                            case VOLTAGE_BETWEEN_PHASES:
+                                serie.set(DateUtils.getInstance().convertDateToSimpleStringFormat( registry.getCurrenttime()),registry.getVllsys());
                                 break;
                             default: 
                                 break;
@@ -73,29 +120,6 @@ public class AnalysisGraphicPojo {
                 }
                 ));
 
-        Axis xAxis = new DateAxis("Time");
-        xAxis.setTickAngle(STICK_ANGLE_GRAPHIC_LINE);
-        
-        switch(currentScale) {
-            case HOUR:
-                //5 minutes interval
-                xAxis.setTickInterval( DATE_HOUR_INTERVAL_GRAPHIC );
-                xAxis.setTickFormat(DATE_FORMAT_GRAPHIC);
-                break;
-            case DAY:
-                //5 minutes interval
-                xAxis.setTickInterval( DATE_DAY_INTERVAL_GRAPHIC );
-                xAxis.setTickFormat(DATE_FORMAT_GRAPHIC);
-                break;
-                
-        }
-
-        lineModel.getAxes().put(AxisType.X,xAxis);
-        
-        Axis yAxis = lineModel.getAxis(AxisType.Y);
-        yAxis.setLabel("Energy Values");
-
-        yAxis.setMin(0.0);
 
     }
 

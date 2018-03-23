@@ -33,11 +33,11 @@ import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryAverageObject;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.BuildingMeterObject;
-import clb.business.objects.BuildingMeterParameterObject;
 import clb.business.objects.BuildingObject;
 import clb.business.objects.DataLoggerObject;
 import clb.business.objects.UsersystemObject;
 import clb.database.ClbDao;
+import clb.global.BuildingMeterParameterValues;
 
 @Service
 public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializable{
@@ -55,7 +55,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
     @Autowired
     private ClbDao clbDao;
-    
+
     @Autowired 
     private ApplicationEventPublisher eventPublisher;
 
@@ -66,13 +66,13 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
             updateAnalyzerRegistriesForAnalyzer(file,clbDao.findUserByUserName( userName ));
         }
     }
-    
+
 
     @Override
     public List<AnalyzerRegistryObject> getHourRegistriesFromAnalyzer( String analyzerId , Date timeFrame) {
         return clbDao.getHourRegistriesFromAnalyzer( analyzerId, timeFrame );
     }
-    
+
     @Override
     public List<AnalyzerRegistryObject> getDayRegistriesFromAnalyzer( String analyzerId , Date timeFrame) {
         return clbDao.getDayRegistriesFromAnalyzer( analyzerId, timeFrame );
@@ -82,7 +82,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
     public UsersystemObject getUserData( String username ) {
         UsersystemObject user = clbDao.findUserByUserName( username );
         user.setBuildings( clbDao.findUserBuildings(username));
-        
+
         return user;
     }
 
@@ -113,32 +113,18 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
         building2.setBuildingusername(file.getName().split("\\.")[0]);
         building2.setImgPath( "building2.jpg" );
         userObject.addBuilding(building2);
-        
-        BuildingMeterObject buildingMeterObject = new BuildingMeterObject();
-        buildingMeterObject.setName( "Power" );
-        
-        BuildingMeterParameterObject buildingMeterParameterObject = new BuildingMeterParameterObject();
-        buildingMeterParameterObject.setName( "AL1" );
-        
-        BuildingMeterParameterObject buildingMeterParameterObject2 = new BuildingMeterParameterObject();
-        buildingMeterParameterObject2.setName( "AL2" );
-        
-        BuildingMeterParameterObject buildingMeterParameterObject3 = new BuildingMeterParameterObject();
-        buildingMeterParameterObject3.setName( "AL3" );
-        
-        clbDao.saveBuildingMeterParameter( buildingMeterParameterObject );
-        clbDao.saveBuildingMeterParameter( buildingMeterParameterObject2 );
-        clbDao.saveBuildingMeterParameter( buildingMeterParameterObject3 );
-        
-        buildingMeterObject.addBuildingMeterParameter( buildingMeterParameterObject );
-        buildingMeterObject.addBuildingMeterParameter( buildingMeterParameterObject2 );
-        buildingMeterObject.addBuildingMeterParameter( buildingMeterParameterObject3 );
-        
-        clbDao.saveBuildingMeter( buildingMeterObject );
-        
-        building.addBuildingMeter( buildingMeterObject);
-        building2.addBuildingMeter( buildingMeterObject);
-        
+
+        for(BuildingMeterParameterValues buildingMeterParameter: BuildingMeterParameterValues.values()) {
+            BuildingMeterObject buildingMeterObject = new BuildingMeterObject();
+            buildingMeterObject.setName( buildingMeterParameter.getLabel() );
+            buildingMeterObject.setLabelKey( buildingMeterParameter.name() );
+
+            clbDao.saveBuildingMeter( buildingMeterObject );
+
+            building.addBuildingMeter( buildingMeterObject);
+            building2.addBuildingMeter( buildingMeterObject);
+        }
+
         for(int j = 0; j<workbook.getNumberOfSheets();j++){
 
             DataLoggerObject dl = new DataLoggerObject();
@@ -149,11 +135,11 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
             AnalyzerObject ana = new AnalyzerObject();
             ana.setName( "Analyzer 2 " + j);
             dl.addAnalyzer(ana);
-            
+
             AnalyzerObject ana2 = new AnalyzerObject();
             ana2.setName( "Analyzer 2 " + j);
             dl.addAnalyzer(ana2);
-            
+
             AnalyzerObject ana3 = new AnalyzerObject();
             ana3.setName( "Analyzer 3 " + j);
             dl.addAnalyzer(ana3);
@@ -163,13 +149,13 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
             Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
 
             Set<Long> dataToExclueOnDummy = new HashSet<Long>();
-            
+
             clbDao.saveAnalyzer(ana);
             clbDao.saveAnalyzer(ana2);
             clbDao.saveAnalyzer(ana3);
-            
+
             List<AnalyzerRegistryObject> analyzerRegistries = new ArrayList<AnalyzerRegistryObject>();
-            
+
             for(int i = 2;i<worksheet.getLastRowNum();i++){
 
                 XSSFRow row = worksheet.getRow(i);
@@ -219,17 +205,17 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                 analyzerRegistryObject.setKvarl3(row.getCell(28).getNumericCellValue());
                 analyzerRegistryObject.setKvarsys(row.getCell(29).getNumericCellValue());
                 analyzerRegistryObject.setAnalyzerId(ana.getId());
-                
+
                 analyzerRegistries.add( analyzerRegistryObject );
             }
-            
+
 
             clbDao.saveAnalyzerRegistries(analyzerRegistries);
 
             analyzerRegistries.stream().forEach( analyzerRegistry -> ana.addAnalyzerRegistry( analyzerRegistry.getId() ) );
-            
+
             persistDummyAnalyzerRegistries( ana, dataToExclueOnDummy);
-            
+
             clbDao.saveAnalyzer(ana);
             clbDao.saveDataLogger(dl);
         }
@@ -260,7 +246,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                     double al1DailyAverage = 0;
                     double al2DailyAverage = 0;
                     double al3DailyAverage = 0;
-                    
+
                     List<AnalyzerRegistryObject> analyzersRegistries = new ArrayList<AnalyzerRegistryObject>();
 
                     for(int b = 0; b < 24 ; b++){
@@ -287,22 +273,38 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
                                 anaRegObj.setCurrenttime( time);
 
-                                anaRegObj.setAl1(lowAl + (highAl - lowAl) * random.nextDouble());
-                                anaRegObj.setAl2(lowAl + (highAl - lowAl) * random.nextDouble());
-                                anaRegObj.setAl3(lowAl + (highAl - lowAl) * random.nextDouble());
+                                //Voltage
+                                anaRegObj.setVlnsys(lowAl + (highAl - lowAl) * random.nextDouble());
 
-                                al1DailyAverage +=anaRegObj.getAl1();
-                                al2DailyAverage +=anaRegObj.getAl2();
-                                al3DailyAverage +=anaRegObj.getAl3();
-                                
+                                //Voltage Between Phasys
+                                anaRegObj.setVllsys(lowAl + (highAl - lowAl) * random.nextDouble());
+
+                                //Power
+                                anaRegObj.setKwsys(lowAl + (highAl - lowAl) * random.nextDouble());
+
+                                //Reactive Power
+                                anaRegObj.setKvarsys( lowAl + (highAl - lowAl) * random.nextDouble() );
+
+                                //Volt-Ampere
+                                anaRegObj.setKvasys( lowAl + (highAl - lowAl) * random.nextDouble() );
+
+                                //Frequency
+                                anaRegObj.setHz( lowAl + (highAl - lowAl) * random.nextDouble()  );
+
+                                //Current
+                                anaRegObj.setAsys( lowAl + (highAl - lowAl) * random.nextDouble()  );
+
+                                //Power Factor
+                                anaRegObj.setPfsys( lowAl + (highAl - lowAl) * random.nextDouble() );
+
                                 anaRegObj.setAnalyzerId( analyzer.getId() );
                                 analyzersRegistries.add( anaRegObj );
                             }
                         }
                     }
-                    
+
                     clbDao.saveAnalyzerRegistries(analyzersRegistries);
-                    
+
                     analyzersRegistries.stream().forEach( analyzerRegistry -> analyzer.addAnalyzerRegistry( analyzerRegistry.getId() ) );
 
                     AnalyzerRegistryAverageObject anaRegAverageObj = new AnalyzerRegistryAverageObject();

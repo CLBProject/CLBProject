@@ -20,9 +20,11 @@ public class BuildingMeterEntity implements ClbEntity, Serializable {
 	private String buildingMeterId;
 
 	private String name;
+	
+	private String labelKey;
 
 	@DBRef
-	private List<BuildingMeterParameterEntity> buildingMeterParameters;
+	private List<BuildingMeterEntity> buildingMeterParameters;
 
 	public BuildingMeterEntity() {
 	}
@@ -48,13 +50,23 @@ public class BuildingMeterEntity implements ClbEntity, Serializable {
     }
 
 
-    public List<BuildingMeterParameterEntity> getBuildingMeterParameters() {
+    public List<BuildingMeterEntity> getBuildingMeterParameters() {
         return buildingMeterParameters;
     }
 
 
-    public void setBuildingMeterParameters( List<BuildingMeterParameterEntity> buildingMeterParameters ) {
+    public void setBuildingMeterParameters( List<BuildingMeterEntity> buildingMeterParameters ) {
         this.buildingMeterParameters = buildingMeterParameters;
+    }
+
+
+    public String getLabelKey() {
+        return labelKey;
+    }
+
+
+    public void setLabelKey( String labelKey ) {
+        this.labelKey = labelKey;
     }
 	
 	

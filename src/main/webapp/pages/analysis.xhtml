@@ -25,7 +25,9 @@
 									for="scaleList"></p:outputLabel></b> <p:spacer width="5"></p:spacer>
 							<p:selectOneMenu id="scaleList" widgetVar="scaleList"
 								value="#{analysisBean.scaleGraphic}">
-								<p:ajax event="change" listener="#{analysisBean.updateScaleValues}" update=":analysisForm"></p:ajax>
+								<p:ajax event="change"
+									listener="#{analysisBean.updateScaleValues}"
+									update=":analysisForm"></p:ajax>
 								<f:selectItems value="#{analysisBean.scalesGraphic}"
 									var="analysisScale" itemValue="#{analysisScale}"
 									itemLabel="#{analysisScale.label}" />
@@ -46,7 +48,7 @@
 										</c:when>
 										<c:otherwise>
 											<b><p:outputLabel value="Building"></p:outputLabel></b>
-											<hr/>
+											<hr />
 											<p:graphicImage width="150px"
 												styleClass="buildingImgAnalysis"
 												value="#{request.contextPath}/../resources/images/buildings/#{analysisBean.buildingSelected.imgPath}" />
@@ -70,33 +72,25 @@
 										</c:when>
 										<c:otherwise>
 											<b><p:outputLabel value="Meters"></p:outputLabel></b>
-											<hr/>
-											<p:accordionPanel>
-												<c:forEach
-													items="#{analysisBean.buildingSelected.buildingMeters}"
-													var="buildingMeter">
-													<p:tab title="#{buildingMeter.name}">
-														<div align="left">
-															<h:panelGrid columns="2" cellpadding="2">
-																<c:forEach
-																	items="#{buildingMeter.buildingMeterParameters}"
-																	var="buildingMeterParameter">
-																	<p:column>
-																		<p:selectBooleanCheckbox>
-																			<p:ajax update="@form"
-																				listener="#{analysisBean.updateMeterSelection(buildingMeter,buildingMeterParameter)}" />
-																		</p:selectBooleanCheckbox>
-																	</p:column>
-																	<p:column>
-																		<h:outputText value="#{buildingMeterParameter.name}"
-																			styleClass="accPanelMeters"></h:outputText>
-																	</p:column>
-																</c:forEach>
-															</h:panelGrid>
-														</div>
-													</p:tab>
-												</c:forEach>
-											</p:accordionPanel>
+											<hr />
+											<div align="left">
+												<h:panelGrid columns="2" cellpadding="2">
+													<c:forEach
+														items="#{analysisBean.buildingSelected.buildingMeters}"
+														var="buildingMeter">
+														<p:column>
+															<p:selectBooleanCheckbox>
+																<p:ajax update="@form"
+																	listener="#{analysisBean.updateMeterSelection(buildingMeter)}" />
+															</p:selectBooleanCheckbox>
+														</p:column>
+														<p:column>
+															<h:outputText value="#{buildingMeter.name}"
+																styleClass="accPanelMeters"></h:outputText>
+														</p:column>
+													</c:forEach>
+												</h:panelGrid>
+											</div>
 										</c:otherwise>
 									</c:choose>
 								</div>
@@ -108,8 +102,8 @@
 								<br />
 								<p:commandLink value="Change" style="font-size: 10px"
 									oncomplete="PF('selectionPopupAnalyzer').show()" />
-								<p:chart styleClass="analysisChartCSS" id="chartDayId" responsive="true"
-									widgetVar="chartDayId"
+								<p:chart styleClass="analysisChartCSS" id="chartDayId"
+									responsive="true" widgetVar="chartDayId"
 									model="#{analysisBean.analysisDayPojo.lineModel}" type="line" />
 							</p:panel></td>
 					</tr>

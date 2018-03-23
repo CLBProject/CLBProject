@@ -15,7 +15,6 @@ import clb.beans.pojos.AnalysisGraphicPojo;
 import clb.business.AnalyzerDataService;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.BuildingMeterObject;
-import clb.business.objects.BuildingMeterParameterObject;
 import clb.business.objects.BuildingObject;
 import clb.business.objects.DataLoggerObject;
 
@@ -110,7 +109,7 @@ public class AnalysisBean implements Serializable{
         }
     }
 
-    public void updateMeterSelection(BuildingMeterObject buildingMeterObj, BuildingMeterParameterObject buildingParameterObj) {
+    public void updateMeterSelection(BuildingMeterObject buildingMeterObj) {
         System.out.println( buildingMeterObj );
     }
 

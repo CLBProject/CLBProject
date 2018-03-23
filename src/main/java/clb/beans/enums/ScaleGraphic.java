@@ -4,6 +4,7 @@ public enum ScaleGraphic
 {
     HOUR("Hour"),
     DAY("Day"),
+    WEEK("Week"),
     MONTH("Month"),
     YEAR("Year");
     
