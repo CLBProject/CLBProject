@@ -126,20 +126,50 @@
 							</p:column>
 						</p:panelGrid>
 						<p:spacer height="20" />
-						<div align="center">
-							<p:commandLink oncomplete="PF('resendEmail').show()"
-								value="Resend Registration Email"
-								styleClass="recoverLinkPassword"></p:commandLink>
-							<br />
-							<p:commandLink oncomplete="PF('recoverPassword').show()"
-								value="Forget your password?" styleClass="recoverLinkPassword"></p:commandLink>
-							<br /> <br />
-							<p:commandButton
-								action="#{clbHomeRegisterBean.registerUserAccount}"
-								validateClient="true" styleClass="signButtonExtended"
-								value="Register" ajax="true"
-								onstart="document.body.style.cursor='wait'"
-								oncomplete="
+						<!-- 						<div align="center"> -->
+
+
+						<div class="ui-g">
+							<div class="ui-g-4"></div>
+							<div class="ui-g-4">
+
+								<p:button oncomplete="PF('resendEmail').show()"
+									value="Resend Registration Email">
+								</p:button>
+							</div>
+
+							<div class="ui-g-4"></div>
+						</div>
+
+
+
+						<!-- 							<p:commandLink oncomplete="PF('resendEmail').show()" -->
+						<!-- 								value="Resend Registration Email" -->
+						<!-- 								styleClass="recoverLinkPassword"></p:commandLink> -->
+						<br />
+						<div class="ui-g">
+							<div class="ui-g-4"></div>
+							<div class="ui-g-4">
+
+
+								<p:button oncomplete="PF('recoverPassword').show()"
+									value="Forget your password?">
+								</p:button>
+							</div>
+
+							<div class="ui-g-4"></div>
+						</div>
+
+						<!-- 							<p:commandLink oncomplete="PF('recoverPassword').show()" -->
+						<!-- 								value="Forget your password?" styleClass="recoverLinkPassword"></p:commandLink> -->
+						<br />
+						<br />
+						<p:commandButton
+							action="#{clbHomeRegisterBean.registerUserAccount}"
+							validateClient="true" styleClass="signButtonExtended"
+							value="Register" ajax="true"
+							onstart="document.body.style.cursor='wait'"
+							oncomplete="
 											document.body.style.cursor='default';
 											if (!args.validationFailed){
 												document.body.style.cursor = 'default'; 
@@ -151,8 +181,8 @@
 												}
 												else PF('successPanelregistry').show(); 
 											}"
-								update="registerForm"></p:commandButton>
-						</div>
+							update="registerForm"></p:commandButton>
+						<!-- 						</div> -->
 					</p:panel>
 				</h:form>
 			</div>
