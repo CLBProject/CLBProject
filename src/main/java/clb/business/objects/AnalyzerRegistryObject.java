@@ -163,6 +163,7 @@ public class AnalyzerRegistryObject implements Serializable {
         this.kvarl3 = analyzerRegEntity.getKvarl3();
         this.kvarsys = analyzerRegEntity.getKvarsys();
         this.kvasys = analyzerRegEntity.getKvasys();
+        this.kwsys = analyzerRegEntity.getKwsys();
         this.kwh = analyzerRegEntity.getKwh();
         this.kwhl1 = analyzerRegEntity.getKwhl1();
         this.kwhl2 = analyzerRegEntity.getKwhl2();

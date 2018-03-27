@@ -74,8 +74,10 @@ public class AnalysisBean implements Serializable{
                                     analyzerSelected = aObj;
                                     tempAnalyzerSelected = analyzerSelected;
 
-                                    analysisDayPojo = new AnalysisGraphicPojo( 
-                                            analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate),buildingSelected.getBuildingMeters());
+                                    analysisDayPojo = new AnalysisGraphicPojo( buildingSelected.getBuildingMeters());
+
+                                    analysisDayPojo.fillGraphicForData( 
+                                            analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate), scaleGraphic );
 
                                     firstTime = true;
                                 }
@@ -96,21 +98,11 @@ public class AnalysisBean implements Serializable{
     }
 
     public void updateScaleValues() {
-        switch(scaleGraphic) {
-            case HOUR:
-                analysisDayPojo.fillGraphicForYearData( analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate), scaleGraphic );
-                break;
-            case DAY:
-                analysisDayPojo.fillGraphicForYearData( analyzerDataService.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate), scaleGraphic );
-                break;
-            default:
-                analysisDayPojo.fillGraphicForYearData( analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate), scaleGraphic );
-                break;
-        }
+        analysisDayPojo.fillGraphicForData( analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate), scaleGraphic );
     }
 
     public void updateMeterSelection(BuildingMeterObject buildingMeterObj) {
-        System.out.println( buildingMeterObj );
+        analysisDayPojo.changeSerie(buildingMeterObj.getLabelKey());
     }
 
     public Date getAnalysisDate() {

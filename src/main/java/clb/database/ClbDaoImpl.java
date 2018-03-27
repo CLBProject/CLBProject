@@ -265,6 +265,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
             analyzerReg.setVlnsys( (Double)result.get("vlnsys") );
             analyzerReg.setVllsys( (Double)result.get("vllsys") );
             analyzerReg.setKwsys( (Double)result.get("kwsys")  );
+            analyzerReg.setKvasys( (Double)result.get("kvasys")  );
             analyzerReg.setKvarsys( (Double)result.get("kvarsys")  );
             analyzerReg.setPfsys( (Double)result.get("pfsys")  );
             analyzerReg.setHz( (Double)result.get("hz")  );
