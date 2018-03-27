@@ -79,7 +79,8 @@
 														items="#{analysisBean.buildingSelected.buildingMeters}"
 														var="buildingMeter">
 														<p:column>
-															<p:selectBooleanCheckbox>
+															<p:selectBooleanCheckbox value="#{not empty 
+																			analysisBean.analysisDayPojo.lineSeriesBuildingParametersMap[buildingMeter.labelKey]}">
 																<p:ajax update="@form"
 																	listener="#{analysisBean.updateMeterSelection(buildingMeter)}" />
 															</p:selectBooleanCheckbox>
