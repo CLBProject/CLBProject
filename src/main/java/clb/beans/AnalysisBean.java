@@ -1,6 +1,7 @@
 package clb.beans;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import clb.beans.enums.ScaleGraphic;
 import clb.beans.pojos.AnalysisGraphicPojo;
 import clb.business.AnalyzerDataService;
 import clb.business.objects.AnalyzerObject;
+import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.BuildingMeterObject;
 import clb.business.objects.BuildingObject;
 import clb.business.objects.DataLoggerObject;
@@ -22,200 +24,216 @@ import clb.business.objects.DataLoggerObject;
 @ManagedBean
 public class AnalysisBean implements Serializable{
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @ManagedProperty("#{clbHomeLoginBean}")
-    private ClbHomeLoginBean clbHomeLoginBean;
+	@ManagedProperty("#{clbHomeLoginBean}")
+	private ClbHomeLoginBean clbHomeLoginBean;
 
-    @ManagedProperty("#{analyzerDataService}")
-    private AnalyzerDataService analyzerDataService;
+	@ManagedProperty("#{analyzerDataService}")
+	private AnalyzerDataService analyzerDataService;
 
-    private Date analysisDate;
-    private AnalysisGraphicPojo analysisDayPojo;
+	private Date analysisDate;
+	private AnalysisGraphicPojo analysisDayPojo;
 
-    private List<BuildingObject> buildingsToSelect;
-    private BuildingObject tempBuildingSelected;
-    private BuildingObject buildingSelected;
+	private List<BuildingObject> buildingsToSelect;
+	private BuildingObject tempBuildingSelected;
+	private BuildingObject buildingSelected;
 
-    private List<AnalyzerObject> analyzersSelected;
-    private AnalyzerObject tempAnalyzerSelected;
-    private AnalyzerObject analyzerSelected;
+	private List<AnalyzerObject> analyzersSelected;
+	private AnalyzerObject tempAnalyzerSelected;
+	private AnalyzerObject analyzerSelected;
 
-    private AnalysisTypes analysisType;
-    private AnalysisTypes[] analysisTypes;
+	private AnalysisTypes analysisType;
+	private AnalysisTypes[] analysisTypes;
 
-    private ScaleGraphic scaleGraphic;
-    private ScaleGraphic[] scalesGraphic;
+	private ScaleGraphic scaleGraphic;
+	private ScaleGraphic[] scalesGraphic;
 
-    @PostConstruct
-    public void init() {
-        analysisDate = new Date();
-        analysisTypes = AnalysisTypes.values();
-        scalesGraphic = ScaleGraphic.values();
-        scaleGraphic = ScaleGraphic.HOUR;
+	@PostConstruct
+	public void init() {
+		analysisDate = new Date();
+		analysisTypes = AnalysisTypes.values();
+		scalesGraphic = ScaleGraphic.values();
+		scaleGraphic = ScaleGraphic.HOUR;
 
-        //Set Initial Selected Building, DataLogger and Analyzer
-        if(clbHomeLoginBean.getUserLoginPojo().getCurrentUser().getBuildings() != null && 
-                clbHomeLoginBean.getUserLoginPojo().getCurrentUser().getBuildings().size() > 0 ) {
+		//Set Initial Selected Building, DataLogger and Analyzer
+		if(clbHomeLoginBean.getUserLoginPojo().getCurrentUser().getBuildings() != null && 
+				clbHomeLoginBean.getUserLoginPojo().getCurrentUser().getBuildings().size() > 0 ) {
 
-            buildingsToSelect = clbHomeLoginBean.getUserLoginPojo().getCurrentUser().getBuildings();
+			buildingsToSelect = clbHomeLoginBean.getUserLoginPojo().getCurrentUser().getBuildings();
 
-            boolean firstTime = false;
+			boolean firstTime = false;
 
-            for(BuildingObject bObj: clbHomeLoginBean.getUserLoginPojo().getCurrentUser().getBuildings()) {
-                if(bObj.getBuildingMeters() != null && bObj.getBuildingMeters().size() > 0 && bObj.getDataLoggers() != null) {
-                    for(DataLoggerObject dlObj: bObj.getDataLoggers()) {
-                        if(dlObj.getAnalyzers() != null) {
-                            for(AnalyzerObject aObj : dlObj.getAnalyzers()) {
-                                if(!firstTime) {
-                                    buildingSelected = bObj;
-                                    tempBuildingSelected = buildingSelected;
-                                    analyzersSelected = dlObj.getAnalyzers(); 
-                                    analyzerSelected = aObj;
-                                    tempAnalyzerSelected = analyzerSelected;
+			for(BuildingObject bObj: clbHomeLoginBean.getUserLoginPojo().getCurrentUser().getBuildings()) {
+				if(bObj.getBuildingMeters() != null && bObj.getBuildingMeters().size() > 0 && bObj.getDataLoggers() != null) {
+					for(DataLoggerObject dlObj: bObj.getDataLoggers()) {
+						if(dlObj.getAnalyzers() != null) {
+							for(AnalyzerObject aObj : dlObj.getAnalyzers()) {
+								if(!firstTime) {
+									buildingSelected = bObj;
+									tempBuildingSelected = buildingSelected;
+									analyzersSelected = dlObj.getAnalyzers(); 
+									analyzerSelected = aObj;
+									tempAnalyzerSelected = analyzerSelected;
 
-                                    analysisDayPojo = new AnalysisGraphicPojo( buildingSelected.getBuildingMeters());
+									analysisDayPojo = new AnalysisGraphicPojo( buildingSelected.getBuildingMeters());
 
-                                    analysisDayPojo.fillGraphicForData( 
-                                            analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate), scaleGraphic );
+									analysisDayPojo.fillGraphicForData( 
+											analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate), scaleGraphic );
 
-                                    firstTime = true;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+									firstTime = true;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 
-    public void selectBuilding() {
-        buildingSelected = tempBuildingSelected;
-    }
+	public void selectBuilding() {
+		buildingSelected = tempBuildingSelected;
+	}
 
-    public void selectAnalyzer() {
-        analyzerSelected = tempAnalyzerSelected;
-    }
+	public void selectAnalyzer() {
+		analyzerSelected = tempAnalyzerSelected;
+	}
 
-    public void updateScaleValues() {
-        analysisDayPojo.fillGraphicForData( analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate), scaleGraphic );
-    }
+	public void updateScaleValues() {
 
-    public void updateMeterSelection(BuildingMeterObject buildingMeterObj) {
-        analysisDayPojo.changeSerie(buildingMeterObj.getLabelKey());
-    }
+		List<AnalyzerRegistryObject> registries = new ArrayList<AnalyzerRegistryObject>();
 
-    public Date getAnalysisDate() {
-        return analysisDate;
-    }
+		switch(scaleGraphic) {
+		case HOUR:
+			registries = analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
+			break;
+		case DAY:
+			registries = analyzerDataService.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
+			break;
+		default: 
+			registries = analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
+			break;
+		}
 
-    public void setAnalysisDate( Date analysisDate ) {
-        this.analysisDate = analysisDate;
-    }
 
-    public AnalysisGraphicPojo getAnalysisDayPojo() {
-        return analysisDayPojo;
-    }
+		analysisDayPojo.fillGraphicForData( registries, scaleGraphic );
+	}
 
-    public void setAnalysisDayPojo( AnalysisGraphicPojo analysisDayPojo ) {
-        this.analysisDayPojo = analysisDayPojo;
-    }
+	public void updateMeterSelection(BuildingMeterObject buildingMeterObj) {
+		analysisDayPojo.changeSerie(buildingMeterObj.getLabelKey());
+	}
 
-    public AnalysisTypes getAnalysisType() {
-        return analysisType;
-    }
+	public Date getAnalysisDate() {
+		return analysisDate;
+	}
 
-    public void setAnalysisType( AnalysisTypes analysisType ) {
-        this.analysisType = analysisType;
-    }
+	public void setAnalysisDate( Date analysisDate ) {
+		this.analysisDate = analysisDate;
+	}
 
-    public AnalysisTypes[] getAnalysisTypes() {
-        return analysisTypes;
-    }
+	public AnalysisGraphicPojo getAnalysisDayPojo() {
+		return analysisDayPojo;
+	}
 
-    public void setAnalysisTypes( AnalysisTypes[] analysisTypes ) {
-        this.analysisTypes = analysisTypes;
-    }
+	public void setAnalysisDayPojo( AnalysisGraphicPojo analysisDayPojo ) {
+		this.analysisDayPojo = analysisDayPojo;
+	}
 
-    public ScaleGraphic[] getScalesGraphic() {
-        return scalesGraphic;
-    }
+	public AnalysisTypes getAnalysisType() {
+		return analysisType;
+	}
 
-    public void setScalesGraphic( ScaleGraphic[] scalesGraphic ) {
-        this.scalesGraphic = scalesGraphic;
-    }
+	public void setAnalysisType( AnalysisTypes analysisType ) {
+		this.analysisType = analysisType;
+	}
 
-    public ScaleGraphic getScaleGraphic() {
-        return scaleGraphic;
-    }
+	public AnalysisTypes[] getAnalysisTypes() {
+		return analysisTypes;
+	}
 
-    public void setScaleGraphic( ScaleGraphic scaleGraphic ) {
-        this.scaleGraphic = scaleGraphic;
-    }
+	public void setAnalysisTypes( AnalysisTypes[] analysisTypes ) {
+		this.analysisTypes = analysisTypes;
+	}
 
-    public BuildingObject getBuildingSelected() {
-        return buildingSelected;
-    }
+	public ScaleGraphic[] getScalesGraphic() {
+		return scalesGraphic;
+	}
 
-    public void setBuildingSelected( BuildingObject buildingSelected ) {
-        this.buildingSelected = buildingSelected;
-    }
+	public void setScalesGraphic( ScaleGraphic[] scalesGraphic ) {
+		this.scalesGraphic = scalesGraphic;
+	}
 
-    public ClbHomeLoginBean getClbHomeLoginBean() {
-        return clbHomeLoginBean;
-    }
+	public ScaleGraphic getScaleGraphic() {
+		return scaleGraphic;
+	}
 
-    public void setClbHomeLoginBean( ClbHomeLoginBean clbHomeLoginBean ) {
-        this.clbHomeLoginBean = clbHomeLoginBean;
-    }
+	public void setScaleGraphic( ScaleGraphic scaleGraphic ) {
+		this.scaleGraphic = scaleGraphic;
+	}
 
-    public AnalyzerDataService getAnalyzerDataService() {
-        return analyzerDataService;
-    }
+	public BuildingObject getBuildingSelected() {
+		return buildingSelected;
+	}
 
-    public void setAnalyzerDataService( AnalyzerDataService analyzerDataService ) {
-        this.analyzerDataService = analyzerDataService;
-    }
+	public void setBuildingSelected( BuildingObject buildingSelected ) {
+		this.buildingSelected = buildingSelected;
+	}
 
-    public AnalyzerObject getAnalyzerSelected() {
-        return analyzerSelected;
-    }
+	public ClbHomeLoginBean getClbHomeLoginBean() {
+		return clbHomeLoginBean;
+	}
 
-    public void setAnalyzerSelected( AnalyzerObject analyzerSelected ) {
-        this.analyzerSelected = analyzerSelected;
-    }
+	public void setClbHomeLoginBean( ClbHomeLoginBean clbHomeLoginBean ) {
+		this.clbHomeLoginBean = clbHomeLoginBean;
+	}
 
-    public BuildingObject getTempBuildingSelected() {
-        return tempBuildingSelected;
-    }
+	public AnalyzerDataService getAnalyzerDataService() {
+		return analyzerDataService;
+	}
 
-    public void setTempBuildingSelected( BuildingObject tempBuildingSelected ) {
-        this.tempBuildingSelected = tempBuildingSelected;
-    }
+	public void setAnalyzerDataService( AnalyzerDataService analyzerDataService ) {
+		this.analyzerDataService = analyzerDataService;
+	}
 
-    public AnalyzerObject getTempAnalyzerSelected() {
-        return tempAnalyzerSelected;
-    }
+	public AnalyzerObject getAnalyzerSelected() {
+		return analyzerSelected;
+	}
 
-    public void setTempAnalyzerSelected( AnalyzerObject tempAnalyzerSelected ) {
-        this.tempAnalyzerSelected = tempAnalyzerSelected;
-    }
+	public void setAnalyzerSelected( AnalyzerObject analyzerSelected ) {
+		this.analyzerSelected = analyzerSelected;
+	}
 
-    public List<BuildingObject> getBuildingsToSelect() {
-        return buildingsToSelect;
-    }
+	public BuildingObject getTempBuildingSelected() {
+		return tempBuildingSelected;
+	}
 
-    public void setBuildingsToSelect( List<BuildingObject> buildingsToSelect ) {
-        this.buildingsToSelect = buildingsToSelect;
-    }
+	public void setTempBuildingSelected( BuildingObject tempBuildingSelected ) {
+		this.tempBuildingSelected = tempBuildingSelected;
+	}
 
-    public List<AnalyzerObject> getAnalyzersSelected() {
-        return analyzersSelected;
-    }
+	public AnalyzerObject getTempAnalyzerSelected() {
+		return tempAnalyzerSelected;
+	}
 
-    public void setAnalyzersSelected( List<AnalyzerObject> analyzersSelected ) {
-        this.analyzersSelected = analyzersSelected;
-    }
+	public void setTempAnalyzerSelected( AnalyzerObject tempAnalyzerSelected ) {
+		this.tempAnalyzerSelected = tempAnalyzerSelected;
+	}
+
+	public List<BuildingObject> getBuildingsToSelect() {
+		return buildingsToSelect;
+	}
+
+	public void setBuildingsToSelect( List<BuildingObject> buildingsToSelect ) {
+		this.buildingsToSelect = buildingsToSelect;
+	}
+
+	public List<AnalyzerObject> getAnalyzersSelected() {
+		return analyzersSelected;
+	}
+
+	public void setAnalyzersSelected( List<AnalyzerObject> analyzersSelected ) {
+		this.analyzersSelected = analyzersSelected;
+	}
 
 
 }
