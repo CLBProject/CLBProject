@@ -289,13 +289,38 @@ form {
 	font-size: 12px !important;
 }
 
+.ui-timepicker {
+	background: white !important;
+	font-size: 12px !important;
+}
+
 .ui-datepicker-header {
 	background: #0A122A !important;
 	color: #CED8F6 !important;
 }
 
+.ui-timepicker-title {
+	background: #0A122A !important;
+	color: #CED8F6 !important;
+	font-size: 12px !important;
+}
+
+.ui-timepicker-table.ui-state-default{
+	background: #0A122A !important;
+	color: #CED8F6 !important;
+	font-size: 12px !important;
+}
+
 .hasDatePicker.ui-inputfield {
 	background: #CED8F6 !important;
+}
+
+.hasTimePicker.ui-inputfield {
+	background: #CED8F6 !important;
+}
+
+.ui-selectonemenu{
+	vertical-align: middle !important;
 }
 
 .ui-selectonemenu .ui-selectonemenu-label {

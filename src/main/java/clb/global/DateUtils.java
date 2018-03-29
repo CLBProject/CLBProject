@@ -31,4 +31,42 @@ public class DateUtils
 
         return name + "_"+ year+month+day;
     }
+    
+    public Date getDateResetedbyHour(Date timeFrame) {
+        Calendar timeFrameCalToday = Calendar.getInstance();
+        timeFrameCalToday.setTime( timeFrame );
+        timeFrameCalToday.set( Calendar.MINUTE, 0 );
+        timeFrameCalToday.set( Calendar.SECOND, 0 );
+        
+        return timeFrameCalToday.getTime();
+    }
+    
+    public Date getNextHourFromDate(Date timeFrame) {
+        Calendar timeFrameCalTomorrow = Calendar.getInstance();
+        timeFrameCalTomorrow.setTime( timeFrame );
+        timeFrameCalTomorrow.add( Calendar.HOUR_OF_DAY, 1 );
+        
+        return timeFrameCalTomorrow.getTime();
+    }
+    
+    public Date getDateResetedbyDay(Date timeFrame) {
+        Calendar timeFrameCalToday = Calendar.getInstance();
+        timeFrameCalToday.setTime( timeFrame );
+        timeFrameCalToday.set( Calendar.MINUTE, 0 );
+        timeFrameCalToday.set( Calendar.SECOND, 0 );
+        timeFrameCalToday.set( Calendar.HOUR_OF_DAY, 0 );
+        
+        return timeFrameCalToday.getTime();
+    }
+    
+    public Date getNextDayFromDate(Date timeFrame) {
+        Calendar timeFrameCalTomorrow = Calendar.getInstance();
+        timeFrameCalTomorrow.setTime( timeFrame );
+        timeFrameCalTomorrow.add( Calendar.DAY_OF_MONTH, 1 );
+        
+        return timeFrameCalTomorrow.getTime();
+    }
+    
+
+
 }

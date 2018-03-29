@@ -6,6 +6,7 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
 	template="template/ui.xhtml">
 	<ui:define name="body">
 		<ui:include src="./general/menutab.xhtml" />
@@ -17,14 +18,24 @@
 						<td width="175px" align="left" class="analysisDivClassMainCell"><h:outputLabel
 								value="Analysis Menu"></h:outputLabel>
 							<hr /></td>
-						<td align="right"><b><p:outputLabel value="Time Frame:"
-									for="scaleList"></p:outputLabel></b> <p:spacer width="5"></p:spacer>
-							<p:calendar value="#{analysisBean.analysisDate}"
+						<td align="right">
+								 <b><p:outputLabel
+									value="Date:" for="scaleList"></p:outputLabel></b>
+								 <p:spacer width="5"/>
+								<p:calendar
+								value="#{analysisBean.analysisDate}" label="Date:"
 								pattern="dd-MM-yyyy" styleClass="timeFrame"></p:calendar> <p:spacer
-								width="30"></p:spacer> <b><p:outputLabel value="Scale:"
-									for="scaleList"></p:outputLabel></b> <p:spacer width="5"></p:spacer>
-							<p:selectOneMenu id="scaleList" widgetVar="scaleList"
-								value="#{analysisBean.scaleGraphic}">
+								width="30"></p:spacer> 
+								<b><p:outputLabel
+									value="Time:" for="scaleList"></p:outputLabel></b>
+								 <p:spacer width="5"/>
+								<pe:timePicker styleClass="timeFrame"
+								value="#{analysisBean.analysisDate}"
+								widgetVar="spinnerTimeWidget"/> <p:spacer
+								width="30" /><b><p:outputLabel
+									value="Scale:" for="scaleList"></p:outputLabel></b> <p:spacer
+								width="5"></p:spacer> <p:selectOneMenu id="scaleList"
+								widgetVar="scaleList" value="#{analysisBean.scaleGraphic}">
 								<p:ajax event="change"
 									listener="#{analysisBean.updateScaleValues}"
 									update=":analysisForm"></p:ajax>
@@ -79,7 +90,8 @@
 														items="#{analysisBean.buildingSelected.buildingMeters}"
 														var="buildingMeter">
 														<p:column>
-															<p:selectBooleanCheckbox value="#{analysisBean.analysisDayPojo.lineSeriesAvilableBuldingParamatersMap[buildingMeter.labelKey]}">
+															<p:selectBooleanCheckbox
+																value="#{analysisBean.analysisDayPojo.lineSeriesAvilableBuldingParamatersMap[buildingMeter.labelKey]}">
 																<p:ajax update="@form"
 																	listener="#{analysisBean.updateMeterSelection(buildingMeter)}" />
 															</p:selectBooleanCheckbox>

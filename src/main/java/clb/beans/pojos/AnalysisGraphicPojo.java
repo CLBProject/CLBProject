@@ -55,7 +55,7 @@ public class AnalysisGraphicPojo {
     }
 
 
-    public void fillGraphicForData(List<AnalyzerRegistryObject> registries, ScaleGraphic currentScale){
+    public void fillGraphicForData(List<AnalyzerRegistryObject> registries, ScaleGraphic currentScale, Date dateSelected){
 
         //Clear All Data
         lineModel.getSeries().stream().forEach( serie -> serie.getData().clear() );

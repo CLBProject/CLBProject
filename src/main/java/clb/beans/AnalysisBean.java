@@ -79,7 +79,7 @@ public class AnalysisBean implements Serializable{
 									analysisDayPojo = new AnalysisGraphicPojo( buildingSelected.getBuildingMeters());
 
 									analysisDayPojo.fillGraphicForData( 
-											analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate), scaleGraphic );
+											analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate), scaleGraphic, analysisDate );
 
 									firstTime = true;
 								}
@@ -116,7 +116,7 @@ public class AnalysisBean implements Serializable{
 		}
 
 
-		analysisDayPojo.fillGraphicForData( registries, scaleGraphic );
+		analysisDayPojo.fillGraphicForData( registries, scaleGraphic, analysisDate );
 	}
 
 	public void updateMeterSelection(BuildingMeterObject buildingMeterObj) {
