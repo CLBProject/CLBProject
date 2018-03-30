@@ -65,7 +65,7 @@ public class AnalysisGraphicPojo {
 
         Double minValue = Double.MAX_VALUE;
         Double maxValue = Double.MIN_VALUE;
-
+        
         for(AnalyzerRegistryObject registry: registries) {
 
             String currentTime = DateUtils.getInstance().convertDateToSimpleStringFormat( registry.getCurrenttime());

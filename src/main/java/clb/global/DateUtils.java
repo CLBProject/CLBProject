@@ -26,7 +26,8 @@ public class DateUtils
         cal.setTime( time );
 
         String year = cal.get(Calendar.YEAR) + "";
-        String month = cal.get(Calendar.MONTH) >= 10 ? "" + cal.get(Calendar.MONTH) : "0" + cal.get(Calendar.MONTH);
+        Integer realMonth = cal.get(Calendar.MONTH) + 1;
+        String month = realMonth >= 10 ? "" + realMonth : "0" + realMonth;
         String day = cal.get(Calendar.DAY_OF_MONTH) >= 10 ? "" + cal.get(Calendar.DAY_OF_MONTH) : "0" + cal.get(Calendar.DAY_OF_MONTH);
 
         return name + "_"+ year+month+day;
