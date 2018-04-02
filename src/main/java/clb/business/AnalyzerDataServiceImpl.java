@@ -30,7 +30,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import clb.business.objects.AnalyzerObject;
-import clb.business.objects.AnalyzerRegistryAverageObject;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.BuildingMeterObject;
 import clb.business.objects.BuildingObject;
@@ -128,21 +127,13 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
         for(int j = 0; j<workbook.getNumberOfSheets();j++){
 
             DataLoggerObject dl = new DataLoggerObject();
-            dl.setName( "Data Logger "+j );
+            dl.setName( "Data Logger "+ (j+1) );
             dl.setFtpAddress( "ftp://noftp" );
             building.addDataLogger(dl);
 
             AnalyzerObject ana = new AnalyzerObject();
-            ana.setName( "Analyzer 2 " + j);
+            ana.setName( "Analyzer " + (j+1));
             dl.addAnalyzer(ana);
-
-            AnalyzerObject ana2 = new AnalyzerObject();
-            ana2.setName( "Analyzer 2 " + j);
-            dl.addAnalyzer(ana2);
-
-            AnalyzerObject ana3 = new AnalyzerObject();
-            ana3.setName( "Analyzer 3 " + j);
-            dl.addAnalyzer(ana3);
 
             XSSFSheet worksheet = workbook.getSheetAt( j );
 
@@ -151,8 +142,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
             Set<Long> dataToExclueOnDummy = new HashSet<Long>();
 
             clbDao.saveAnalyzer(ana);
-            clbDao.saveAnalyzer(ana2);
-            clbDao.saveAnalyzer(ana3);
 
             List<AnalyzerRegistryObject> analyzerRegistries = new ArrayList<AnalyzerRegistryObject>();
 
@@ -243,10 +232,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
             for(int l = 0; l < 12; l++ ){
                 for(int m=0; m < calendar.getActualMaximum(Calendar.DAY_OF_MONTH);m++) {
 
-                    double al1DailyAverage = 0;
-                    double al2DailyAverage = 0;
-                    double al3DailyAverage = 0;
-
                     List<AnalyzerRegistryObject> analyzersRegistries = new ArrayList<AnalyzerRegistryObject>();
 
                     for(int b = 0; b < 24 ; b++){
@@ -306,17 +291,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
                     clbDao.saveAnalyzerRegistries(analyzersRegistries);
 
                     analyzersRegistries.stream().forEach( analyzerRegistry -> analyzer.addAnalyzerRegistry( analyzerRegistry.getId() ) );
-
-                    AnalyzerRegistryAverageObject anaRegAverageObj = new AnalyzerRegistryAverageObject();
-
-                    anaRegAverageObj.setCurrenttime( calendar.getTime() );
-
-                    anaRegAverageObj.setAl1Average(al1DailyAverage/ (24*60));
-                    anaRegAverageObj.setAl2Average(al2DailyAverage/ (24*60));
-                    anaRegAverageObj.setAl3Average(al3DailyAverage/ (24*60));
-                    anaRegAverageObj.setAnalyzerId( analyzer.getId() );
-
-                    analyzer.addAnalyzerRegistryAverage(anaRegAverageObj.getId());
 
                     calendar.add(Calendar.DATE, 1);
                 }
