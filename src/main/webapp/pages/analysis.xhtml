@@ -26,13 +26,29 @@
 								value="#{analysisBean.analysisDate}" label="Date:"
 								pattern="dd-MM-yyyy" styleClass="timeFrame"></p:calendar> <p:spacer
 								width="30"></p:spacer> 
+								<b><p:outputLabel rendered="#{analysisBean.scaleGraphic == 'HOUR'}"
+									value="Hour:" for="scaleList"></p:outputLabel></b>
+								<p:spacer width="5" rendered="#{analysisBean.scaleGraphic == 'HOUR'}" />
+								<p:selectOneMenu id="hourList" rendered="#{analysisBean.scaleGraphic == 'HOUR'}"
+								widgetVar="hourList" value="#{analysisBean.hour}">
+								<f:selectItems value="#{analysisBean.hoursValues}"
+									var="hour" itemValue="#{hour}"
+									itemLabel="#{hour.label}" />
+							</p:selectOneMenu>
+								<p:spacer rendered="#{analysisBean.scaleGraphic == 'HOUR'}"
+								width="30" />
+								<b><p:outputLabel rendered="#{analysisBean.scaleGraphic == 'MONTH'}"
+									value="Month:" for="scaleList"></p:outputLabel></b>
+								<p:spacer width="5" rendered="#{analysisBean.scaleGraphic == 'MONTH'}" />
+								<p:selectOneMenu id="monthsList" rendered="#{analysisBean.scaleGraphic == 'MONTH'}"
+								widgetVar="monthsList" value="#{analysisBean.month}">
+								<f:selectItems value="#{analysisBean.monthsValues}"
+									var="month" itemValue="#{month}"
+									itemLabel="#{month.label}" />
+							</p:selectOneMenu>
+								<p:spacer rendered="#{analysisBean.scaleGraphic == 'MONTH'}"
+								width="30" />
 								<b><p:outputLabel
-									value="Time:" for="scaleList"></p:outputLabel></b>
-								 <p:spacer width="5"/>
-								<pe:timePicker styleClass="timeFrame"
-								value="#{analysisBean.analysisDate}"
-								widgetVar="spinnerTimeWidget"/> <p:spacer
-								width="30" /><b><p:outputLabel
 									value="Scale:" for="scaleList"></p:outputLabel></b> <p:spacer
 								width="5"></p:spacer> <p:selectOneMenu id="scaleList"
 								widgetVar="scaleList" value="#{analysisBean.scaleGraphic}">

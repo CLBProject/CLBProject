@@ -11,6 +11,8 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
 import clb.beans.enums.AnalysisTypes;
+import clb.beans.enums.Hours;
+import clb.beans.enums.Months;
 import clb.beans.enums.ScaleGraphic;
 import clb.beans.pojos.AnalysisGraphicPojo;
 import clb.business.AnalyzerDataService;
@@ -19,6 +21,7 @@ import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.BuildingMeterObject;
 import clb.business.objects.BuildingObject;
 import clb.business.objects.DataLoggerObject;
+import clb.global.DateUtils;
 
 @ViewScoped
 @ManagedBean
@@ -48,6 +51,12 @@ public class AnalysisBean implements Serializable{
 
 	private ScaleGraphic scaleGraphic;
 	private ScaleGraphic[] scalesGraphic;
+	
+	private Hours hour;
+	private Hours[] hoursValues;
+	
+	private Months month;
+	private Months[] monthsValues;
 
 	@PostConstruct
 	public void init() {
@@ -55,6 +64,11 @@ public class AnalysisBean implements Serializable{
 		analysisTypes = AnalysisTypes.values();
 		scalesGraphic = ScaleGraphic.values();
 		scaleGraphic = ScaleGraphic.HOUR;
+		hoursValues = Hours.values();
+		hour = Hours.getHourByValue(DateUtils.getInstance().getHourFromDate(analysisDate));
+		
+		monthsValues = Months.values();
+		month = Months.getMonthByValue(DateUtils.getInstance().getMonthFromDate(analysisDate));
 
 		//Set Initial Selected Building, DataLogger and Analyzer
 		if(clbHomeLoginBean.getUserLoginPojo().getCurrentUser().getBuildings() != null && 
@@ -235,5 +249,37 @@ public class AnalysisBean implements Serializable{
 		this.analyzersSelected = analyzersSelected;
 	}
 
+	public Hours getHour() {
+		return hour;
+	}
 
+	public void setHour(Hours hour) {
+		this.hour = hour;
+	}
+
+	public Hours[] getHoursValues() {
+		return hoursValues;
+	}
+
+	public void setHoursValues(Hours[] hoursValues) {
+		this.hoursValues = hoursValues;
+	}
+
+	public Months getMonth() {
+		return month;
+	}
+
+	public void setMonth(Months month) {
+		this.month = month;
+	}
+
+	public Months[] getMonthsValues() {
+		return monthsValues;
+	}
+
+	public void setMonthsValues(Months[] monthsValues) {
+		this.monthsValues = monthsValues;
+	}
+	
+	
 }

@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import clb.beans.enums.Hours;
+
 public class DateUtils
 {
     private static DateUtils instance;
@@ -67,6 +69,20 @@ public class DateUtils
         
         return timeFrameCalTomorrow.getTime();
     }
+
+	public int getHourFromDate(Date analysisDate) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(analysisDate);
+		
+		return cal.get(Calendar.HOUR_OF_DAY);
+	}
+
+	public int getMonthFromDate(Date analysisDate) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(analysisDate);
+		
+		return cal.get(Calendar.MONTH+1);
+	}
     
 
 
