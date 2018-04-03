@@ -1,5 +1,8 @@
 package clb.beans.enums;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public enum Hours {
 
 	ZERO(0,"00:00"),
@@ -52,6 +55,19 @@ public enum Hours {
 
 	public int getValue() {
 		return value;
+	}
+
+	public static Hours[] getHoursLimited(int hourFromDate) {
+		
+		List<Hours> hours = new ArrayList<Hours>();
+		
+		for(Hours hour: values()) {
+			if(hour.getValue() <= hourFromDate) {
+				hours.add(hour);
+			}
+		}
+		
+		return hours.toArray(new Hours[hours.size()]);
 	}
 	
 	

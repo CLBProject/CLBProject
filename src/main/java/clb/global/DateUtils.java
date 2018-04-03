@@ -5,8 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import clb.beans.enums.Hours;
-
 public class DateUtils
 {
     private static DateUtils instance;
@@ -35,37 +33,19 @@ public class DateUtils
         return name + "_"+ year+month+day;
     }
     
-    public Date getDateResetedbyHour(Date timeFrame) {
-        Calendar timeFrameCalToday = Calendar.getInstance();
-        timeFrameCalToday.setTime( timeFrame );
-        timeFrameCalToday.set( Calendar.MINUTE, 0 );
-        timeFrameCalToday.set( Calendar.SECOND, 0 );
-        
-        return timeFrameCalToday.getTime();
-    }
     
-    public Date getNextHourFromDate(Date timeFrame) {
+    public Date getPreviousHourFromDate(Date timeFrame) {
         Calendar timeFrameCalTomorrow = Calendar.getInstance();
         timeFrameCalTomorrow.setTime( timeFrame );
-        timeFrameCalTomorrow.add( Calendar.HOUR_OF_DAY, 1 );
+        timeFrameCalTomorrow.add( Calendar.HOUR_OF_DAY, -1 );
         
         return timeFrameCalTomorrow.getTime();
     }
-    
-    public Date getDateResetedbyDay(Date timeFrame) {
-        Calendar timeFrameCalToday = Calendar.getInstance();
-        timeFrameCalToday.setTime( timeFrame );
-        timeFrameCalToday.set( Calendar.MINUTE, 0 );
-        timeFrameCalToday.set( Calendar.SECOND, 0 );
-        timeFrameCalToday.set( Calendar.HOUR_OF_DAY, 0 );
-        
-        return timeFrameCalToday.getTime();
-    }
-    
-    public Date getNextDayFromDate(Date timeFrame) {
+
+    public Date getPreviousDayFromDate(Date timeFrame) {
         Calendar timeFrameCalTomorrow = Calendar.getInstance();
         timeFrameCalTomorrow.setTime( timeFrame );
-        timeFrameCalTomorrow.add( Calendar.DAY_OF_MONTH, 1 );
+        timeFrameCalTomorrow.add( Calendar.DAY_OF_MONTH, -1 );
         
         return timeFrameCalTomorrow.getTime();
     }
@@ -82,6 +62,15 @@ public class DateUtils
 		cal.setTime(analysisDate);
 		
 		return cal.get(Calendar.MONTH+1);
+	}
+
+	public Date setHourForDate(Date analysisDate, int value) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(analysisDate);
+		cal.set(Calendar.HOUR_OF_DAY,value);
+		
+		return cal.getTime();
+		
 	}
     
 

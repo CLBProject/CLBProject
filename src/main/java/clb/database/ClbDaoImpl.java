@@ -2,7 +2,6 @@ package clb.database;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -214,36 +213,26 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	@Override
 	public List<AnalyzerRegistryObject> getHourRegistriesFromAnalyzer( String analyzerId, Date timeFrame ) {
 
-		//Missing Reset Dates
+		Date previousHourDateLimit = DateUtils.getInstance().getPreviousHourFromDate(timeFrame);
 
-		Date timeFrameCalHourReseted = DateUtils.getInstance().getDateResetedbyHour(timeFrame);
-
-		Date timeFrameCalNextHourReseted = DateUtils.getInstance().getNextHourFromDate(timeFrameCalHourReseted);
-
-
-		return  processRegistries(timeFrame, analyzerId, timeFrameCalHourReseted, timeFrameCalNextHourReseted);
+		return  processRegistries( analyzerId, previousHourDateLimit, timeFrame);
 	}
 
 	@Override
-	public List<AnalyzerRegistryObject> getDayRegistriesFromAnalyzer( String analyzerId, Date timeFrame ) {
+	public List<AnalyzerRegistryObject> getDayRegistriesFromAnalyzer( String analyzerId, Date timeFrameNow ) {
 
-		//Missing Reset Dates
+		Date previousDayDateLimit = DateUtils.getInstance().getPreviousDayFromDate(timeFrameNow);
 
-		Date timeFrameCalTodayReseted = DateUtils.getInstance().getDateResetedbyDay(timeFrame);
-
-		Date timeFrameCalTomorrowReseted = DateUtils.getInstance().getNextDayFromDate(timeFrameCalTodayReseted);
-
-		return  processRegistries(timeFrame, analyzerId, timeFrameCalTodayReseted, timeFrameCalTomorrowReseted);
+		return  processRegistries(analyzerId, previousDayDateLimit, timeFrameNow);
 	}
 
-	private List<AnalyzerRegistryObject> processRegistries(final Date timeFrame, final String analyzerId, 
-			final Date timeFrameToday, final Date timeFrameTomorrow){
+	private List<AnalyzerRegistryObject> processRegistries(final String analyzerId, final Date previousTimeFrame, final Date timeFrameNow){
 
-		final String collectionName =  DateUtils.getInstance().concatTimeWithString(ANALYZER_REGISTIES_COLL_NAME, timeFrame );
+		final String collectionName =  DateUtils.getInstance().concatTimeWithString(ANALYZER_REGISTIES_COLL_NAME, previousTimeFrame );
 
 		DBCollection collection = this.mongoTemplate.getCollection( collectionName );
 		DBObject dbObj = new BasicDBObject("analyzerId",analyzerId);
-		dbObj.put( "currenttime", BasicDBObjectBuilder.start("$gte", timeFrameToday).add("$lte", timeFrameTomorrow).get() );
+		dbObj.put( "currenttime", BasicDBObjectBuilder.start("$gte",previousTimeFrame ).add("$lte", timeFrameNow).get() );
 
 		final List<AnalyzerRegistryObject> analyzerRegistries = new ArrayList<AnalyzerRegistryObject>();
 
@@ -266,6 +255,12 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
 		return analyzerRegistries;
 	}
+	
+	@Override
+	public Date getLowestAnalyzerRegistryDate() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	public MongoTemplate getMongoTemplate() {
 		return mongoTemplate;
@@ -274,4 +269,5 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	public void setMongoTemplate( MongoTemplate mongoTemplate ) {
 		this.mongoTemplate = mongoTemplate;
 	}
+
 }

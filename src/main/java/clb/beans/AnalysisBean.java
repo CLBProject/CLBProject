@@ -10,6 +10,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
+import org.primefaces.event.SelectEvent;
+
 import clb.beans.enums.AnalysisTypes;
 import clb.beans.enums.Hours;
 import clb.beans.enums.Months;
@@ -35,6 +37,8 @@ public class AnalysisBean implements Serializable{
 	@ManagedProperty("#{analyzerDataService}")
 	private AnalyzerDataService analyzerDataService;
 
+	private Date todayDate;
+	private Date minDate;
 	private Date analysisDate;
 	private AnalysisGraphicPojo analysisDayPojo;
 
@@ -60,11 +64,13 @@ public class AnalysisBean implements Serializable{
 
 	@PostConstruct
 	public void init() {
+		todayDate = new Date();
 		analysisDate = new Date();
+		minDate = analyzerDataService.getLowestAnalyzerRegistryDate();
 		analysisTypes = AnalysisTypes.values();
 		scalesGraphic = ScaleGraphic.values();
 		scaleGraphic = ScaleGraphic.HOUR;
-		hoursValues = Hours.values();
+		hoursValues = Hours.getHoursLimited(DateUtils.getInstance().getHourFromDate(analysisDate));
 		hour = Hours.getHourByValue(DateUtils.getInstance().getHourFromDate(analysisDate));
 		
 		monthsValues = Months.values();
@@ -112,6 +118,10 @@ public class AnalysisBean implements Serializable{
 	public void selectAnalyzer() {
 		analyzerSelected = tempAnalyzerSelected;
 	}
+	
+	public void analysisCalendarSelect(SelectEvent event) {
+		updateScaleValues();
+	}
 
 	public void updateScaleValues() {
 
@@ -119,6 +129,7 @@ public class AnalysisBean implements Serializable{
 
 		switch(scaleGraphic) {
 		case HOUR:
+			analysisDate = DateUtils.getInstance().setHourForDate(analysisDate,hour.getValue());
 			registries = analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
 			break;
 		case DAY:
@@ -280,6 +291,12 @@ public class AnalysisBean implements Serializable{
 	public void setMonthsValues(Months[] monthsValues) {
 		this.monthsValues = monthsValues;
 	}
-	
-	
+
+	public Date getTodayDate() {
+		return todayDate;
+	}
+
+	public void setTodayDate(Date todayDate) {
+		this.todayDate = todayDate;
+	}
 }

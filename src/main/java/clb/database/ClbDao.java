@@ -38,4 +38,6 @@ public interface ClbDao{
     
     List<AnalyzerRegistryObject> getDayRegistriesFromAnalyzer( String analyzerId, Date timeFrame );
 
+	Date getLowestAnalyzerRegistryDate();
+
 }

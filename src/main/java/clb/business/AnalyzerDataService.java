@@ -16,4 +16,6 @@ public interface AnalyzerDataService {
     public List<AnalyzerRegistryObject> getHourRegistriesFromAnalyzer( String analyzerId , Date timeFrame);
     
     public List<AnalyzerRegistryObject> getDayRegistriesFromAnalyzer( String analyzerId, Date timeFrame );
+
+	public Date getLowestAnalyzerRegistryDate();
 }

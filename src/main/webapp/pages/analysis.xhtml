@@ -22,15 +22,22 @@
 								 <b><p:outputLabel
 									value="Date:" for="scaleList"></p:outputLabel></b>
 								 <p:spacer width="5"/>
-								<p:calendar
-								value="#{analysisBean.analysisDate}" label="Date:"
-								pattern="dd-MM-yyyy" styleClass="timeFrame"></p:calendar> <p:spacer
+								<p:calendar 
+								value="#{analysisBean.analysisDate}" label="Date:" maxdate="#{analysisBean.todayDate}"
+								pattern="dd-MM-yyyy" styleClass="timeFrame">
+								<p:ajax event="dateSelect"
+									listener="#{analysisBean.analysisCalendarSelect}"
+									update=":analysisForm"></p:ajax>
+								</p:calendar> <p:spacer
 								width="30"></p:spacer> 
 								<b><p:outputLabel rendered="#{analysisBean.scaleGraphic == 'HOUR'}"
 									value="Hour:" for="scaleList"></p:outputLabel></b>
 								<p:spacer width="5" rendered="#{analysisBean.scaleGraphic == 'HOUR'}" />
 								<p:selectOneMenu id="hourList" rendered="#{analysisBean.scaleGraphic == 'HOUR'}"
 								widgetVar="hourList" value="#{analysisBean.hour}">
+								<p:ajax event="change"
+									listener="#{analysisBean.updateScaleValues}"
+									update=":analysisForm"></p:ajax>
 								<f:selectItems value="#{analysisBean.hoursValues}"
 									var="hour" itemValue="#{hour}"
 									itemLabel="#{hour.label}" />

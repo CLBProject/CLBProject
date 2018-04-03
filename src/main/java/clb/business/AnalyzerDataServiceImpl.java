@@ -313,6 +313,13 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		});
 	}
 
+	@Override
+	public Date getLowestAnalyzerRegistryDate() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
 	public Resource getDataAnalyzerXls() {
 		return dataAnalyzerXls;
 	}
