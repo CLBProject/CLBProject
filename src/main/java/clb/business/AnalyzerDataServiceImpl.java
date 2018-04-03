@@ -315,8 +315,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
 	@Override
 	public Date getLowestAnalyzerRegistryDate() {
-		// TODO Auto-generated method stub
-		return null;
+		return clbDao.getLowestAnalyzerRegistryDate();
 	}
 
 	
