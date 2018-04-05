@@ -29,7 +29,7 @@ public class QuickAnalysis {
 
 	private String buildingMeterSelected;
 	private List<BuildingMeterParameterValues> buildingMeterQuickAnalysis;
-	
+
 	private List<AnalyzerRegistryObject> currentRegistries;
 
 	public QuickAnalysis(List<BuildingMeterObject> buildingMetersObject){
@@ -60,21 +60,43 @@ public class QuickAnalysis {
 		lineModel.addSeries( serie );
 
 		buildingMeterSelected = BuildingMeterParameterValues.POWER.name();
-		
+
 		currentRegistries = new ArrayList<AnalyzerRegistryObject>();
 	}
 
 
 	public void fillGraphicForData(List<AnalyzerRegistryObject> registries, ScaleGraphic currentScale){
-		
+
 		this.currentRegistries = registries;
-		
+
 		//Clear All Data
 		lineModel.getSeries().stream().forEach( serie -> serie.getData().clear() );
-		
+
+		if(registries.size() > 0) {
+			updateSeriesRegistriesValues(currentScale);
+		}
+	}
+
+	/**
+	 * Changes The Serie to add or remove in the Graphic
+	 * @param serieToChange
+	 */
+	public void changeSerie(ScaleGraphic currentScale) {
+
+		Map<Object, Number> dataSerie = lineModel.getSeries().get(0).getData();
+
+		lineModel.clear();
+
+		BuildingMeterParameterValues buildingMeterParamValue = BuildingMeterParameterValues.valueOf(buildingMeterSelected);
+
+		final LineChartSeries serie = new LineChartSeries(buildingMeterParamValue.getLabel());
+		serie.setShowMarker( false );
+		serie.setData(dataSerie);
+		lineModel.addSeries( serie );
+
 		updateSeriesRegistriesValues(currentScale);
 	}
-	
+
 	private void updateSeriesRegistriesValues(ScaleGraphic currentScale) {
 
 		Date minDate = new Date();
@@ -99,27 +121,90 @@ public class QuickAnalysis {
 
 				case CURRENT:
 					chartSerie.set(currentTime,asys);
+
+					if (minValue > asys) {
+						minValue = asys;
+					}
+					if (maxValue < asys) {
+						maxValue = asys;
+					}
+
 					break;
 				case FREQUENCY:
 					chartSerie.set(currentTime,hz);
+
+					if (minValue > hz) {
+						minValue = hz;
+					}
+					if (maxValue < hz) {
+						maxValue = hz;
+					}
+
 					break;
 				case POWER:
 					chartSerie.set(currentTime,kwsys);
+
+					if (minValue > kwsys) {
+						minValue = kwsys;
+					}
+					if (maxValue < kwsys) {
+						maxValue = kwsys;
+					}
+
 					break;
 				case POWER_FACTOR:
 					chartSerie.set(currentTime,pfsys);
+
+					if (minValue > pfsys) {
+						minValue = pfsys;
+					}
+					if (maxValue < pfsys) {
+						maxValue = pfsys;
+					}
+
 					break;
 				case REACTIVE_POWER:
 					chartSerie.set(currentTime,kvarsys);
+
+					if (minValue > kvarsys) {
+						minValue = kvarsys;
+					}
+					if (maxValue < kvarsys) {
+						maxValue = kvarsys;
+					}
+
 					break;
 				case VOLT_AMPERE:
 					chartSerie.set(currentTime,kvasys);
+
+					if (minValue > kvasys) {
+						minValue = kvasys;
+					}
+					if (maxValue < kvasys) {
+						maxValue = kvasys;
+					}
+
 					break;
 				case VOLTAGE:
 					chartSerie.set(currentTime,vlnsys);
+
+					if (minValue > vlnsys) {
+						minValue = vlnsys;
+					}
+					if (maxValue < vlnsys) {
+						maxValue = vlnsys;
+					}
 					break;
 				case VOLTAGE_BETWEEN_PHASES:
 					chartSerie.set(currentTime,vllsys);
+
+					if (minValue > vllsys) {
+						minValue = vllsys;
+					}
+					if (maxValue < vllsys) {
+						maxValue = vllsys;
+					}
+
 					break;
 				default:
 					chartSerie.set(currentTime,kwsys);
@@ -135,57 +220,6 @@ public class QuickAnalysis {
 			//Get Min Date for Graphic
 			if(registry.getCurrenttime().compareTo( minDate) < 0) {
 				minDate = registry.getCurrenttime();
-			}
-
-			if (minValue > asys) {
-				minValue = asys;
-			}
-			if (maxValue < asys) {
-				maxValue = asys;
-			}
-
-			if (minValue > hz) {
-				minValue = hz;
-			}
-			if (maxValue < hz) {
-				maxValue = hz;
-			}
-
-			if (minValue > kwsys) {
-				minValue = kwsys;
-			}
-			if (maxValue < kwsys) {
-				maxValue = kwsys;
-			}
-			if (minValue > pfsys) {
-				minValue = pfsys;
-			}
-			if (maxValue < pfsys) {
-				maxValue = pfsys;
-			}
-			if (minValue > kvarsys) {
-				minValue = kvarsys;
-			}
-			if (maxValue < kvarsys) {
-				maxValue = kvarsys;
-			}
-			if (minValue > kvasys) {
-				minValue = kvasys;
-			}
-			if (maxValue < kvasys) {
-				maxValue = kvasys;
-			}
-			if (minValue > vlnsys) {
-				minValue = vlnsys;
-			}
-			if (maxValue < vlnsys) {
-				maxValue = vlnsys;
-			}
-			if (minValue > vllsys) {
-				minValue = vllsys;
-			}
-			if (maxValue < vllsys) {
-				maxValue = vllsys;
 			}
 
 		}
@@ -216,30 +250,10 @@ public class QuickAnalysis {
 
 		Axis yAxis = lineModel.getAxis(AxisType.Y);
 		yAxis.setLabel("Energy Values");
-		yAxis.setMax( maxValue );
-		yAxis.setMin( minValue );
+		yAxis.setMax( maxValue + maxValue*0.10 );
+		yAxis.setMin( minValue - minValue*0.10 );
 	}
 
-
-	/**
-	 * Changes The Serie to add or remove in the Graphic
-	 * @param serieToChange
-	 */
-	public void changeSerie(ScaleGraphic currentScale) {
-		
-		Map<Object, Number> dataSerie = lineModel.getSeries().get(0).getData();
-		
-		lineModel.clear();
-		
-		BuildingMeterParameterValues buildingMeterParamValue = BuildingMeterParameterValues.valueOf(buildingMeterSelected);
-		
-		final LineChartSeries serie = new LineChartSeries(buildingMeterParamValue.getLabel());
-		serie.setShowMarker( false );
-		serie.setData(dataSerie);
-		lineModel.addSeries( serie );
-		
-		updateSeriesRegistriesValues(currentScale);
-	}
 
 	public LineChartModel getLineModel() {
 		return lineModel;
@@ -265,5 +279,5 @@ public class QuickAnalysis {
 		this.buildingMeterQuickAnalysis = buildingMeterQuickAnalysis;
 	}
 
-	
+
 }
