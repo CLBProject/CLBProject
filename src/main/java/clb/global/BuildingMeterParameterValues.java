@@ -3,7 +3,7 @@ package clb.global;
 public enum BuildingMeterParameterValues
 {
     VOLTAGE("Voltage"),
-    VOLTAGE_BETWEEN_PHASES("Voltage Between Phases"),
+    VOLTAGE_BETWEEN_PHASES("Voltage B. Phases"),
     POWER("Power"),
     REACTIVE_POWER("Reactive Power"),
     VOLT_AMPERE("Volt-Ampere"),

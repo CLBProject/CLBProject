@@ -16,11 +16,10 @@ import clb.beans.enums.AnalysisTypes;
 import clb.beans.enums.Hours;
 import clb.beans.enums.Months;
 import clb.beans.enums.ScaleGraphic;
-import clb.beans.pojos.AnalysisGraphicPojo;
+import clb.beans.pojos.QuickAnalysis;
 import clb.business.AnalyzerDataService;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
-import clb.business.objects.BuildingMeterObject;
 import clb.business.objects.BuildingObject;
 import clb.business.objects.DataLoggerObject;
 import clb.global.DateUtils;
@@ -40,7 +39,7 @@ public class AnalysisBean implements Serializable{
 	private Date todayDate;
 	private Date minDate;
 	private Date analysisDate;
-	private AnalysisGraphicPojo analysisDayPojo;
+	private QuickAnalysis analysisDayPojo;
 
 	private List<BuildingObject> buildingsToSelect;
 	private BuildingObject tempBuildingSelected;
@@ -96,10 +95,10 @@ public class AnalysisBean implements Serializable{
 									analyzerSelected = aObj;
 									tempAnalyzerSelected = analyzerSelected;
 
-									analysisDayPojo = new AnalysisGraphicPojo( buildingSelected.getBuildingMeters());
+									analysisDayPojo = new QuickAnalysis( buildingSelected.getBuildingMeters());
 
 									analysisDayPojo.fillGraphicForData( 
-											analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate), scaleGraphic, analysisDate );
+											analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate), scaleGraphic );
 
 									firstTime = true;
 								}
@@ -140,12 +139,11 @@ public class AnalysisBean implements Serializable{
 			break;
 		}
 
-
-		analysisDayPojo.fillGraphicForData( registries, scaleGraphic, analysisDate );
+		analysisDayPojo.fillGraphicForData( registries, scaleGraphic );
 	}
 
-	public void updateMeterSelection(BuildingMeterObject buildingMeterObj) {
-		analysisDayPojo.changeSerie(buildingMeterObj.getLabelKey());
+	public void updateMeterSelection() {
+		analysisDayPojo.changeSerie(scaleGraphic);
 	}
 
 	public Date getAnalysisDate() {
@@ -156,11 +154,11 @@ public class AnalysisBean implements Serializable{
 		this.analysisDate = analysisDate;
 	}
 
-	public AnalysisGraphicPojo getAnalysisDayPojo() {
+	public QuickAnalysis getAnalysisDayPojo() {
 		return analysisDayPojo;
 	}
 
-	public void setAnalysisDayPojo( AnalysisGraphicPojo analysisDayPojo ) {
+	public void setAnalysisDayPojo( QuickAnalysis analysisDayPojo ) {
 		this.analysisDayPojo = analysisDayPojo;
 	}
 
