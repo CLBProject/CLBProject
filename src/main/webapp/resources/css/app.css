@@ -4,21 +4,23 @@ body {
 	margin: 0px !important;
 }
 
-.ui-g-12{
+.ui-g-12 {
 	padding: 0 !important;
 }
 
-.ui-md-12{
+.ui-md-12 {
 	padding: 0 !important;
 }
 
-footer {
-	background-color: #CED8F6;
-	width: 100%;
+.footer {
+	position: fixed;
+	left: 0;
 	bottom: 0;
+	width: 100%;
+	background-color: #CED8F6;
 	color: #0A122A !important;
-	text-decoration: none !important;
-	font-size: 14px !important;
+	text-align: center;
+	font-size: 12px !important;
 	padding-top: 10px !important;
 	padding-bottom: 10px !important;
 }
@@ -47,6 +49,13 @@ form {
 	color: #DF7401 !important;
 	font-size: 22px ! important;
 	font-family: Arial, Helvetica, sans-serif;
+}
+
+.noRegClass {
+	color: #0A122A !important;
+	font-size: 26px ! important;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
 }
 
 .ui-message-error-detail {
@@ -313,7 +322,7 @@ form {
 	font-size: 12px !important;
 }
 
-.ui-timepicker-table.ui-state-default{
+.ui-timepicker-table.ui-state-default {
 	background: #0A122A !important;
 	color: #CED8F6 !important;
 	font-size: 12px !important;
@@ -327,7 +336,7 @@ form {
 	background: #CED8F6 !important;
 }
 
-.ui-selectonemenu{
+.ui-selectonemenu {
 	vertical-align: middle !important;
 }
 
@@ -357,33 +366,33 @@ form {
 	width: 99.5% !important;
 }
 
-.ui-datatable-selectable{
+.ui-datatable-selectable {
 	font-size: 14px !important;
 }
 
-.ui-datatable-selectable.ui-state-hover{
+.ui-datatable-selectable.ui-state-hover {
 	background-color: #81BEF7 !important;
 	color: white !important;
 }
 
-.ui-datatable-selectable.ui-state-highlight{
+.ui-datatable-selectable.ui-state-highlight {
 	background-color: #0B3861 !important;
 	color: white !important;
 }
 
-.ui-datatable-tablewrapper thead{
-	display:none;
+.ui-datatable-tablewrapper thead {
+	display: none;
 }
 
-.dataTableColumn{
+.dataTableColumn {
 	text-align: center;
 }
 
-.accPanelMeters{
+.accPanelMeters {
 	font-size: 12px !important;
 	color: #0A122A;
 }
 
-.meterPanelCss{
+.meterPanelCss {
 	text-align: left;
 }

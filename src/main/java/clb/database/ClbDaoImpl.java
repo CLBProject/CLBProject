@@ -2,8 +2,10 @@ package clb.database;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -213,7 +215,15 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	@Override
 	public List<AnalyzerRegistryObject> getHourRegistriesFromAnalyzer( String analyzerId, Date timeFrame ) {
 
-		Date previousHourDateLimit = DateUtils.getInstance().getPreviousHourFromDate(timeFrame);
+		Date previousHourDateLimit = null;
+		
+		if(DateUtils.getInstance().isThisHour(timeFrame)) {
+			previousHourDateLimit = DateUtils.getInstance().getPreviousHourFromDate(timeFrame);
+		}
+		else {
+			timeFrame = DateUtils.getInstance().getHourReseted(timeFrame,true);
+			previousHourDateLimit = DateUtils.getInstance().getHourReseted(timeFrame,false);
+		}
 
 		return  processRegistries( analyzerId, previousHourDateLimit, timeFrame);
 	}
@@ -221,7 +231,15 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	@Override
 	public List<AnalyzerRegistryObject> getDayRegistriesFromAnalyzer( String analyzerId, Date timeFrameNow ) {
 
-		Date previousDayDateLimit = DateUtils.getInstance().getPreviousDayFromDate(timeFrameNow);
+		Date previousDayDateLimit = null;
+		
+		if(DateUtils.getInstance().isToday(timeFrameNow)) {
+			previousDayDateLimit = DateUtils.getInstance().getPreviousDayFromDate(timeFrameNow);
+		}
+		else {
+			timeFrameNow = DateUtils.getInstance().getDayReseted(timeFrameNow,true);
+			previousDayDateLimit = DateUtils.getInstance().getDayReseted(timeFrameNow,false);
+		}
 
 		return  processRegistries(analyzerId, previousDayDateLimit, timeFrameNow);
 	}
@@ -255,10 +273,27 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
 		return analyzerRegistries;
 	}
-	
+
 	@Override
 	public Date getLowestAnalyzerRegistryDate() {
-		// TODO Auto-generated method stub
+		Optional<Date> hasDate = this.mongoTemplate.getCollectionNames().stream()
+				.filter(collname -> collname.startsWith(ANALYZER_REGISTIES_COLL_NAME))
+				.map(collName -> {
+					String dateRegistry = collName.split(ANALYZER_REGISTIES_COLL_NAME + "_")[1];
+
+					Calendar cal = Calendar.getInstance();
+					cal.set(Calendar.YEAR, Integer.parseInt(dateRegistry.substring(0,4)));
+					cal.set(Calendar.MONTH, Integer.parseInt(dateRegistry.substring(4,6)));
+					cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dateRegistry.substring(6,8)));
+
+					return cal.getTime();
+				})
+				.sorted()
+				.findFirst();
+
+		if(hasDate.isPresent())
+			return hasDate.get();
+
 		return null;
 	}
 

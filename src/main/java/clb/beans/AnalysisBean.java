@@ -66,6 +66,7 @@ public class AnalysisBean implements Serializable{
 		todayDate = new Date();
 		analysisDate = new Date();
 		minDate = analyzerDataService.getLowestAnalyzerRegistryDate();
+		
 		analysisTypes = AnalysisTypes.values();
 		scalesGraphic = ScaleGraphic.values();
 		scaleGraphic = ScaleGraphic.HOUR;
@@ -297,4 +298,14 @@ public class AnalysisBean implements Serializable{
 	public void setTodayDate(Date todayDate) {
 		this.todayDate = todayDate;
 	}
+
+	public Date getMinDate() {
+		return minDate;
+	}
+
+	public void setMinDate(Date minDate) {
+		this.minDate = minDate;
+	}
+	
+	
 }

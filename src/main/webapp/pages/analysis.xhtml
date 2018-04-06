@@ -21,6 +21,7 @@
 						<td align="right"><b><p:outputLabel value="Date:"
 									for="scaleList"></p:outputLabel></b> <p:spacer width="5" /> <p:calendar
 								value="#{analysisBean.analysisDate}" label="Date:"
+								mindate="#{analysisBean.minDate}"
 								maxdate="#{analysisBean.todayDate}" pattern="dd-MM-yyyy"
 								styleClass="timeFrame">
 								<p:ajax event="dateSelect"
@@ -101,17 +102,17 @@
 											<b><p:outputLabel value="Meters"></p:outputLabel></b>
 											<hr />
 											<div align="left">
-													<p:selectOneRadio id="meteresRadio" value="#{analysisBean.analysisDayPojo.buildingMeterSelected}"
-														layout="responsive" columns="1" >
-														<f:selectItems
-															value="#{analysisBean.analysisDayPojo.buildingMeterQuickAnalysis}"
-															var="buildingMeter"
-															itemLabel="#{buildingMeter.label}"
-															itemValue="#{buildingMeter}">
-														</f:selectItems>
-														<p:ajax update="@form" event="change"
-															listener="#{analysisBean.updateMeterSelection}" />
-													</p:selectOneRadio>
+												<p:selectOneRadio id="meteresRadio"
+													value="#{analysisBean.analysisDayPojo.buildingMeterSelected}"
+													layout="responsive" columns="1">
+													<f:selectItems
+														value="#{analysisBean.analysisDayPojo.buildingMeterQuickAnalysis}"
+														var="buildingMeter" itemLabel="#{buildingMeter.label}"
+														itemValue="#{buildingMeter}">
+													</f:selectItems>
+													<p:ajax update="@form" event="change"
+														listener="#{analysisBean.updateMeterSelection}" />
+												</p:selectOneRadio>
 											</div>
 										</c:otherwise>
 									</c:choose>
@@ -124,15 +125,29 @@
 								<br />
 								<p:commandLink value="Change" style="font-size: 10px"
 									oncomplete="PF('selectionPopupAnalyzer').show()" />
-								<p:chart styleClass="analysisChartCSS" id="chartDayId"
-									responsive="true" widgetVar="chartDayId"
-									model="#{analysisBean.analysisDayPojo.lineModel}" type="line" />
+								<c:choose>
+									<c:when test="#{analysisBean.analysisDayPojo.lineModel.series[0].data.size() > 0}">
+										<p:chart styleClass="analysisChartCSS" id="chartDayId"
+											responsive="true" widgetVar="chartDayId"
+											model="#{analysisBean.analysisDayPojo.lineModel}" type="line" />
+									</c:when>
+									<c:otherwise>
+									<br/>
+									<br/>
+									<br/>
+									<br/>
+										<p:outputLabel styleClass="noRegClass" value="No Data to Display for this Date!"></p:outputLabel>
+									<br/>
+									<br/>
+									<br/>
+									</c:otherwise>
+								</c:choose>
 							</p:panel></td>
 					</tr>
 				</table>
 			</h:form>
+			<ui:include src="./general/footer.xhtml" />
 		</div>
-		<ui:include src="./general/footer.xhtml" />
 		<ui:include src="./popups/selectionPopupBuilding.xhtml" />
 		<ui:include src="./popups/selectionPopupAnalyzer.xhtml" />
 	</ui:define>

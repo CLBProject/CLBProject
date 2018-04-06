@@ -26,8 +26,7 @@ public class DateUtils
         cal.setTime( time );
 
         String year = cal.get(Calendar.YEAR) + "";
-        Integer realMonth = cal.get(Calendar.MONTH) + 1;
-        String month = realMonth >= 10 ? "" + realMonth : "0" + realMonth;
+        String month = cal.get(Calendar.MONTH) >= 10 ? "" + cal.get(Calendar.MONTH) : "0" + cal.get(Calendar.MONTH);
         String day = cal.get(Calendar.DAY_OF_MONTH) >= 10 ? "" + cal.get(Calendar.DAY_OF_MONTH) : "0" + cal.get(Calendar.DAY_OF_MONTH);
 
         return name + "_"+ year+month+day;
@@ -61,7 +60,7 @@ public class DateUtils
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(analysisDate);
 		
-		return cal.get(Calendar.MONTH+1);
+		return cal.get(Calendar.MONTH);
 	}
 
 	public Date setHourForDate(Date analysisDate, int value) {
@@ -72,7 +71,56 @@ public class DateUtils
 		return cal.getTime();
 		
 	}
-    
+
+	public boolean isThisHour(Date date) {
+		Calendar dateCal = Calendar.getInstance();
+		dateCal.setTime(date);
+		
+		Calendar today = Calendar.getInstance();
+		
+		return dateCal.get(Calendar.YEAR) == today.get(Calendar.YEAR) && 
+			dateCal.get(Calendar.MONTH) == today.get(Calendar.MONTH) &&
+			dateCal.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH) &&
+			dateCal.get(Calendar.HOUR_OF_DAY) == today.get(Calendar.HOUR_OF_DAY);
+	}
+	
+	public boolean isToday(Date date) {
+		Calendar dateCal = Calendar.getInstance();
+		dateCal.setTime(date);
+		
+		Calendar today = Calendar.getInstance();
+		
+		return dateCal.get(Calendar.YEAR) == today.get(Calendar.YEAR) && 
+			dateCal.get(Calendar.MONTH) == today.get(Calendar.MONTH) &&
+			dateCal.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH);
+	}
+
+	public Date getHourReseted(Date timeFrame, boolean next) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(timeFrame);
+		cal.set(Calendar.MINUTE,0);
+		cal.set(Calendar.SECOND,0);
+		
+		if(next)
+		cal.add(Calendar.HOUR_OF_DAY, 1);
+		else cal.add(Calendar.HOUR_OF_DAY, -1);
+		
+		return cal.getTime();
+	}
+
+	public Date getDayReseted(Date timeFrame, boolean next) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(timeFrame);
+		cal.set(Calendar.SECOND,0);
+		cal.set(Calendar.MINUTE,0);
+		cal.set(Calendar.HOUR_OF_DAY,0);
+		
+		if(next)
+		cal.add(Calendar.DAY_OF_MONTH, 1);
+		else cal.add(Calendar.DAY_OF_MONTH, -1);
+		
+		return cal.getTime();
+	}
 
 
 }
