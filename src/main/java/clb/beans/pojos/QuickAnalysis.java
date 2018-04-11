@@ -49,7 +49,7 @@ public class QuickAnalysis {
 		lineModel.setZoom(true);
 		lineModel.setLegendPosition("se");
 		lineModel.setMouseoverHighlight( true );
-		lineModel.setResetAxesOnResize( true );
+		lineModel.setResetAxesOnResize( false );
 		lineModel.setAnimate( true );
 		lineModel.setShowPointLabels( false );
 		lineModel.setShowDatatip( false );

@@ -116,7 +116,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 			}
 
 			AnalyzerRegistryEntity analyzerRegistryEntity = analyzerRegistryObject.toEntity();
-
+						
 			analyzerRegCol.insert( analyzerRegistryEntity.toDbObject() );
 			analyzerRegistryObject.setId(analyzerRegistryEntity.getId());
 		}

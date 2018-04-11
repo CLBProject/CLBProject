@@ -126,20 +126,22 @@
 								<p:commandLink value="Change" style="font-size: 10px"
 									oncomplete="PF('selectionPopupAnalyzer').show()" />
 								<c:choose>
-									<c:when test="#{analysisBean.analysisDayPojo.lineModel.series[0].data.size() > 0}">
+									<c:when
+										test="#{analysisBean.analysisDayPojo.lineModel.series[0].data.size() > 0}">
 										<p:chart styleClass="analysisChartCSS" id="chartDayId"
 											responsive="true" widgetVar="chartDayId"
 											model="#{analysisBean.analysisDayPojo.lineModel}" type="line" />
 									</c:when>
 									<c:otherwise>
-									<br/>
-									<br/>
-									<br/>
-									<br/>
-										<p:outputLabel styleClass="noRegClass" value="No Data to Display for this Date!"></p:outputLabel>
-									<br/>
-									<br/>
-									<br/>
+										<br />
+										<br />
+										<br />
+										<br />
+										<p:outputLabel styleClass="noRegClass"
+											value="No Data to Display for this Date!"></p:outputLabel>
+										<br />
+										<br />
+										<br />
 									</c:otherwise>
 								</c:choose>
 							</p:panel></td>
@@ -147,6 +149,7 @@
 				</table>
 			</h:form>
 			<ui:include src="./general/footer.xhtml" />
+			<div class="lastAnalysisDiv"></div>
 		</div>
 		<ui:include src="./popups/selectionPopupBuilding.xhtml" />
 		<ui:include src="./popups/selectionPopupAnalyzer.xhtml" />
