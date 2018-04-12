@@ -217,15 +217,33 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
 		Date previousHourDateLimit = null;
 		
+		//If this Hour set to current time
 		if(DateUtils.getInstance().isThisHour(timeFrame)) {
+			timeFrame = new Date();
 			previousHourDateLimit = DateUtils.getInstance().getPreviousHourFromDate(timeFrame);
+			
+			//If is not today is necessary to join 2 tables
+			if(DateUtils.getInstance().isToday(previousHourDateLimit)) {
+				return  processRegistries( analyzerId, previousHourDateLimit, timeFrame);
+			}
+			else {
+				List<AnalyzerRegistryObject> firstHourRegistries =  processRegistries(analyzerId, previousHourDateLimit, timeFrame);
+				List<AnalyzerRegistryObject> secondHourRegistries =  processRegistries(analyzerId, 
+						DateUtils.getInstance().getHourReseted(previousHourDateLimit, true), timeFrame);
+				
+				firstHourRegistries.addAll(secondHourRegistries);
+				
+				return firstHourRegistries;
+			}
 		}
 		else {
 			timeFrame = DateUtils.getInstance().getHourReseted(timeFrame,true);
 			previousHourDateLimit = DateUtils.getInstance().getHourReseted(timeFrame,false);
+			
+			return  processRegistries( analyzerId, previousHourDateLimit, timeFrame);
 		}
 
-		return  processRegistries( analyzerId, previousHourDateLimit, timeFrame);
+		
 	}
 
 	@Override
@@ -234,14 +252,23 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 		Date previousDayDateLimit = null;
 		
 		if(DateUtils.getInstance().isToday(timeFrameNow)) {
+			timeFrameNow = new Date();
 			previousDayDateLimit = DateUtils.getInstance().getPreviousDayFromDate(timeFrameNow);
-		}
+			
+			List<AnalyzerRegistryObject> firstDayRegistries =  processRegistries(analyzerId, previousDayDateLimit, timeFrameNow);
+			List<AnalyzerRegistryObject> secondDayRegistries =  processRegistries(analyzerId, DateUtils.getInstance().getDayReseted(previousDayDateLimit, true), timeFrameNow);
+			
+			firstDayRegistries.addAll(secondDayRegistries);
+			
+			return firstDayRegistries;
+		} 
 		else {
 			timeFrameNow = DateUtils.getInstance().getDayReseted(timeFrameNow,true);
 			previousDayDateLimit = DateUtils.getInstance().getDayReseted(timeFrameNow,false);
+			return  processRegistries(analyzerId, previousDayDateLimit, timeFrameNow);
 		}
 
-		return  processRegistries(analyzerId, previousDayDateLimit, timeFrameNow);
+		
 	}
 
 	private List<AnalyzerRegistryObject> processRegistries(final String analyzerId, final Date previousTimeFrame, final Date timeFrameNow){

@@ -54,10 +54,10 @@ public class AnalysisBean implements Serializable{
 
 	private ScaleGraphic scaleGraphic;
 	private ScaleGraphic[] scalesGraphic;
-	
+
 	private Hours hour;
 	private Hours[] hoursValues;
-	
+
 	private Months month;
 	private Months[] monthsValues;
 
@@ -66,15 +66,15 @@ public class AnalysisBean implements Serializable{
 		todayDate = new Date();
 		analysisDate = new Date();
 		minDate = analyzerDataService.getLowestAnalyzerRegistryDate();
-		
+
 		analysisTypes = AnalysisTypes.values();
 		scalesGraphic = ScaleGraphic.values();
 		scaleGraphic = ScaleGraphic.HOUR;
-		hoursValues = Hours.getHoursLimited(DateUtils.getInstance().getHourFromDate(analysisDate));
-		hour = Hours.getHourByValue(DateUtils.getInstance().getHourFromDate(analysisDate));
-		
+		hoursValues = Hours.getHoursLimited(DateUtils.getInstance().getHourFromDate(todayDate));
+		hour = Hours.getHourByValue(DateUtils.getInstance().getHourFromDate(todayDate));
+
 		monthsValues = Months.values();
-		month = Months.getMonthByValue(DateUtils.getInstance().getMonthFromDate(analysisDate));
+		month = Months.getMonthByValue(DateUtils.getInstance().getMonthFromDate(todayDate));
 
 		//Set Initial Selected Building, DataLogger and Analyzer
 		if(clbHomeLoginBean.getUserLoginPojo().getCurrentUser().getBuildings() != null && 
@@ -118,7 +118,7 @@ public class AnalysisBean implements Serializable{
 	public void selectAnalyzer() {
 		analyzerSelected = tempAnalyzerSelected;
 	}
-	
+
 	public void analysisCalendarSelect(SelectEvent event) {
 		updateScaleValues();
 	}
@@ -129,6 +129,7 @@ public class AnalysisBean implements Serializable{
 
 		switch(scaleGraphic) {
 		case HOUR:
+			updateHoursCombo();
 			analysisDate = DateUtils.getInstance().setHourForDate(analysisDate,hour.getValue());
 			registries = analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
 			break;
@@ -141,6 +142,13 @@ public class AnalysisBean implements Serializable{
 		}
 
 		analysisDayPojo.fillGraphicForData( registries, scaleGraphic );
+	}
+
+	private void updateHoursCombo() {
+		if(DateUtils.getInstance().isToday(analysisDate)) {
+			hoursValues = Hours.getHoursLimited(DateUtils.getInstance().getHourFromDate(new Date()));
+		}
+		else hoursValues = Hours.values();
 	}
 
 	public void updateMeterSelection() {
@@ -306,6 +314,6 @@ public class AnalysisBean implements Serializable{
 	public void setMinDate(Date minDate) {
 		this.minDate = minDate;
 	}
-	
-	
+
+
 }

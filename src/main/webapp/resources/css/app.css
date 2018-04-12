@@ -308,6 +308,19 @@ form {
 	font-size: 12px !important;
 }
 
+.ui-selectonemenu{
+       vertical-align: middle;
+       font-size: 12px !important;
+}
+
+.ui-selectonemenu-list-item{
+       font-size: 12px !important;
+}
+
+.ui-button {
+       font-size: 12px !important;
+}
+
 .ui-timepicker {
 	background: white !important;
 	font-size: 12px !important;
