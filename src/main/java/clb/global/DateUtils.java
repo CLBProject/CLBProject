@@ -116,11 +116,32 @@ public class DateUtils
 		cal.set(Calendar.HOUR_OF_DAY,0);
 		
 		if(next)
-		cal.add(Calendar.DAY_OF_MONTH, 1);
+			cal.add(Calendar.DAY_OF_MONTH, 1);
 		else cal.add(Calendar.DAY_OF_MONTH, -1);
 		
 		return cal.getTime();
 	}
 
+	public Date getWeekFirstDay(Date timeFrame) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(timeFrame);
+		cal.set(Calendar.SECOND,0);
+		cal.set(Calendar.MINUTE,0);
+		cal.set(Calendar.HOUR_OF_DAY,0);
+		cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
+		
+		return cal.getTime();
+	}
 
+	public Date getWeekLastDay(Date timeFrame) {
+		
+		Calendar c = Calendar.getInstance();
+		c.setTime(getWeekFirstDay(timeFrame));
+		
+		for (int i = 0; i < 7; i++) {
+		    c.add(Calendar.DATE, 1);
+		}
+		
+		return c.getTime();
+	}
 }

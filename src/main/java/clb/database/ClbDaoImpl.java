@@ -270,6 +270,30 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
 		
 	}
+	
+
+	@Override
+	public List<AnalyzerRegistryObject> getWeekRegistriesFromAnalyzer(String analyzerId, Date timeFrame) {
+		Date previousDayDateLimit = null;
+		
+		if(DateUtils.getInstance().isToday(timeFrame)) {
+			timeFrame = new Date();
+			
+			List<AnalyzerRegistryObject> firstDayRegistries =  processRegistries(analyzerId, previousDayDateLimit, timeFrame);
+			List<AnalyzerRegistryObject> secondDayRegistries =  processRegistries(analyzerId, DateUtils.getInstance().getWeekFirstDay(previousDayDateLimit), timeFrame);
+			
+			firstDayRegistries.addAll(secondDayRegistries);
+			
+			return firstDayRegistries;
+		} 
+		else {
+			timeFrame = DateUtils.getInstance().getWeekLastDay(timeFrame);
+			previousDayDateLimit = DateUtils.getInstance().getWeekFirstDay(timeFrame);
+			return  processRegistries(analyzerId, previousDayDateLimit, timeFrame);
+		}
+
+	}
+
 
 	private List<AnalyzerRegistryObject> processRegistries(final String analyzerId, final Date previousTimeFrame, final Date timeFrameNow){
 
@@ -331,5 +355,4 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	public void setMongoTemplate( MongoTemplate mongoTemplate ) {
 		this.mongoTemplate = mongoTemplate;
 	}
-
 }

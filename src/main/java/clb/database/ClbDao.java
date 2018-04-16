@@ -37,7 +37,11 @@ public interface ClbDao{
     List<AnalyzerRegistryObject> getHourRegistriesFromAnalyzer( String analyzerId , Date timeFrame);
     
     List<AnalyzerRegistryObject> getDayRegistriesFromAnalyzer( String analyzerId, Date timeFrame );
+    
+	List<AnalyzerRegistryObject> getWeekRegistriesFromAnalyzer(String analyzerId, Date timeFrame);
 
 	Date getLowestAnalyzerRegistryDate();
+
+
 
 }

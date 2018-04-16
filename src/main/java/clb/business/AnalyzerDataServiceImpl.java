@@ -76,6 +76,14 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	public List<AnalyzerRegistryObject> getDayRegistriesFromAnalyzer( String analyzerId , Date timeFrame) {
 		return clbDao.getDayRegistriesFromAnalyzer( analyzerId, timeFrame );
 	}
+	
+
+
+	@Override
+	public List<AnalyzerRegistryObject> getWeekRegistriesFromAnalyzer(String analyzerId, Date timeFrame) {
+		return clbDao.getWeekRegistriesFromAnalyzer( analyzerId, timeFrame );
+	}
+
 
 	@Override
 	public UsersystemObject getUserData( String username ) {
@@ -350,5 +358,4 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	public void setEventPublisher( ApplicationEventPublisher eventPublisher ) {
 		this.eventPublisher = eventPublisher;
 	}
-
 }

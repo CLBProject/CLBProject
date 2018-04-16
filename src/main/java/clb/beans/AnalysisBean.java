@@ -136,6 +136,9 @@ public class AnalysisBean implements Serializable{
 		case DAY:
 			registries = analyzerDataService.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
 			break;
+		case WEEK:
+			registries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
+			break;
 		default: 
 			registries = analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
 			break;

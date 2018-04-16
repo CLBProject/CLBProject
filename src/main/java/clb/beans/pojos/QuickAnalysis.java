@@ -25,6 +25,7 @@ public class QuickAnalysis {
 	private static final int STICK_ANGLE_GRAPHIC_LINE = -50;
 	private static final String DATE_HOUR_INTERVAL_GRAPHIC = "300";
 	private static final String DATE_DAY_INTERVAL_GRAPHIC = "3600";
+	private static final String DATE_WEEK_INTERVAL_GRAPHIC = "21600";
 	private static final String DATE_FORMAT_GRAPHIC = "%H:%M:%S";
 
 	private String buildingMeterSelected;
@@ -237,6 +238,11 @@ public class QuickAnalysis {
 		case DAY:
 			//5 minutes interval
 			xAxis.setTickInterval( DATE_DAY_INTERVAL_GRAPHIC );
+			xAxis.setTickFormat(DATE_FORMAT_GRAPHIC);
+			break;
+		case WEEK:
+			//5 minutes interval
+			xAxis.setTickInterval( DATE_WEEK_INTERVAL_GRAPHIC );
 			xAxis.setTickFormat(DATE_FORMAT_GRAPHIC);
 			break;
 		default:

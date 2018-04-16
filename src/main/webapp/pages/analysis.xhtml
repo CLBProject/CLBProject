@@ -133,15 +133,17 @@
 											model="#{analysisBean.analysisDayPojo.lineModel}" type="line" />
 									</c:when>
 									<c:otherwise>
-										<br />
-										<br />
-										<br />
-										<br />
-										<p:outputLabel styleClass="noRegClass"
-											value="No Data to Display for this Date!"></p:outputLabel>
-										<br />
-										<br />
-										<br />
+										<div class="analysisChartCSS">
+											<br />
+											<br />
+											<br />
+											<br />
+											<p:outputLabel styleClass="noRegClass"
+												value="No Data to Display for this Date!"></p:outputLabel>
+											<br />
+											<br />
+											<br />
+										</div>
 									</c:otherwise>
 								</c:choose>
 							</p:panel></td>
