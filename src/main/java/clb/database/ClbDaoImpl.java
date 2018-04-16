@@ -116,7 +116,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 			}
 
 			AnalyzerRegistryEntity analyzerRegistryEntity = analyzerRegistryObject.toEntity();
-						
+
 			analyzerRegCol.insert( analyzerRegistryEntity.toDbObject() );
 			analyzerRegistryObject.setId(analyzerRegistryEntity.getId());
 		}
@@ -216,12 +216,12 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	public List<AnalyzerRegistryObject> getHourRegistriesFromAnalyzer( String analyzerId, Date timeFrame ) {
 
 		Date previousHourDateLimit = null;
-		
+
 		//If this Hour set to current time
 		if(DateUtils.getInstance().isThisHour(timeFrame)) {
 			timeFrame = new Date();
 			previousHourDateLimit = DateUtils.getInstance().getPreviousHourFromDate(timeFrame);
-			
+
 			//If is not today is necessary to join 2 tables
 			if(DateUtils.getInstance().isToday(previousHourDateLimit)) {
 				return  processRegistries( analyzerId, previousHourDateLimit, timeFrame);
@@ -230,36 +230,36 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 				List<AnalyzerRegistryObject> firstHourRegistries =  processRegistries(analyzerId, previousHourDateLimit, timeFrame);
 				List<AnalyzerRegistryObject> secondHourRegistries =  processRegistries(analyzerId, 
 						DateUtils.getInstance().getHourReseted(previousHourDateLimit, true), timeFrame);
-				
+
 				firstHourRegistries.addAll(secondHourRegistries);
-				
+
 				return firstHourRegistries;
 			}
 		}
 		else {
 			timeFrame = DateUtils.getInstance().getHourReseted(timeFrame,true);
 			previousHourDateLimit = DateUtils.getInstance().getHourReseted(timeFrame,false);
-			
+
 			return  processRegistries( analyzerId, previousHourDateLimit, timeFrame);
 		}
 
-		
+
 	}
 
 	@Override
 	public List<AnalyzerRegistryObject> getDayRegistriesFromAnalyzer( String analyzerId, Date timeFrameNow ) {
 
 		Date previousDayDateLimit = null;
-		
+
 		if(DateUtils.getInstance().isToday(timeFrameNow)) {
 			timeFrameNow = new Date();
 			previousDayDateLimit = DateUtils.getInstance().getPreviousDayFromDate(timeFrameNow);
-			
+
 			List<AnalyzerRegistryObject> firstDayRegistries =  processRegistries(analyzerId, previousDayDateLimit, timeFrameNow);
 			List<AnalyzerRegistryObject> secondDayRegistries =  processRegistries(analyzerId, DateUtils.getInstance().getDayReseted(previousDayDateLimit, true), timeFrameNow);
-			
+
 			firstDayRegistries.addAll(secondDayRegistries);
-			
+
 			return firstDayRegistries;
 		} 
 		else {
@@ -268,30 +268,47 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 			return  processRegistries(analyzerId, previousDayDateLimit, timeFrameNow);
 		}
 
-		
+
 	}
-	
+
 
 	@Override
 	public List<AnalyzerRegistryObject> getWeekRegistriesFromAnalyzer(String analyzerId, Date timeFrame) {
-		Date previousDayDateLimit = null;
-		
-		if(DateUtils.getInstance().isToday(timeFrame)) {
-			timeFrame = new Date();
-			
-			List<AnalyzerRegistryObject> firstDayRegistries =  processRegistries(analyzerId, previousDayDateLimit, timeFrame);
-			List<AnalyzerRegistryObject> secondDayRegistries =  processRegistries(analyzerId, DateUtils.getInstance().getWeekFirstDay(previousDayDateLimit), timeFrame);
-			
-			firstDayRegistries.addAll(secondDayRegistries);
-			
-			return firstDayRegistries;
+
+		List<AnalyzerRegistryObject> weekRegistries = new ArrayList<AnalyzerRegistryObject>();
+
+		if(DateUtils.getInstance().isThisWeek(timeFrame)) {
+			Date nextCurrentDay = DateUtils.getInstance().getDayReseted(timeFrame, true);
+
+			Date previousDayDateLimit = DateUtils.getInstance().getWeekFirstDayReseted(timeFrame);
+			Date nextDayDateLimit = DateUtils.getInstance().getDayReseted(previousDayDateLimit, true);
+
+			//While is not today get from first day until today
+
+			while(!DateUtils.getInstance().isTheSameDay(nextCurrentDay, previousDayDateLimit)) {
+				weekRegistries.addAll(processRegistries(analyzerId, previousDayDateLimit, nextDayDateLimit));
+
+				previousDayDateLimit = DateUtils.getInstance().getDayReseted(previousDayDateLimit, true);
+				nextDayDateLimit = DateUtils.getInstance().getDayReseted(nextDayDateLimit, true);
+			}
+
 		} 
 		else {
-			timeFrame = DateUtils.getInstance().getWeekLastDay(timeFrame);
-			previousDayDateLimit = DateUtils.getInstance().getWeekFirstDay(timeFrame);
-			return  processRegistries(analyzerId, previousDayDateLimit, timeFrame);
+			Date lastDay = DateUtils.getInstance().getDayReseted(DateUtils.getInstance().getWeekLastDay(timeFrame),true);
+			Date firstDay = DateUtils.getInstance().getWeekFirstDayReseted(timeFrame);
+			Date nextFirstDay = DateUtils.getInstance().getDayReseted(firstDay, true);
+
+			//While is not last day of the week get from first day until last
+
+			while(!DateUtils.getInstance().isTheSameDay(lastDay, firstDay)){
+				weekRegistries.addAll(processRegistries(analyzerId, firstDay, nextFirstDay));
+
+				firstDay = DateUtils.getInstance().getDayReseted(firstDay, true);
+				nextFirstDay = DateUtils.getInstance().getDayReseted(nextFirstDay, true);
+			} 
 		}
 
+		return weekRegistries;
 	}
 
 

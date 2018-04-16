@@ -122,7 +122,7 @@ public class DateUtils
 		return cal.getTime();
 	}
 
-	public Date getWeekFirstDay(Date timeFrame) {
+	public Date getWeekFirstDayReseted(Date timeFrame) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(timeFrame);
 		cal.set(Calendar.SECOND,0);
@@ -136,12 +136,30 @@ public class DateUtils
 	public Date getWeekLastDay(Date timeFrame) {
 		
 		Calendar c = Calendar.getInstance();
-		c.setTime(getWeekFirstDay(timeFrame));
+		c.setTime(getWeekFirstDayReseted(timeFrame));
 		
 		for (int i = 0; i < 7; i++) {
 		    c.add(Calendar.DATE, 1);
 		}
 		
 		return c.getTime();
+	}
+
+	public boolean isTheSameDay(Date date1, Date date2) {
+		
+		Calendar dateCal = Calendar.getInstance();
+		dateCal.setTime(date1);
+		
+		Calendar dateCal2 = Calendar.getInstance();
+		dateCal2.setTime(date2);
+		
+		return dateCal.get(Calendar.YEAR) == dateCal2.get(Calendar.YEAR) && 
+			dateCal.get(Calendar.MONTH) == dateCal2.get(Calendar.MONTH) &&
+			dateCal.get(Calendar.DAY_OF_MONTH) == dateCal2.get(Calendar.DAY_OF_MONTH);
+	}
+
+	public boolean isThisWeek(Date timeFrame) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
