@@ -279,32 +279,29 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
 		if(DateUtils.getInstance().isThisWeek(timeFrame)) {
 			Date nextCurrentDay = DateUtils.getInstance().getDayReseted(timeFrame, true);
-
 			Date previousDayDateLimit = DateUtils.getInstance().getWeekFirstDayReseted(timeFrame);
-			Date nextDayDateLimit = DateUtils.getInstance().getDayReseted(previousDayDateLimit, true);
 
 			//While is not today get from first day until today
 
 			while(!DateUtils.getInstance().isTheSameDay(nextCurrentDay, previousDayDateLimit)) {
-				weekRegistries.addAll(processRegistries(analyzerId, previousDayDateLimit, nextDayDateLimit));
+				weekRegistries.addAll(processRegistries(analyzerId, previousDayDateLimit, 
+						DateUtils.getInstance().getDayReseted(previousDayDateLimit,true)));
 
-				previousDayDateLimit = DateUtils.getInstance().getDayReseted(previousDayDateLimit, true);
-				nextDayDateLimit = DateUtils.getInstance().getDayReseted(nextDayDateLimit, true);
+				previousDayDateLimit = DateUtils.getInstance().getDay(previousDayDateLimit, true);
 			}
 
 		} 
 		else {
-			Date lastDay = DateUtils.getInstance().getDayReseted(DateUtils.getInstance().getWeekLastDay(timeFrame),true);
+			Date lastDay = DateUtils.getInstance().getWeekLastDay(timeFrame);
 			Date firstDay = DateUtils.getInstance().getWeekFirstDayReseted(timeFrame);
-			Date nextFirstDay = DateUtils.getInstance().getDayReseted(firstDay, true);
 
 			//While is not last day of the week get from first day until last
 
 			while(!DateUtils.getInstance().isTheSameDay(lastDay, firstDay)){
-				weekRegistries.addAll(processRegistries(analyzerId, firstDay, nextFirstDay));
+				weekRegistries.addAll(processRegistries(analyzerId, firstDay, 
+						DateUtils.getInstance().getDayReseted(firstDay,true)));
 
 				firstDay = DateUtils.getInstance().getDayReseted(firstDay, true);
-				nextFirstDay = DateUtils.getInstance().getDayReseted(nextFirstDay, true);
 			} 
 		}
 

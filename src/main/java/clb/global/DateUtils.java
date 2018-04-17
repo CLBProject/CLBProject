@@ -121,6 +121,17 @@ public class DateUtils
 		
 		return cal.getTime();
 	}
+	
+	public Date getDay(Date timeFrame, boolean next) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(timeFrame);
+		
+		if(next)
+			cal.add(Calendar.DAY_OF_MONTH, 1);
+		else cal.add(Calendar.DAY_OF_MONTH, -1);
+		
+		return cal.getTime();
+	}
 
 	public Date getWeekFirstDayReseted(Date timeFrame) {
 		Calendar cal = Calendar.getInstance();
@@ -138,7 +149,7 @@ public class DateUtils
 		Calendar c = Calendar.getInstance();
 		c.setTime(getWeekFirstDayReseted(timeFrame));
 		
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < 8; i++) {
 		    c.add(Calendar.DATE, 1);
 		}
 		
@@ -159,7 +170,8 @@ public class DateUtils
 	}
 
 	public boolean isThisWeek(Date timeFrame) {
-		// TODO Auto-generated method stub
-		return false;
+		
+		return timeFrame.compareTo(getWeekFirstDayReseted(timeFrame)) >= 0 &&
+				timeFrame.compareTo(getWeekLastDay(timeFrame)) < 0;
 	}
 }
