@@ -278,14 +278,22 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 		List<AnalyzerRegistryObject> weekRegistries = new ArrayList<AnalyzerRegistryObject>();
 
 		if(DateUtils.getInstance().isThisWeek(timeFrame)) {
-			Date nextCurrentDay = DateUtils.getInstance().getDayReseted(timeFrame, true);
+			Date nextCurrentDay = DateUtils.getInstance().getDayReseted(new Date(), true);
 			Date previousDayDateLimit = DateUtils.getInstance().getWeekFirstDayReseted(timeFrame);
 
 			//While is not today get from first day until today
 
 			while(!DateUtils.getInstance().isTheSameDay(nextCurrentDay, previousDayDateLimit)) {
-				weekRegistries.addAll(processRegistries(analyzerId, previousDayDateLimit, 
-						DateUtils.getInstance().getDayReseted(previousDayDateLimit,true)));
+				
+				//Less Registries If is today
+				if(DateUtils.getInstance().isToday(previousDayDateLimit)) {
+					weekRegistries.addAll(processRegistries(analyzerId, previousDayDateLimit, new Date()));
+				}
+				//Full Registries
+				else {
+					weekRegistries.addAll(processRegistries(analyzerId, previousDayDateLimit, 
+							DateUtils.getInstance().getDayReseted(previousDayDateLimit,true)));
+				}
 
 				previousDayDateLimit = DateUtils.getInstance().getDay(previousDayDateLimit, true);
 			}

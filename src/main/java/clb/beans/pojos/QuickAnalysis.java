@@ -23,10 +23,12 @@ public class QuickAnalysis {
 	private LineChartModel lineModel;
 
 	private static final int STICK_ANGLE_GRAPHIC_LINE = -50;
+	private static final int STICK_ANGLE_GRAPHIC_LINE_WEEK = -60;
 	private static final String DATE_HOUR_INTERVAL_GRAPHIC = "300";
 	private static final String DATE_DAY_INTERVAL_GRAPHIC = "3600";
 	private static final String DATE_WEEK_INTERVAL_GRAPHIC = "86400";
 	private static final String DATE_FORMAT_GRAPHIC = "%H:%M:%S";
+	private static final String DATE_FORMAT_GRAPHIC_WEEK= "%A %#d, %B";
 
 	private String buildingMeterSelected;
 	private List<BuildingMeterParameterValues> buildingMeterQuickAnalysis;
@@ -225,25 +227,27 @@ public class QuickAnalysis {
 
 		}
 
-		Axis xAxis = new DateAxis("Time");
-		xAxis.setTickAngle(STICK_ANGLE_GRAPHIC_LINE);
+		Axis xAxis = new DateAxis();
 
 		switch(currentScale) {
 		case HOUR:
 			//5 minutes interval
+			xAxis.setTickAngle(STICK_ANGLE_GRAPHIC_LINE);
 			xAxis.setTickInterval( DATE_HOUR_INTERVAL_GRAPHIC );
 			xAxis.setTickFormat(DATE_FORMAT_GRAPHIC);
 
 			break;
 		case DAY:
 			//5 minutes interval
+			xAxis.setTickAngle(STICK_ANGLE_GRAPHIC_LINE);
 			xAxis.setTickInterval( DATE_DAY_INTERVAL_GRAPHIC );
 			xAxis.setTickFormat(DATE_FORMAT_GRAPHIC);
 			break;
 		case WEEK:
 			//5 minutes interval
+			xAxis.setTickAngle(STICK_ANGLE_GRAPHIC_LINE_WEEK);
 			xAxis.setTickInterval( DATE_WEEK_INTERVAL_GRAPHIC );
-			xAxis.setTickFormat(DATE_FORMAT_GRAPHIC);
+			xAxis.setTickFormat(DATE_FORMAT_GRAPHIC_WEEK);
 			break;
 		default:
 			break;
@@ -255,7 +259,6 @@ public class QuickAnalysis {
 		lineModel.getAxes().put(AxisType.X,xAxis);
 
 		Axis yAxis = lineModel.getAxis(AxisType.Y);
-		yAxis.setLabel("Energy Values");
 		yAxis.setMax( maxValue + maxValue*0.10 );
 		yAxis.setMin( minValue - minValue*0.10 );
 	}

@@ -117,14 +117,30 @@
 										</c:otherwise>
 									</c:choose>
 								</div>
+							</p:panel> <p:spacer height="5" /> <p:panel>
+								<div align="center">
+									<c:choose>
+										<c:when
+											test="#{empty analysisBean.buildingSelected.buildingMeters}">
+											<p:outputLabel value="No Analyzers to Select"></p:outputLabel>
+										</c:when>
+										<c:otherwise>
+											<p:outputLabel styleClass="analysisPanelTitle"
+												value="#{analysisBean.analyzerSelected.name}"></p:outputLabel>
+											<hr />
+											<p:commandButton value="Change"
+												oncomplete="PF('selectionPopupAnalyzer').show()" ajax="true"
+												icon="fa fa-fw fa-building" styleClass="simpleButton" />
+										</c:otherwise>
+									</c:choose>
+								</div>
 							</p:panel></td>
 						<td valign="top" align="center"><p:panel
 								styleClass="chartPanel">
-								<p:outputLabel styleClass="analysisTitle"
-									value="#{analysisBean.analyzerSelected.name}"></p:outputLabel>
-								<br />
-								<p:commandLink value="Change" style="font-size: 10px"
-									oncomplete="PF('selectionPopupAnalyzer').show()" />
+								<p:outputLabel styleClass="noRegClass"
+									value="Energy Consumption"></p:outputLabel>
+								<br/>
+								<p:outputLabel style="color:blue;font-size: 11px" value="Value / Time"></p:outputLabel>
 								<c:choose>
 									<c:when
 										test="#{analysisBean.analysisDayPojo.lineModel.series[0].data.size() > 0}">
@@ -134,15 +150,10 @@
 									</c:when>
 									<c:otherwise>
 										<div class="analysisChartCSS">
-											<br />
-											<br />
-											<br />
-											<br />
+											<br /> <br /> <br /> <br />
 											<p:outputLabel styleClass="noRegClass"
 												value="No Data to Display for this Date!"></p:outputLabel>
-											<br />
-											<br />
-											<br />
+											<br /> <br /> <br />
 										</div>
 									</c:otherwise>
 								</c:choose>

@@ -39,6 +39,7 @@ public class AnalysisBean implements Serializable{
 	private Date todayDate;
 	private Date minDate;
 	private Date analysisDate;
+	private String analysisDatePrettyFormat;
 	private QuickAnalysis analysisDayPojo;
 
 	private List<BuildingObject> buildingsToSelect;
@@ -65,6 +66,7 @@ public class AnalysisBean implements Serializable{
 	public void init() {
 		todayDate = new Date();
 		analysisDate = new Date();
+		analysisDatePrettyFormat = DateUtils.getInstance().prettyFormat(analysisDate);
 		minDate = analyzerDataService.getLowestAnalyzerRegistryDate();
 
 		analysisTypes = AnalysisTypes.values();
@@ -164,6 +166,7 @@ public class AnalysisBean implements Serializable{
 
 	public void setAnalysisDate( Date analysisDate ) {
 		this.analysisDate = analysisDate;
+		this.setAnalysisDatePrettyFormat(DateUtils.getInstance().prettyFormat(analysisDate));
 	}
 
 	public QuickAnalysis getAnalysisDayPojo() {
@@ -318,5 +321,13 @@ public class AnalysisBean implements Serializable{
 		this.minDate = minDate;
 	}
 
+	public String getAnalysisDatePrettyFormat() {
+		return analysisDatePrettyFormat;
+	}
 
+	public void setAnalysisDatePrettyFormat(String analysisDatePrettyFormat) {
+		this.analysisDatePrettyFormat = analysisDatePrettyFormat;
+	}
+
+	
 }
