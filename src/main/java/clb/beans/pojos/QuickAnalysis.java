@@ -1,7 +1,7 @@
 package clb.beans.pojos;
 
+import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -103,8 +103,8 @@ public class QuickAnalysis {
 
 	private void updateSeriesRegistriesValues(ScaleGraphic currentScale) {
 
-		Date minDate = new Date();
-		Date maxDate = null;
+		String minDate = null;
+		String maxDate = null;
 
 		Double minValue = Double.MAX_VALUE;
 		Double maxValue = Double.MIN_VALUE;
@@ -215,9 +215,23 @@ public class QuickAnalysis {
 					break;
 				}
 			}
+
+			//Get Max Date for Graphic
+			if(maxDate == null || registry.getCurrentTimeString().compareTo( maxDate ) > 0) {
+				maxDate = registry.getCurrentTimeString();
+			}
+
+			//Get Min Date for Graphic
+			if(minDate == null || registry.getCurrentTimeString().compareTo( minDate) < 0) {
+				minDate = registry.getCurrentTimeString();
+			}
+
 		}
 
 		Axis xAxis = new DateAxis();
+		xAxis.setMax(maxDate);
+		xAxis.setMin(minDate);
+
 
 		switch(currentScale) {
 		case HOUR:
@@ -249,8 +263,6 @@ public class QuickAnalysis {
 			break;
 
 		}
-		xAxis.setMin( DateUtils.getInstance().convertDateToSimpleStringFormat( minDate ));
-		xAxis.setMax( DateUtils.getInstance().convertDateToSimpleStringFormat( maxDate ));
 
 		lineModel.getAxes().put(AxisType.X,xAxis);
 

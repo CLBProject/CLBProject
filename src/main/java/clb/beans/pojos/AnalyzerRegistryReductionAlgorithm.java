@@ -30,6 +30,7 @@ public class AnalyzerRegistryReductionAlgorithm {
 		for(AnalyzerRegistryObject registry: registries) {
 			String dateTransformedToHoursAverage = DateUtils.getInstance().transformDateToHoursAverage(registry.getCurrenttime());
 
+			
 			List<AnalyzerRegistryObject> registriesForMinuteAverage = registriesReduced.get(dateTransformedToHoursAverage);
 
 			if(registriesForMinuteAverage == null) {

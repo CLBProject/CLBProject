@@ -1,6 +1,7 @@
 package clb.global;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -20,6 +21,10 @@ public class DateUtils
 
 	public String convertDateToSimpleStringFormat(Date date) {
 		return outputFormat.format( date );
+	}
+	
+	public Date convertDateStringToSimpleDateFormat(String dateStr) throws ParseException {
+		return outputFormat.parse( dateStr );
 	}
 
 	public String concatTimeWithString(String name, Date time) {
@@ -210,13 +215,16 @@ public class DateUtils
 		cal.setTime(currenttime);
 		
 		int minute = cal.get(Calendar.MINUTE);
+		String minuteStr = minute > 9 ? ""+minute : "0" + minute;
+		int minuteValue = Integer.parseInt(minuteStr.charAt(1)+"");
 		
-		if(minute <=5 && minute > 0) {
-			minute = 5;
+		
+		if(minuteValue <=5 && minuteValue > 0) {
+			minuteStr = minuteStr.charAt(0) + "5";
 		}
-		else minute = 0;
+		else minuteStr = minuteStr.charAt(0) + "0";
 		
-		cal.set(Calendar.MINUTE, minute);
+		cal.set(Calendar.MINUTE, Integer.parseInt(minuteStr));
 		
 		return convertDateToSimpleStringFormat(cal.getTime());
 	}
