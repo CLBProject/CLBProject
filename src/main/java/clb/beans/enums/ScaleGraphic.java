@@ -5,8 +5,7 @@ public enum ScaleGraphic
     HOUR("Hour",1),
     DAY("Day",96),
     WEEK("Week",168),
-    MONTH("Month",124),
-    YEAR("Year",72);
+    MONTH("Month",124);
     
     private String label;
     
