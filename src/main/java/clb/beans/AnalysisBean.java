@@ -75,7 +75,7 @@ public class AnalysisBean implements Serializable{
 		hoursValues = Hours.getHoursLimited(DateUtils.getInstance().getHourFromDate(todayDate));
 		hour = Hours.getHourByValue(DateUtils.getInstance().getHourFromDate(todayDate));
 
-		monthsValues = Months.values();
+		monthsValues = Months.getMonthsLimited(DateUtils.getInstance().getMonthFromDate(todayDate));
 		month = Months.getMonthByValue(DateUtils.getInstance().getMonthFromDate(todayDate));
 
 		//Set Initial Selected Building, DataLogger and Analyzer
@@ -125,6 +125,12 @@ public class AnalysisBean implements Serializable{
 		updateScaleValues();
 	}
 
+	public void updateMonthValue() {
+		analysisDate = DateUtils.getInstance().setMonthOfDate(this.analysisDate,month.getValue());
+		List<AnalyzerRegistryObject> registries = analyzerDataService.getMonthRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
+		analysisDayPojo.fillGraphicForData( registries, scaleGraphic );
+	}
+	
 	public void updateScaleValues() {
 
 		List<AnalyzerRegistryObject> registries = new ArrayList<AnalyzerRegistryObject>();
@@ -140,6 +146,9 @@ public class AnalysisBean implements Serializable{
 			break;
 		case WEEK:
 			registries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
+			break;
+		case MONTH:
+			registries = analyzerDataService.getMonthRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
 			break;
 		default: 
 			registries = analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);

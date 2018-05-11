@@ -1,5 +1,8 @@
 package clb.beans.enums;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public enum Months {
 
 	JANUARY("January",0),
@@ -39,6 +42,18 @@ public enum Months {
 		}
 		
 		return null;
+	}
+
+	public static Months[] getMonthsLimited(int monthFromDate) {
+		List<Months> months = new ArrayList<Months>();
+		
+		for(Months month: values()) {
+			if(month.getValue() <= monthFromDate) {
+				months.add(month);
+			}
+		}
+		
+		return months.toArray(new Months[months.size()]);
 	}
 	
 }

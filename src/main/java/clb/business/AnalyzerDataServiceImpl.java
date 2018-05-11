@@ -358,4 +358,10 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	public void setEventPublisher( ApplicationEventPublisher eventPublisher ) {
 		this.eventPublisher = eventPublisher;
 	}
+
+
+	@Override
+	public List<AnalyzerRegistryObject> getMonthRegistriesFromAnalyzer(String analyzerId, Date timeFrame) {
+		return clbDao.getMonthRegistriesFromAnalyzer( analyzerId, timeFrame );
+	}
 }

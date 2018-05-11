@@ -46,6 +46,9 @@
 							<p:selectOneMenu id="monthsList"
 								rendered="#{analysisBean.scaleGraphic == 'MONTH'}"
 								widgetVar="monthsList" value="#{analysisBean.month}">
+								<p:ajax event="change"
+									listener="#{analysisBean.updateMonthValue}"
+									update=":analysisForm"></p:ajax>
 								<f:selectItems value="#{analysisBean.monthsValues}" var="month"
 									itemValue="#{month}" itemLabel="#{month.label}" />
 							</p:selectOneMenu> <p:spacer rendered="#{analysisBean.scaleGraphic == 'MONTH'}"

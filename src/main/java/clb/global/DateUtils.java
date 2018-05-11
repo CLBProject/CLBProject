@@ -178,6 +178,27 @@ public class DateUtils
 		return timeFrame.compareTo(getWeekFirstDayReseted(todayDate)) >= 0 &&
 				timeFrame.compareTo(getWeekLastDay(todayDate)) < 0;
 	}
+	
+	public boolean isThisMonth(Date timeFrame) {
+		Date todayDate = new Date();
+
+		return timeFrame.compareTo(getMonthFirstDayReseted(todayDate)) >= 0 &&
+				timeFrame.compareTo(getMonthLastDay(todayDate)) < 0;
+	}
+
+	public Date getMonthLastDay(Date todayDate) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(todayDate);
+		cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+		return cal.getTime();
+	}
+
+	public Date getMonthFirstDayReseted(Date todayDate) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(todayDate);
+		cal.set(Calendar.DAY_OF_MONTH, 1);
+		return cal.getTime();
+	}
 
 	public String prettyFormat(Date analysisDate) {
 		
@@ -200,9 +221,12 @@ public class DateUtils
 		return convertDateToSimpleStringFormat(cal.getTime());
 	}
 
-	public Object convertDateStringToDate(String key) {
-		// TODO Auto-generated method stub
-		return null;
+	public Date setMonthOfDate(Date date, int value) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.set(Calendar.MONTH, value);
+		return cal.getTime();
+		
 	}
-	
+
 }
