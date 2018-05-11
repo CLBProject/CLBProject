@@ -183,4 +183,26 @@ public class DateUtils
 		
 		return prettyDateFormat.format(analysisDate);
 	}
+
+	public String transformDateToHoursAverage(Date currenttime) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(currenttime);
+		
+		int minute = cal.get(Calendar.MINUTE);
+		
+		if(minute <=5 && minute > 0) {
+			minute = 5;
+		}
+		else minute = 0;
+		
+		cal.set(Calendar.MINUTE, minute);
+		
+		return convertDateToSimpleStringFormat(cal.getTime());
+	}
+
+	public Object convertDateStringToDate(String key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 }

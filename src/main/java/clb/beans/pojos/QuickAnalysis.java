@@ -33,7 +33,7 @@ public class QuickAnalysis {
 	private String buildingMeterSelected;
 	private List<BuildingMeterParameterValues> buildingMeterQuickAnalysis;
 
-	private List<AnalyzerRegistryObject> currentRegistries;
+	private List<AnalyzerRegistryGui> currentRegistries;
 
 	public QuickAnalysis(List<BuildingMeterObject> buildingMetersObject){
 
@@ -64,13 +64,13 @@ public class QuickAnalysis {
 
 		buildingMeterSelected = BuildingMeterParameterValues.POWER.name();
 
-		currentRegistries = new ArrayList<AnalyzerRegistryObject>();
+		currentRegistries = new ArrayList<AnalyzerRegistryGui>();
 	}
 
 
 	public void fillGraphicForData(List<AnalyzerRegistryObject> registries, ScaleGraphic currentScale){
 
-		this.currentRegistries = registries;
+		this.currentRegistries = AnalyzerRegistryReductionAlgorithm.getInstance().reduceRegistriesToHours(registries);
 
 		//Clear All Data
 		lineModel.getSeries().stream().forEach( serie -> serie.getData().clear() );
@@ -108,7 +108,7 @@ public class QuickAnalysis {
 		Double minValue = Double.MAX_VALUE;
 		Double maxValue = Double.MIN_VALUE;
 
-		for(AnalyzerRegistryObject registry: currentRegistries) {
+		for(AnalyzerRegistryGui registry: currentRegistries) {
 			Double asys = registry.getAsys();
 			Double hz = registry.getHz();
 			Double kwsys = registry.getKwsys();
@@ -117,7 +117,7 @@ public class QuickAnalysis {
 			Double kvasys = registry.getKvasys();
 			Double vlnsys = registry.getVlnsys();
 			Double vllsys = registry.getVllsys();
-			String currentTime = DateUtils.getInstance().convertDateToSimpleStringFormat( registry.getCurrenttime());
+			String currentTime = registry.getCurrentTimeString();
 
 			for(ChartSeries chartSerie: lineModel.getSeries()) {
 				switch(BuildingMeterParameterValues.valueOf(buildingMeterSelected)) {
@@ -214,17 +214,6 @@ public class QuickAnalysis {
 					break;
 				}
 			}
-
-			//Get Max Date for Graphic
-			if(maxDate == null || registry.getCurrenttime().compareTo( maxDate ) > 0) {
-				maxDate = registry.getCurrenttime();
-			}
-
-			//Get Min Date for Graphic
-			if(registry.getCurrenttime().compareTo( minDate) < 0) {
-				minDate = registry.getCurrenttime();
-			}
-
 		}
 
 		Axis xAxis = new DateAxis();
