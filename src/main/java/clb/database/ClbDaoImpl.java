@@ -345,6 +345,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 		} 
 		else {
 			Date lastDay = DateUtils.getInstance().getMonthLastDay(timeFrame);
+			lastDay = DateUtils.getInstance().getDay(lastDay, true);
 			Date firstDay = DateUtils.getInstance().getMonthFirstDayReseted(timeFrame);
 
 			//While is not last day of the week get from first day until last

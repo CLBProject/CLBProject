@@ -195,6 +195,9 @@ public class DateUtils
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(todayDate);
 		cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+		
+		System.out.println(convertDateToSimpleStringFormat(cal.getTime()));
+		
 		return cal.getTime();
 	}
 
@@ -210,7 +213,16 @@ public class DateUtils
 		return prettyDateFormat.format(analysisDate);
 	}
 
-	public String transformDateToHoursAverage(Date currenttime) {
+
+	public Date setMonthOfDate(Date date, int value) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.set(Calendar.MONTH, value);
+		return cal.getTime();
+		
+	}
+	
+	public String transformDateToHoursOrDaysAverage(Date currenttime) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(currenttime);
 		
@@ -228,13 +240,26 @@ public class DateUtils
 		
 		return convertDateToSimpleStringFormat(cal.getTime());
 	}
-
-	public Date setMonthOfDate(Date date, int value) {
+	
+	public String transformDateToWeekAverage(Date currenttime) {
 		Calendar cal = Calendar.getInstance();
-		cal.setTime(date);
-		cal.set(Calendar.MONTH, value);
-		return cal.getTime();
+		cal.setTime(currenttime);
+		cal.set(Calendar.MILLISECOND, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MINUTE, 0);
 		
+		return convertDateToSimpleStringFormat(cal.getTime());
+	}
+
+	public String transformDateToMonthAverage(Date currenttime) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(currenttime);
+		cal.set(Calendar.MILLISECOND, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.HOUR_OF_DAY,0);
+		
+		return convertDateToSimpleStringFormat(cal.getTime());
 	}
 
 }

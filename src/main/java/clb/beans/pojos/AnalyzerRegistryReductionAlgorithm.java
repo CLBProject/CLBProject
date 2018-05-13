@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import clb.beans.enums.ScaleGraphic;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.global.DateUtils;
 
@@ -20,7 +21,7 @@ public class AnalyzerRegistryReductionAlgorithm {
 		return instance;
 	}
 
-	public List<AnalyzerRegistryGui> reduceRegistriesToHours(List<AnalyzerRegistryObject> registries){
+	public List<AnalyzerRegistryGui> reduceRegistries(List<AnalyzerRegistryObject> registries, ScaleGraphic scale){
 		List<AnalyzerRegistryGui> registryReduced = new ArrayList<AnalyzerRegistryGui>();
 
 
@@ -28,9 +29,24 @@ public class AnalyzerRegistryReductionAlgorithm {
 
 		//Organize Registries and insert them on RegistriesReduced 
 		for(AnalyzerRegistryObject registry: registries) {
-			String dateTransformedToHoursAverage = DateUtils.getInstance().transformDateToHoursAverage(registry.getCurrenttime());
-
+			String dateTransformedToHoursAverage = null;
 			
+			switch(scale) {
+			case HOUR:
+			case DAY:
+				dateTransformedToHoursAverage = DateUtils.getInstance().transformDateToHoursOrDaysAverage(registry.getCurrenttime());
+				break;
+			case WEEK:
+				dateTransformedToHoursAverage = DateUtils.getInstance().transformDateToWeekAverage(registry.getCurrenttime());
+				break;
+			case MONTH:
+				dateTransformedToHoursAverage = DateUtils.getInstance().transformDateToMonthAverage(registry.getCurrenttime());
+				break;
+			default: 
+				dateTransformedToHoursAverage = DateUtils.getInstance().transformDateToHoursOrDaysAverage(registry.getCurrenttime());
+				break;
+			}
+
 			List<AnalyzerRegistryObject> registriesForMinuteAverage = registriesReduced.get(dateTransformedToHoursAverage);
 
 			if(registriesForMinuteAverage == null) {
@@ -49,7 +65,7 @@ public class AnalyzerRegistryReductionAlgorithm {
 
 		return registryReduced;
 	}
-
+	
 
 	private AnalyzerRegistryGui averageAnalyzerRegistryObject(List<AnalyzerRegistryObject> registries, String dateString) {
 

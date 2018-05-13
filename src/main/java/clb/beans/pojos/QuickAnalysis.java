@@ -1,6 +1,5 @@
 package clb.beans.pojos;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +15,6 @@ import clb.beans.enums.ScaleGraphic;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.BuildingMeterObject;
 import clb.global.BuildingMeterParameterValues;
-import clb.global.DateUtils;
 
 public class QuickAnalysis {
 
@@ -71,7 +69,7 @@ public class QuickAnalysis {
 
 	public void fillGraphicForData(List<AnalyzerRegistryObject> registries, ScaleGraphic currentScale){
 
-		this.currentRegistries = AnalyzerRegistryReductionAlgorithm.getInstance().reduceRegistriesToHours(registries);
+		this.currentRegistries = AnalyzerRegistryReductionAlgorithm.getInstance().reduceRegistries(registries, currentScale);
 
 		//Clear All Data
 		lineModel.getSeries().stream().forEach( serie -> serie.getData().clear() );
