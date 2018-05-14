@@ -273,4 +273,27 @@ public class DateUtils
 		return cal.getTime();
 	}
 
+	public int getNumberOfWeeksFromDate(Date date) {
+	
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(getMonthLastDay(date));
+		
+		return cal.get(Calendar.WEEK_OF_MONTH);
+	}
+
+	public int getWeekFromDate(Date todayDate) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(todayDate);
+		
+		return cal.get(Calendar.WEEK_OF_MONTH);
+	}
+
+	public Date setWeekOfDate(Date date, int value) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		
+		cal.set(Calendar.WEEK_OF_MONTH, value);
+		
+		return cal.getTime();
+	}
 }
