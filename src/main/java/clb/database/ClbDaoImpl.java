@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -415,6 +416,16 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
 		return null;
 	}
+	
+	@Override
+	public String[] getYearsAvailable() {
+		 Set<String> yearsValues = this.mongoTemplate.getCollectionNames().stream()
+		 	.filter(collname -> collname.startsWith(ANALYZER_REGISTIES_COLL_NAME))	
+		 	.map( colName -> colName.split("_")[1].substring(0, 4))
+		 	.collect(Collectors.toSet());
+		 
+		return yearsValues.toArray(new String[yearsValues.size()]);
+	}
 
 	public MongoTemplate getMongoTemplate() {
 		return mongoTemplate;
@@ -423,4 +434,5 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	public void setMongoTemplate( MongoTemplate mongoTemplate ) {
 		this.mongoTemplate = mongoTemplate;
 	}
+
 }

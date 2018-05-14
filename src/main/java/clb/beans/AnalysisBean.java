@@ -61,6 +61,9 @@ public class AnalysisBean implements Serializable{
 
 	private Months month;
 	private Months[] monthsValues;
+	
+	private String year;
+	private String[] years;
 
 	@PostConstruct
 	public void init() {
@@ -77,6 +80,9 @@ public class AnalysisBean implements Serializable{
 
 		monthsValues = Months.getMonthsLimited(DateUtils.getInstance().getMonthFromDate(todayDate));
 		month = Months.getMonthByValue(DateUtils.getInstance().getMonthFromDate(todayDate));
+		
+		year = "" + DateUtils.getInstance().getYearFromDate(todayDate);
+		years = analyzerDataService.getYearsAvailable();
 
 		//Set Initial Selected Building, DataLogger and Analyzer
 		if(clbHomeLoginBean.getUserLoginPojo().getCurrentUser().getBuildings() != null && 
@@ -131,6 +137,12 @@ public class AnalysisBean implements Serializable{
 		analysisDayPojo.fillGraphicForData( registries, scaleGraphic );
 	}
 	
+	public void updateYearValue() {
+		analysisDate = DateUtils.getInstance().setYearOfDate(this.analysisDate,Integer.parseInt(year));
+		List<AnalyzerRegistryObject> registries = analyzerDataService.getMonthRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
+		analysisDayPojo.fillGraphicForData( registries, scaleGraphic );
+	}
+	
 	public void updateScaleValues() {
 
 		List<AnalyzerRegistryObject> registries = new ArrayList<AnalyzerRegistryObject>();
@@ -148,6 +160,7 @@ public class AnalysisBean implements Serializable{
 			registries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
 			break;
 		case MONTH:
+			month = Months.getMonthByValue(DateUtils.getInstance().getMonthFromDate(analysisDate));
 			registries = analyzerDataService.getMonthRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
 			break;
 		default: 
@@ -336,6 +349,22 @@ public class AnalysisBean implements Serializable{
 
 	public void setAnalysisDatePrettyFormat(String analysisDatePrettyFormat) {
 		this.analysisDatePrettyFormat = analysisDatePrettyFormat;
+	}
+
+	public String getYear() {
+		return year;
+	}
+
+	public void setYear(String year) {
+		this.year = year;
+	}
+
+	public String[] getYears() {
+		return years;
+	}
+
+	public void setYears(String[] years) {
+		this.years = years;
 	}
 
 	

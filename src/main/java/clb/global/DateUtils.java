@@ -195,9 +195,6 @@ public class DateUtils
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(todayDate);
 		cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-		
-		System.out.println(convertDateToSimpleStringFormat(cal.getTime()));
-		
 		return cal.getTime();
 	}
 
@@ -260,6 +257,20 @@ public class DateUtils
 		cal.set(Calendar.HOUR_OF_DAY,0);
 		
 		return convertDateToSimpleStringFormat(cal.getTime());
+	}
+
+	public Integer getYearFromDate(Date todayDate) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(todayDate);
+		
+		return cal.get(Calendar.YEAR);
+	}
+
+	public Date setYearOfDate(Date date, int year) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.set(Calendar.YEAR, year);
+		return cal.getTime();
 	}
 
 }

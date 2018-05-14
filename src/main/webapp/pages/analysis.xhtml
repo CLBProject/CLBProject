@@ -18,12 +18,25 @@
 						<td width="175px" align="left" class="analysisDivClassMainCell"><h:outputLabel
 								value="Analysis Menu"></h:outputLabel>
 							<hr /></td>
-						<td align="right"><b><p:outputLabel value="Date:"
+						<td align="right"><b> <p:outputLabel value="Year:"
+									rendered="#{analysisBean.scaleGraphic == 'MONTH'}"
+									for="monthList"></p:outputLabel></b> <p:spacer width="5" /> <p:selectOneMenu
+								id="monthList"
+								rendered="#{analysisBean.scaleGraphic == 'MONTH'}"
+								widgetVar="monthList" value="#{analysisBean.year}">
+								<p:ajax event="change"
+									listener="#{analysisBean.updateYearValue}"
+									update=":analysisForm"></p:ajax>
+								<f:selectItems value="#{analysisBean.years}" var="year"
+									itemValue="#{year}" itemLabel="#{year}" />
+							</p:selectOneMenu> <b><p:outputLabel value="Date:"
+									rendered="#{analysisBean.scaleGraphic != 'MONTH'}"
 									for="scaleList"></p:outputLabel></b> <p:spacer width="5" /> <p:calendar
 								value="#{analysisBean.analysisDate}" label="Date:"
 								mindate="#{analysisBean.minDate}"
 								maxdate="#{analysisBean.todayDate}" pattern="dd-MM-yyyy"
-								styleClass="timeFrame">
+								styleClass="timeFrame"
+								rendered="#{analysisBean.scaleGraphic != 'MONTH'}">
 								<p:ajax event="dateSelect"
 									listener="#{analysisBean.analysisCalendarSelect}"
 									update=":analysisForm"></p:ajax>
@@ -140,23 +153,23 @@
 							</p:panel></td>
 						<td valign="top" align="center"><p:panel
 								styleClass="chartPanel">
-								<p:outputLabel styleClass="noRegClass"
-									value="Energy Consumption"></p:outputLabel>
-								<br/>
-								<p:outputLabel style="color:blue;font-size: 11px" value="Value / Time"></p:outputLabel>
+
 								<c:choose>
 									<c:when
 										test="#{analysisBean.analysisDayPojo.lineModel.series[0].data.size() > 0}">
+										<p:outputLabel styleClass="noRegClass"
+											value="Energy Consumption"></p:outputLabel>
+										<br />
+										<p:outputLabel style="color:blue;font-size: 11px"
+											value="Value / Time"></p:outputLabel>
 										<p:chart styleClass="analysisChartCSS" id="chartDayId"
 											responsive="true" widgetVar="chartDayId"
 											model="#{analysisBean.analysisDayPojo.lineModel}" type="line" />
 									</c:when>
 									<c:otherwise>
 										<div class="analysisChartCSS">
-											<br /> <br /> <br /> <br />
 											<p:outputLabel styleClass="noRegClass"
 												value="No Data to Display for this Date!"></p:outputLabel>
-											<br /> <br /> <br />
 										</div>
 									</c:otherwise>
 								</c:choose>

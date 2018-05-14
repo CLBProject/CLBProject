@@ -364,4 +364,10 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	public List<AnalyzerRegistryObject> getMonthRegistriesFromAnalyzer(String analyzerId, Date timeFrame) {
 		return clbDao.getMonthRegistriesFromAnalyzer( analyzerId, timeFrame );
 	}
+
+
+	@Override
+	public String[] getYearsAvailable() {
+		return clbDao.getYearsAvailable();
+	}
 }

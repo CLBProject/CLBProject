@@ -44,6 +44,8 @@ public interface ClbDao{
 	
 	Date getLowestAnalyzerRegistryDate();
 
+	String[] getYearsAvailable();
+
 
 
 }

@@ -22,4 +22,6 @@ public interface AnalyzerDataService {
 	public List<AnalyzerRegistryObject> getMonthRegistriesFromAnalyzer(String analyzerId, Date timeFrame);
 	
 	public Date getLowestAnalyzerRegistryDate();
+
+	public String[] getYearsAvailable();
 }

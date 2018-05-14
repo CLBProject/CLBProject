@@ -17,7 +17,7 @@ body {
 	left: 0;
 	bottom: 0;
 	width: 100%;
-	background-color: #CED8F6;
+	background-color: #EFEFFB;
 	color: #0A122A !important;
 	text-align: center;
 	font-size: 12px !important;
@@ -71,7 +71,7 @@ form {
 }
 
 .homeMainDivBannerClass {
-	background-color: #CED8F6 !important;
+	background-color: #EFEFFB !important;
 	color: #0A122A !important;
 	font-size: 12px;
 	font-weight: bold;
