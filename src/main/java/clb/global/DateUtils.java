@@ -213,7 +213,7 @@ public class DateUtils
 
 	public Date setMonthOfDate(Date date, int value) {
 		Calendar cal = Calendar.getInstance();
-		cal.setTime(date);
+		cal.setTime(getMonthFirstDayReseted(date));
 		cal.set(Calendar.MONTH, value);
 		return cal.getTime();
 		
@@ -292,8 +292,29 @@ public class DateUtils
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		
+		int dateMonth = cal.get(Calendar.MONTH);
+		
 		cal.set(Calendar.WEEK_OF_MONTH, value);
 		
+		if(dateMonth != cal.get(Calendar.MONTH)) {
+			cal.setTime(getMonthFirstDayReseted(date));
+		}
+		
 		return cal.getTime();
+	}
+
+	public boolean sameYearOfCurrent(Date analysisDate) {
+		Calendar otherDate = Calendar.getInstance();
+		otherDate.setTime(analysisDate);
+		
+		Calendar thisDate = Calendar.getInstance();
+		thisDate.setTime(new Date());
+		
+		return thisDate.get(Calendar.YEAR) == otherDate.get(Calendar.YEAR);
+	}
+	
+	public boolean dateIsBiggerThen(Date date1, Date date2) {
+		
+		return date1.compareTo(date2) > 0;
 	}
 }

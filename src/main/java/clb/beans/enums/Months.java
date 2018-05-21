@@ -44,11 +44,11 @@ public enum Months {
 		return null;
 	}
 
-	public static Months[] getMonthsLimited(int monthFromDate) {
+	public static Months[] getMonthsLimited(int monthFromDate, boolean sameYear) {
 		List<Months> months = new ArrayList<Months>();
 		
 		for(Months month: values()) {
-			if(month.getValue() <= monthFromDate) {
+			if(month.getValue() <= monthFromDate || !sameYear) {
 				months.add(month);
 			}
 		}
