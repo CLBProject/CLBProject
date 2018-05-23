@@ -303,7 +303,7 @@ public class DateUtils
 		return cal.getTime();
 	}
 
-	public boolean sameYearOfCurrent(Date analysisDate) {
+	public boolean isSameYearOfCurrent(Date analysisDate) {
 		Calendar otherDate = Calendar.getInstance();
 		otherDate.setTime(analysisDate);
 		
@@ -313,7 +313,7 @@ public class DateUtils
 		return thisDate.get(Calendar.YEAR) == otherDate.get(Calendar.YEAR);
 	}
 	
-	public boolean dateIsBiggerThen(Date date1, Date date2) {
+	public boolean isDateBiggerThen(Date date1, Date date2) {
 		
 		return date1.compareTo(date2) > 0;
 	}

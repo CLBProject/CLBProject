@@ -81,8 +81,7 @@ public class AnalysisBean implements Serializable{
 		hoursValues = Hours.getHoursLimited(DateUtils.getInstance().getHourFromDate(todayDate));
 		hour = Hours.getHourByValue(DateUtils.getInstance().getHourFromDate(todayDate));
 
-		monthsValues = Months.getMonthsLimited(DateUtils.getInstance().getMonthFromDate(todayDate),
-													DateUtils.getInstance().sameYearOfCurrent(todayDate));
+		monthsValues = Months.getMonthsLimited(DateUtils.getInstance().getMonthFromDate(todayDate));
 		month = Months.getMonthByValue(DateUtils.getInstance().getMonthFromDate(todayDate));
 
 		year = "" + DateUtils.getInstance().getYearFromDate(todayDate);
@@ -174,12 +173,20 @@ public class AnalysisBean implements Serializable{
 	}
 
 	public void updateYearValue() {
-		
-		 analysisDate = DateUtils.getInstance().setYearOfDate(this.analysisDate,Integer.parseInt(year));
-		
+
+		analysisDate = DateUtils.getInstance().setYearOfDate(this.analysisDate,Integer.parseInt(year));
+
 		//If year Date is bigger then is allowed
-		if(DateUtils.getInstance().dateIsBiggerThen(analysisDate, todayDate)) {
+		if(DateUtils.getInstance().isSameYearOfCurrent(analysisDate)) {
 			analysisDate = todayDate;
+			int monthDate = DateUtils.getInstance().getMonthFromDate(analysisDate);
+			monthsValues = Months.getMonthsLimited(monthDate);
+			month = Months.getMonthByValue(monthDate);
+		}
+		else {
+			int monthDate = DateUtils.getInstance().getMonthFromDate(analysisDate);
+			monthsValues = Months.values();
+			month = Months.getMonthByValue(monthDate);
 		}
 
 		List<AnalyzerRegistryObject> registries = null;
@@ -193,12 +200,7 @@ public class AnalysisBean implements Serializable{
 			break;
 		default:;
 		}
-		
-		int monthDate = DateUtils.getInstance().getMonthFromDate(analysisDate);
-		
-		monthsValues = Months.getMonthsLimited(monthDate, DateUtils.getInstance().sameYearOfCurrent(analysisDate));
-		month = Months.getMonthByValue(monthDate);
-		
+
 		analysisDayPojo.fillGraphicForData( registries, scaleGraphic );
 	}
 
