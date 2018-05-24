@@ -311,17 +311,17 @@ form {
 
 .ui-datepicker {
 	background: white !important;
-	font-size: 14px !important;
+	font-size: 12px !important;
 }
 
 .ui-selectonemenu{
        vertical-align:top !important;
-       font-size: 14px !important;
+       font-size: 12px !important;
 }
 
 .ui-selectonemenu-list-item{
 	   vertical-align:top !important;
-       font-size: 14px  !important;
+       font-size: 12px  !important;
 }
 
 .ui-button {
@@ -336,12 +336,12 @@ form {
 .ui-datepicker-header {
 	background: #0A122A !important;
 	color: #CED8F6 !important;
-	font-size: 14px !important;
+	font-size: 12px !important;
 }
 
 .hasDatePicker.ui-inputfield {
 	background: white !important;
-	font-size: 14px !important;
+	font-size: 12px !important;
 }
 
 .hasTimePicker.ui-inputfield {

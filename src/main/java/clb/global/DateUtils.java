@@ -312,4 +312,15 @@ public class DateUtils
 		
 		return date1.compareTo(date2) > 0;
 	}
+
+	public Date updateIfIsSundayForMonth(Date date) {
+		
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		
+		if(cal.get(Calendar.DAY_OF_WEEK) == 1)
+			return getDayReseted(date, true);
+		
+		return date;
+	}
 }

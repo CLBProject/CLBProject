@@ -168,6 +168,8 @@ public class AnalysisBean implements Serializable{
 			registries = analyzerDataService.getMonthRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
 			break;
 		case WEEK:
+			//If First Day Of Month is Sunday the Calendar just take into account as monday
+			analysisDate = DateUtils.getInstance().updateIfIsSundayForMonth(analysisDate);
 			registries = analyzerDataService.getWeekRegistriesFromAnalyzer(analyzerSelected.getId(), analysisDate);
 			break;
 		default:;
