@@ -156,7 +156,7 @@ public class DateUtils
 		Calendar c = Calendar.getInstance();
 		c.setTime(getWeekFirstDayReseted(timeFrame));
 
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < 6; i++) {
 			c.add(Calendar.DATE, 1);
 		}
 
@@ -289,17 +289,12 @@ public class DateUtils
 	}
 
 	public Date setWeekOfDate(Date date, int value) {
+
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
-		
-		int dateMonth = cal.get(Calendar.MONTH);
-		
 		cal.set(Calendar.WEEK_OF_MONTH, value);
-		
-		if(dateMonth != cal.get(Calendar.MONTH)) {
-			cal.setTime(getMonthFirstDayReseted(date));
-		}
-		
+		cal.setTime(getWeekFirstDayReseted(cal.getTime()));
+
 		return cal.getTime();
 	}
 

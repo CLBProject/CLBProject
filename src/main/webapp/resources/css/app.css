@@ -200,6 +200,12 @@ form {
 	font-family: Arial, Helvetica, sans-serif !important;
 }
 
+/* Change The Combos Backbround Color*/
+.ui-selectonemenu-list{
+	background-color: white !important;
+}
+
+/* Popups Title Text */
 .ui-dialog-title-dialog {
 	text-align: center;
 }
@@ -305,16 +311,17 @@ form {
 
 .ui-datepicker {
 	background: white !important;
-	font-size: 12px !important;
+	font-size: 14px !important;
 }
 
 .ui-selectonemenu{
-       vertical-align: middle;
-       font-size: 12px !important;
+       vertical-align:top !important;
+       font-size: 14px !important;
 }
 
 .ui-selectonemenu-list-item{
-       font-size: 12px !important;
+	   vertical-align:top !important;
+       font-size: 14px  !important;
 }
 
 .ui-button {
@@ -329,26 +336,16 @@ form {
 .ui-datepicker-header {
 	background: #0A122A !important;
 	color: #CED8F6 !important;
-}
-
-.ui-timepicker-title {
-	background: #0A122A !important;
-	color: #CED8F6 !important;
-	font-size: 12px !important;
-}
-
-.ui-timepicker-table.ui-state-default {
-	background: #0A122A !important;
-	color: #CED8F6 !important;
-	font-size: 12px !important;
+	font-size: 14px !important;
 }
 
 .hasDatePicker.ui-inputfield {
-	background: #CED8F6 !important;
+	background: white !important;
+	font-size: 14px !important;
 }
 
 .hasTimePicker.ui-inputfield {
-	background: #CED8F6 !important;
+	background: white !important;
 }
 
 .ui-selectonemenu {
@@ -356,7 +353,7 @@ form {
 }
 
 .ui-selectonemenu .ui-selectonemenu-label {
-	background: #CED8F6 !important;
+	background: white !important;
 	color: #0A122A !important;
 }
 
@@ -410,4 +407,15 @@ form {
 
 .meterPanelCss {
 	text-align: left;
+}
+
+.analysisLabels{
+	font-size:15px !important;
+	color: #0A122A !important;
+	vertical-align: middle !important;
+}
+
+.analysisViewDiv{
+	padding-top:10px !important;
+	padding-right:10px !important;
 }

@@ -77,7 +77,7 @@ public class AnalysisBean implements Serializable{
 
 		analysisTypes = AnalysisTypes.values();
 		scalesGraphic = ScaleGraphic.values();
-		scaleGraphic = ScaleGraphic.HOUR;
+		scaleGraphic = ScaleGraphic.DAY;
 		hoursValues = Hours.getHoursLimited(DateUtils.getInstance().getHourFromDate(todayDate));
 		hour = Hours.getHourByValue(DateUtils.getInstance().getHourFromDate(todayDate));
 
@@ -113,7 +113,7 @@ public class AnalysisBean implements Serializable{
 									analysisDayPojo = new QuickAnalysis( buildingSelected.getBuildingMeters());
 
 									analysisDayPojo.fillGraphicForData( 
-											analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate), scaleGraphic );
+											analyzerDataService.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate), scaleGraphic );
 
 									firstTime = true;
 								}
@@ -156,7 +156,11 @@ public class AnalysisBean implements Serializable{
 	}
 
 	public void updateMonthValue() {
+		
+		week = "1";
+		
 		analysisDate = DateUtils.getInstance().setMonthOfDate(this.analysisDate,month.getValue());
+		analysisDate = DateUtils.getInstance().getMonthFirstDayReseted(analysisDate);
 		List<AnalyzerRegistryObject> registries = null;
 
 		switch(scaleGraphic) {
@@ -175,6 +179,7 @@ public class AnalysisBean implements Serializable{
 	public void updateYearValue() {
 
 		analysisDate = DateUtils.getInstance().setYearOfDate(this.analysisDate,Integer.parseInt(year));
+		week = "1";
 
 		//If year Date is bigger then is allowed
 		if(DateUtils.getInstance().isSameYearOfCurrent(analysisDate)) {
@@ -225,7 +230,7 @@ public class AnalysisBean implements Serializable{
 			registries = analyzerDataService.getMonthRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
 			break;
 		default: 
-			registries = analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
+			registries = analyzerDataService.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
 			break;
 		}
 

@@ -11,34 +11,28 @@
 		<h:form id="bannerForm">
 			<table width="100%" class="homeMainDivBannerClass" cellpadding="5">
 				<tr>
-					<td width="1%"></td>
-					<td align="left" valign="middle"><p:outputLabel
-							styleClass="logoClass">LEnergy Logo</p:outputLabel></td>
-					<td align="center" width="105px"><p:graphicImage
+					<td align="left" valign="middle"></td>
+					<td align="right" valign="top"><p:spacer width="25" /> <p:graphicImage
 							value="#{request.contextPath}/../resources/images/dashboard.png"></p:graphicImage>
-						<p:spacer width="5" /> <p:commandLink value="Dashboard"
-							styleClass="menuLink" ajax="false" type="submit" 
-							action="#{redirectBean.redirectTo('clb.xhtml?faces-redirect=true')}"></p:commandLink></td>
-					<td align="center" width="100px"><p:graphicImage
-							value="#{request.contextPath}/../resources/images/graph.png" ></p:graphicImage>
-						<p:spacer width="5" /> <p:commandLink value="Analysis"
-							styleClass="menuLink" ajax="false" type="submit" 
-							action="#{redirectBean.redirectTo('analysis.xhtml?faces-redirect=true')}"></p:commandLink></td>
-					<td align="center" width="170px"><p:graphicImage
+						<p:spacer width="2" /> <p:commandLink value="Dashboard"
+							styleClass="menuLink" ajax="false" type="submit"
+							action="#{redirectBean.redirectTo('clb.xhtml?faces-redirect=true')}"></p:commandLink>
+						<p:spacer width="25" /> <p:graphicImage
+							value="#{request.contextPath}/../resources/images/graph.png"></p:graphicImage>
+						<p:spacer width="2" /> <p:commandLink value="Analysis"
+							styleClass="menuLink" ajax="false" type="submit"
+							action="#{redirectBean.redirectTo('analysis.xhtml?faces-redirect=true')}"></p:commandLink>
+						<p:spacer width="25" /> <p:graphicImage
 							value="#{request.contextPath}/../resources/images/maintenance.png"></p:graphicImage>
-						<p:spacer width="5" /> <p:commandLink value="Building Management"
-							styleClass="menuLink"></p:commandLink></td>
-					<td align="center" width="80px"><p:graphicImage
+						<p:spacer width="2" /> <p:commandLink value="Building Management"
+							styleClass="menuLink"></p:commandLink> <p:spacer width="25" /> <p:graphicImage
 							value="#{request.contextPath}/../resources/images/forum.png"></p:graphicImage>
-						<p:spacer width="5" /> <p:commandLink value="Forum"
-							styleClass="menuLink"></p:commandLink></td>
-					<td align="center" width="90px"><p:graphicImage
+						<p:spacer width="2" /> <p:commandLink value="Forum"
+							styleClass="menuLink"></p:commandLink> <p:spacer width="25" /> <p:graphicImage
 							value="#{request.contextPath}/../resources/images/account.png"></p:graphicImage>
-						<p:spacer width="5" /> <p:commandLink value="Account"
-							styleClass="menuLink"></p:commandLink></td>
-					<td width="20px">
-						<p:spacer width="1" height="25" styleClass="menuSeparator" />
-					</td>
+						<p:spacer width="2" /> <p:commandLink value="Account"
+							styleClass="menuLink"></p:commandLink> <p:spacer width="15" /> <p:spacer
+							width="1" height="23" styleClass="menuSeparator" /></td>
 					<td align="center" valign="top" width="110px"><h:panelGrid
 							columns="1" styleClass="homeMainDivBannerClass">
 							<p:column>

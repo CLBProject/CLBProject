@@ -281,6 +281,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 		if(DateUtils.getInstance().isThisWeek(timeFrame)) {
 			Date nextCurrentDay = DateUtils.getInstance().getDayReseted(new Date(), true);
 			Date previousDayDateLimit = DateUtils.getInstance().getWeekFirstDayReseted(timeFrame);
+			previousDayDateLimit = DateUtils.getInstance().getDayReseted(previousDayDateLimit, false);
 
 			//While is not today get from first day until today
 
@@ -303,6 +304,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 		else {
 			Date lastDay = DateUtils.getInstance().getWeekLastDay(timeFrame);
 			Date firstDay = DateUtils.getInstance().getWeekFirstDayReseted(timeFrame);
+			firstDay = DateUtils.getInstance().getDayReseted(firstDay, false);
 
 			//While is not last day of the week get from first day until last
 
