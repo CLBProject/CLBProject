@@ -376,6 +376,7 @@ form {
 .chartPanel.ui-widget-content {
 	background-color: #E0ECF8 !important;
 	width: 99.5% !important;
+	padding:5px !important;
 }
 
 .ui-datatable-selectable {

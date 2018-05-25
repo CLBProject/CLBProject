@@ -202,7 +202,8 @@ public class DateUtils
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(todayDate);
 		cal.set(Calendar.DAY_OF_MONTH, 1);
-		return cal.getTime();
+		
+		return updateIfIsSundayForMonth(cal.getTime());
 	}
 
 	public String prettyFormat(Date analysisDate) {
@@ -276,9 +277,15 @@ public class DateUtils
 	public int getNumberOfWeeksFromDate(Date date) {
 	
 		Calendar cal = Calendar.getInstance();
-		cal.setTime(getMonthLastDay(date));
+		Date currentDate = new Date();
+		Date lateDate = getMonthLastDay(date);
 		
-		return cal.get(Calendar.WEEK_OF_MONTH);
+		if(isDateBiggerThen(lateDate, currentDate)) {
+			cal.setTime(currentDate);
+		}
+		else cal.setTime(lateDate);
+
+		return cal.get(Calendar.WEEK_OF_MONTH) ;
 	}
 
 	public int getWeekFromDate(Date todayDate) {
@@ -290,6 +297,11 @@ public class DateUtils
 
 	public Date setWeekOfDate(Date date, int value) {
 
+		//First Week
+		if(value == 1) {
+			return getMonthFirstDayReseted(date);
+		}
+		
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		cal.set(Calendar.WEEK_OF_MONTH, value);

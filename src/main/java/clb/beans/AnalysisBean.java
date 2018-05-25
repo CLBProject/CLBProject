@@ -125,8 +125,8 @@ public class AnalysisBean implements Serializable{
 		}
 	}
 
-	private String[] generateWeeksFromMonth(Date todayDate2) {
-		int nrOfWeeks = DateUtils.getInstance().getNumberOfWeeksFromDate(todayDate);
+	private String[] generateWeeksFromMonth(Date date) {
+		int nrOfWeeks = DateUtils.getInstance().getNumberOfWeeksFromDate(date);
 
 		String[] weeksList = new String[nrOfWeeks];
 
@@ -168,9 +168,8 @@ public class AnalysisBean implements Serializable{
 			registries = analyzerDataService.getMonthRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
 			break;
 		case WEEK:
-			//If First Day Of Month is Sunday the Calendar just take into account as monday
-			analysisDate = DateUtils.getInstance().updateIfIsSundayForMonth(analysisDate);
 			registries = analyzerDataService.getWeekRegistriesFromAnalyzer(analyzerSelected.getId(), analysisDate);
+			weeks = generateWeeksFromMonth(analysisDate);
 			break;
 		default:;
 		}
@@ -204,6 +203,7 @@ public class AnalysisBean implements Serializable{
 			break;
 		case WEEK:
 			registries = analyzerDataService.getWeekRegistriesFromAnalyzer(analyzerSelected.getId(), analysisDate);
+			weeks = generateWeeksFromMonth(analysisDate);
 			break;
 		default:;
 		}
