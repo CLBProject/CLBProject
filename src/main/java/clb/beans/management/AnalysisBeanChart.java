@@ -1,4 +1,4 @@
-package clb.beans.pojos;
+package clb.beans.management;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +12,13 @@ import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
 
 import clb.beans.enums.ScaleGraphic;
+import clb.beans.pojos.AnalyzerRegistryGui;
+import clb.beans.pojos.AnalyzerRegistryReductionAlgorithm;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.BuildingMeterObject;
 import clb.global.BuildingMeterParameterValues;
 
-public class QuickAnalysis {
+public class AnalysisBeanChart {
 
 	private LineChartModel lineModel;
 
@@ -34,7 +36,7 @@ public class QuickAnalysis {
 
 	private List<AnalyzerRegistryGui> currentRegistries;
 
-	public QuickAnalysis(List<BuildingMeterObject> buildingMetersObject){
+	public AnalysisBeanChart(List<BuildingMeterObject> buildingMetersObject){
 
 		buildingMeterQuickAnalysis = new ArrayList<BuildingMeterParameterValues>();
 		buildingMeterQuickAnalysis.add(BuildingMeterParameterValues.POWER);
@@ -100,26 +102,29 @@ public class QuickAnalysis {
 	}
 
 	private void updateSeriesRegistriesValues(ScaleGraphic currentScale) {
-
+		
+		
+		BuildingMeterParameterValues buildingMeterSel = BuildingMeterParameterValues.valueOf(buildingMeterSelected);
+		
 		String minDate = null;
 		String maxDate = null;
 
-		Double minValue = Double.MAX_VALUE;
-		Double maxValue = Double.MIN_VALUE;
+		Integer minValue = Integer.MAX_VALUE;
+		Integer maxValue = Integer.MIN_VALUE;
 
 		for(AnalyzerRegistryGui registry: currentRegistries) {
-			Double asys = registry.getAsys();
-			Double hz = registry.getHz();
-			Double kwsys = registry.getKwsys();
-			Double pfsys = registry.getPfsys();
-			Double kvarsys = registry.getKvarsys();
-			Double kvasys = registry.getKvasys();
-			Double vlnsys = registry.getVlnsys();
-			Double vllsys = registry.getVllsys();
+			Integer asys = registry.getAsys().intValue();
+			Integer hz = registry.getHz().intValue();;
+			Integer kwsys = registry.getKwsys().intValue();;
+			Integer pfsys = registry.getPfsys().intValue();;
+			Integer kvarsys = registry.getKvarsys().intValue();;
+			Integer kvasys = registry.getKvasys().intValue();;
+			Integer vlnsys = registry.getVlnsys().intValue();;
+			Integer vllsys = registry.getVllsys().intValue();;
 			String currentTime = registry.getCurrentTimeString();
 
 			for(ChartSeries chartSerie: lineModel.getSeries()) {
-				switch(BuildingMeterParameterValues.valueOf(buildingMeterSelected)) {
+				switch(buildingMeterSel) {
 
 				case CURRENT:
 					chartSerie.set(currentTime,asys);
@@ -265,8 +270,10 @@ public class QuickAnalysis {
 		lineModel.getAxes().put(AxisType.X,xAxis);
 
 		Axis yAxis = lineModel.getAxis(AxisType.Y);
-		yAxis.setMax( maxValue + maxValue*0.10 );
-		yAxis.setMin( minValue - minValue*0.10 );
+		yAxis.setTickFormat("%d");
+		yAxis.setLabel(buildingMeterSel.getLabel() + " (" + buildingMeterSel.getUnit() + ")");
+		yAxis.setMax( new Double(maxValue + maxValue*0.10).intValue() );
+		yAxis.setMin( new Double(minValue - minValue*0.10).intValue() );
 	}
 
 

@@ -21,6 +21,8 @@ public class BuildingMeterEntity implements ClbEntity, Serializable {
 
 	private String name;
 	
+	private String unit;
+	
 	private String labelKey;
 
 	@DBRef
@@ -68,6 +70,16 @@ public class BuildingMeterEntity implements ClbEntity, Serializable {
     public void setLabelKey( String labelKey ) {
         this.labelKey = labelKey;
     }
+
+
+	public String getUnit() {
+		return unit;
+	}
+
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
 	
 	
 }

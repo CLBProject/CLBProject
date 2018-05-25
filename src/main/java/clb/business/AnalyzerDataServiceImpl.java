@@ -113,6 +113,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 			BuildingMeterObject buildingMeterObject = new BuildingMeterObject();
 			buildingMeterObject.setName( buildingMeterParameter.getLabel() );
 			buildingMeterObject.setLabelKey( buildingMeterParameter.name() );
+			buildingMeterObject.setUnit(buildingMeterParameter.getUnit());
 
 			clbDao.saveBuildingMeter( buildingMeterObject );
 

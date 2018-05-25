@@ -1,4 +1,4 @@
-package clb.beans;
+package clb.beans.management;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -16,7 +16,6 @@ import clb.beans.enums.AnalysisTypes;
 import clb.beans.enums.Hours;
 import clb.beans.enums.Months;
 import clb.beans.enums.ScaleGraphic;
-import clb.beans.pojos.QuickAnalysis;
 import clb.business.AnalyzerDataService;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
@@ -39,8 +38,10 @@ public class AnalysisBean implements Serializable{
 	private Date todayDate;
 	private Date minDate;
 	private Date analysisDate;
+	private Date previousAnalisysDate;
+	private Date nextAnalisysDate;
 	private String analysisDatePrettyFormat;
-	private QuickAnalysis analysisDayPojo;
+	private AnalysisBeanChart analysisDayPojo;
 
 	private List<BuildingObject> buildingsToSelect;
 	private BuildingObject tempBuildingSelected;
@@ -71,7 +72,9 @@ public class AnalysisBean implements Serializable{
 	@PostConstruct
 	public void init() {
 		todayDate = new Date();
-		analysisDate = new Date();
+
+		updateAnalysisDateAndNeighbours(new Date());
+
 		analysisDatePrettyFormat = DateUtils.getInstance().prettyFormat(analysisDate);
 		minDate = analyzerDataService.getLowestAnalyzerRegistryDate();
 
@@ -110,7 +113,7 @@ public class AnalysisBean implements Serializable{
 									analyzerSelected = aObj;
 									tempAnalyzerSelected = analyzerSelected;
 
-									analysisDayPojo = new QuickAnalysis( buildingSelected.getBuildingMeters());
+									analysisDayPojo = new AnalysisBeanChart( buildingSelected.getBuildingMeters());
 
 									analysisDayPojo.fillGraphicForData( 
 											analyzerDataService.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate), scaleGraphic );
@@ -123,18 +126,6 @@ public class AnalysisBean implements Serializable{
 				}
 			}
 		}
-	}
-
-	private String[] generateWeeksFromMonth(Date date) {
-		int nrOfWeeks = DateUtils.getInstance().getNumberOfWeeksFromDate(date);
-
-		String[] weeksList = new String[nrOfWeeks];
-
-		for(int i=0;i<nrOfWeeks;i++) {
-			weeksList[i] = "" + (i+1);
-		}
-
-		return weeksList;
 	}
 
 	public void selectBuilding() {
@@ -156,9 +147,9 @@ public class AnalysisBean implements Serializable{
 	}
 
 	public void updateMonthValue() {
-		
+
 		week = "1";
-		
+
 		analysisDate = DateUtils.getInstance().setMonthOfDate(this.analysisDate,month.getValue());
 		analysisDate = DateUtils.getInstance().getMonthFirstDayReseted(analysisDate);
 		List<AnalyzerRegistryObject> registries = null;
@@ -239,6 +230,12 @@ public class AnalysisBean implements Serializable{
 		analysisDayPojo.fillGraphicForData( registries, scaleGraphic );
 	}
 
+
+
+	public void updateMeterSelection() {
+		analysisDayPojo.changeSerie(scaleGraphic);
+	}
+
 	private void updateHoursCombo() {
 		if(DateUtils.getInstance().isToday(analysisDate)) {
 			hoursValues = Hours.getHoursLimited(DateUtils.getInstance().getHourFromDate(new Date()));
@@ -246,10 +243,25 @@ public class AnalysisBean implements Serializable{
 		else hoursValues = Hours.values();
 	}
 
-	public void updateMeterSelection() {
-		analysisDayPojo.changeSerie(scaleGraphic);
+
+	private void updateAnalysisDateAndNeighbours(Date dateToSet) {
+		analysisDate = dateToSet;
+		previousAnalisysDate = DateUtils.getInstance().getDay(analysisDate, false);
+		nextAnalisysDate = DateUtils.getInstance().getDay(analysisDate, true);
 	}
 
+	private String[] generateWeeksFromMonth(Date date) {
+		int nrOfWeeks = DateUtils.getInstance().getNumberOfWeeksFromDate(date);
+
+		String[] weeksList = new String[nrOfWeeks];
+
+		for(int i=0;i<nrOfWeeks;i++) {
+			weeksList[i] = "" + (i+1);
+		}
+
+		return weeksList;
+	}
+	
 	public Date getAnalysisDate() {
 		return analysisDate;
 	}
@@ -259,11 +271,11 @@ public class AnalysisBean implements Serializable{
 		this.setAnalysisDatePrettyFormat(DateUtils.getInstance().prettyFormat(analysisDate));
 	}
 
-	public QuickAnalysis getAnalysisDayPojo() {
+	public AnalysisBeanChart getAnalysisDayPojo() {
 		return analysisDayPojo;
 	}
 
-	public void setAnalysisDayPojo( QuickAnalysis analysisDayPojo ) {
+	public void setAnalysisDayPojo( AnalysisBeanChart analysisDayPojo ) {
 		this.analysisDayPojo = analysisDayPojo;
 	}
 
@@ -449,6 +461,22 @@ public class AnalysisBean implements Serializable{
 
 	public void setWeeks(String[] weeks) {
 		this.weeks = weeks;
+	}
+
+	public Date getPreviousAnalisysDate() {
+		return previousAnalisysDate;
+	}
+
+	public void setPreviousAnalisysDate(Date previousAnalisysDate) {
+		this.previousAnalisysDate = previousAnalisysDate;
+	}
+
+	public Date getNextAnalisysDate() {
+		return nextAnalisysDate;
+	}
+
+	public void setNextAnalisysDate(Date nextAnalisysDate) {
+		this.nextAnalisysDate = nextAnalisysDate;
 	}
 
 

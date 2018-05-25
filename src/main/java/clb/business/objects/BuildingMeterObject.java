@@ -13,6 +13,8 @@ public class BuildingMeterObject
     private String name;
     
     private String labelKey;
+    
+    private String unit;
 
     private List<BuildingMeterObject> buildingMeterParameters;
     
@@ -23,6 +25,7 @@ public class BuildingMeterObject
     public BuildingMeterObject( BuildingMeterEntity buildingMeterEntity ) {
         this.buildingMeterId = buildingMeterEntity.getBuildingMeterId();
         this.name = buildingMeterEntity.getName();
+        this.unit = buildingMeterEntity.getUnit();
         this.labelKey = buildingMeterEntity.getLabelKey();
         this.buildingMeterParameters = buildingMeterEntity.getBuildingMeterParameters() != null ?
                 buildingMeterEntity.getBuildingMeterParameters().stream().map(BuildingMeterObject::new).collect( Collectors.toList()) : null;
@@ -33,6 +36,7 @@ public class BuildingMeterObject
         buildingMeterEntity.setBuildingMeterId( this.buildingMeterId );
         buildingMeterEntity.setName( this.name );
         buildingMeterEntity.setLabelKey( this.labelKey );
+        buildingMeterEntity.setUnit( this.unit );
         buildingMeterEntity.setBuildingMeterParameters( this.buildingMeterParameters != null ?
                 this.buildingMeterParameters.stream().map(BuildingMeterObject::toEntity).collect(Collectors.toList()) : null);
         
@@ -78,6 +82,14 @@ public class BuildingMeterObject
     public void setLabelKey( String labelKey ) {
         this.labelKey = labelKey;
     }
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
     
     
     

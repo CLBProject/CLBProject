@@ -1,4 +1,4 @@
-package clb.beans;
+package clb.beans.management;
 
 import java.io.IOException;
 

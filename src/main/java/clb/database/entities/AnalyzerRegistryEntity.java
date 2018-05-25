@@ -199,20 +199,28 @@ public class AnalyzerRegistryEntity implements ClbEntity, Serializable {
 
     private double vardmd;
 
+    //Tension Betwween 1 & 2
     private double vl1l2;
-
+    
+    //Tension Phase 1
     private double vl1n;
 
+    //Tension Between 2 & 3
     private double vl2l3;
 
+    //Tension Phase 2
     private double vl2n;
 
+    //Tension Between 1 & 3
     private double vl3l1;
 
+    //Tension Phase 3
     private double vl3n;
 
+    //Global Tension Between Phases
     private double vllsys;
 
+    //Global System Tension
     private double vlnsys;
 
     private double wdmd;

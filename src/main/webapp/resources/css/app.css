@@ -420,3 +420,9 @@ form {
 	padding-top:10px !important;
 	padding-right:10px !important;
 }
+
+.timeAnalysis{
+	vertical-align: middle !important;
+	color: #0A122A !important;	
+	font-size: 12px !important;
+}
