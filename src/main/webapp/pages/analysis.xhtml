@@ -259,7 +259,10 @@
 										<p:outputLabel styleClass="timeAnalysis" value="Time Analysis" for="allowTimeComp"></p:outputLabel>
 										<p:spacer width="5"/>
 										<p:selectBooleanCheckbox widgetVar="allowTimeComp" id="allowTimeComp" 
-													label="Time Analysis"></p:selectBooleanCheckbox>
+													label="Time Analysis" value="#{analysisBean.analysisDayPojo.nextAndPreviousSelected}">
+													
+											<p:ajax update="@form" listener="#{analysisBean.updatePreviousAndNextSeries}" />
+										</p:selectBooleanCheckbox>
 									</c:when>
 									<c:otherwise>
 										<div>

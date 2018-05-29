@@ -236,6 +236,47 @@ public class AnalysisBean implements Serializable{
 		analysisDayPojo.changeSerie(scaleGraphic);
 	}
 
+	public void updatePreviousAndNextSeries() {
+		
+		List<AnalyzerRegistryObject> previousSeriesRegistries = new ArrayList<AnalyzerRegistryObject>();
+		List<AnalyzerRegistryObject> nextSeriesRegistries = new ArrayList<AnalyzerRegistryObject>();
+		
+		switch(scaleGraphic) {
+		case HOUR:
+			previousSeriesRegistries = analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), 
+					DateUtils.getInstance().getHourReseted(analysisDate, false));
+			nextSeriesRegistries = analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), 
+					DateUtils.getInstance().getHourReseted(analysisDate, true));
+			break;
+		case DAY:
+			previousSeriesRegistries = analyzerDataService.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), 
+					DateUtils.getInstance().getDayReseted(analysisDate, false));
+			nextSeriesRegistries = analyzerDataService.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), 
+					DateUtils.getInstance().getDayReseted(analysisDate, true));
+			break;
+		case WEEK:
+			previousSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerSelected.getId(), 
+					DateUtils.getInstance().getWeekReseted(analysisDate, false));
+			nextSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerSelected.getId(), 
+					DateUtils.getInstance().getWeekReseted(analysisDate, true));
+			break;
+		case MONTH:
+			previousSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerSelected.getId(), 
+					DateUtils.getInstance().getMonthReseted(analysisDate, false));
+			nextSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerSelected.getId(), 
+					DateUtils.getInstance().getMonthReseted(analysisDate, true));
+			break;
+		default: 
+			previousSeriesRegistries = analyzerDataService.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), 
+					DateUtils.getInstance().getDayReseted(analysisDate, false));
+			nextSeriesRegistries = analyzerDataService.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), 
+					DateUtils.getInstance().getDayReseted(analysisDate, true));
+			break;
+		}
+		
+		analysisDayPojo.addNextAndPreviousSeriesRegistries(scaleGraphic,previousSeriesRegistries,nextSeriesRegistries);
+	}
+	
 	private void updateHoursCombo() {
 		if(DateUtils.getInstance().isToday(analysisDate)) {
 			hoursValues = Hours.getHoursLimited(DateUtils.getInstance().getHourFromDate(new Date()));

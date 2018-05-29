@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
-import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.DateAxis;
 import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
@@ -34,7 +33,15 @@ public class AnalysisBeanChart {
 	private String buildingMeterSelected;
 	private List<BuildingMeterParameterValues> buildingMeterQuickAnalysis;
 
+	private LineChartSeries currentSerie;
+	private LineChartSeries previousSerie;
+	private LineChartSeries nextSerie;
+	
+	private List<AnalyzerRegistryGui> previousRegistries;
 	private List<AnalyzerRegistryGui> currentRegistries;
+	private List<AnalyzerRegistryGui> nextRegistries;
+	
+	private Boolean nextAndPreviousSelected;
 
 	public AnalysisBeanChart(List<BuildingMeterObject> buildingMetersObject){
 
@@ -59,13 +66,18 @@ public class AnalysisBeanChart {
 		lineModel.setShowDatatip( false );
 
 		//Default
-		final LineChartSeries serie = new LineChartSeries(BuildingMeterParameterValues.POWER.getLabel());
-		serie.setShowMarker( false );
-		lineModel.addSeries( serie );
+		currentSerie = new LineChartSeries(BuildingMeterParameterValues.POWER.getLabel());
+		previousSerie = new LineChartSeries(BuildingMeterParameterValues.POWER.getLabel());
+		nextSerie = new LineChartSeries(BuildingMeterParameterValues.POWER.getLabel());
+		
+		currentSerie.setShowMarker( false );
+		lineModel.addSeries( currentSerie );
 
 		buildingMeterSelected = BuildingMeterParameterValues.POWER.name();
-
-		currentRegistries = new ArrayList<AnalyzerRegistryGui>();
+		
+		this.currentRegistries = new ArrayList<AnalyzerRegistryGui>();
+		this.previousRegistries = new ArrayList<AnalyzerRegistryGui>();
+		this.nextRegistries = new ArrayList<AnalyzerRegistryGui>();
 	}
 
 
@@ -77,35 +89,66 @@ public class AnalysisBeanChart {
 		lineModel.getSeries().stream().forEach( serie -> serie.getData().clear() );
 
 		if(registries.size() > 0) {
-			updateSeriesRegistriesValues(currentScale);
+			updateSeriesRegistriesValues(currentScale,currentSerie,currentRegistries);
 		}
 	}
 
+	public void addNextAndPreviousSeriesRegistries(ScaleGraphic currentScale, List<AnalyzerRegistryObject> previousSeriesRegistries,
+			List<AnalyzerRegistryObject> nextSeriesRegistries) {
+		
+		previousRegistries =
+				AnalyzerRegistryReductionAlgorithm.getInstance().reduceRegistries(previousSeriesRegistries, currentScale);
+		
+		nextRegistries =  
+				AnalyzerRegistryReductionAlgorithm.getInstance().reduceRegistries(nextSeriesRegistries, currentScale);
+		
+		
+		
+		updateSeriesRegistriesValues(currentScale,previousSerie,previousRegistries);
+		updateSeriesRegistriesValues(currentScale,nextSerie,nextRegistries);
+	}
+	
 	/**
 	 * Changes The Serie to add or remove in the Graphic
 	 * @param serieToChange
 	 */
 	public void changeSerie(ScaleGraphic currentScale) {
 
-		Map<Object, Number> dataSerie = lineModel.getSeries().get(0).getData();
-
+		Map<Object, Number> dataSerie = currentSerie.getData();
+		Map<Object, Number> dataPrevSerie = previousSerie != null ? previousSerie.getData() : null;
+		Map<Object, Number> dataNextSerie = nextSerie != null ? nextSerie.getData() : null;
+		
 		lineModel.clear();
 
 		BuildingMeterParameterValues buildingMeterParamValue = BuildingMeterParameterValues.valueOf(buildingMeterSelected);
 
-		final LineChartSeries serie = new LineChartSeries(buildingMeterParamValue.getLabel());
-		serie.setShowMarker( false );
-		serie.setData(dataSerie);
-		lineModel.addSeries( serie );
+		currentSerie = new LineChartSeries(buildingMeterParamValue.getLabel());
+		currentSerie.setShowMarker( false );
+		currentSerie.setData(dataSerie);
+		lineModel.addSeries( currentSerie );
+		
+		//If previous and next are selected
+		if(nextAndPreviousSelected) {
+			
+			previousSerie = new LineChartSeries(buildingMeterParamValue.getLabel());
+			nextSerie = new LineChartSeries(buildingMeterParamValue.getLabel());
+			
+			previousSerie.setData(dataPrevSerie);
+			nextSerie.setData(dataNextSerie);
+			
+			lineModel.addSeries( previousSerie );
+			lineModel.addSeries( nextSerie );
+		}
 
-		updateSeriesRegistriesValues(currentScale);
+		updateSeriesRegistriesValues(currentScale,currentSerie,this.currentRegistries);
 	}
 
-	private void updateSeriesRegistriesValues(ScaleGraphic currentScale) {
-		
-		
+	private void updateSeriesRegistriesValues(ScaleGraphic currentScale, LineChartSeries chartSerie, 
+			List<AnalyzerRegistryGui> currentRegistries) {
+
+
 		BuildingMeterParameterValues buildingMeterSel = BuildingMeterParameterValues.valueOf(buildingMeterSelected);
-		
+
 		String minDate = null;
 		String maxDate = null;
 
@@ -123,100 +166,98 @@ public class AnalysisBeanChart {
 			Integer vllsys = registry.getVllsys().intValue();;
 			String currentTime = registry.getCurrentTimeString();
 
-			for(ChartSeries chartSerie: lineModel.getSeries()) {
-				switch(buildingMeterSel) {
+			switch(buildingMeterSel) {
 
-				case CURRENT:
-					chartSerie.set(currentTime,asys);
+			case CURRENT:
+				chartSerie.set(currentTime,asys);
 
-					if (minValue > asys) {
-						minValue = asys;
-					}
-					if (maxValue < asys) {
-						maxValue = asys;
-					}
-
-					break;
-				case FREQUENCY:
-					chartSerie.set(currentTime,hz);
-
-					if (minValue > hz) {
-						minValue = hz;
-					}
-					if (maxValue < hz) {
-						maxValue = hz;
-					}
-
-					break;
-				case POWER:
-					chartSerie.set(currentTime,kwsys);
-
-					if (minValue > kwsys) {
-						minValue = kwsys;
-					}
-					if (maxValue < kwsys) {
-						maxValue = kwsys;
-					}
-
-					break;
-				case POWER_FACTOR:
-					chartSerie.set(currentTime,pfsys);
-
-					if (minValue > pfsys) {
-						minValue = pfsys;
-					}
-					if (maxValue < pfsys) {
-						maxValue = pfsys;
-					}
-
-					break;
-				case REACTIVE_POWER:
-					chartSerie.set(currentTime,kvarsys);
-
-					if (minValue > kvarsys) {
-						minValue = kvarsys;
-					}
-					if (maxValue < kvarsys) {
-						maxValue = kvarsys;
-					}
-
-					break;
-				case VOLT_AMPERE:
-					chartSerie.set(currentTime,kvasys);
-
-					if (minValue > kvasys) {
-						minValue = kvasys;
-					}
-					if (maxValue < kvasys) {
-						maxValue = kvasys;
-					}
-
-					break;
-				case VOLTAGE:
-					chartSerie.set(currentTime,vlnsys);
-
-					if (minValue > vlnsys) {
-						minValue = vlnsys;
-					}
-					if (maxValue < vlnsys) {
-						maxValue = vlnsys;
-					}
-					break;
-				case VOLTAGE_BETWEEN_PHASES:
-					chartSerie.set(currentTime,vllsys);
-
-					if (minValue > vllsys) {
-						minValue = vllsys;
-					}
-					if (maxValue < vllsys) {
-						maxValue = vllsys;
-					}
-
-					break;
-				default:
-					chartSerie.set(currentTime,kwsys);
-					break;
+				if (minValue > asys) {
+					minValue = asys;
 				}
+				if (maxValue < asys) {
+					maxValue = asys;
+				}
+
+				break;
+			case FREQUENCY:
+				chartSerie.set(currentTime,hz);
+
+				if (minValue > hz) {
+					minValue = hz;
+				}
+				if (maxValue < hz) {
+					maxValue = hz;
+				}
+
+				break;
+			case POWER:
+				chartSerie.set(currentTime,kwsys);
+
+				if (minValue > kwsys) {
+					minValue = kwsys;
+				}
+				if (maxValue < kwsys) {
+					maxValue = kwsys;
+				}
+
+				break;
+			case POWER_FACTOR:
+				chartSerie.set(currentTime,pfsys);
+
+				if (minValue > pfsys) {
+					minValue = pfsys;
+				}
+				if (maxValue < pfsys) {
+					maxValue = pfsys;
+				}
+
+				break;
+			case REACTIVE_POWER:
+				chartSerie.set(currentTime,kvarsys);
+
+				if (minValue > kvarsys) {
+					minValue = kvarsys;
+				}
+				if (maxValue < kvarsys) {
+					maxValue = kvarsys;
+				}
+
+				break;
+			case VOLT_AMPERE:
+				chartSerie.set(currentTime,kvasys);
+
+				if (minValue > kvasys) {
+					minValue = kvasys;
+				}
+				if (maxValue < kvasys) {
+					maxValue = kvasys;
+				}
+
+				break;
+			case VOLTAGE:
+				chartSerie.set(currentTime,vlnsys);
+
+				if (minValue > vlnsys) {
+					minValue = vlnsys;
+				}
+				if (maxValue < vlnsys) {
+					maxValue = vlnsys;
+				}
+				break;
+			case VOLTAGE_BETWEEN_PHASES:
+				chartSerie.set(currentTime,vllsys);
+
+				if (minValue > vllsys) {
+					minValue = vllsys;
+				}
+				if (maxValue < vllsys) {
+					maxValue = vllsys;
+				}
+
+				break;
+			default:
+				chartSerie.set(currentTime,kwsys);
+				break;
 			}
 
 			//Get Max Date for Graphic
@@ -301,5 +342,16 @@ public class AnalysisBeanChart {
 		this.buildingMeterQuickAnalysis = buildingMeterQuickAnalysis;
 	}
 
+
+	public Boolean getNextAndPreviousSelected() {
+		return nextAndPreviousSelected;
+	}
+
+
+	public void setNextAndPreviousSelected(Boolean nextAndPreviousSelected) {
+		this.nextAndPreviousSelected = nextAndPreviousSelected;
+	}
+
+	
 
 }
