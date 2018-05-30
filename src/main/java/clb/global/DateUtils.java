@@ -68,11 +68,11 @@ public class DateUtils
 
 		return cal.get(Calendar.MONTH);
 	}
-
-	public Date setHourForDate(Date analysisDate, int value) {
+	
+	public Date setDayForDate(Date analysisDate, int value) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(analysisDate);
-		cal.set(Calendar.HOUR_OF_DAY,value);
+		cal.set(Calendar.DAY_OF_MONTH,value);
 
 		return cal.getTime();
 
