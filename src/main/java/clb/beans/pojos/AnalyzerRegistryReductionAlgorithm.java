@@ -1,6 +1,8 @@
 package clb.beans.pojos;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +32,7 @@ public class AnalyzerRegistryReductionAlgorithm {
 		//Organize Registries and insert them on RegistriesReduced 
 		for(AnalyzerRegistryObject registry: registries) {
 			String dateTransformedToHoursAverage = null;
-			
+
 			switch(scale) {
 			case HOUR:
 			case DAY:
@@ -65,7 +67,7 @@ public class AnalyzerRegistryReductionAlgorithm {
 
 		return registryReduced;
 	}
-	
+
 
 	private AnalyzerRegistryGui averageAnalyzerRegistryObject(List<AnalyzerRegistryObject> registries, String dateString) {
 
@@ -88,7 +90,7 @@ public class AnalyzerRegistryReductionAlgorithm {
 			vlnsys += registry.getVlnsys();
 			vllsys += registry.getVllsys();
 		}
-		
+
 		Double asysAverage = asys/registries.size();
 		Double hzAverage = hz/registries.size();
 		Double kwsysAverage = kwsys/registries.size();
@@ -100,7 +102,32 @@ public class AnalyzerRegistryReductionAlgorithm {
 
 		AnalyzerRegistryGui registryGui = new AnalyzerRegistryGui(asysAverage,hzAverage,kwsysAverage,pfsysAverage,
 				kvarsysAverage,kvasysAverage,vlnsysAverage,vllsysAverage, dateString);
-		
+
 		return registryGui;
+	}
+
+	public void updateRegistriesTimeToMatchDate(Date currentDate,
+			List<AnalyzerRegistryGui> previousRegistries, ScaleGraphic currentScale) {
+
+		previousRegistries.stream().forEach(regGuig -> {
+			try {
+				switch(currentScale) {
+				case HOUR:
+					regGuig.setCurrentTimeString(DateUtils.getInstance().updateDateToTimeHour(regGuig.getCurrentTimeString(),currentDate));
+					break;
+				case DAY:
+					regGuig.setCurrentTimeString(DateUtils.getInstance().updateDateToTimeDay(regGuig.getCurrentTimeString(),currentDate));
+					break;
+				case WEEK:
+					regGuig.setCurrentTimeString(DateUtils.getInstance().updateDateToTimeWeek(regGuig.getCurrentTimeString(),currentDate));
+					break;
+				case MONTH:
+					regGuig.setCurrentTimeString(DateUtils.getInstance().updateDateToTimeMonth(regGuig.getCurrentTimeString(),currentDate));
+					break;
+				}
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		});
 	}
 }

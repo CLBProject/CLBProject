@@ -69,11 +69,15 @@ public class AnalysisBean implements Serializable{
 	private String week;
 	private String[] weeks;
 
+	private Boolean showTimeAnalysis;
+
 	@PostConstruct
 	public void init() {
 		todayDate = new Date();
 
-		updateAnalysisDateAndNeighbours(new Date());
+		analysisDate = new Date();
+		previousAnalisysDate = DateUtils.getInstance().getDay(analysisDate, false);
+		nextAnalisysDate = DateUtils.getInstance().getDay(analysisDate, true);
 
 		analysisDatePrettyFormat = DateUtils.getInstance().prettyFormat(analysisDate);
 		minDate = analyzerDataService.getLowestAnalyzerRegistryDate();
@@ -92,6 +96,8 @@ public class AnalysisBean implements Serializable{
 
 		week = "" + DateUtils.getInstance().getWeekFromDate(todayDate);
 		weeks = generateWeeksFromMonth(todayDate);
+
+		showTimeAnalysis = false;
 
 		//Set Initial Selected Building, DataLogger and Analyzer
 		if(clbHomeLoginBean.getUserLoginPojo().getCurrentUser().getBuildings() != null && 
@@ -115,8 +121,7 @@ public class AnalysisBean implements Serializable{
 
 									analysisDayPojo = new AnalysisBeanChart( buildingSelected.getBuildingMeters());
 
-									analysisDayPojo.fillGraphicForData( 
-											analyzerDataService.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate), scaleGraphic );
+									fillGraphicData(analyzerDataService.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate) );
 
 									firstTime = true;
 								}
@@ -143,7 +148,7 @@ public class AnalysisBean implements Serializable{
 	public void updateWeekValue() {
 		analysisDate = DateUtils.getInstance().setWeekOfDate(this.analysisDate,Integer.parseInt(week));
 		List<AnalyzerRegistryObject> registries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
-		analysisDayPojo.fillGraphicForData( registries, scaleGraphic );
+		fillGraphicData( registries );
 	}
 
 	public void updateMonthValue() {
@@ -165,7 +170,41 @@ public class AnalysisBean implements Serializable{
 		default:;
 		}
 
+		fillGraphicData(registries);
+	}
+
+	private void fillGraphicData(List<AnalyzerRegistryObject> registries) {
+
+		switch(scaleGraphic) {
+		case HOUR:
+			if(DateUtils.getInstance().isThisHour(analysisDate)) {
+				this.showTimeAnalysis = false;
+			}
+			else this.showTimeAnalysis = true;
+			break;
+		case DAY:
+			if(DateUtils.getInstance().isToday(analysisDate)) {
+				this.showTimeAnalysis = false;
+			}
+			else this.showTimeAnalysis = true;
+			break;
+		case WEEK:
+			if(DateUtils.getInstance().isThisWeek(analysisDate)) {
+				this.showTimeAnalysis = false;
+			}
+			else this.showTimeAnalysis = true;
+			break;
+		case MONTH:
+			if(DateUtils.getInstance().isThisMonth(analysisDate)) {
+				this.showTimeAnalysis = false;
+			}
+			else this.showTimeAnalysis = true;
+			break;
+		}
+
 		analysisDayPojo.fillGraphicForData( registries, scaleGraphic );
+
+		updatePreviousAndNextSeries();
 	}
 
 	public void updateYearValue() {
@@ -199,7 +238,7 @@ public class AnalysisBean implements Serializable{
 		default:;
 		}
 
-		analysisDayPojo.fillGraphicForData( registries, scaleGraphic );
+		fillGraphicData(registries);
 	}
 
 	public void updateScaleValues() {
@@ -226,7 +265,7 @@ public class AnalysisBean implements Serializable{
 			break;
 		}
 
-		analysisDayPojo.fillGraphicForData( registries, scaleGraphic );
+		fillGraphicData( registries );
 	}
 
 
@@ -236,72 +275,73 @@ public class AnalysisBean implements Serializable{
 
 	public void updatePreviousAndNextSeries() {
 
-		if(!analysisDayPojo.getNextAndPreviousSelected()) {
+		if(showTimeAnalysis) {
+
 			analysisDayPojo.removeNextAndPreviousSeriesRegistries();
-		}
 
-		else {
-			List<AnalyzerRegistryObject> previousSeriesRegistries = new ArrayList<AnalyzerRegistryObject>();
-			List<AnalyzerRegistryObject> nextSeriesRegistries = new ArrayList<AnalyzerRegistryObject>();
+			if(analysisDayPojo.getNextAndPreviousSelected()) {
+				List<AnalyzerRegistryObject> previousSeriesRegistries = new ArrayList<AnalyzerRegistryObject>();
+				List<AnalyzerRegistryObject> nextSeriesRegistries = new ArrayList<AnalyzerRegistryObject>();
 
-			String prevDateLabel = "";
-			String nextDateLabel = "";
+				String prevDateLabel = "";
+				String nextDateLabel = "";
 
-			switch(scaleGraphic) {
-			case HOUR:
+				switch(scaleGraphic) {
+				case HOUR:
 
-				Date previousHour = DateUtils.getInstance().getHourReseted(analysisDate, false);
-				Date nextHour = DateUtils.getInstance().getHourReseted(analysisDate, true);
+					Date previousHour = DateUtils.getInstance().getHourReseted(analysisDate, false);
+					Date nextHour = DateUtils.getInstance().getHourReseted(analysisDate, true);
 
-				previousSeriesRegistries = analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(),previousHour);
-				nextSeriesRegistries = analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(),nextHour);
+					previousSeriesRegistries = analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(),previousHour);
+					nextSeriesRegistries = analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(),nextHour);
 
-				prevDateLabel = DateUtils.getInstance().prettyFormat(previousHour);
-				nextDateLabel = DateUtils.getInstance().prettyFormat(nextHour);
+					prevDateLabel = DateUtils.getInstance().prettyFormat(previousHour);
+					nextDateLabel = DateUtils.getInstance().prettyFormat(nextHour);
 
-				break;
-			case DAY:
+					break;
+				case DAY:
 
-				Date previousDay = DateUtils.getInstance().getDayReseted(analysisDate, false);
-				Date nextDay = DateUtils.getInstance().getDayReseted(analysisDate, true);
+					Date previousDay = DateUtils.getInstance().getDayReseted(analysisDate, false);
+					Date nextDay = DateUtils.getInstance().getDayReseted(analysisDate, true);
 
-				previousSeriesRegistries = analyzerDataService.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), previousDay);
-				nextSeriesRegistries = analyzerDataService.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), nextDay);
+					previousSeriesRegistries = analyzerDataService.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), previousDay);
+					nextSeriesRegistries = analyzerDataService.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), nextDay);
 
-				prevDateLabel = DateUtils.getInstance().prettyFormat(previousDay);
-				nextDateLabel = DateUtils.getInstance().prettyFormat(nextDay);
+					prevDateLabel = DateUtils.getInstance().prettyFormat(previousDay);
+					nextDateLabel = DateUtils.getInstance().prettyFormat(nextDay);
 
-				break;
-			case WEEK:
+					break;
+				case WEEK:
 
-				Date previousWeek = DateUtils.getInstance().getWeekReseted(analysisDate, false);
-				Date nextWeek = DateUtils.getInstance().getWeekReseted(analysisDate, true);
+					Date previousWeek = DateUtils.getInstance().getWeekReseted(analysisDate, false);
+					Date nextWeek = DateUtils.getInstance().getWeekReseted(analysisDate, true);
 
-				previousSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerSelected.getId(), previousWeek);
-				nextSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerSelected.getId(), nextWeek);
+					previousSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerSelected.getId(), previousWeek);
+					nextSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerSelected.getId(), nextWeek);
 
-				prevDateLabel = DateUtils.getInstance().prettyFormat(previousWeek);
-				nextDateLabel = DateUtils.getInstance().prettyFormat(nextWeek);
+					prevDateLabel = DateUtils.getInstance().prettyFormat(previousWeek);
+					nextDateLabel = DateUtils.getInstance().prettyFormat(nextWeek);
 
-				break;
-			case MONTH:
+					break;
+				case MONTH:
 
-				Date previousMonth = DateUtils.getInstance().getMonthReseted(analysisDate, false);
-				Date nextMonth = DateUtils.getInstance().getMonthReseted(analysisDate, true);
+					Date previousMonth = DateUtils.getInstance().getMonthReseted(analysisDate, false);
+					Date nextMonth = DateUtils.getInstance().getMonthReseted(analysisDate, true);
 
-				previousSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerSelected.getId(), previousMonth);
-				nextSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerSelected.getId(), nextMonth );
+					previousSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerSelected.getId(), previousMonth);
+					nextSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerSelected.getId(), nextMonth );
 
-				prevDateLabel = DateUtils.getInstance().prettyFormat(previousMonth);
-				nextDateLabel = DateUtils.getInstance().prettyFormat(nextMonth);
+					prevDateLabel = DateUtils.getInstance().prettyFormat(previousMonth);
+					nextDateLabel = DateUtils.getInstance().prettyFormat(nextMonth);
 
-				break;
-			default: 
-				break;
+					break;
+				default: 
+					break;
+				}
+
+				analysisDayPojo.addPreviousAndNextSeries(scaleGraphic,analysisDate,previousSeriesRegistries,nextSeriesRegistries, 
+						prevDateLabel, nextDateLabel);
 			}
-
-			analysisDayPojo.addPreviousAndNextSeries(scaleGraphic,previousSeriesRegistries,nextSeriesRegistries, 
-					prevDateLabel, nextDateLabel);
 		}
 	}
 
@@ -312,12 +352,6 @@ public class AnalysisBean implements Serializable{
 		else hoursValues = Hours.values();
 	}
 
-
-	private void updateAnalysisDateAndNeighbours(Date dateToSet) {
-		analysisDate = dateToSet;
-		previousAnalisysDate = DateUtils.getInstance().getDay(analysisDate, false);
-		nextAnalisysDate = DateUtils.getInstance().getDay(analysisDate, true);
-	}
 
 	private String[] generateWeeksFromMonth(Date date) {
 		int nrOfWeeks = DateUtils.getInstance().getNumberOfWeeksFromDate(date);
@@ -546,6 +580,14 @@ public class AnalysisBean implements Serializable{
 
 	public void setNextAnalisysDate(Date nextAnalisysDate) {
 		this.nextAnalisysDate = nextAnalisysDate;
+	}
+
+	public Boolean getShowTimeAnalysis() {
+		return showTimeAnalysis;
+	}
+
+	public void setShowTimeAnalysis(Boolean showTimeAnalysis) {
+		this.showTimeAnalysis = showTimeAnalysis;
 	}
 
 

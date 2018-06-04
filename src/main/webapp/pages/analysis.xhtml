@@ -256,9 +256,9 @@
 											model="#{analysisBean.analysisDayPojo.lineModel}" type="line" />
 										<p:spacer height="20"/>
 										<hr/>
-										<p:outputLabel styleClass="timeAnalysis" value="Time Analysis" for="allowTimeComp"></p:outputLabel>
-										<p:spacer width="5"/>
-										<p:selectBooleanCheckbox widgetVar="allowTimeComp" id="allowTimeComp" 
+										<p:outputLabel rendered="#{analysisBean.showTimeAnalysis}" styleClass="timeAnalysis" value="Time Analysis: " for="allowTimeComp"></p:outputLabel>
+										<p:spacer rendered="#{analysisBean.showTimeAnalysis}" width="5"/>
+										<p:selectBooleanCheckbox widgetVar="allowTimeComp" id="allowTimeComp" rendered="#{analysisBean.showTimeAnalysis}"
 													label="Time Analysis" value="#{analysisBean.analysisDayPojo.nextAndPreviousSelected}">
 													
 											<p:ajax update="@form" listener="#{analysisBean.updatePreviousAndNextSeries}" />

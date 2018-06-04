@@ -1,6 +1,7 @@
 package clb.beans.management;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -69,6 +70,8 @@ public class AnalysisBeanChart {
 
 		//Default
 		currentSerie = new LineChartSeries(BuildingMeterParameterValues.POWER.getLabel());
+		previousSerie = new LineChartSeries(BuildingMeterParameterValues.POWER.getLabel());
+		nextSerie = new LineChartSeries(BuildingMeterParameterValues.POWER.getLabel());
 
 		currentSerie.setShowMarker( false );
 		lineModel.addSeries( currentSerie );
@@ -79,6 +82,8 @@ public class AnalysisBeanChart {
 		this.currentRegistries = new ArrayList<AnalyzerRegistryGui>();
 		this.previousRegistries = new ArrayList<AnalyzerRegistryGui>();
 		this.nextRegistries = new ArrayList<AnalyzerRegistryGui>();
+		
+		this.nextAndPreviousSelected = false;
 	}
 
 
@@ -91,11 +96,11 @@ public class AnalysisBeanChart {
 
 		if(registries.size() > 0) {
 			updateSeriesRegistriesValues(currentScale,currentSerie,currentRegistries);
-
 		}
+
 	}
 
-	public void addPreviousAndNextSeries(ScaleGraphic currentScale, List<AnalyzerRegistryObject> previousSeriesRegistries,
+	public void addPreviousAndNextSeries(ScaleGraphic currentScale, Date currentDate, List<AnalyzerRegistryObject> previousSeriesRegistries,
 			List<AnalyzerRegistryObject> nextSeriesRegistries,String previousDayLabel, String nextDayLabel){
 
 		previousSerie = new LineChartSeries(BuildingMeterParameterValues.POWER.getLabel()+" - "+previousDayLabel);
@@ -110,8 +115,14 @@ public class AnalysisBeanChart {
 		previousRegistries =
 				AnalyzerRegistryReductionAlgorithm.getInstance().reduceRegistries(previousSeriesRegistries, currentScale);
 
+		AnalyzerRegistryReductionAlgorithm.getInstance().updateRegistriesTimeToMatchDate(currentDate,
+				previousRegistries, currentScale);
+
 		nextRegistries =  
 				AnalyzerRegistryReductionAlgorithm.getInstance().reduceRegistries(nextSeriesRegistries, currentScale);
+
+		AnalyzerRegistryReductionAlgorithm.getInstance().updateRegistriesTimeToMatchDate(currentDate,
+				nextRegistries, currentScale);
 
 		updateSeriesRegistriesValues(currentScale,previousSerie,previousRegistries);
 		updateSeriesRegistriesValues(currentScale,nextSerie,nextRegistries);
@@ -327,7 +338,5 @@ public class AnalysisBeanChart {
 	public void setNextAndPreviousSelected(Boolean nextAndPreviousSelected) {
 		this.nextAndPreviousSelected = nextAndPreviousSelected;
 	}
-
-
 
 }

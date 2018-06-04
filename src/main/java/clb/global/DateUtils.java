@@ -367,6 +367,44 @@ public class DateUtils
 		return date;
 	}
 
+	public String updateDateToTimeHour(String currentTimeString, Date currentDate) throws ParseException {
+
+		Calendar currentDateCal = Calendar.getInstance();
+		currentDateCal.setTime(currentDate);
+		
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(convertDateStringToSimpleDateFormat(currentTimeString));
+		cal.set(Calendar.HOUR, currentDateCal.get(Calendar.DAY_OF_MONTH));
+		cal.set(Calendar.DAY_OF_MONTH, currentDateCal.get(Calendar.DAY_OF_MONTH));
+		cal.set(Calendar.MONTH, currentDateCal.get(Calendar.MONTH));
+		cal.set(Calendar.YEAR, currentDateCal.get(Calendar.YEAR));
+		
+		return convertDateToSimpleStringFormat(cal.getTime());
+	}
+
+	public String updateDateToTimeDay(String currentTimeString, Date currentDate) throws ParseException {
+		Calendar currentDateCal = Calendar.getInstance();
+		currentDateCal.setTime(currentDate);
+		
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(convertDateStringToSimpleDateFormat(currentTimeString));
+		cal.set(Calendar.DAY_OF_MONTH, currentDateCal.get(Calendar.DAY_OF_MONTH));
+		cal.set(Calendar.MONTH, currentDateCal.get(Calendar.MONTH));
+		cal.set(Calendar.YEAR, currentDateCal.get(Calendar.YEAR));
+		
+		return convertDateToSimpleStringFormat(cal.getTime());
+	}
+
+	public String updateDateToTimeWeek(String currentTimeString, Date currentDate) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String updateDateToTimeMonth(String currentTimeString, Date currentDate) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 
 }
