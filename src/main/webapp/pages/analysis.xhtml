@@ -165,7 +165,7 @@
 										<p:selectOneMenu id="hourList" widgetVar="hourList"
 											value="#{analysisBean.hour}">
 											<p:ajax event="change"
-												listener="#{analysisBean.updateScaleValues}"
+												listener="#{analysisBean.updateHourValues}"
 												update=":analysisForm"></p:ajax>
 											<f:selectItems value="#{analysisBean.hoursValues}" var="hour"
 												itemValue="#{hour}" itemLabel="#{hour.label}" />

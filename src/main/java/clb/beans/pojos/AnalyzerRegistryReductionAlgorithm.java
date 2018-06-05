@@ -1,8 +1,6 @@
 package clb.beans.pojos;
 
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -104,30 +102,5 @@ public class AnalyzerRegistryReductionAlgorithm {
 				kvarsysAverage,kvasysAverage,vlnsysAverage,vllsysAverage, dateString);
 
 		return registryGui;
-	}
-
-	public void updateRegistriesTimeToMatchDate(Date currentDate,
-			List<AnalyzerRegistryGui> previousRegistries, ScaleGraphic currentScale) {
-
-		previousRegistries.stream().forEach(regGuig -> {
-			try {
-				switch(currentScale) {
-				case HOUR:
-					regGuig.setCurrentTimeString(DateUtils.getInstance().updateDateToTimeHour(regGuig.getCurrentTimeString(),currentDate));
-					break;
-				case DAY:
-					regGuig.setCurrentTimeString(DateUtils.getInstance().updateDateToTimeDay(regGuig.getCurrentTimeString(),currentDate));
-					break;
-				case WEEK:
-					regGuig.setCurrentTimeString(DateUtils.getInstance().updateDateToTimeWeek(regGuig.getCurrentTimeString(),currentDate));
-					break;
-				case MONTH:
-					regGuig.setCurrentTimeString(DateUtils.getInstance().updateDateToTimeMonth(regGuig.getCurrentTimeString(),currentDate));
-					break;
-				}
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		});
 	}
 }

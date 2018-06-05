@@ -142,7 +142,17 @@ public class AnalysisBean implements Serializable{
 	}
 
 	public void analysisCalendarSelect(SelectEvent event) {
+		hour = Hours.ZERO;
 		updateScaleValues();
+	}
+	
+	public void updateHourValues() {
+		analysisDate = DateUtils.getInstance().setHourOfDate(analysisDate,hour.getValue());
+		
+		List<AnalyzerRegistryObject> registries = 
+				analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
+		
+		fillGraphicData(registries);
 	}
 
 	public void updateWeekValue() {
@@ -274,78 +284,13 @@ public class AnalysisBean implements Serializable{
 	}
 
 	public void updatePreviousAndNextSeries() {
-
 		if(showTimeAnalysis) {
-
-			analysisDayPojo.removeNextAndPreviousSeriesRegistries();
-
-			if(analysisDayPojo.getNextAndPreviousSelected()) {
-				List<AnalyzerRegistryObject> previousSeriesRegistries = new ArrayList<AnalyzerRegistryObject>();
-				List<AnalyzerRegistryObject> nextSeriesRegistries = new ArrayList<AnalyzerRegistryObject>();
-
-				String prevDateLabel = "";
-				String nextDateLabel = "";
-
-				switch(scaleGraphic) {
-				case HOUR:
-
-					Date previousHour = DateUtils.getInstance().getHourReseted(analysisDate, false);
-					Date nextHour = DateUtils.getInstance().getHourReseted(analysisDate, true);
-
-					previousSeriesRegistries = analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(),previousHour);
-					nextSeriesRegistries = analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(),nextHour);
-
-					prevDateLabel = DateUtils.getInstance().prettyFormat(previousHour);
-					nextDateLabel = DateUtils.getInstance().prettyFormat(nextHour);
-
-					break;
-				case DAY:
-
-					Date previousDay = DateUtils.getInstance().getDayReseted(analysisDate, false);
-					Date nextDay = DateUtils.getInstance().getDayReseted(analysisDate, true);
-
-					previousSeriesRegistries = analyzerDataService.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), previousDay);
-					nextSeriesRegistries = analyzerDataService.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), nextDay);
-
-					prevDateLabel = DateUtils.getInstance().prettyFormat(previousDay);
-					nextDateLabel = DateUtils.getInstance().prettyFormat(nextDay);
-
-					break;
-				case WEEK:
-
-					Date previousWeek = DateUtils.getInstance().getWeekReseted(analysisDate, false);
-					Date nextWeek = DateUtils.getInstance().getWeekReseted(analysisDate, true);
-
-					previousSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerSelected.getId(), previousWeek);
-					nextSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerSelected.getId(), nextWeek);
-
-					prevDateLabel = DateUtils.getInstance().prettyFormat(previousWeek);
-					nextDateLabel = DateUtils.getInstance().prettyFormat(nextWeek);
-
-					break;
-				case MONTH:
-
-					Date previousMonth = DateUtils.getInstance().getMonthReseted(analysisDate, false);
-					Date nextMonth = DateUtils.getInstance().getMonthReseted(analysisDate, true);
-
-					previousSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerSelected.getId(), previousMonth);
-					nextSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerSelected.getId(), nextMonth );
-
-					prevDateLabel = DateUtils.getInstance().prettyFormat(previousMonth);
-					nextDateLabel = DateUtils.getInstance().prettyFormat(nextMonth);
-
-					break;
-				default: 
-					break;
-				}
-
-				analysisDayPojo.addPreviousAndNextSeries(scaleGraphic,analysisDate,previousSeriesRegistries,nextSeriesRegistries, 
-						prevDateLabel, nextDateLabel);
-			}
+			analysisDayPojo.affectPreviousAndNextSeries(scaleGraphic,analysisDate,analyzerSelected.getId());
 		}
 	}
 
 	private void updateHoursCombo() {
+		
 		if(DateUtils.getInstance().isToday(analysisDate)) {
 			hoursValues = Hours.getHoursLimited(DateUtils.getInstance().getHourFromDate(new Date()));
 		}

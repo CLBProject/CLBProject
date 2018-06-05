@@ -1,5 +1,7 @@
 package clb.beans.pojos;
 
+import java.util.Date;
+
 public class AnalyzerRegistryGui {
 
 	private Double asys;
@@ -10,10 +12,10 @@ public class AnalyzerRegistryGui {
 	private Double kvasys;
 	private Double vlnsys;
 	private Double vllsys;
-	private String currentTimeString;
+	private Date currentTime;
 
 	public AnalyzerRegistryGui(Double asys, Double hz, Double kwsys, Double pfsys, Double kvarsys, Double kvasys,
-			Double vlnsys, Double vllsys, String currentTimeString) {
+			Double vlnsys, Double vllsys, Date currentTime) {
 		super();
 		this.asys = asys;
 		this.hz = hz;
@@ -23,7 +25,6 @@ public class AnalyzerRegistryGui {
 		this.kvasys = kvasys;
 		this.vlnsys = vlnsys;
 		this.vllsys = vllsys;
-		this.currentTimeString = currentTimeString;
 	}
 	
 	
@@ -76,14 +77,14 @@ public class AnalyzerRegistryGui {
 		this.vllsys = vllsys;
 	}
 
-	public String getCurrentTimeString() {
-		return currentTimeString;
+
+	public Date getCurrentTime() {
+		return currentTime;
 	}
 
-	public void setCurrentTimeString(String currentTimeString) {
-		this.currentTimeString = currentTimeString;
-	}
 
-	
+	public void setCurrentTime(Date currentTime) {
+		this.currentTime = currentTime;
+	}
 	
 }

@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.faces.bean.ManagedProperty;
+
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.ChartSeries;
@@ -16,9 +18,11 @@ import org.primefaces.model.chart.LineChartSeries;
 import clb.beans.enums.ScaleGraphic;
 import clb.beans.pojos.AnalyzerRegistryGui;
 import clb.beans.pojos.AnalyzerRegistryReductionAlgorithm;
+import clb.business.AnalyzerDataService;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.BuildingMeterObject;
 import clb.global.BuildingMeterParameterValues;
+import clb.global.DateUtils;
 
 public class AnalysisBeanChart {
 
@@ -34,7 +38,7 @@ public class AnalysisBeanChart {
 	private static final String DATE_FORMAT_GRAPHIC_WEEK= "%A %#d, %B";
 
 	private String buildingMeterSelected;
-	private List<BuildingMeterParameterValues> buildingMeterQuickAnalysis;
+	private BuildingMeterParameterValues[] buildingMeterQuickAnalysis;
 
 	private LineChartSeries currentSerie;
 	private LineChartSeries previousSerie;
@@ -46,18 +50,12 @@ public class AnalysisBeanChart {
 
 	private Boolean nextAndPreviousSelected;
 
+	@ManagedProperty("#{analyzerDataService}")
+	private AnalyzerDataService analyzerDataService;
+
 	public AnalysisBeanChart(List<BuildingMeterObject> buildingMetersObject){
 
-		buildingMeterQuickAnalysis = new ArrayList<BuildingMeterParameterValues>();
-		buildingMeterQuickAnalysis.add(BuildingMeterParameterValues.POWER);
-		buildingMeterQuickAnalysis.add(BuildingMeterParameterValues.POWER_FACTOR);
-		buildingMeterQuickAnalysis.add(BuildingMeterParameterValues.REACTIVE_POWER);
-		buildingMeterQuickAnalysis.add(BuildingMeterParameterValues.CURRENT);
-		buildingMeterQuickAnalysis.add(BuildingMeterParameterValues.FREQUENCY);
-		buildingMeterQuickAnalysis.add(BuildingMeterParameterValues.VOLT_AMPERE);
-		buildingMeterQuickAnalysis.add(BuildingMeterParameterValues.VOLTAGE);
-		buildingMeterQuickAnalysis.add(BuildingMeterParameterValues.VOLTAGE_BETWEEN_PHASES);
-
+		buildingMeterQuickAnalysis = BuildingMeterParameterValues.values();
 
 		lineModel = new LineChartModel();
 		lineModel.setZoom(true);
@@ -69,6 +67,8 @@ public class AnalysisBeanChart {
 		lineModel.setShowDatatip( false );
 
 		//Default
+		buildingMeterSelected = BuildingMeterParameterValues.POWER.name();
+
 		currentSerie = new LineChartSeries(BuildingMeterParameterValues.POWER.getLabel());
 		previousSerie = new LineChartSeries(BuildingMeterParameterValues.POWER.getLabel());
 		nextSerie = new LineChartSeries(BuildingMeterParameterValues.POWER.getLabel());
@@ -77,12 +77,11 @@ public class AnalysisBeanChart {
 		lineModel.addSeries( currentSerie );
 		lineModel.getAxes().put(AxisType.X,new DateAxis());
 
-		buildingMeterSelected = BuildingMeterParameterValues.POWER.name();
 
 		this.currentRegistries = new ArrayList<AnalyzerRegistryGui>();
 		this.previousRegistries = new ArrayList<AnalyzerRegistryGui>();
 		this.nextRegistries = new ArrayList<AnalyzerRegistryGui>();
-		
+
 		this.nextAndPreviousSelected = false;
 	}
 
@@ -98,43 +97,6 @@ public class AnalysisBeanChart {
 			updateSeriesRegistriesValues(currentScale,currentSerie,currentRegistries);
 		}
 
-	}
-
-	public void addPreviousAndNextSeries(ScaleGraphic currentScale, Date currentDate, List<AnalyzerRegistryObject> previousSeriesRegistries,
-			List<AnalyzerRegistryObject> nextSeriesRegistries,String previousDayLabel, String nextDayLabel){
-
-		previousSerie = new LineChartSeries(BuildingMeterParameterValues.POWER.getLabel()+" - "+previousDayLabel);
-		nextSerie = new LineChartSeries(BuildingMeterParameterValues.POWER.getLabel() + " - " + nextDayLabel);
-
-		previousSerie.setShowMarker(false);
-		nextSerie.setShowMarker(false);
-
-		lineModel.addSeries( previousSerie );
-		lineModel.addSeries( nextSerie );
-
-		previousRegistries =
-				AnalyzerRegistryReductionAlgorithm.getInstance().reduceRegistries(previousSeriesRegistries, currentScale);
-
-		AnalyzerRegistryReductionAlgorithm.getInstance().updateRegistriesTimeToMatchDate(currentDate,
-				previousRegistries, currentScale);
-
-		nextRegistries =  
-				AnalyzerRegistryReductionAlgorithm.getInstance().reduceRegistries(nextSeriesRegistries, currentScale);
-
-		AnalyzerRegistryReductionAlgorithm.getInstance().updateRegistriesTimeToMatchDate(currentDate,
-				nextRegistries, currentScale);
-
-		updateSeriesRegistriesValues(currentScale,previousSerie,previousRegistries);
-		updateSeriesRegistriesValues(currentScale,nextSerie,nextRegistries);
-
-	}
-
-	public void removeNextAndPreviousSeriesRegistries() {
-		previousSerie.getData().clear();
-		nextSerie.getData().clear();
-
-		lineModel.getSeries().remove(previousSerie);
-		lineModel.getSeries().remove(nextSerie);
 	}
 
 	/**
@@ -171,6 +133,105 @@ public class AnalysisBeanChart {
 		updateSeriesRegistriesValues(currentScale,currentSerie,this.currentRegistries);
 	}
 
+
+
+
+	public void affectPreviousAndNextSeries(ScaleGraphic scaleGraphic, Date analysisDate, String analyzerId) {
+		removeNextAndPreviousSeriesRegistries();
+
+		if(nextAndPreviousSelected) {
+			List<AnalyzerRegistryObject> previousSeriesRegistries = new ArrayList<AnalyzerRegistryObject>();
+			List<AnalyzerRegistryObject> nextSeriesRegistries = new ArrayList<AnalyzerRegistryObject>();
+
+			String prevDateLabel = "";
+			String nextDateLabel = "";
+
+			switch(scaleGraphic) {
+			case HOUR:
+
+				Date previousHour = DateUtils.getInstance().getHourReseted(analysisDate, false);
+				Date nextHour = DateUtils.getInstance().getHourReseted(analysisDate, true);
+
+				previousSeriesRegistries = analyzerDataService.getHourRegistriesFromAnalyzer( analyzerId,previousHour);
+				nextSeriesRegistries = analyzerDataService.getHourRegistriesFromAnalyzer( analyzerId,nextHour);
+
+				prevDateLabel = DateUtils.getInstance().prettyFormat(previousHour);
+				nextDateLabel = DateUtils.getInstance().prettyFormat(nextHour);
+
+				break;
+			case DAY:
+
+				Date previousDay = DateUtils.getInstance().getDayReseted(analysisDate, false);
+				Date nextDay = DateUtils.getInstance().getDayReseted(analysisDate, true);
+
+				previousSeriesRegistries = analyzerDataService.getDayRegistriesFromAnalyzer( analyzerId, previousDay);
+				nextSeriesRegistries = analyzerDataService.getDayRegistriesFromAnalyzer( analyzerId, nextDay);
+
+				prevDateLabel = DateUtils.getInstance().prettyFormat(previousDay);
+				nextDateLabel = DateUtils.getInstance().prettyFormat(nextDay);
+
+				break;
+			case WEEK:
+				Date previousWeek = DateUtils.getInstance().getWeekReseted(analysisDate, false);
+				Date nextWeek = DateUtils.getInstance().getWeekReseted(analysisDate, true);
+
+				previousSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerId, previousWeek);
+				nextSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerId, nextWeek);
+
+				prevDateLabel = DateUtils.getInstance().prettyFormat(previousWeek);
+				nextDateLabel = DateUtils.getInstance().prettyFormat(nextWeek);
+
+				break;
+			case MONTH:
+
+				Date previousMonth = DateUtils.getInstance().getMonthReseted(analysisDate, false);
+				Date nextMonth = DateUtils.getInstance().getMonthReseted(analysisDate, true);
+
+				previousSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerId, previousMonth);
+				nextSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerId, nextMonth );
+
+				prevDateLabel = DateUtils.getInstance().prettyFormat(previousMonth);
+				nextDateLabel = DateUtils.getInstance().prettyFormat(nextMonth);
+
+				break;
+			default: 
+				break;
+			}
+
+			addPreviousAndNextSeries(scaleGraphic,analysisDate,previousSeriesRegistries,nextSeriesRegistries, prevDateLabel, nextDateLabel);
+		}
+
+	}
+
+	private void addPreviousAndNextSeries(ScaleGraphic currentScale, Date currentDate, List<AnalyzerRegistryObject> previousSeriesRegistries,
+			List<AnalyzerRegistryObject> nextSeriesRegistries,String previousDayLabel, String nextDayLabel){
+
+		previousSerie = new LineChartSeries(BuildingMeterParameterValues.POWER.getLabel()+" - "+previousDayLabel);
+		nextSerie = new LineChartSeries(BuildingMeterParameterValues.POWER.getLabel() + " - " + nextDayLabel);
+
+		previousSerie.setShowMarker(false);
+		nextSerie.setShowMarker(false);
+
+		lineModel.addSeries( previousSerie );
+		lineModel.addSeries( nextSerie );
+
+		previousRegistries = AnalyzerRegistryReductionAlgorithm.getInstance().reduceRegistries(previousSeriesRegistries, currentScale);
+		nextRegistries =  AnalyzerRegistryReductionAlgorithm.getInstance().reduceRegistries(nextSeriesRegistries, currentScale);
+
+		updateSeriesRegistriesValues(currentScale,previousSerie,previousRegistries);
+		updateSeriesRegistriesValues(currentScale,nextSerie,nextRegistries);
+	}
+
+	private void removeNextAndPreviousSeriesRegistries() {
+		previousSerie.getData().clear();
+		nextSerie.getData().clear();
+
+		lineModel.getSeries().remove(previousSerie);
+		lineModel.getSeries().remove(nextSerie);
+	}
+
+
+
 	private void updateSeriesRegistriesValues(ScaleGraphic currentScale, LineChartSeries chartSerie, 
 			List<AnalyzerRegistryGui> registriesSelected){
 
@@ -186,7 +247,7 @@ public class AnalysisBeanChart {
 			Integer kvasys = registry.getKvasys().intValue();;
 			Integer vlnsys = registry.getVlnsys().intValue();;
 			Integer vllsys = registry.getVllsys().intValue();;
-			String currentTime = registry.getCurrentTimeString();
+			String currentTime = getTimeString(registry.getCurrentTime(),currentScale);
 
 			switch(buildingMeterSel) {
 
@@ -261,6 +322,24 @@ public class AnalysisBeanChart {
 	}
 
 
+	private String getTimeString(Date currentTime, ScaleGraphic scale) {
+		if(nextAndPreviousSelected) {
+			switch(scale) {
+			case HOUR:
+				break;
+			case DAY:
+				break;
+			case WEEK:
+				break;
+			case MONTH:
+				break;
+				//TODO Need to Implement
+			}
+		}
+		return DateUtils.getInstance().convertDateToSimpleStringFormat(currentTime);
+	}
+
+
 	private void updateSeriesMinAndMaxValue(ScaleGraphic currentScale){
 
 		int minValue = Integer.MAX_VALUE;
@@ -321,11 +400,11 @@ public class AnalysisBeanChart {
 		this.buildingMeterSelected = buildingMeterSelected;
 	}
 
-	public List<BuildingMeterParameterValues> getBuildingMeterQuickAnalysis() {
+	public BuildingMeterParameterValues[] getBuildingMeterQuickAnalysis() {
 		return buildingMeterQuickAnalysis;
 	}
 
-	public void setBuildingMeterQuickAnalysis(List<BuildingMeterParameterValues> buildingMeterQuickAnalysis) {
+	public void setBuildingMeterQuickAnalysis(BuildingMeterParameterValues[] buildingMeterQuickAnalysis) {
 		this.buildingMeterQuickAnalysis = buildingMeterQuickAnalysis;
 	}
 
@@ -338,5 +417,16 @@ public class AnalysisBeanChart {
 	public void setNextAndPreviousSelected(Boolean nextAndPreviousSelected) {
 		this.nextAndPreviousSelected = nextAndPreviousSelected;
 	}
+
+
+	public AnalyzerDataService getAnalyzerDataService() {
+		return analyzerDataService;
+	}
+
+
+	public void setAnalyzerDataService(AnalyzerDataService analyzerDataService) {
+		this.analyzerDataService = analyzerDataService;
+	}
+
 
 }
