@@ -404,15 +404,28 @@ public class DateUtils
 
 		Calendar thisDate = Calendar.getInstance();
 		thisDate.setTime(currentTime);
-		
-		for (int i = 0; i < 6; i++) {
-			if(otherDate.get(Calendar.WEEK_OF_YEAR) > thisDate.get(Calendar.WEEK_OF_YEAR))
-				otherDate.add(Calendar.DATE, -1);
-			else otherDate.add(Calendar.DATE, 1);
+
+		boolean add = otherDate.get(Calendar.WEEK_OF_YEAR) > thisDate.get(Calendar.WEEK_OF_YEAR);
+
+		for (int i = 0; i < 7; i++) {
+
+			if(add) {
+				thisDate.add(Calendar.DAY_OF_MONTH, 1);
+			}
+
+			else thisDate.add(Calendar.DAY_OF_MONTH, -1);
 		}
+		return thisDate.getTime();
+	}
+
+	public Date reaplceDateForMonthDay(Date dateToBase, Date currentTime) {
+		Calendar otherDate = Calendar.getInstance();
+		otherDate.setTime(dateToBase);
 		
-		System.out.println(prettyFormat(otherDate.getTime()));
+		Calendar currentDate = Calendar.getInstance();
+		currentDate.setTime(currentTime);
+		currentDate.set(Calendar.MONTH, otherDate.get(Calendar.MONTH));
 		
-		return otherDate.getTime();
+		return currentDate.getTime();
 	}
 }

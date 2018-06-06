@@ -329,17 +329,15 @@ public class AnalysisBeanChart {
 			switch(scale) {
 			case HOUR:
 				date = DateUtils.getInstance().replaceDateForOtherDate(dateToBase,currentTime,false);
-				return DateUtils.getInstance().convertDateToSimpleStringFormat(date);
+				
 			case DAY:
 				date = DateUtils.getInstance().replaceDateForOtherDate(dateToBase,currentTime,true);
-				return DateUtils.getInstance().convertDateToSimpleStringFormat(date);
 			case WEEK:
 				date = DateUtils.getInstance().reaplceDateForWeekDay(dateToBase,currentTime);
-				return DateUtils.getInstance().convertDateToSimpleStringFormat(date);
 			case MONTH:
-				break;
-				//TODO Need to Implement
+				date = DateUtils.getInstance().reaplceDateForMonthDay(dateToBase,currentTime);
 			}
+			return DateUtils.getInstance().convertDateToSimpleStringFormat(date);
 		}
 		return DateUtils.getInstance().convertDateToSimpleStringFormat(currentTime);
 	}
