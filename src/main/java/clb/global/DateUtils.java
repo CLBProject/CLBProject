@@ -10,6 +10,7 @@ public class DateUtils
 {
 	private static DateUtils instance;
 	private DateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private DateFormat hourOutputFormat = new SimpleDateFormat("mm:ss");
 	private DateFormat prettyDateFormat = new SimpleDateFormat("EEE, d MMM yyyy");
 
 	public static synchronized DateUtils getInstance() {
@@ -68,7 +69,7 @@ public class DateUtils
 
 		return cal.get(Calendar.MONTH);
 	}
-	
+
 	public Date setDayForDate(Date analysisDate, int value) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(analysisDate);
@@ -134,7 +135,7 @@ public class DateUtils
 		cal.set(Calendar.SECOND,0);
 		cal.set(Calendar.MINUTE,0);
 		cal.set(Calendar.HOUR_OF_DAY,0);
-		
+
 		if(next)
 			cal.add(Calendar.DATE, 7);
 		else
@@ -142,7 +143,7 @@ public class DateUtils
 
 		return cal.getTime();
 	}
-	
+
 
 	public Date getMonthReseted(Date analysisDate, boolean next) {
 		Calendar cal = Calendar.getInstance();
@@ -151,14 +152,14 @@ public class DateUtils
 		cal.set(Calendar.MINUTE,0);
 		cal.set(Calendar.HOUR_OF_DAY,0);
 		cal.set(Calendar.DAY_OF_MONTH,0);
-		
+
 		if(next)
 			cal.add(Calendar.MONTH, 1);
 		else cal.add(Calendar.MONTH, -1);
-		
+
 		return cal.getTime();
 	}
-	
+
 	public Date getDay(Date timeFrame, boolean next) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(timeFrame);
@@ -242,6 +243,11 @@ public class DateUtils
 		return prettyDateFormat.format(analysisDate);
 	}
 
+	public String hourFormat(Date analysisDate) {
+
+		return hourOutputFormat.format(analysisDate);
+	}
+
 
 	public Date setMonthOfDate(Date date, int value) {
 		Calendar cal = Calendar.getInstance();
@@ -304,7 +310,7 @@ public class DateUtils
 		cal.set(Calendar.YEAR, year);
 		return cal.getTime();
 	}
-	
+
 	public Date setHourOfDate(Date date, int value) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
@@ -375,4 +381,38 @@ public class DateUtils
 		return date;
 	}
 
+
+	public Date replaceDateForOtherDate(Date dateToBase, Date currentTime, boolean hour) {
+		Calendar otherDate = Calendar.getInstance();
+		otherDate.setTime(dateToBase);
+
+		Calendar thisDate = Calendar.getInstance();
+		thisDate.setTime(currentTime);
+
+
+		if(hour) {
+			otherDate.set(Calendar.HOUR_OF_DAY,thisDate.get(Calendar.HOUR_OF_DAY));
+		}
+		otherDate.set(Calendar.MINUTE,thisDate.get(Calendar.MINUTE));
+		return otherDate.getTime();
+	}
+
+	public Date reaplceDateForWeekDay(Date dateToBase, Date currentTime) {
+
+		Calendar otherDate = Calendar.getInstance();
+		otherDate.setTime(dateToBase);
+
+		Calendar thisDate = Calendar.getInstance();
+		thisDate.setTime(currentTime);
+		
+		for (int i = 0; i < 6; i++) {
+			if(otherDate.get(Calendar.WEEK_OF_YEAR) > thisDate.get(Calendar.WEEK_OF_YEAR))
+				otherDate.add(Calendar.DATE, -1);
+			else otherDate.add(Calendar.DATE, 1);
+		}
+		
+		System.out.println(prettyFormat(otherDate.getTime()));
+		
+		return otherDate.getTime();
+	}
 }

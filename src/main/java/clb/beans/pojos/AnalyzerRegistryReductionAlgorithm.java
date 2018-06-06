@@ -1,5 +1,6 @@
 package clb.beans.pojos;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,15 +60,19 @@ public class AnalyzerRegistryReductionAlgorithm {
 
 		//Reduce Registries
 		for(Entry<String,List<AnalyzerRegistryObject>> registriesReducedEntry : registriesReduced.entrySet()) {
-			registryReduced.add(averageAnalyzerRegistryObject(registriesReducedEntry.getValue(),
-					registriesReducedEntry.getKey()));
+			try {
+				registryReduced.add(averageAnalyzerRegistryObject(registriesReducedEntry.getValue(),
+						registriesReducedEntry.getKey()));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
 		}
 
 		return registryReduced;
 	}
 
 
-	private AnalyzerRegistryGui averageAnalyzerRegistryObject(List<AnalyzerRegistryObject> registries, String dateString) {
+	private AnalyzerRegistryGui averageAnalyzerRegistryObject(List<AnalyzerRegistryObject> registries, String dateString) throws ParseException {
 
 		Double asys = 0.0;
 		Double hz = 0.0;
@@ -99,7 +104,8 @@ public class AnalyzerRegistryReductionAlgorithm {
 		Double vllsysAverage = vllsys/registries.size();
 
 		AnalyzerRegistryGui registryGui = new AnalyzerRegistryGui(asysAverage,hzAverage,kwsysAverage,pfsysAverage,
-				kvarsysAverage,kvasysAverage,vlnsysAverage,vllsysAverage, dateString);
+				kvarsysAverage,kvasysAverage,vlnsysAverage,vllsysAverage, 
+				DateUtils.getInstance().convertDateStringToSimpleDateFormat(dateString));
 
 		return registryGui;
 	}

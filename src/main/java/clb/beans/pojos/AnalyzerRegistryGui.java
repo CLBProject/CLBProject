@@ -25,6 +25,7 @@ public class AnalyzerRegistryGui {
 		this.kvasys = kvasys;
 		this.vlnsys = vlnsys;
 		this.vllsys = vllsys;
+		this.currentTime = currentTime;
 	}
 	
 	

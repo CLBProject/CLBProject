@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.faces.bean.ManagedProperty;
-
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.ChartSeries;
@@ -49,12 +47,13 @@ public class AnalysisBeanChart {
 	private List<AnalyzerRegistryGui> nextRegistries;
 
 	private Boolean nextAndPreviousSelected;
-
-	@ManagedProperty("#{analyzerDataService}")
+	
 	private AnalyzerDataService analyzerDataService;
 
-	public AnalysisBeanChart(List<BuildingMeterObject> buildingMetersObject){
+	public AnalysisBeanChart(List<BuildingMeterObject> buildingMetersObject, AnalyzerDataService analyzerDataService){
 
+		this.analyzerDataService = analyzerDataService;
+		
 		buildingMeterQuickAnalysis = BuildingMeterParameterValues.values();
 
 		lineModel = new LineChartModel();
@@ -94,7 +93,7 @@ public class AnalysisBeanChart {
 		lineModel.getSeries().stream().forEach( serie -> serie.getData().clear() );
 
 		if(registries.size() > 0) {
-			updateSeriesRegistriesValues(currentScale,currentSerie,currentRegistries);
+			updateSeriesRegistriesValues(currentScale,currentSerie,currentRegistries,null);
 		}
 
 	}
@@ -130,7 +129,7 @@ public class AnalysisBeanChart {
 			lineModel.addSeries( previousSerie );
 			lineModel.addSeries( nextSerie );
 		}
-		updateSeriesRegistriesValues(currentScale,currentSerie,this.currentRegistries);
+		updateSeriesRegistriesValues(currentScale,currentSerie,this.currentRegistries,null);
 	}
 
 
@@ -218,8 +217,8 @@ public class AnalysisBeanChart {
 		previousRegistries = AnalyzerRegistryReductionAlgorithm.getInstance().reduceRegistries(previousSeriesRegistries, currentScale);
 		nextRegistries =  AnalyzerRegistryReductionAlgorithm.getInstance().reduceRegistries(nextSeriesRegistries, currentScale);
 
-		updateSeriesRegistriesValues(currentScale,previousSerie,previousRegistries);
-		updateSeriesRegistriesValues(currentScale,nextSerie,nextRegistries);
+		updateSeriesRegistriesValues(currentScale,previousSerie,previousRegistries,currentDate);
+		updateSeriesRegistriesValues(currentScale,nextSerie,nextRegistries,currentDate);
 	}
 
 	private void removeNextAndPreviousSeriesRegistries() {
@@ -232,8 +231,8 @@ public class AnalysisBeanChart {
 
 
 
-	private void updateSeriesRegistriesValues(ScaleGraphic currentScale, LineChartSeries chartSerie, 
-			List<AnalyzerRegistryGui> registriesSelected){
+	private void updateSeriesRegistriesValues(ScaleGraphic currentScale, LineChartSeries chartSerie,
+			List<AnalyzerRegistryGui> registriesSelected, Date basedOnDate){
 
 
 		BuildingMeterParameterValues buildingMeterSel = BuildingMeterParameterValues.valueOf(buildingMeterSelected);
@@ -247,7 +246,7 @@ public class AnalysisBeanChart {
 			Integer kvasys = registry.getKvasys().intValue();;
 			Integer vlnsys = registry.getVlnsys().intValue();;
 			Integer vllsys = registry.getVllsys().intValue();;
-			String currentTime = getTimeString(registry.getCurrentTime(),currentScale);
+			String currentTime = getTimeString(basedOnDate,registry.getCurrentTime(),currentScale); //getTimeString(registry.getCurrentTime(),currentScale);
 
 			switch(buildingMeterSel) {
 
@@ -322,15 +321,21 @@ public class AnalysisBeanChart {
 	}
 
 
-	private String getTimeString(Date currentTime, ScaleGraphic scale) {
-		if(nextAndPreviousSelected) {
+	private String getTimeString(Date dateToBase, Date currentTime, ScaleGraphic scale) {
+		if(dateToBase != null) {
+			
+			Date date = null;
+			
 			switch(scale) {
 			case HOUR:
-				break;
+				date = DateUtils.getInstance().replaceDateForOtherDate(dateToBase,currentTime,false);
+				return DateUtils.getInstance().convertDateToSimpleStringFormat(date);
 			case DAY:
-				break;
+				date = DateUtils.getInstance().replaceDateForOtherDate(dateToBase,currentTime,true);
+				return DateUtils.getInstance().convertDateToSimpleStringFormat(date);
 			case WEEK:
-				break;
+				date = DateUtils.getInstance().reaplceDateForWeekDay(dateToBase,currentTime);
+				return DateUtils.getInstance().convertDateToSimpleStringFormat(date);
 			case MONTH:
 				break;
 				//TODO Need to Implement

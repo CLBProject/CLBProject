@@ -119,7 +119,7 @@ public class AnalysisBean implements Serializable{
 									analyzerSelected = aObj;
 									tempAnalyzerSelected = analyzerSelected;
 
-									analysisDayPojo = new AnalysisBeanChart( buildingSelected.getBuildingMeters());
+									analysisDayPojo = new AnalysisBeanChart( buildingSelected.getBuildingMeters(), this.analyzerDataService);
 
 									fillGraphicData(analyzerDataService.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate) );
 
