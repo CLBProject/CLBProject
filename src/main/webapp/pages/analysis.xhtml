@@ -15,8 +15,8 @@
 				<p:spacer height="10" />
 				<table width="100%" class="analysisDivClass" cellpadding="5">
 					<tr>
-						<td width="175px" align="center" ><p:outputLabel styleClass="analysisDivClassMainCell"
-								value="Analysis Menu"></p:outputLabel>
+						<td width="175px" align="center"><p:outputLabel
+								styleClass="analysisDivClassMainCell" value="Analysis Menu"></p:outputLabel>
 							<hr /></td>
 						<td align="right"></td>
 					</tr>
@@ -100,67 +100,71 @@
 									<!-- Week Options -->
 									<p:outputPanel
 										rendered="#{analysisBean.scaleGraphic == 'WEEK'}">
-										<p:outputLabel value="Year:" styleClass="analysisLabels" for="monthWeekList"></p:outputLabel>
+										<p:outputLabel value="Year:" styleClass="analysisLabels"
+											for="monthWeekList"></p:outputLabel>
 										<p:spacer width="5" />
 										<p:selectOneMenu id="monthWeekList" widgetVar="monthWeekList"
 											value="#{analysisBean.year}">
 											<p:ajax event="change"
-												listener="#{analysisBean.updateYearValue}"
+												listener="#{analysisBean.setYearValueForMonth}"
 												update=":analysisForm"></p:ajax>
 											<f:selectItems value="#{analysisBean.years}" var="year"
 												itemValue="#{year}" itemLabel="#{year}" />
 										</p:selectOneMenu>
-										<p:spacer width="40"  height="1"/>
-										<p:outputLabel value="Month:" styleClass="analysisLabels"  for="monthsList"></p:outputLabel>
+										<p:spacer width="40" height="1" />
+										<p:outputLabel value="Month:" styleClass="analysisLabels"
+											for="monthsList"></p:outputLabel>
 										<p:spacer width="5" />
 										<p:selectOneMenu id="monthWeeksList"
 											widgetVar="monthWeeksList" value="#{analysisBean.month}">
 											<p:ajax event="change"
-												listener="#{analysisBean.updateMonthValue}"
+												listener="#{analysisBean.setMonthValueForWeek}"
 												update=":analysisForm"></p:ajax>
 											<f:selectItems value="#{analysisBean.monthsValues}"
 												var="month" itemValue="#{month}" itemLabel="#{month.label}" />
 										</p:selectOneMenu>
-										<p:spacer width="40"  height="1"/>
-										<p:outputLabel value="Week:" styleClass="analysisLabels"  for="weekList"></p:outputLabel>
+										<p:spacer width="40" height="1" />
+										<p:outputLabel value="Week:" styleClass="analysisLabels"
+											for="weekList"></p:outputLabel>
 										<p:spacer width="5" />
 										<p:selectOneMenu id="weekList" widgetVar="weekList"
 											value="#{analysisBean.week}">
 											<p:ajax event="change"
-												listener="#{analysisBean.updateWeekValue}"
+												listener="#{analysisBean.setWeekValue}"
 												update=":analysisForm"></p:ajax>
 											<f:selectItems value="#{analysisBean.weeks}" var="week"
-												itemValue="#{week}" itemLabel="#{week}" />
+												itemValue="#{week}" itemLabel="#{week.label}" />
 										</p:selectOneMenu>
-										<p:spacer width="40"  height="1"/>
-										<p:outputLabel value="View:" styleClass="analysisLabels"  for="scaleListWeek"></p:outputLabel>
+										<p:spacer width="40" height="1" />
+										<p:outputLabel value="View:" styleClass="analysisLabels"
+											for="scaleListWeek"></p:outputLabel>
 										<p:spacer width="5"></p:spacer>
 										<p:selectOneMenu id="scaleListWeek" widgetVar="scaleListWeek"
 											value="#{analysisBean.scaleGraphic}">
-											<p:ajax event="change"
-												listener="#{analysisBean.updateScaleValues}"
+											<p:ajax event="change" listener="#{analysisBean.changeView}"
 												update=":analysisForm"></p:ajax>
 											<f:selectItems value="#{analysisBean.scalesGraphic}"
 												var="analysisScale" itemValue="#{analysisScale}"
 												itemLabel="#{analysisScale.label}" />
 										</p:selectOneMenu>
 									</p:outputPanel>
-									
+
 									<!-- Hour Options -->
 									<p:outputPanel
 										rendered="#{analysisBean.scaleGraphic == 'HOUR'}">
-										<p:outputLabel value="Date:" styleClass="analysisLabels" ></p:outputLabel>
+										<p:outputLabel value="Date:" styleClass="analysisLabels"></p:outputLabel>
 										<p:spacer width="5" />
 										<p:calendar value="#{analysisBean.analysisDate}" label="Date:"
 											mindate="#{analysisBean.minDate}"
 											maxdate="#{analysisBean.todayDate}" pattern="dd-MM-yyyy"
 											styleClass="timeFrame">
 											<p:ajax event="dateSelect"
-												listener="#{analysisBean.analysisCalendarSelect}"
+												listener="#{analysisBean.analysisHourCalendarSelect}"
 												update=":analysisForm"></p:ajax>
 										</p:calendar>
-										<p:spacer width="40"  height="1"/>
-										<p:outputLabel value="Hour:" styleClass="analysisLabels"  for="scaleListHour"></p:outputLabel>
+										<p:spacer width="40" height="1" />
+										<p:outputLabel value="Hour:" styleClass="analysisLabels"
+											for="scaleListHour"></p:outputLabel>
 										<p:spacer width="5" />
 										<p:selectOneMenu id="hourList" widgetVar="hourList"
 											value="#{analysisBean.hour}">
@@ -170,13 +174,13 @@
 											<f:selectItems value="#{analysisBean.hoursValues}" var="hour"
 												itemValue="#{hour}" itemLabel="#{hour.label}" />
 										</p:selectOneMenu>
-										<p:spacer width="40"  height="1"/>
-										<p:outputLabel value="View:" styleClass="analysisLabels"  for="scaleListHour"></p:outputLabel>
+										<p:spacer width="40" height="1" />
+										<p:outputLabel value="View:" styleClass="analysisLabels"
+											for="scaleListHour"></p:outputLabel>
 										<p:spacer width="5"></p:spacer>
 										<p:selectOneMenu id="scaleListHour" widgetVar="scaleListHour"
 											value="#{analysisBean.scaleGraphic}">
-											<p:ajax event="change"
-												listener="#{analysisBean.updateScaleValues}"
+											<p:ajax event="change" listener="#{analysisBean.changeView}"
 												update="@form"></p:ajax>
 											<f:selectItems value="#{analysisBean.scalesGraphic}"
 												var="analysisScale" itemValue="#{analysisScale}"
@@ -186,61 +190,64 @@
 
 									<!-- Day Options -->
 									<p:outputPanel rendered="#{analysisBean.scaleGraphic == 'DAY'}">
-										<p:outputLabel value="Date:" styleClass="analysisLabels" ></p:outputLabel>
+										<p:outputLabel value="Date:" styleClass="analysisLabels"></p:outputLabel>
 										<p:spacer width="5" />
 										<p:calendar value="#{analysisBean.analysisDate}" label="Date:"
 											mindate="#{analysisBean.minDate}"
 											maxdate="#{analysisBean.todayDate}" pattern="dd-MM-yyyy"
 											styleClass="timeFrame">
 											<p:ajax event="dateSelect"
-												listener="#{analysisBean.analysisCalendarSelect}"
+												listener="#{analysisBean.analysisDayCalendarSelect}"
 												update=":analysisForm"></p:ajax>
 										</p:calendar>
-										<p:spacer width="40"  height="1"/>
-										<p:outputLabel value="View:" styleClass="analysisLabels"  for="scaleListDay"></p:outputLabel>
+										<p:spacer width="40" height="1" />
+										<p:outputLabel value="View:" styleClass="analysisLabels"
+											for="scaleListDay"></p:outputLabel>
 										<p:spacer width="5"></p:spacer>
 										<p:selectOneMenu id="scaleListDay" widgetVar="scaleListDay"
 											value="#{analysisBean.scaleGraphic}">
-											<p:ajax event="change"
-												listener="#{analysisBean.updateScaleValues}"
+											<p:ajax event="change" listener="#{analysisBean.changeView}"
 												update=":analysisForm"></p:ajax>
 											<f:selectItems value="#{analysisBean.scalesGraphic}"
 												var="analysisScale" itemValue="#{analysisScale}"
 												itemLabel="#{analysisScale.label}" />
 										</p:selectOneMenu>
 									</p:outputPanel>
-									
+
 									<!-- Month Options -->
-									<p:outputPanel rendered="#{analysisBean.scaleGraphic == 'MONTH'}">
-										<p:outputLabel value="Year:" styleClass="analysisLabels"  for="monthList"></p:outputLabel>
+									<p:outputPanel
+										rendered="#{analysisBean.scaleGraphic == 'MONTH'}">
+										<p:outputLabel value="Year:" styleClass="analysisLabels"
+											for="monthList"></p:outputLabel>
 										<p:spacer width="5" />
 										<p:selectOneMenu id="monthList" widgetVar="monthList"
 											value="#{analysisBean.year}">
 											<p:ajax event="change"
-												listener="#{analysisBean.updateYearValue}"
+												listener="#{analysisBean.setYearValueForWeek}"
 												update=":analysisForm"></p:ajax>
 											<f:selectItems value="#{analysisBean.years}" var="year"
 												itemValue="#{year}" itemLabel="#{year}" />
 										</p:selectOneMenu>
-										<p:spacer width="40"  height="1"/>
-										<p:outputLabel value="Month:" styleClass="analysisLabels"  for="monthsList"></p:outputLabel>
+										<p:spacer width="40" height="1" />
+										<p:outputLabel value="Month:" styleClass="analysisLabels"
+											for="monthsList"></p:outputLabel>
 										<p:spacer width="5" />
 										<p:selectOneMenu id="monthsList" widgetVar="monthsList"
 											value="#{analysisBean.month}">
 											<p:ajax event="change"
-												listener="#{analysisBean.updateMonthValue}"
+												listener="#{analysisBean.setMonthValueForMonth}"
 												update=":analysisForm"></p:ajax>
 											<f:selectItems value="#{analysisBean.monthsValues}"
 												var="month" itemValue="#{month}" itemLabel="#{month.label}" />
 										</p:selectOneMenu>
-										<p:spacer width="40"  height="1"/>
-										<p:outputLabel value="View:" styleClass="analysisLabels"  for="scaleListMonth"></p:outputLabel>
+										<p:spacer width="40" height="1" />
+										<p:outputLabel value="View:" styleClass="analysisLabels"
+											for="scaleListMonth"></p:outputLabel>
 										<p:spacer width="5"></p:spacer>
 										<p:selectOneMenu id="scaleListMonth"
 											widgetVar="scaleListMonth"
 											value="#{analysisBean.scaleGraphic}">
-											<p:ajax event="change"
-												listener="#{analysisBean.updateScaleValues}"
+											<p:ajax event="change" listener="#{analysisBean.changeView}"
 												update=":analysisForm"></p:ajax>
 											<f:selectItems value="#{analysisBean.scalesGraphic}"
 												var="analysisScale" itemValue="#{analysisScale}"
@@ -254,14 +261,25 @@
 										<p:chart styleClass="analysisChartCSS" id="chartDayId"
 											responsive="true" widgetVar="chartDayId"
 											model="#{analysisBean.analysisDayPojo.lineModel}" type="line" />
-										<p:spacer height="20"/>
-										<hr/>
-										<p:outputLabel rendered="#{analysisBean.showTimeAnalysis}" styleClass="timeAnalysis" value="Time Analysis: " for="allowTimeComp"></p:outputLabel>
-										<p:spacer rendered="#{analysisBean.showTimeAnalysis}" width="5"/>
-										<p:selectBooleanCheckbox widgetVar="allowTimeComp" id="allowTimeComp" rendered="#{analysisBean.showTimeAnalysis}"
-													label="Time Analysis" value="#{analysisBean.analysisDayPojo.nextAndPreviousSelected}">
-													
-											<p:ajax update="@form" listener="#{analysisBean.updatePreviousAndNextSeries}" />
+										<p:spacer height="30" />
+										<div align="right">
+											<p:outputLabel styleClass="chartDateCss"
+												value="#{analysisBean.analysisDatePrettyFormat}" />
+										</div>
+										<hr />
+										<p:outputLabel rendered="#{analysisBean.showTimeAnalysis}"
+											styleClass="timeAnalysis" value="Time Analysis: "
+											for="allowTimeComp"></p:outputLabel>
+										<p:spacer rendered="#{analysisBean.showTimeAnalysis}"
+											width="2" />
+										<p:selectBooleanCheckbox widgetVar="allowTimeComp"
+											id="allowTimeComp"
+											rendered="#{analysisBean.showTimeAnalysis}"
+											label="Time Analysis"
+											value="#{analysisBean.analysisDayPojo.nextAndPreviousSelected}">
+
+											<p:ajax update="@form"
+												listener="#{analysisBean.updatePreviousAndNextSeries}" />
 										</p:selectBooleanCheckbox>
 									</c:when>
 									<c:otherwise>

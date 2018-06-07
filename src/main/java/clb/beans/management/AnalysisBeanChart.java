@@ -93,7 +93,7 @@ public class AnalysisBeanChart {
 		lineModel.getSeries().stream().forEach( serie -> serie.getData().clear() );
 
 		if(registries.size() > 0) {
-			updateSeriesRegistriesValues(currentScale,currentSerie,currentRegistries,null);
+			setSeriesRegistriesValues(currentScale,currentSerie,currentRegistries,null);
 		}
 
 	}
@@ -129,7 +129,7 @@ public class AnalysisBeanChart {
 			lineModel.addSeries( previousSerie );
 			lineModel.addSeries( nextSerie );
 		}
-		updateSeriesRegistriesValues(currentScale,currentSerie,this.currentRegistries,null);
+		setSeriesRegistriesValues(currentScale,currentSerie,this.currentRegistries,null);
 	}
 
 
@@ -186,8 +186,8 @@ public class AnalysisBeanChart {
 				Date previousMonth = DateUtils.getInstance().getMonthReseted(analysisDate, false);
 				Date nextMonth = DateUtils.getInstance().getMonthReseted(analysisDate, true);
 
-				previousSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerId, previousMonth);
-				nextSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerId, nextMonth );
+				previousSeriesRegistries = analyzerDataService.getMonthRegistriesFromAnalyzer( analyzerId, previousMonth);
+				nextSeriesRegistries = analyzerDataService.getMonthRegistriesFromAnalyzer( analyzerId, nextMonth );
 
 				prevDateLabel = DateUtils.getInstance().prettyFormat(previousMonth);
 				nextDateLabel = DateUtils.getInstance().prettyFormat(nextMonth);
@@ -217,8 +217,8 @@ public class AnalysisBeanChart {
 		previousRegistries = AnalyzerRegistryReductionAlgorithm.getInstance().reduceRegistries(previousSeriesRegistries, currentScale);
 		nextRegistries =  AnalyzerRegistryReductionAlgorithm.getInstance().reduceRegistries(nextSeriesRegistries, currentScale);
 
-		updateSeriesRegistriesValues(currentScale,previousSerie,previousRegistries,currentDate);
-		updateSeriesRegistriesValues(currentScale,nextSerie,nextRegistries,currentDate);
+		setSeriesRegistriesValues(currentScale,previousSerie,previousRegistries,currentDate);
+		setSeriesRegistriesValues(currentScale,nextSerie,nextRegistries,currentDate);
 	}
 
 	private void removeNextAndPreviousSeriesRegistries() {
@@ -231,7 +231,7 @@ public class AnalysisBeanChart {
 
 
 
-	private void updateSeriesRegistriesValues(ScaleGraphic currentScale, LineChartSeries chartSerie,
+	private void setSeriesRegistriesValues(ScaleGraphic currentScale, LineChartSeries chartSerie,
 			List<AnalyzerRegistryGui> registriesSelected, Date basedOnDate){
 
 
@@ -329,13 +329,16 @@ public class AnalysisBeanChart {
 			switch(scale) {
 			case HOUR:
 				date = DateUtils.getInstance().replaceDateForOtherDate(dateToBase,currentTime,false);
-				
+				break;
 			case DAY:
 				date = DateUtils.getInstance().replaceDateForOtherDate(dateToBase,currentTime,true);
+				break;
 			case WEEK:
 				date = DateUtils.getInstance().reaplceDateForWeekDay(dateToBase,currentTime);
+				break;
 			case MONTH:
 				date = DateUtils.getInstance().reaplceDateForMonthDay(dateToBase,currentTime);
+				break;
 			}
 			return DateUtils.getInstance().convertDateToSimpleStringFormat(date);
 		}

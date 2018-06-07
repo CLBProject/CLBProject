@@ -299,7 +299,7 @@ form {
 .analysisChartCSS {
 	font-size: 12px;
 	width: 100% !important;
-	height: 70vh !important;
+	height: 60vh !important;
 }
 .lastAnalysisDiv{
 	height:25vh !important;
@@ -411,7 +411,7 @@ form {
 }
 
 .analysisLabels{
-	font-size:15px !important;
+	font-size:12px !important;
 	color: #0A122A !important;
 	vertical-align: middle !important;
 }
@@ -425,4 +425,10 @@ form {
 	vertical-align: middle !important;
 	color: #0A122A !important;	
 	font-size: 12px !important;
+}
+
+.chartDateCss{
+	color:blue;
+	font-size:10px !important;
+	font-weight:bold;
 }

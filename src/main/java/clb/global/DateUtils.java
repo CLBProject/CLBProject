@@ -11,7 +11,7 @@ public class DateUtils
 	private static DateUtils instance;
 	private DateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private DateFormat hourOutputFormat = new SimpleDateFormat("mm:ss");
-	private DateFormat prettyDateFormat = new SimpleDateFormat("EEE, d MMM yyyy");
+	private DateFormat prettyDateFormat = new SimpleDateFormat("EEEE, d MMMM yyyy, HH:mm:ss");
 
 	public static synchronized DateUtils getInstance() {
 		if (instance == null) {
@@ -105,6 +105,8 @@ public class DateUtils
 	public Date getHourReseted(Date timeFrame, boolean next) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(timeFrame);
+		
+		cal.set(Calendar.MILLISECOND,0);
 		cal.set(Calendar.MINUTE,0);
 		cal.set(Calendar.SECOND,0);
 
@@ -118,6 +120,8 @@ public class DateUtils
 	public Date getDayReseted(Date timeFrame, boolean next) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(timeFrame);
+		
+		cal.set(Calendar.MILLISECOND,0);
 		cal.set(Calendar.SECOND,0);
 		cal.set(Calendar.MINUTE,0);
 		cal.set(Calendar.HOUR_OF_DAY,0);
@@ -132,6 +136,7 @@ public class DateUtils
 	public Date getWeekReseted(Date analysisDate, boolean next) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(analysisDate);
+		cal.set(Calendar.MILLISECOND,0);
 		cal.set(Calendar.SECOND,0);
 		cal.set(Calendar.MINUTE,0);
 		cal.set(Calendar.HOUR_OF_DAY,0);
@@ -147,11 +152,13 @@ public class DateUtils
 
 	public Date getMonthReseted(Date analysisDate, boolean next) {
 		Calendar cal = Calendar.getInstance();
+		
 		cal.setTime(analysisDate);
+		cal.set(Calendar.MILLISECOND,0);
 		cal.set(Calendar.SECOND,0);
 		cal.set(Calendar.MINUTE,0);
 		cal.set(Calendar.HOUR_OF_DAY,0);
-		cal.set(Calendar.DAY_OF_MONTH,0);
+		cal.set(Calendar.DAY_OF_MONTH,1);
 
 		if(next)
 			cal.add(Calendar.MONTH, 1);
@@ -174,6 +181,7 @@ public class DateUtils
 	public Date getWeekFirstDayReseted(Date timeFrame) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(timeFrame);
+		cal.set(Calendar.MILLISECOND,0);
 		cal.set(Calendar.SECOND,0);
 		cal.set(Calendar.MINUTE,0);
 		cal.set(Calendar.HOUR_OF_DAY,0);
@@ -223,7 +231,7 @@ public class DateUtils
 				timeFrame.compareTo(getMonthLastDay(todayDate)) < 0;
 	}
 
-	public Date getMonthLastDay(Date todayDate) {
+	public Date getMonthLastDay(Date todayDate) {	
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(todayDate);
 		cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
@@ -234,6 +242,22 @@ public class DateUtils
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(todayDate);
 		cal.set(Calendar.DAY_OF_MONTH, 1);
+		cal.set(Calendar.MILLISECOND,0);
+		cal.set(Calendar.SECOND,0);
+		cal.set(Calendar.MINUTE,0);
+		cal.set(Calendar.HOUR_OF_DAY,0);
+
+		return cal.getTime();
+	}
+	
+	public Date getMonthFirstDayResetedForWeek(Date todayDate) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(todayDate);
+		cal.set(Calendar.DAY_OF_MONTH, 1);
+		cal.set(Calendar.MILLISECOND,0);
+		cal.set(Calendar.SECOND,0);
+		cal.set(Calendar.MINUTE,0);
+		cal.set(Calendar.HOUR_OF_DAY,0);
 
 		return updateIfIsSundayForMonth(cal.getTime());
 	}
@@ -344,7 +368,7 @@ public class DateUtils
 
 		//First Week
 		if(value == 1) {
-			return getMonthFirstDayReseted(date);
+			return getMonthFirstDayResetedForWeek(date);
 		}
 
 		Calendar cal = Calendar.getInstance();
