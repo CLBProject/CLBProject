@@ -80,8 +80,8 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
 
 	@Override
-	public List<AnalyzerRegistryObject> getWeekRegistriesFromAnalyzer(String analyzerId, Date timeFrame) {
-		return clbDao.getWeekRegistriesFromAnalyzer( analyzerId, timeFrame );
+	public List<AnalyzerRegistryObject> getWeekRegistriesFromAnalyzer(String analyzerId, int week, int month, int year) {
+		return clbDao.getWeekRegistriesFromAnalyzer( analyzerId, week, month, year );
 	}
 
 
@@ -362,8 +362,8 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
 
 	@Override
-	public List<AnalyzerRegistryObject> getMonthRegistriesFromAnalyzer(String analyzerId, Date timeFrame) {
-		return clbDao.getMonthRegistriesFromAnalyzer( analyzerId, timeFrame );
+	public List<AnalyzerRegistryObject> getMonthRegistriesFromAnalyzer(String analyzerId, int month, int year) {
+		return clbDao.getMonthRegistriesFromAnalyzer( analyzerId, month , year );
 	}
 
 

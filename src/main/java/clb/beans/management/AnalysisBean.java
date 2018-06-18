@@ -70,8 +70,6 @@ public class AnalysisBean implements Serializable{
 	private Weeks week;
 	private Weeks[] weeks;
 
-	private Boolean showTimeAnalysis;
-
 	@PostConstruct
 	public void init() {
 		todayDate = new Date();
@@ -95,10 +93,8 @@ public class AnalysisBean implements Serializable{
 		year = "" + DateUtils.getInstance().getYearFromDate(todayDate);
 		years = analyzerDataService.getYearsAvailable();
 
-		week = Weeks.getWeekByValue(DateUtils.getInstance().getWeekFromDate(todayDate));
-		weeks = Weeks.getWeeksLimited(DateUtils.getInstance().getWeekFromDate(todayDate));
-
-		showTimeAnalysis = false;
+		week = Weeks.getWeekByValue(DateUtils.getInstance().getWeekFromDate(analysisDate));
+		weeks = Weeks.getWeeksLimited(DateUtils.getInstance().getNumberOfMonthWeeks(month.getValue(),Integer.parseInt(year)));
 
 		//Set Initial Selected Building, DataLogger and Analyzer
 		if(clbHomeLoginBean.getUserLoginPojo().getCurrentUser().getBuildings() != null && 
@@ -163,44 +159,35 @@ public class AnalysisBean implements Serializable{
 	/** Week View Listeners **/
 
 	public void setWeekValue() {
-		analysisDate = DateUtils.getInstance().setWeekOfDate(this.analysisDate,week.getCode());
-		fillGraphicData(  analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate) );
+		analysisDate = DateUtils.getInstance().getWeekFirstDayReseted(week.getCode(),month.getValue(),Integer.parseInt(year));
+		fillGraphicData(  analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerSelected.getId(), 
+				week.getCode(), month.getValue(), Integer.parseInt(year)) );
 	}
 
 
 	public void setMonthValueForWeek() {
 
 		week = Weeks.WEEK1;
+		
+		analysisDate = DateUtils.getInstance().getWeekFirstDayReseted(week.getCode(),month.getValue(), Integer.parseInt(year));
 
-		analysisDate = DateUtils.getInstance().setMonthOfDate(this.analysisDate,month.getValue());
-		analysisDate = DateUtils.getInstance().getMonthFirstDayResetedForWeek(analysisDate);
+		weeks = Weeks.getWeeksLimited(DateUtils.getInstance().getNumberOfMonthWeeks(month.getValue(),Integer.parseInt(year)));
 
-		weeks = Weeks.getWeeksLimited(DateUtils.getInstance().getWeekFromDate(analysisDate));
-
-		fillGraphicData(analyzerDataService.getWeekRegistriesFromAnalyzer(analyzerSelected.getId(), analysisDate));
+		fillGraphicData(analyzerDataService.getWeekRegistriesFromAnalyzer(analyzerSelected.getId(), 
+				week.getCode(), month.getValue(), Integer.parseInt(year)));
 	}
 
 	public void setYearValueForWeek() {
 
-		week = Weeks.WEEK1;	
+		week = Weeks.WEEK1;
+		month = Months.JANUARY;
 		
-		analysisDate = DateUtils.getInstance().setYearOfDate(this.analysisDate,Integer.parseInt(year));
+		analysisDate = DateUtils.getInstance().getWeekFirstDayReseted(week.getCode(),month.getValue(),Integer.parseInt(year));
 
-		//If year Date is bigger then is allowed
-		if(DateUtils.getInstance().isSameYearOfCurrent(analysisDate)) {
-			analysisDate = todayDate;
-			int monthDate = DateUtils.getInstance().getMonthFromDate(analysisDate);
-			monthsValues = Months.getMonthsLimited(monthDate);
-			month = Months.getMonthByValue(monthDate);
-		}
-		else {
-			int monthDate = DateUtils.getInstance().getMonthFromDate(analysisDate);
-			monthsValues = Months.values();
-			month = Months.getMonthByValue(monthDate);
-		}
+		monthsValues = Months.getMonthsLimited(DateUtils.getInstance().getNumberOfMonthsInYear(Integer.parseInt(year)));
+		weeks = Weeks.getWeeksLimited(DateUtils.getInstance().getNumberOfMonthWeeks(month.getValue(),Integer.parseInt(year)));
 
-		weeks = Weeks.getWeeksLimited(DateUtils.getInstance().getWeekFromDate(analysisDate));
-		fillGraphicData(analyzerDataService.getWeekRegistriesFromAnalyzer(analyzerSelected.getId(), analysisDate));
+		fillGraphicData(analyzerDataService.getWeekRegistriesFromAnalyzer(analyzerSelected.getId(), week.getCode(), month.getValue(), Integer.parseInt(year)));
 	}
 
 	/** Month View Listeners **/
@@ -208,51 +195,24 @@ public class AnalysisBean implements Serializable{
 	public void setMonthValueForMonth() {
 
 		week = Weeks.WEEK1;
+		
+		analysisDate = DateUtils.getInstance().getWeekFirstDayReseted(week.getCode(),month.getValue(), Integer.parseInt(year));
 
-		analysisDate = DateUtils.getInstance().setMonthOfDate(this.analysisDate,month.getValue());
-		analysisDate = DateUtils.getInstance().getMonthFirstDayReseted(analysisDate);
-
-		fillGraphicData(analyzerDataService.getMonthRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate));
+		fillGraphicData(analyzerDataService.getMonthRegistriesFromAnalyzer( analyzerSelected.getId(), month.getValue(), Integer.parseInt(year)));
 	}
 
 	public void setYearValueForMonth() {
 
 		week = Weeks.WEEK1;
+		month = Months.JANUARY;
 		
-		analysisDate = DateUtils.getInstance().setYearOfDate(this.analysisDate,Integer.parseInt(year));
-
-		//If year Date is bigger then is allowed
-		if(DateUtils.getInstance().isSameYearOfCurrent(analysisDate)) {
-			analysisDate = todayDate;
-			int monthDate = DateUtils.getInstance().getMonthFromDate(analysisDate);
-			monthsValues = Months.getMonthsLimited(monthDate);
-			month = Months.getMonthByValue(monthDate);
-		}
-		else {
-			int monthDate = DateUtils.getInstance().getMonthFromDate(analysisDate);
-			monthsValues = Months.values();
-			month = Months.getMonthByValue(monthDate);
-		}
-
-		fillGraphicData(analyzerDataService.getMonthRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate));
+		analysisDate = DateUtils.getInstance().getWeekFirstDayReseted(week.getCode(),month.getValue(),Integer.parseInt(year));
+		monthsValues = Months.getMonthsLimited(DateUtils.getInstance().getNumberOfMonthsInYear(Integer.parseInt(year)));
+		
+		fillGraphicData(analyzerDataService.getMonthRegistriesFromAnalyzer( analyzerSelected.getId(), month.getValue(), Integer.parseInt(year)));
 	}
 
 	private void fillGraphicData(List<AnalyzerRegistryObject> registries) {
-
-		switch(scaleGraphic) {
-		case HOUR:
-			this.showTimeAnalysis = !DateUtils.getInstance().isThisHour(analysisDate);
-			break;
-		case DAY:
-			this.showTimeAnalysis = !DateUtils.getInstance().isToday(analysisDate);
-			break;
-		case WEEK:
-			this.showTimeAnalysis = !DateUtils.getInstance().isThisWeek(analysisDate);
-			break;
-		case MONTH:
-			this.showTimeAnalysis = !DateUtils.getInstance().isThisMonth(analysisDate);
-			break;
-		}
 
 		analysisDayPojo.fillGraphicForData( registries, scaleGraphic );
 		updatePreviousAndNextSeries();
@@ -272,11 +232,10 @@ public class AnalysisBean implements Serializable{
 			registries = analyzerDataService.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
 			break;
 		case WEEK:
-			registries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
+			registries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerSelected.getId(), week.getCode(), month.getValue(), Integer.parseInt(year));
 			break;
 		case MONTH:
-			month = Months.getMonthByValue(DateUtils.getInstance().getMonthFromDate(analysisDate));
-			registries = analyzerDataService.getMonthRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
+			registries = analyzerDataService.getMonthRegistriesFromAnalyzer( analyzerSelected.getId(), month.getValue(), Integer.parseInt(year));
 			break;
 		default: 
 			registries = analyzerDataService.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
@@ -292,9 +251,7 @@ public class AnalysisBean implements Serializable{
 	}
 
 	public void updatePreviousAndNextSeries() {
-		if(showTimeAnalysis) {
-			analysisDayPojo.affectPreviousAndNextSeries(scaleGraphic,analysisDate,analyzerSelected.getId());
-		}
+		analysisDayPojo.affectPreviousAndNextSeries(scaleGraphic,analysisDate,analyzerSelected.getId(),week.getCode(), month.getValue(), Integer.parseInt(year));
 	}
 
 	private void updateHoursCombo() {
@@ -521,14 +478,4 @@ public class AnalysisBean implements Serializable{
 	public void setNextAnalisysDate(Date nextAnalisysDate) {
 		this.nextAnalisysDate = nextAnalisysDate;
 	}
-
-	public Boolean getShowTimeAnalysis() {
-		return showTimeAnalysis;
-	}
-
-	public void setShowTimeAnalysis(Boolean showTimeAnalysis) {
-		this.showTimeAnalysis = showTimeAnalysis;
-	}
-
-
 }

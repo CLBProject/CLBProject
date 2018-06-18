@@ -10,7 +10,9 @@ public class DateUtils
 {
 	private static DateUtils instance;
 	private DateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	private DateFormat hourOutputFormat = new SimpleDateFormat("mm:ss");
+	private DateFormat hourOutputFormat = new SimpleDateFormat("HH:mm:ss");
+	private DateFormat weekFormat = new SimpleDateFormat("EEEE, d");
+	private DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy");
 	private DateFormat prettyDateFormat = new SimpleDateFormat("EEEE, d MMMM yyyy, HH:mm:ss");
 
 	public static synchronized DateUtils getInstance() {
@@ -37,23 +39,6 @@ public class DateUtils
 		String day = cal.get(Calendar.DAY_OF_MONTH) >= 10 ? "" + cal.get(Calendar.DAY_OF_MONTH) : "0" + cal.get(Calendar.DAY_OF_MONTH);
 
 		return name + "_"+ year+month+day;
-	}
-
-
-	public Date getPreviousHourFromDate(Date timeFrame) {
-		Calendar timeFrameCalTomorrow = Calendar.getInstance();
-		timeFrameCalTomorrow.setTime( timeFrame );
-		timeFrameCalTomorrow.add( Calendar.HOUR_OF_DAY, -1 );
-
-		return timeFrameCalTomorrow.getTime();
-	}
-
-	public Date getPreviousDayFromDate(Date timeFrame) {
-		Calendar timeFrameCalTomorrow = Calendar.getInstance();
-		timeFrameCalTomorrow.setTime( timeFrame );
-		timeFrameCalTomorrow.add( Calendar.DAY_OF_MONTH, -1 );
-
-		return timeFrameCalTomorrow.getTime();
 	}
 
 	public int getHourFromDate(Date analysisDate) {
@@ -105,7 +90,7 @@ public class DateUtils
 	public Date getHourReseted(Date timeFrame, boolean next) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(timeFrame);
-		
+
 		cal.set(Calendar.MILLISECOND,0);
 		cal.set(Calendar.MINUTE,0);
 		cal.set(Calendar.SECOND,0);
@@ -117,59 +102,14 @@ public class DateUtils
 		return cal.getTime();
 	}
 
-	public Date getDayReseted(Date timeFrame, boolean next) {
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(timeFrame);
-		
-		cal.set(Calendar.MILLISECOND,0);
-		cal.set(Calendar.SECOND,0);
-		cal.set(Calendar.MINUTE,0);
-		cal.set(Calendar.HOUR_OF_DAY,0);
-
-		if(next)
-			cal.add(Calendar.DAY_OF_MONTH, 1);
-		else cal.add(Calendar.DAY_OF_MONTH, -1);
-
-		return cal.getTime();
-	}
-
-	public Date getWeekReseted(Date analysisDate, boolean next) {
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(analysisDate);
-		cal.set(Calendar.MILLISECOND,0);
-		cal.set(Calendar.SECOND,0);
-		cal.set(Calendar.MINUTE,0);
-		cal.set(Calendar.HOUR_OF_DAY,0);
-
-		if(next)
-			cal.add(Calendar.DATE, 7);
-		else
-			cal.add(Calendar.DATE,- 7);
-
-		return cal.getTime();
-	}
-
-
-	public Date getMonthReseted(Date analysisDate, boolean next) {
-		Calendar cal = Calendar.getInstance();
-		
-		cal.setTime(analysisDate);
-		cal.set(Calendar.MILLISECOND,0);
-		cal.set(Calendar.SECOND,0);
-		cal.set(Calendar.MINUTE,0);
-		cal.set(Calendar.HOUR_OF_DAY,0);
-		cal.set(Calendar.DAY_OF_MONTH,1);
-
-		if(next)
-			cal.add(Calendar.MONTH, 1);
-		else cal.add(Calendar.MONTH, -1);
-
-		return cal.getTime();
-	}
 
 	public Date getDay(Date timeFrame, boolean next) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(timeFrame);
+		cal.set(Calendar.MILLISECOND,0);
+		cal.set(Calendar.SECOND,0);
+		cal.set(Calendar.MINUTE,0);
+		cal.set(Calendar.HOUR_OF_DAY,0);
 
 		if(next)
 			cal.add(Calendar.DAY_OF_MONTH, 1);
@@ -177,30 +117,40 @@ public class DateUtils
 
 		return cal.getTime();
 	}
-
-	public Date getWeekFirstDayReseted(Date timeFrame) {
+	
+	public Date getDayReseted(Date timeFrame) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(timeFrame);
 		cal.set(Calendar.MILLISECOND,0);
 		cal.set(Calendar.SECOND,0);
 		cal.set(Calendar.MINUTE,0);
 		cal.set(Calendar.HOUR_OF_DAY,0);
-		cal.set(Calendar.MILLISECOND,0);
-		cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
 
 		return cal.getTime();
 	}
 
-	public Date getWeekLastDay(Date timeFrame) {
+	public Date getWeekFirstDayReseted(int weekNr, int month, int year) {
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.YEAR, year);
+		cal.set(Calendar.MONTH, month);
+		cal.set(Calendar.DAY_OF_MONTH,(weekNr-1)*7+1);
+		cal.set(Calendar.MILLISECOND,0);
+		cal.set(Calendar.SECOND,0);
+		cal.set(Calendar.MINUTE,0);
+		cal.set(Calendar.HOUR_OF_DAY,0);
 
-		Calendar c = Calendar.getInstance();
-		c.setTime(getWeekFirstDayReseted(timeFrame));
+		return cal.getTime();
+	}
 
-		for (int i = 0; i < 6; i++) {
-			c.add(Calendar.DATE, 1);
-		}
+	public Date getWeekLastDay(int weekNr, int month, int year) {
 
-		return c.getTime();
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.YEAR, year);
+		cal.set(Calendar.MONTH, month);
+		cal.set(Calendar.DAY_OF_MONTH,(weekNr-1)*7+1);
+		cal.add(Calendar.DATE, 6);
+
+		return cal.getTime();
 	}
 
 	public boolean isTheSameDay(Date date1, Date date2) {
@@ -216,50 +166,40 @@ public class DateUtils
 				dateCal.get(Calendar.DAY_OF_MONTH) == dateCal2.get(Calendar.DAY_OF_MONTH);
 	}
 
-	public boolean isThisWeek(Date timeFrame) {
 
-		Date todayDate = new Date();
+	public boolean isThisWeek(int week,int month,int year) {
 
-		return timeFrame.compareTo(getWeekFirstDayReseted(todayDate)) >= 0 &&
-				timeFrame.compareTo(getWeekLastDay(todayDate)) < 0;
+		Calendar dateCal = Calendar.getInstance();
+
+		int dayOfMonth = dateCal.get(Calendar.DAY_OF_MONTH);
+
+		return dateCal.get(Calendar.YEAR) == year && 
+				dateCal.get(Calendar.MONTH) == month && getWeekFromByDayOfMonth(dayOfMonth) == week;
 	}
 
-	public boolean isThisMonth(Date timeFrame) {
-		Date todayDate = new Date();
+	public boolean isThisMonth(int month, int year) {
+		Calendar dateCal = Calendar.getInstance();
 
-		return timeFrame.compareTo(getMonthFirstDayReseted(todayDate)) >= 0 &&
-				timeFrame.compareTo(getMonthLastDay(todayDate)) < 0;
+		return dateCal.get(Calendar.YEAR) == year && 
+				dateCal.get(Calendar.MONTH) == month;
 	}
 
-	public Date getMonthLastDay(Date todayDate) {	
+	public boolean isThisYear(int year) {
+		Calendar dateCal = Calendar.getInstance();
+		return dateCal.get(Calendar.YEAR) == year;
+	}
+
+	public Date getMonthLastDay(int month, int year) {	
 		Calendar cal = Calendar.getInstance();
-		cal.setTime(todayDate);
+		cal.set(Calendar.MONTH, month);
+		cal.set(Calendar.YEAR, year);
 		cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-		return cal.getTime();
-	}
-
-	public Date getMonthFirstDayReseted(Date todayDate) {
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(todayDate);
-		cal.set(Calendar.DAY_OF_MONTH, 1);
 		cal.set(Calendar.MILLISECOND,0);
 		cal.set(Calendar.SECOND,0);
 		cal.set(Calendar.MINUTE,0);
 		cal.set(Calendar.HOUR_OF_DAY,0);
 
 		return cal.getTime();
-	}
-	
-	public Date getMonthFirstDayResetedForWeek(Date todayDate) {
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(todayDate);
-		cal.set(Calendar.DAY_OF_MONTH, 1);
-		cal.set(Calendar.MILLISECOND,0);
-		cal.set(Calendar.SECOND,0);
-		cal.set(Calendar.MINUTE,0);
-		cal.set(Calendar.HOUR_OF_DAY,0);
-
-		return updateIfIsSundayForMonth(cal.getTime());
 	}
 
 	public String prettyFormat(Date analysisDate) {
@@ -272,13 +212,25 @@ public class DateUtils
 		return hourOutputFormat.format(analysisDate);
 	}
 
+	public String weekFormat(int week, int month, int year) {
 
-	public Date setMonthOfDate(Date date, int value) {
 		Calendar cal = Calendar.getInstance();
-		cal.setTime(getMonthFirstDayReseted(date));
-		cal.set(Calendar.MONTH, value);
-		return cal.getTime();
+		cal.set(Calendar.YEAR, year);
+		cal.set(Calendar.MONTH, month);
+		cal.set(Calendar.WEEK_OF_MONTH, week);
+		cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
 
+		return weekFormat.format(cal.getTime());
+	}
+
+	public String monthFormat(int month, int year) {
+
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.YEAR, year);
+		cal.set(Calendar.MONTH, month);
+		cal.set(Calendar.DAY_OF_MONTH,1);
+
+		return monthFormat.format(cal.getTime());
 	}
 
 	public String transformDateToHoursOrDaysAverage(Date currenttime) {
@@ -328,13 +280,6 @@ public class DateUtils
 		return cal.get(Calendar.YEAR);
 	}
 
-	public Date setYearOfDate(Date date, int year) {
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(date);
-		cal.set(Calendar.YEAR, year);
-		return cal.getTime();
-	}
-
 	public Date setHourOfDate(Date date, int value) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
@@ -342,69 +287,10 @@ public class DateUtils
 		return cal.getTime();
 	}
 
-
-	public int getNumberOfWeeksFromDate(Date date) {
-
-		Calendar cal = Calendar.getInstance();
-		Date currentDate = new Date();
-		Date lateDate = getMonthLastDay(date);
-
-		if(isDateBiggerThen(lateDate, currentDate)) {
-			cal.setTime(currentDate);
-		}
-		else cal.setTime(lateDate);
-
-		return cal.get(Calendar.WEEK_OF_MONTH) ;
-	}
-
-	public int getWeekFromDate(Date todayDate) {
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(todayDate);
-
-		return cal.get(Calendar.WEEK_OF_MONTH);
-	}
-
-	public Date setWeekOfDate(Date date, int value) {
-
-		//First Week
-		if(value == 1) {
-			return getMonthFirstDayResetedForWeek(date);
-		}
-
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(date);
-		cal.set(Calendar.WEEK_OF_MONTH, value);
-		cal.setTime(getWeekFirstDayReseted(cal.getTime()));
-
-		return cal.getTime();
-	}
-
-	public boolean isSameYearOfCurrent(Date analysisDate) {
-		Calendar otherDate = Calendar.getInstance();
-		otherDate.setTime(analysisDate);
-
-		Calendar thisDate = Calendar.getInstance();
-		thisDate.setTime(new Date());
-
-		return thisDate.get(Calendar.YEAR) == otherDate.get(Calendar.YEAR);
-	}
-
 	public boolean isDateBiggerThen(Date date1, Date date2) {
 
 		return date1.compareTo(date2) > 0;
 	}
-
-	public Date updateIfIsSundayForMonth(Date date) {
-
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(date);
-
-		if(cal.get(Calendar.DAY_OF_WEEK) == 1)
-			return getDayReseted(date, true);
-
-		return date;
-	}
-
 
 	public Date replaceDateForOtherDate(Date dateToBase, Date currentTime, boolean hour) {
 		Calendar otherDate = Calendar.getInstance();
@@ -421,7 +307,7 @@ public class DateUtils
 		return otherDate.getTime();
 	}
 
-	public Date reaplceDateForWeekDay(Date dateToBase, Date currentTime) {
+	public Date replaceDateForWeekDay(Date dateToBase, Date currentTime) {
 
 		Calendar otherDate = Calendar.getInstance();
 		otherDate.setTime(dateToBase);
@@ -429,27 +315,168 @@ public class DateUtils
 		Calendar thisDate = Calendar.getInstance();
 		thisDate.setTime(currentTime);
 
-		boolean add = otherDate.get(Calendar.WEEK_OF_YEAR) > thisDate.get(Calendar.WEEK_OF_YEAR);
+		boolean add = otherDate.compareTo(thisDate) > 0;
 
-		for (int i = 0; i < 7; i++) {
-
-			if(add) {
-				thisDate.add(Calendar.DAY_OF_MONTH, 1);
-			}
-
-			else thisDate.add(Calendar.DAY_OF_MONTH, -1);
+		if(add) {
+			thisDate.add(Calendar.DAY_OF_MONTH, 7);
 		}
+
+		else thisDate.add(Calendar.DAY_OF_MONTH, -7);
+
 		return thisDate.getTime();
 	}
 
-	public Date reaplceDateForMonthDay(Date dateToBase, Date currentTime) {
+	public Date replaceDateForMonthDay(Date dateToBase, Date currentTime) {
 		Calendar otherDate = Calendar.getInstance();
 		otherDate.setTime(dateToBase);
-		
+
 		Calendar currentDate = Calendar.getInstance();
 		currentDate.setTime(currentTime);
 		currentDate.set(Calendar.MONTH, otherDate.get(Calendar.MONTH));
-		
+
 		return currentDate.getTime();
+	}
+
+	public int getNumberOfMonthWeeks(int month, int year) {
+
+		Calendar cal = Calendar.getInstance();
+
+		if(isThisMonth(month, year)) {
+			return getWeekFromByDayOfMonth(cal.get(Calendar.DAY_OF_MONTH));
+		}
+		else {
+			cal.set(Calendar.MONTH, month);
+			cal.set(Calendar.YEAR, year);
+
+			int maxMonthDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+			if(maxMonthDay % 7 == 0) {
+				return maxMonthDay / 7;
+			}
+			else return maxMonthDay/7 + 1;
+		}
+	}
+
+	public int getNumberOfMonthsInYear(int year) {
+
+		Calendar cal = Calendar.getInstance();
+
+		if(isThisYear(year)) {
+			return cal.get(Calendar.MONTH);
+		}
+		else return 12;
+	}
+
+	public int getWeekFromDate(Date analysisDate) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(analysisDate);
+		return getWeekFromByDayOfMonth(cal.get(Calendar.DAY_OF_MONTH));
+	}
+
+	public int getPreviousWeekFromWeek(int week, int month, int year) {
+		Calendar cal = getFromWeek(week,month,year,false); 
+		return getWeekFromByDayOfMonth(cal.get(Calendar.DAY_OF_MONTH));
+	}
+
+	public int getPreviousMonthFromWeek(int week, int month, int year) {
+		Calendar cal = getFromWeek(week,month,year,false); 
+		return cal.get(Calendar.MONTH);
+	}
+
+	public int getPreviousYearFromWeek(int week, int month, int year) {
+		Calendar cal = getFromWeek(week,month,year,false); 
+		return cal.get(Calendar.YEAR);
+	}
+
+	public int getNextWeekFromWeek(int week, int month, int year) {
+		Calendar cal = getFromWeek(week,month,year,true); 
+		return getWeekFromByDayOfMonth(cal.get(Calendar.DAY_OF_MONTH));
+	}
+
+	public int getNextMonthFromWeek(int week, int month, int year) {
+		Calendar cal = getFromWeek(week,month,year,true); 
+		return cal.get(Calendar.MONTH);
+	}
+
+	public int getNextYearFromWeek(int week, int month, int year) {
+		Calendar cal = getFromWeek(week,month,year,true); 
+		return cal.get(Calendar.YEAR);
+	}
+
+	private Calendar getFromWeek(int week, int month, int year, boolean add) {
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.YEAR, year);
+		cal.set(Calendar.MONTH, month);
+		cal.set(Calendar.DAY_OF_MONTH,1+(week-1)*7);
+
+		if(add) {
+			if(week == 5) {
+				//5th week
+				cal.set(Calendar.DAY_OF_MONTH, 1);
+				if(month == 11) {
+					cal.set(Calendar.MONTH, 0);
+					cal.set(Calendar.YEAR, year+1);
+				}
+				else cal.set(Calendar.MONTH, month+1);
+			}
+			else cal.add(Calendar.DATE, 7);
+		}
+		else {
+			if(week == 1) {
+				//5th week
+				cal.set(Calendar.DAY_OF_MONTH, 29);
+				if(month == 1) {
+					cal.set(Calendar.MONTH, 11);
+					cal.set(Calendar.YEAR, year-1);
+				}
+				else cal.set(Calendar.MONTH, month-1);
+			}
+			else cal.add(Calendar.DATE, -7);
+		}
+
+		return cal;
+	}
+
+	private Calendar getFromMonth(int month, int year, boolean add) {
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.YEAR, year);
+		cal.set(Calendar.MONTH, month);
+		cal.set(Calendar.DAY_OF_MONTH, 1);
+
+		if(add) 
+			cal.add(Calendar.MONTH, 1);
+		else
+			cal.add(Calendar.MONTH, -1);
+
+		return cal;
+	}
+
+	private int getWeekFromByDayOfMonth(int dayOfMonth) {
+		int week = dayOfMonth/7;
+
+		if(dayOfMonth % 7 == 0) {
+			return week;
+		}
+		else return week + 1;
+	}
+
+	public int getPreviousMonth(int month, int year) {
+		Calendar cal = getFromMonth(month,year,false);
+		return cal.get(Calendar.MONTH);
+	}
+
+	public int getPreviousYear(int month, int year) {
+		Calendar cal = getFromMonth(month,year,false);
+		return cal.get(Calendar.YEAR);
+	}
+
+	public int getNextMonth(int month, int year) {
+		Calendar cal = getFromMonth(month,year,true);
+		return cal.get(Calendar.MONTH);
+	}
+
+	public int getNextYear(int month, int year) {
+		Calendar cal = getFromMonth(month,year,true);
+		return cal.get(Calendar.YEAR);
 	}
 }

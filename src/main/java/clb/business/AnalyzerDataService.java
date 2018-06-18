@@ -17,9 +17,9 @@ public interface AnalyzerDataService {
     
     public List<AnalyzerRegistryObject> getDayRegistriesFromAnalyzer( String analyzerId, Date timeFrame );
 
-	public List<AnalyzerRegistryObject> getWeekRegistriesFromAnalyzer(String id, Date analysisDate);
+	public List<AnalyzerRegistryObject> getWeekRegistriesFromAnalyzer(String id, int week, int month, int year);
 	
-	public List<AnalyzerRegistryObject> getMonthRegistriesFromAnalyzer(String analyzerId, Date timeFrame);
+	public List<AnalyzerRegistryObject> getMonthRegistriesFromAnalyzer(String analyzerId, int month, int year);
 	
 	public Date getLowestAnalyzerRegistryDate();
 

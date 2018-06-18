@@ -106,7 +106,7 @@
 										<p:selectOneMenu id="monthWeekList" widgetVar="monthWeekList"
 											value="#{analysisBean.year}">
 											<p:ajax event="change"
-												listener="#{analysisBean.setYearValueForMonth}"
+												listener="#{analysisBean.setYearValueForWeek}"
 												update=":analysisForm"></p:ajax>
 											<f:selectItems value="#{analysisBean.years}" var="year"
 												itemValue="#{year}" itemLabel="#{year}" />
@@ -223,7 +223,7 @@
 										<p:selectOneMenu id="monthList" widgetVar="monthList"
 											value="#{analysisBean.year}">
 											<p:ajax event="change"
-												listener="#{analysisBean.setYearValueForWeek}"
+												listener="#{analysisBean.setYearValueForMonth}"
 												update=":analysisForm"></p:ajax>
 											<f:selectItems value="#{analysisBean.years}" var="year"
 												itemValue="#{year}" itemLabel="#{year}" />
@@ -267,14 +267,11 @@
 												value="#{analysisBean.analysisDatePrettyFormat}" />
 										</div>
 										<hr />
-										<p:outputLabel rendered="#{analysisBean.showTimeAnalysis}"
-											styleClass="timeAnalysis" value="Time Analysis: "
+										<p:outputLabel styleClass="timeAnalysis" value="Time Analysis: "
 											for="allowTimeComp"></p:outputLabel>
-										<p:spacer rendered="#{analysisBean.showTimeAnalysis}"
-											width="2" />
+										<p:spacer width="2" />
 										<p:selectBooleanCheckbox widgetVar="allowTimeComp"
 											id="allowTimeComp"
-											rendered="#{analysisBean.showTimeAnalysis}"
 											label="Time Analysis"
 											value="#{analysisBean.analysisDayPojo.nextAndPreviousSelected}">
 

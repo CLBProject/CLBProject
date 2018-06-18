@@ -47,17 +47,17 @@ public class AnalysisBeanChart {
 	private List<AnalyzerRegistryGui> nextRegistries;
 
 	private Boolean nextAndPreviousSelected;
-	
+
 	private AnalyzerDataService analyzerDataService;
 
 	public AnalysisBeanChart(List<BuildingMeterObject> buildingMetersObject, AnalyzerDataService analyzerDataService){
 
 		this.analyzerDataService = analyzerDataService;
-		
+
 		buildingMeterQuickAnalysis = BuildingMeterParameterValues.values();
 
 		lineModel = new LineChartModel();
-		lineModel.setZoom(true);
+		lineModel.setZoom(false);
 		lineModel.setLegendPosition("se");
 		lineModel.setMouseoverHighlight( true );
 		lineModel.setResetAxesOnResize( false );
@@ -135,7 +135,7 @@ public class AnalysisBeanChart {
 
 
 
-	public void affectPreviousAndNextSeries(ScaleGraphic scaleGraphic, Date analysisDate, String analyzerId) {
+	public void affectPreviousAndNextSeries(ScaleGraphic scaleGraphic, Date analysisDate, String analyzerId, int week, int month, int year) {
 		removeNextAndPreviousSeriesRegistries();
 
 		if(nextAndPreviousSelected) {
@@ -154,14 +154,14 @@ public class AnalysisBeanChart {
 				previousSeriesRegistries = analyzerDataService.getHourRegistriesFromAnalyzer( analyzerId,previousHour);
 				nextSeriesRegistries = analyzerDataService.getHourRegistriesFromAnalyzer( analyzerId,nextHour);
 
-				prevDateLabel = DateUtils.getInstance().prettyFormat(previousHour);
-				nextDateLabel = DateUtils.getInstance().prettyFormat(nextHour);
+				prevDateLabel = DateUtils.getInstance().hourFormat(previousHour);
+				nextDateLabel = DateUtils.getInstance().hourFormat(nextHour);
 
 				break;
 			case DAY:
 
-				Date previousDay = DateUtils.getInstance().getDayReseted(analysisDate, false);
-				Date nextDay = DateUtils.getInstance().getDayReseted(analysisDate, true);
+				Date previousDay = DateUtils.getInstance().getDay(analysisDate, false);
+				Date nextDay = DateUtils.getInstance().getDay(analysisDate, true);
 
 				previousSeriesRegistries = analyzerDataService.getDayRegistriesFromAnalyzer( analyzerId, previousDay);
 				nextSeriesRegistries = analyzerDataService.getDayRegistriesFromAnalyzer( analyzerId, nextDay);
@@ -171,26 +171,36 @@ public class AnalysisBeanChart {
 
 				break;
 			case WEEK:
-				Date previousWeek = DateUtils.getInstance().getWeekReseted(analysisDate, false);
-				Date nextWeek = DateUtils.getInstance().getWeekReseted(analysisDate, true);
+				
+				int previousWeek = DateUtils.getInstance().getPreviousWeekFromWeek(week,month,year);
+				int previousMonth = DateUtils.getInstance().getPreviousMonthFromWeek(week,month,year);
+				int previousYear = DateUtils.getInstance().getPreviousYearFromWeek(week,month,year);
 
-				previousSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerId, previousWeek);
-				nextSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerId, nextWeek);
 
-				prevDateLabel = DateUtils.getInstance().prettyFormat(previousWeek);
-				nextDateLabel = DateUtils.getInstance().prettyFormat(nextWeek);
+				int nextWeek = DateUtils.getInstance().getNextWeekFromWeek(week,month,year);
+				int nextMonth = DateUtils.getInstance().getNextMonthFromWeek(week,month,year);
+				int nextYear = DateUtils.getInstance().getNextYearFromWeek(week,month,year);
+
+				previousSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerId, previousWeek, previousMonth, previousYear);
+				nextSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerId, nextWeek, nextMonth, nextYear);
+
+				prevDateLabel = DateUtils.getInstance().weekFormat(previousWeek, previousMonth, previousYear);
+				nextDateLabel = DateUtils.getInstance().weekFormat(nextWeek, nextMonth, nextYear);
 
 				break;
 			case MONTH:
 
-				Date previousMonth = DateUtils.getInstance().getMonthReseted(analysisDate, false);
-				Date nextMonth = DateUtils.getInstance().getMonthReseted(analysisDate, true);
+				int prevMonth = DateUtils.getInstance().getPreviousMonth(month,year);
+				int prevYear = DateUtils.getInstance().getPreviousYear(month,year);
 
-				previousSeriesRegistries = analyzerDataService.getMonthRegistriesFromAnalyzer( analyzerId, previousMonth);
-				nextSeriesRegistries = analyzerDataService.getMonthRegistriesFromAnalyzer( analyzerId, nextMonth );
+				int nMonth = DateUtils.getInstance().getNextMonth(month,year);
+				int nYear = DateUtils.getInstance().getNextYear(month,year);
+				
+				previousSeriesRegistries = analyzerDataService.getMonthRegistriesFromAnalyzer( analyzerId, prevMonth, prevYear);
+				nextSeriesRegistries = analyzerDataService.getMonthRegistriesFromAnalyzer( analyzerId, nMonth , nYear);
 
-				prevDateLabel = DateUtils.getInstance().prettyFormat(previousMonth);
-				nextDateLabel = DateUtils.getInstance().prettyFormat(nextMonth);
+				prevDateLabel = DateUtils.getInstance().monthFormat(prevMonth, prevYear);
+				nextDateLabel = DateUtils.getInstance().monthFormat(nMonth, nYear);
 
 				break;
 			default: 
@@ -246,7 +256,7 @@ public class AnalysisBeanChart {
 			Integer kvasys = registry.getKvasys().intValue();;
 			Integer vlnsys = registry.getVlnsys().intValue();;
 			Integer vllsys = registry.getVllsys().intValue();;
-			String currentTime = getTimeString(basedOnDate,registry.getCurrentTime(),currentScale); //getTimeString(registry.getCurrentTime(),currentScale);
+			String currentTime = getTimeString(basedOnDate,registry.getCurrentTime(),currentScale);
 
 			switch(buildingMeterSel) {
 
@@ -323,9 +333,9 @@ public class AnalysisBeanChart {
 
 	private String getTimeString(Date dateToBase, Date currentTime, ScaleGraphic scale) {
 		if(dateToBase != null) {
-			
+
 			Date date = null;
-			
+
 			switch(scale) {
 			case HOUR:
 				date = DateUtils.getInstance().replaceDateForOtherDate(dateToBase,currentTime,false);
@@ -334,10 +344,10 @@ public class AnalysisBeanChart {
 				date = DateUtils.getInstance().replaceDateForOtherDate(dateToBase,currentTime,true);
 				break;
 			case WEEK:
-				date = DateUtils.getInstance().reaplceDateForWeekDay(dateToBase,currentTime);
+				date = DateUtils.getInstance().replaceDateForWeekDay(dateToBase,currentTime);
 				break;
 			case MONTH:
-				date = DateUtils.getInstance().reaplceDateForMonthDay(dateToBase,currentTime);
+				date = DateUtils.getInstance().replaceDateForMonthDay(dateToBase,currentTime);
 				break;
 			}
 			return DateUtils.getInstance().convertDateToSimpleStringFormat(date);
