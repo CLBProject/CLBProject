@@ -166,7 +166,21 @@ public class DateUtils
 				dateCal.get(Calendar.DAY_OF_MONTH) == dateCal2.get(Calendar.DAY_OF_MONTH);
 	}
 
-
+	public Date getWeekToDate(Date date,boolean add) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		
+		if(add) {
+			cal.add(Calendar.DATE, 7);
+		}
+		else {
+			cal.add(Calendar.DATE, -7);
+		}
+		
+		return cal.getTime();
+	}
+	
+	
 	public boolean isThisWeek(int week,int month,int year) {
 
 		Calendar dateCal = Calendar.getInstance();
@@ -182,6 +196,19 @@ public class DateUtils
 
 		return dateCal.get(Calendar.YEAR) == year && 
 				dateCal.get(Calendar.MONTH) == month;
+	}
+	
+	public Date getMonthToDate(Date date,boolean add) {
+		Calendar cal = Calendar.getInstance();
+		
+		if(add) {
+			cal.add(Calendar.MONTH, 1);
+		}
+		else {
+			cal.add(Calendar.MONTH, -1);
+		}
+		
+		return cal.getTime();
 	}
 
 	public boolean isThisYear(int year) {
@@ -292,51 +319,6 @@ public class DateUtils
 		return date1.compareTo(date2) > 0;
 	}
 
-	public Date replaceDateForOtherDate(Date dateToBase, Date currentTime, boolean hour) {
-		Calendar otherDate = Calendar.getInstance();
-		otherDate.setTime(dateToBase);
-
-		Calendar thisDate = Calendar.getInstance();
-		thisDate.setTime(currentTime);
-
-
-		if(hour) {
-			otherDate.set(Calendar.HOUR_OF_DAY,thisDate.get(Calendar.HOUR_OF_DAY));
-		}
-		otherDate.set(Calendar.MINUTE,thisDate.get(Calendar.MINUTE));
-		return otherDate.getTime();
-	}
-
-	public Date replaceDateForWeekDay(Date dateToBase, Date currentTime) {
-
-		Calendar otherDate = Calendar.getInstance();
-		otherDate.setTime(dateToBase);
-
-		Calendar thisDate = Calendar.getInstance();
-		thisDate.setTime(currentTime);
-
-		boolean add = otherDate.compareTo(thisDate) > 0;
-
-		if(add) {
-			thisDate.add(Calendar.DAY_OF_MONTH, 7);
-		}
-
-		else thisDate.add(Calendar.DAY_OF_MONTH, -7);
-
-		return thisDate.getTime();
-	}
-
-	public Date replaceDateForMonthDay(Date dateToBase, Date currentTime) {
-		Calendar otherDate = Calendar.getInstance();
-		otherDate.setTime(dateToBase);
-
-		Calendar currentDate = Calendar.getInstance();
-		currentDate.setTime(currentTime);
-		currentDate.set(Calendar.MONTH, otherDate.get(Calendar.MONTH));
-
-		return currentDate.getTime();
-	}
-
 	public int getNumberOfMonthWeeks(int month, int year) {
 
 		Calendar cal = Calendar.getInstance();
@@ -366,6 +348,8 @@ public class DateUtils
 		}
 		else return 12;
 	}
+	
+	
 
 	public int getWeekFromDate(Date analysisDate) {
 		Calendar cal = Calendar.getInstance();

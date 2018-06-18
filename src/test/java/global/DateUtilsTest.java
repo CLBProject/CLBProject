@@ -216,8 +216,12 @@ public class DateUtilsTest {
 	public void testReplaceDateForTimeString() {
 		
 		Calendar dateToBaseCal = Calendar.getInstance();
-		Calendar currentTime = Calendar.getInstance();
+		dateToBaseCal.set(Calendar.YEAR, 2018);
+		dateToBaseCal.set(Calendar.MONTH,5);
+		dateToBaseCal.set(Calendar.DAY_OF_MONTH,21);
 		
-		DateUtils.getInstance().replaceDateForWeekDay(dateToBaseCal.getTime(), currentTime.getTime());
+		
+		System.out.println(DateUtils.getInstance().getWeekToDate(dateToBaseCal.getTime(),true));
+		System.out.println(DateUtils.getInstance().getWeekToDate(dateToBaseCal.getTime(),false));
 	}
 }

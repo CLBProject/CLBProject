@@ -14,6 +14,7 @@ import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
 
 import clb.beans.enums.ScaleGraphic;
+import clb.beans.enums.TimeAnalysisType;
 import clb.beans.pojos.AnalyzerRegistryGui;
 import clb.beans.pojos.AnalyzerRegistryReductionAlgorithm;
 import clb.business.AnalyzerDataService;
@@ -93,7 +94,7 @@ public class AnalysisBeanChart {
 		lineModel.getSeries().stream().forEach( serie -> serie.getData().clear() );
 
 		if(registries.size() > 0) {
-			setSeriesRegistriesValues(currentScale,currentSerie,currentRegistries,null);
+			setSeriesRegistriesValues(currentScale,currentSerie,currentRegistries,TimeAnalysisType.CURRENT);
 		}
 
 	}
@@ -129,7 +130,7 @@ public class AnalysisBeanChart {
 			lineModel.addSeries( previousSerie );
 			lineModel.addSeries( nextSerie );
 		}
-		setSeriesRegistriesValues(currentScale,currentSerie,this.currentRegistries,null);
+		setSeriesRegistriesValues(currentScale,currentSerie,this.currentRegistries,TimeAnalysisType.CURRENT);
 	}
 
 
@@ -171,7 +172,7 @@ public class AnalysisBeanChart {
 
 				break;
 			case WEEK:
-				
+
 				int previousWeek = DateUtils.getInstance().getPreviousWeekFromWeek(week,month,year);
 				int previousMonth = DateUtils.getInstance().getPreviousMonthFromWeek(week,month,year);
 				int previousYear = DateUtils.getInstance().getPreviousYearFromWeek(week,month,year);
@@ -195,7 +196,7 @@ public class AnalysisBeanChart {
 
 				int nMonth = DateUtils.getInstance().getNextMonth(month,year);
 				int nYear = DateUtils.getInstance().getNextYear(month,year);
-				
+
 				previousSeriesRegistries = analyzerDataService.getMonthRegistriesFromAnalyzer( analyzerId, prevMonth, prevYear);
 				nextSeriesRegistries = analyzerDataService.getMonthRegistriesFromAnalyzer( analyzerId, nMonth , nYear);
 
@@ -207,12 +208,12 @@ public class AnalysisBeanChart {
 				break;
 			}
 
-			addPreviousAndNextSeries(scaleGraphic,analysisDate,previousSeriesRegistries,nextSeriesRegistries, prevDateLabel, nextDateLabel);
+			addPreviousAndNextSeries(scaleGraphic,previousSeriesRegistries,nextSeriesRegistries, prevDateLabel, nextDateLabel);
 		}
 
 	}
 
-	private void addPreviousAndNextSeries(ScaleGraphic currentScale, Date currentDate, List<AnalyzerRegistryObject> previousSeriesRegistries,
+	private void addPreviousAndNextSeries(ScaleGraphic currentScale, List<AnalyzerRegistryObject> previousSeriesRegistries,
 			List<AnalyzerRegistryObject> nextSeriesRegistries,String previousDayLabel, String nextDayLabel){
 
 		previousSerie = new LineChartSeries(BuildingMeterParameterValues.POWER.getLabel()+" - "+previousDayLabel);
@@ -227,8 +228,8 @@ public class AnalysisBeanChart {
 		previousRegistries = AnalyzerRegistryReductionAlgorithm.getInstance().reduceRegistries(previousSeriesRegistries, currentScale);
 		nextRegistries =  AnalyzerRegistryReductionAlgorithm.getInstance().reduceRegistries(nextSeriesRegistries, currentScale);
 
-		setSeriesRegistriesValues(currentScale,previousSerie,previousRegistries,currentDate);
-		setSeriesRegistriesValues(currentScale,nextSerie,nextRegistries,currentDate);
+		setSeriesRegistriesValues(currentScale,previousSerie,previousRegistries,TimeAnalysisType.PREVIOUS);
+		setSeriesRegistriesValues(currentScale,nextSerie,nextRegistries,TimeAnalysisType.NEXT);
 	}
 
 	private void removeNextAndPreviousSeriesRegistries() {
@@ -242,7 +243,7 @@ public class AnalysisBeanChart {
 
 
 	private void setSeriesRegistriesValues(ScaleGraphic currentScale, LineChartSeries chartSerie,
-			List<AnalyzerRegistryGui> registriesSelected, Date basedOnDate){
+			List<AnalyzerRegistryGui> registriesSelected, TimeAnalysisType timeAnalysisType){
 
 
 		BuildingMeterParameterValues buildingMeterSel = BuildingMeterParameterValues.valueOf(buildingMeterSelected);
@@ -256,7 +257,7 @@ public class AnalysisBeanChart {
 			Integer kvasys = registry.getKvasys().intValue();;
 			Integer vlnsys = registry.getVlnsys().intValue();;
 			Integer vllsys = registry.getVllsys().intValue();;
-			String currentTime = getTimeString(basedOnDate,registry.getCurrentTime(),currentScale);
+			String currentTime = getTimeString(registry.getCurrentTime(),currentScale,timeAnalysisType);
 
 			switch(buildingMeterSel) {
 
@@ -331,28 +332,56 @@ public class AnalysisBeanChart {
 	}
 
 
-	private String getTimeString(Date dateToBase, Date currentTime, ScaleGraphic scale) {
-		if(dateToBase != null) {
+	private String getTimeString(Date currentTime, ScaleGraphic scale, TimeAnalysisType timeAnalysisType) {
 
-			Date date = null;
+		String timeString = "";
 
+		switch(timeAnalysisType) {
+		case PREVIOUS:
 			switch(scale) {
-			case HOUR:
-				date = DateUtils.getInstance().replaceDateForOtherDate(dateToBase,currentTime,false);
+				case HOUR:
+					timeString = DateUtils.getInstance().convertDateToSimpleStringFormat(
+							DateUtils.getInstance().getHourReseted(currentTime, false));
 				break;
-			case DAY:
-				date = DateUtils.getInstance().replaceDateForOtherDate(dateToBase,currentTime,true);
+				case DAY:
+					timeString = DateUtils.getInstance().convertDateToSimpleStringFormat(
+							DateUtils.getInstance().getDay(currentTime, false));
 				break;
-			case WEEK:
-				date = DateUtils.getInstance().replaceDateForWeekDay(dateToBase,currentTime);
+				case WEEK:
+					timeString = DateUtils.getInstance().convertDateToSimpleStringFormat(
+							DateUtils.getInstance().getWeekToDate(currentTime, false));
 				break;
-			case MONTH:
-				date = DateUtils.getInstance().replaceDateForMonthDay(dateToBase,currentTime);
+				case MONTH:
+					timeString = DateUtils.getInstance().convertDateToSimpleStringFormat(
+							DateUtils.getInstance().getMonthToDate(currentTime, false));
 				break;
 			}
-			return DateUtils.getInstance().convertDateToSimpleStringFormat(date);
+			break;
+		case CURRENT:
+			timeString = DateUtils.getInstance().convertDateToSimpleStringFormat(currentTime);
+			break;
+		case NEXT:
+			switch(scale) {
+				case HOUR:
+					timeString = DateUtils.getInstance().convertDateToSimpleStringFormat(
+							DateUtils.getInstance().getHourReseted(currentTime, true));
+				break;
+				case DAY:
+					timeString = DateUtils.getInstance().convertDateToSimpleStringFormat(
+							DateUtils.getInstance().getDay(currentTime, true));
+				break;
+				case WEEK:
+					timeString = DateUtils.getInstance().convertDateToSimpleStringFormat(
+							DateUtils.getInstance().getWeekToDate(currentTime, true));
+				break;
+				case MONTH:
+					timeString = DateUtils.getInstance().convertDateToSimpleStringFormat(
+							DateUtils.getInstance().getMonthToDate(currentTime, true));
+				break;
+			}
 		}
-		return DateUtils.getInstance().convertDateToSimpleStringFormat(currentTime);
+
+		return timeString;
 	}
 
 
