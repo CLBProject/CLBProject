@@ -187,7 +187,9 @@ public class AnalysisBeanChart {
 
 				prevDateLabel = DateUtils.getInstance().weekFormat(previousWeek, previousMonth, previousYear);
 				nextDateLabel = DateUtils.getInstance().weekFormat(nextWeek, nextMonth, nextYear);
-
+				
+			    currentSerie.setLabel(DateUtils.getInstance().weekFormat(nextWeek, nextMonth, nextYear));
+				
 				break;
 			case MONTH:
 
@@ -341,29 +343,6 @@ public class AnalysisBeanChart {
 			switch(scale) {
 				case HOUR:
 					timeString = DateUtils.getInstance().convertDateToSimpleStringFormat(
-							DateUtils.getInstance().getHourReseted(currentTime, false));
-				break;
-				case DAY:
-					timeString = DateUtils.getInstance().convertDateToSimpleStringFormat(
-							DateUtils.getInstance().getDay(currentTime, false));
-				break;
-				case WEEK:
-					timeString = DateUtils.getInstance().convertDateToSimpleStringFormat(
-							DateUtils.getInstance().getWeekToDate(currentTime, false));
-				break;
-				case MONTH:
-					timeString = DateUtils.getInstance().convertDateToSimpleStringFormat(
-							DateUtils.getInstance().getMonthToDate(currentTime, false));
-				break;
-			}
-			break;
-		case CURRENT:
-			timeString = DateUtils.getInstance().convertDateToSimpleStringFormat(currentTime);
-			break;
-		case NEXT:
-			switch(scale) {
-				case HOUR:
-					timeString = DateUtils.getInstance().convertDateToSimpleStringFormat(
 							DateUtils.getInstance().getHourReseted(currentTime, true));
 				break;
 				case DAY:
@@ -377,6 +356,29 @@ public class AnalysisBeanChart {
 				case MONTH:
 					timeString = DateUtils.getInstance().convertDateToSimpleStringFormat(
 							DateUtils.getInstance().getMonthToDate(currentTime, true));
+				break;
+			}
+			break;
+		case CURRENT:
+			timeString = DateUtils.getInstance().convertDateToSimpleStringFormat(currentTime);
+			break;
+		case NEXT:
+			switch(scale) {
+				case HOUR:
+					timeString = DateUtils.getInstance().convertDateToSimpleStringFormat(
+							DateUtils.getInstance().getHourReseted(currentTime, false));
+				break;
+				case DAY:
+					timeString = DateUtils.getInstance().convertDateToSimpleStringFormat(
+							DateUtils.getInstance().getDay(currentTime, false));
+				break;
+				case WEEK:
+					timeString = DateUtils.getInstance().convertDateToSimpleStringFormat(
+							DateUtils.getInstance().getWeekToDate(currentTime, false));
+				break;
+				case MONTH:
+					timeString = DateUtils.getInstance().convertDateToSimpleStringFormat(
+							DateUtils.getInstance().getMonthToDate(currentTime, false));
 				break;
 			}
 		}

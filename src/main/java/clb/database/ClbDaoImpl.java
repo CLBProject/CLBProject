@@ -250,26 +250,24 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	@Override
 	public List<AnalyzerRegistryObject> getDayRegistriesFromAnalyzer( String analyzerId, Date timeFrameNow ) {
 
-		Date previousDayDateLimit = null;
 
 		if(DateUtils.getInstance().isToday(timeFrameNow)) {
-			timeFrameNow = new Date();
-			previousDayDateLimit = DateUtils.getInstance().getDayReseted(timeFrameNow);
+			Date nowDate = new Date();
+			Date currentDateReseted = DateUtils.getInstance().getDayReseted(nowDate);
+			Date previousDate = DateUtils.getInstance().getDay(nowDate, false);
 
-			List<AnalyzerRegistryObject> firstDayRegistries =  processRegistries(analyzerId, previousDayDateLimit, timeFrameNow);
-			List<AnalyzerRegistryObject> secondDayRegistries =  processRegistries(analyzerId, DateUtils.getInstance().getDay(previousDayDateLimit, true), timeFrameNow);
+			List<AnalyzerRegistryObject> firstDayRegistries =  processRegistries(analyzerId, currentDateReseted, nowDate);
+			List<AnalyzerRegistryObject> secondDayRegistries =  processRegistries(analyzerId, previousDate , currentDateReseted);
 
 			firstDayRegistries.addAll(secondDayRegistries);
 
 			return firstDayRegistries;
 		} 
 		else {
-			timeFrameNow = DateUtils.getInstance().getDay(timeFrameNow,true);
-			previousDayDateLimit = DateUtils.getInstance().getDay(timeFrameNow,false);
-			return  processRegistries(analyzerId, previousDayDateLimit, timeFrameNow);
+			Date currentDateReseted = DateUtils.getInstance().getDayReseted(timeFrameNow);
+			Date nextDayReseted = DateUtils.getInstance().getDay(currentDateReseted,true);
+			return  processRegistries(analyzerId, currentDateReseted, nextDayReseted);
 		}
-
-
 	}
 
 
@@ -277,23 +275,24 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	public List<AnalyzerRegistryObject> getWeekRegistriesFromAnalyzer(String analyzerId, int weekNr, int month, int  year) {
 
 		List<AnalyzerRegistryObject> weekRegistries = new ArrayList<AnalyzerRegistryObject>();
+		
 
 		Date lastDay = DateUtils.getInstance().isThisWeek(weekNr,month,year) ? 
 				new Date() : DateUtils.getInstance().getWeekLastDay(weekNr,month,year);
 
-				Date firstDay = DateUtils.getInstance().getWeekFirstDayReseted(weekNr,month,year);
+		Date firstDay = DateUtils.getInstance().getWeekFirstDayReseted(weekNr,month,year);
 
-				//While is not last day of the week get from first day until last
+		//While is not last day of the week get from first day until last
 
-				while(!DateUtils.getInstance().isTheSameDay(lastDay, firstDay)){
-					weekRegistries.addAll(processRegistries(analyzerId, firstDay, 
-							DateUtils.getInstance().getDay(firstDay,true)));
+		while(!DateUtils.getInstance().isTheSameDay(lastDay, firstDay)){
+			weekRegistries.addAll(processRegistries(analyzerId, firstDay, 
+					DateUtils.getInstance().getDay(firstDay,true)));
 
-					firstDay = DateUtils.getInstance().getDay(firstDay, true);
-				} 
+			firstDay = DateUtils.getInstance().getDay(firstDay, true);
+		} 
 
 
-				return weekRegistries;
+		return weekRegistries;
 	}
 
 	@Override
@@ -303,17 +302,17 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
 		Date lastDay = DateUtils.getInstance().isThisMonth(month,year) ? 
 				new Date() : DateUtils.getInstance().getDay(DateUtils.getInstance().getMonthLastDay(month,year),true);
-				
-		Date firstDay = DateUtils.getInstance().getWeekFirstDayReseted(1,month,year);
 
-		while(!DateUtils.getInstance().isTheSameDay(lastDay, firstDay)){
-			weekRegistries.addAll(processRegistries(analyzerId, firstDay, 
-					DateUtils.getInstance().getDay(firstDay,true)));
+				Date firstDay = DateUtils.getInstance().getWeekFirstDayReseted(1,month,year);
 
-			firstDay = DateUtils.getInstance().getDay(firstDay, true);
-		} 
+				while(!DateUtils.getInstance().isTheSameDay(lastDay, firstDay)){
+					weekRegistries.addAll(processRegistries(analyzerId, firstDay, 
+							DateUtils.getInstance().getDay(firstDay,true)));
 
-		return weekRegistries;
+					firstDay = DateUtils.getInstance().getDay(firstDay, true);
+				} 
+
+				return weekRegistries;
 	}
 
 

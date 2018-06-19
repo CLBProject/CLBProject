@@ -11,7 +11,7 @@ public class DateUtils
 	private static DateUtils instance;
 	private DateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private DateFormat hourOutputFormat = new SimpleDateFormat("HH:mm:ss");
-	private DateFormat weekFormat = new SimpleDateFormat("EEEE, d");
+	private DateFormat weekFormat = new SimpleDateFormat("EEEE d");
 	private DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy");
 	private DateFormat prettyDateFormat = new SimpleDateFormat("EEEE, d MMMM yyyy, HH:mm:ss");
 
@@ -106,10 +106,6 @@ public class DateUtils
 	public Date getDay(Date timeFrame, boolean next) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(timeFrame);
-		cal.set(Calendar.MILLISECOND,0);
-		cal.set(Calendar.SECOND,0);
-		cal.set(Calendar.MINUTE,0);
-		cal.set(Calendar.HOUR_OF_DAY,0);
 
 		if(next)
 			cal.add(Calendar.DAY_OF_MONTH, 1);
@@ -148,7 +144,16 @@ public class DateUtils
 		cal.set(Calendar.YEAR, year);
 		cal.set(Calendar.MONTH, month);
 		cal.set(Calendar.DAY_OF_MONTH,(weekNr-1)*7+1);
+		
+		int maxDate = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+		
 		cal.add(Calendar.DATE, 6);
+		
+		if(cal.get(Calendar.MONTH) != month) {
+			cal.set(Calendar.YEAR, year);
+			cal.set(Calendar.MONTH, month);
+			cal.set(Calendar.DAY_OF_MONTH, maxDate);
+		}
 
 		return cal.getTime();
 	}
@@ -171,10 +176,16 @@ public class DateUtils
 		cal.setTime(date);
 		
 		if(add) {
-			cal.add(Calendar.DATE, 7);
+			if(isDayLastWeek(cal.get(Calendar.DAY_OF_MONTH))) {
+				cal.add(Calendar.DATE, cal.getActualMaximum(Calendar.DAY_OF_MONTH) - 28);
+			}
+			else cal.add(Calendar.DATE, 7);
 		}
 		else {
-			cal.add(Calendar.DATE, -7);
+			if(isDayLastWeek(cal.get(Calendar.DAY_OF_MONTH))) {
+				cal.add(Calendar.DATE, 28 - cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+			}
+			else cal.add(Calendar.DATE, -7);
 		}
 		
 		return cal.getTime();
@@ -442,6 +453,10 @@ public class DateUtils
 			return week;
 		}
 		else return week + 1;
+	}
+	
+	private boolean isDayLastWeek(int dayOfMonth) {
+		return dayOfMonth >= 28;
 	}
 
 	public int getPreviousMonth(int month, int year) {
