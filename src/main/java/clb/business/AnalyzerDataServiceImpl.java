@@ -37,6 +37,7 @@ import clb.business.objects.DataLoggerObject;
 import clb.business.objects.UsersystemObject;
 import clb.database.ClbDao;
 import clb.global.BuildingMeterParameterValues;
+import clb.global.DateUtils;
 
 @Service
 public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializable{
@@ -81,7 +82,24 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
 	@Override
 	public List<AnalyzerRegistryObject> getWeekRegistriesFromAnalyzer(String analyzerId, int week, int month, int year) {
-		return clbDao.getWeekRegistriesFromAnalyzer( analyzerId, week, month, year );
+		
+		Date lastDay = DateUtils.getInstance().isThisWeek(week,month,year) ? 
+				new Date() : DateUtils.getInstance().getWeekLastDay(week,month,year,-1);
+
+		Date firstDay = DateUtils.getInstance().getWeekFirstDayReseted(week,month,year);
+
+		return clbDao.getWeekRegistriesFromAnalyzer( analyzerId,firstDay,lastDay);
+	}
+	
+	@Override
+	public List<AnalyzerRegistryObject> getWeekRegistriesFromAnalyzerWithWeekShift(String analyzerId, int week, int month, int year, int weekShift) {
+		
+		Date lastDay = DateUtils.getInstance().isThisWeek(week,month,year) ? 
+				new Date() : DateUtils.getInstance().getWeekLastDay(week,month,year,weekShift);
+
+		Date firstDay = DateUtils.getInstance().getWeekFirstDayReseted(week,month,year);
+		
+		return clbDao.getWeekRegistriesFromAnalyzer( analyzerId,firstDay,lastDay);
 	}
 
 

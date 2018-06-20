@@ -138,7 +138,7 @@ public class DateUtils
 		return cal.getTime();
 	}
 
-	public Date getWeekLastDay(int weekNr, int month, int year) {
+	public Date getWeekLastDay(int weekNr, int month, int year, int weekShift) {
 
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, year);
@@ -147,7 +147,9 @@ public class DateUtils
 		
 		int maxDate = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 		
-		cal.add(Calendar.DATE, 7);
+		if(weekShift == -1)
+			cal.add(Calendar.DATE, 7);
+		else cal.add(Calendar.DATE, weekShift);
 		
 		if(cal.get(Calendar.MONTH) != month) {
 			cal.set(Calendar.YEAR, year);
@@ -174,16 +176,19 @@ public class DateUtils
 	public Date getWeekToDate(Date date,boolean add) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
+		int month = cal.get(Calendar.MONTH);
 		
 		if(add) {
-			if(cal.get(Calendar.DAY_OF_MONTH) >= 28) {
-				cal.add(Calendar.DATE, cal.getActualMaximum(Calendar.DAY_OF_MONTH) - 27);
+			if(cal.get(Calendar.DAY_OF_MONTH) >= 29) {
+				cal.set(Calendar.MONTH, month+1);
+				cal.set(Calendar.DAY_OF_MONTH, 1);
 			}
 			else cal.add(Calendar.DATE, 7);
 		}
 		else {
 			if(cal.get(Calendar.DAY_OF_MONTH) == 1) {
-				cal.add(Calendar.DATE, 28 - cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+				cal.set(Calendar.MONTH, month-1);
+				cal.set(Calendar.DAY_OF_MONTH, 29);
 			}
 			else cal.add(Calendar.DATE, -7);
 		}
@@ -262,7 +267,7 @@ public class DateUtils
 	}
 
 	public String monthFormat(int month, int year) {
-
+ 
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, year);
 		cal.set(Calendar.MONTH, month);
@@ -474,5 +479,13 @@ public class DateUtils
 	public int getNextYear(int month, int year) {
 		Calendar cal = getFromMonth(month,year,true);
 		return cal.get(Calendar.YEAR);
+	}
+	
+	public int getLastWeekNumberOfDays(int month, int year) {
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.MONTH, month);
+		cal.set(Calendar.YEAR,year);
+		
+		return cal.getActualMaximum(Calendar.DAY_OF_MONTH) - 29;
 	}
 }

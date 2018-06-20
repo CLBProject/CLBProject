@@ -218,14 +218,14 @@ public class DateUtilsTest {
 		Calendar dateToBaseCal = Calendar.getInstance();
 		dateToBaseCal.set(Calendar.YEAR, 2018);
 		dateToBaseCal.set(Calendar.MONTH,5);
-		dateToBaseCal.set(Calendar.DAY_OF_MONTH,21);
+		dateToBaseCal.set(Calendar.DAY_OF_MONTH,22);
 		
 		
 		dateToBaseCal.setTime(DateUtils.getInstance().getWeekToDate(dateToBaseCal.getTime(),true));
 		
 		Assert.assertEquals(dateToBaseCal.get(Calendar.MONTH), 5);
 		Assert.assertEquals(dateToBaseCal.get(Calendar.YEAR), 2018);
-		Assert.assertEquals(dateToBaseCal.get(Calendar.DAY_OF_MONTH), 28);
+		Assert.assertEquals(dateToBaseCal.get(Calendar.DAY_OF_MONTH), 29);
 		
 		dateToBaseCal.setTime(DateUtils.getInstance().getWeekToDate(dateToBaseCal.getTime(),true));
 		
@@ -252,6 +252,6 @@ public class DateUtilsTest {
 		
 		Assert.assertEquals(dateToBaseCal.get(Calendar.MONTH), 5);
 		Assert.assertEquals(dateToBaseCal.get(Calendar.YEAR), 2018);
-		Assert.assertEquals(dateToBaseCal.get(Calendar.DAY_OF_MONTH), 28);
+		Assert.assertEquals(dateToBaseCal.get(Calendar.DAY_OF_MONTH), 29);
 	}
 }

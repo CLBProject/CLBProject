@@ -15,6 +15,7 @@ import org.primefaces.model.chart.LineChartSeries;
 
 import clb.beans.enums.ScaleGraphic;
 import clb.beans.enums.TimeAnalysisType;
+import clb.beans.enums.Weeks;
 import clb.beans.pojos.AnalyzerRegistryGui;
 import clb.beans.pojos.AnalyzerRegistryReductionAlgorithm;
 import clb.business.AnalyzerDataService;
@@ -182,9 +183,23 @@ public class AnalysisBeanChart {
 				int nextMonth = DateUtils.getInstance().getNextMonthFromWeek(week,month,year);
 				int nextYear = DateUtils.getInstance().getNextYearFromWeek(week,month,year);
 
-				previousSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerId, previousWeek, previousMonth, previousYear);
-				nextSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerId, nextWeek, nextMonth, nextYear);
-
+				if(week == Weeks.WEEK5.getCode()) {
+					
+					int numberOfWeek5days = DateUtils.getInstance().getLastWeekNumberOfDays(month, year);
+					
+					previousSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzerWithWeekShift( 
+											analyzerId, previousWeek, previousMonth, previousYear,numberOfWeek5days);
+					
+					nextSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzerWithWeekShift(
+											analyzerId, nextWeek, nextMonth, nextYear,numberOfWeek5days);
+				}
+				else {
+					previousSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( 
+							analyzerId, previousWeek, previousMonth, previousYear);
+					
+					nextSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( 
+							analyzerId, nextWeek, nextMonth, nextYear);
+				}
 				prevDateLabel = DateUtils.getInstance().weekFormat(previousWeek, previousMonth, previousYear);
 				nextDateLabel = DateUtils.getInstance().weekFormat(nextWeek, nextMonth, nextYear);
 				

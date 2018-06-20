@@ -272,17 +272,9 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
 
 	@Override
-	public List<AnalyzerRegistryObject> getWeekRegistriesFromAnalyzer(String analyzerId, int weekNr, int month, int  year) {
+	public List<AnalyzerRegistryObject> getWeekRegistriesFromAnalyzer(String analyzerId, Date firstDay, Date lastDay) {
 
 		List<AnalyzerRegistryObject> weekRegistries = new ArrayList<AnalyzerRegistryObject>();
-		
-
-		Date lastDay = DateUtils.getInstance().isThisWeek(weekNr,month,year) ? 
-				new Date() : DateUtils.getInstance().getWeekLastDay(weekNr,month,year);
-
-		Date firstDay = DateUtils.getInstance().getWeekFirstDayReseted(weekNr,month,year);
-
-		//While is not last day of the week get from first day until last
 
 		while(!DateUtils.getInstance().isTheSameDay(lastDay, firstDay)){
 			weekRegistries.addAll(processRegistries(analyzerId, firstDay, 
