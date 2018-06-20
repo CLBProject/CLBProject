@@ -188,7 +188,8 @@ public class AnalysisBeanChart {
 				prevDateLabel = DateUtils.getInstance().weekFormat(previousWeek, previousMonth, previousYear);
 				nextDateLabel = DateUtils.getInstance().weekFormat(nextWeek, nextMonth, nextYear);
 				
-			    currentSerie.setLabel(DateUtils.getInstance().weekFormat(nextWeek, nextMonth, nextYear));
+			    currentSerie.setLabel(BuildingMeterParameterValues.valueOf(buildingMeterSelected).getLabel() + " - " + 
+			    													DateUtils.getInstance().weekFormat(nextWeek, nextMonth, nextYear));
 				
 				break;
 			case MONTH:
@@ -350,6 +351,7 @@ public class AnalysisBeanChart {
 							DateUtils.getInstance().getDay(currentTime, true));
 				break;
 				case WEEK:
+
 					timeString = DateUtils.getInstance().convertDateToSimpleStringFormat(
 							DateUtils.getInstance().getWeekToDate(currentTime, true));
 				break;

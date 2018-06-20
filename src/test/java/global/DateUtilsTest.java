@@ -232,19 +232,26 @@ public class DateUtilsTest {
 		
 		Assert.assertEquals(dateToBaseCal.get(Calendar.MONTH), 6);
 		Assert.assertEquals(dateToBaseCal.get(Calendar.YEAR), 2018);
-		Assert.assertEquals(dateToBaseCal.get(Calendar.DAY_OF_MONTH), 5);
+		Assert.assertEquals(dateToBaseCal.get(Calendar.DAY_OF_MONTH), 1);
+		
+		dateToBaseCal.setTime(DateUtils.getInstance().getWeekToDate(dateToBaseCal.getTime(),true));
+		
+		
+		Assert.assertEquals(dateToBaseCal.get(Calendar.MONTH), 6);
+		Assert.assertEquals(dateToBaseCal.get(Calendar.YEAR), 2018);
+		Assert.assertEquals(dateToBaseCal.get(Calendar.DAY_OF_MONTH), 8);
 		
 		dateToBaseCal.setTime(DateUtils.getInstance().getWeekToDate(dateToBaseCal.getTime(),false));
+		
+		Assert.assertEquals(dateToBaseCal.get(Calendar.MONTH), 6);
+		Assert.assertEquals(dateToBaseCal.get(Calendar.YEAR), 2018);
+		Assert.assertEquals(dateToBaseCal.get(Calendar.DAY_OF_MONTH), 1);
+		
+		dateToBaseCal.setTime(DateUtils.getInstance().getWeekToDate(dateToBaseCal.getTime(),false));
+		
 		
 		Assert.assertEquals(dateToBaseCal.get(Calendar.MONTH), 5);
 		Assert.assertEquals(dateToBaseCal.get(Calendar.YEAR), 2018);
 		Assert.assertEquals(dateToBaseCal.get(Calendar.DAY_OF_MONTH), 28);
-		
-		dateToBaseCal.setTime(DateUtils.getInstance().getWeekToDate(dateToBaseCal.getTime(),false));
-		
-		
-		Assert.assertEquals(dateToBaseCal.get(Calendar.MONTH), 5);
-		Assert.assertEquals(dateToBaseCal.get(Calendar.YEAR), 2018);
-		Assert.assertEquals(dateToBaseCal.get(Calendar.DAY_OF_MONTH), 21);
 	}
 }

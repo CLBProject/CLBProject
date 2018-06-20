@@ -147,7 +147,7 @@ public class DateUtils
 		
 		int maxDate = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 		
-		cal.add(Calendar.DATE, 6);
+		cal.add(Calendar.DATE, 7);
 		
 		if(cal.get(Calendar.MONTH) != month) {
 			cal.set(Calendar.YEAR, year);
@@ -176,13 +176,13 @@ public class DateUtils
 		cal.setTime(date);
 		
 		if(add) {
-			if(isDayLastWeek(cal.get(Calendar.DAY_OF_MONTH))) {
-				cal.add(Calendar.DATE, cal.getActualMaximum(Calendar.DAY_OF_MONTH) - 28);
+			if(cal.get(Calendar.DAY_OF_MONTH) >= 28) {
+				cal.add(Calendar.DATE, cal.getActualMaximum(Calendar.DAY_OF_MONTH) - 27);
 			}
 			else cal.add(Calendar.DATE, 7);
 		}
 		else {
-			if(isDayLastWeek(cal.get(Calendar.DAY_OF_MONTH))) {
+			if(cal.get(Calendar.DAY_OF_MONTH) == 1) {
 				cal.add(Calendar.DATE, 28 - cal.getActualMaximum(Calendar.DAY_OF_MONTH));
 			}
 			else cal.add(Calendar.DATE, -7);
@@ -455,9 +455,6 @@ public class DateUtils
 		else return week + 1;
 	}
 	
-	private boolean isDayLastWeek(int dayOfMonth) {
-		return dayOfMonth >= 28;
-	}
 
 	public int getPreviousMonth(int month, int year) {
 		Calendar cal = getFromMonth(month,year,false);
