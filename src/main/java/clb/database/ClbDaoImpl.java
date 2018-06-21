@@ -295,16 +295,16 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 		Date lastDay = DateUtils.getInstance().isThisMonth(month,year) ? 
 				new Date() : DateUtils.getInstance().getDay(DateUtils.getInstance().getMonthLastDay(month,year),true);
 
-				Date firstDay = DateUtils.getInstance().getWeekFirstDayReseted(1,month,year);
+		Date firstDay = DateUtils.getInstance().getWeekFirstDayReseted(1,month,year);
 
-				while(!DateUtils.getInstance().isTheSameDay(lastDay, firstDay)){
-					weekRegistries.addAll(processRegistries(analyzerId, firstDay, 
-							DateUtils.getInstance().getDay(firstDay,true)));
+		while(!DateUtils.getInstance().isTheSameDay(lastDay, firstDay)){
+			weekRegistries.addAll(processRegistries(analyzerId, firstDay, 
+					DateUtils.getInstance().getDay(firstDay,true)));
 
-					firstDay = DateUtils.getInstance().getDay(firstDay, true);
-				} 
+			firstDay = DateUtils.getInstance().getDay(firstDay, true);
+		} 
 
-				return weekRegistries;
+		return weekRegistries;
 	}
 
 

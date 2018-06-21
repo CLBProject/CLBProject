@@ -138,24 +138,22 @@ public class DateUtils
 		return cal.getTime();
 	}
 
-	public Date getWeekLastDay(int weekNr, int month, int year, int weekShift) {
+	public Date getWeekLastDay(int weekNr, int month, int year) {
 
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, year);
 		cal.set(Calendar.MONTH, month);
 		cal.set(Calendar.DAY_OF_MONTH,(weekNr-1)*7+1);
-		
-		int maxDate = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-		
-		if(weekShift == -1)
-			cal.add(Calendar.DATE, 7);
-		else cal.add(Calendar.DATE, weekShift);
+		cal.add(Calendar.DATE, 7);
 		
 		if(cal.get(Calendar.MONTH) != month) {
-			cal.set(Calendar.YEAR, year);
-			cal.set(Calendar.MONTH, month);
-			cal.set(Calendar.DAY_OF_MONTH, maxDate);
+			cal.set(Calendar.DAY_OF_MONTH, 1);
 		}
+		
+		cal.set(Calendar.MILLISECOND,0);
+		cal.set(Calendar.SECOND,0);
+		cal.set(Calendar.MINUTE,0);
+		cal.set(Calendar.HOUR_OF_DAY,0);
 
 		return cal.getTime();
 	}
@@ -172,25 +170,16 @@ public class DateUtils
 				dateCal.get(Calendar.MONTH) == dateCal2.get(Calendar.MONTH) &&
 				dateCal.get(Calendar.DAY_OF_MONTH) == dateCal2.get(Calendar.DAY_OF_MONTH);
 	}
-
-	public Date getWeekToDate(Date date,boolean add) {
+	
+	public Date getWeekToDate(Date date,boolean previous) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
-		int month = cal.get(Calendar.MONTH);
 		
-		if(add) {
-			if(cal.get(Calendar.DAY_OF_MONTH) >= 29) {
-				cal.set(Calendar.MONTH, month+1);
-				cal.set(Calendar.DAY_OF_MONTH, 1);
-			}
-			else cal.add(Calendar.DATE, 7);
+		if(previous) {
+			cal.add(Calendar.DATE, 7);
 		}
 		else {
-			if(cal.get(Calendar.DAY_OF_MONTH) == 1) {
-				cal.set(Calendar.MONTH, month-1);
-				cal.set(Calendar.DAY_OF_MONTH, 29);
-			}
-			else cal.add(Calendar.DATE, -7);
+			 cal.add(Calendar.DATE, -7);
 		}
 		
 		return cal.getTime();
@@ -481,11 +470,22 @@ public class DateUtils
 		return cal.get(Calendar.YEAR);
 	}
 	
-	public int getLastWeekNumberOfDays(int month, int year) {
+	public int geWeekNumberOfDays(int month, int year, int week) {
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.MONTH, month);
 		cal.set(Calendar.YEAR,year);
 		
-		return cal.getActualMaximum(Calendar.DAY_OF_MONTH) - 29;
+		if(week == 5)
+			return cal.getActualMaximum(Calendar.DAY_OF_MONTH) - 28;
+		else return 7;
 	}
+
+	public Date shiftDate(Date lastDay, int weekShift) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(lastDay);
+		cal.add(Calendar.DATE, weekShift);
+		
+		return cal.getTime();
+	}
+
 }

@@ -77,28 +77,39 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	public List<AnalyzerRegistryObject> getDayRegistriesFromAnalyzer( String analyzerId , Date timeFrame) {
 		return clbDao.getDayRegistriesFromAnalyzer( analyzerId, timeFrame );
 	}
-	
+
 
 
 	@Override
 	public List<AnalyzerRegistryObject> getWeekRegistriesFromAnalyzer(String analyzerId, int week, int month, int year) {
-		
+
 		Date lastDay = DateUtils.getInstance().isThisWeek(week,month,year) ? 
-				new Date() : DateUtils.getInstance().getWeekLastDay(week,month,year,-1);
+				new Date() : DateUtils.getInstance().getWeekLastDay(week,month,year);
 
 		Date firstDay = DateUtils.getInstance().getWeekFirstDayReseted(week,month,year);
 
 		return clbDao.getWeekRegistriesFromAnalyzer( analyzerId,firstDay,lastDay);
 	}
-	
+
 	@Override
 	public List<AnalyzerRegistryObject> getWeekRegistriesFromAnalyzerWithWeekShift(String analyzerId, int week, int month, int year, int weekShift) {
-		
-		Date lastDay = DateUtils.getInstance().isThisWeek(week,month,year) ? 
-				new Date() : DateUtils.getInstance().getWeekLastDay(week,month,year,weekShift);
 
-		Date firstDay = DateUtils.getInstance().getWeekFirstDayReseted(week,month,year);
+		Date lastDay;
+		Date firstDay;
 		
+		if(weekShift > 0) {
+			firstDay = DateUtils.getInstance().getWeekFirstDayReseted(week,month,year);
+			
+			lastDay = DateUtils.getInstance().isThisWeek(week,month,year) ? 
+					new Date() : DateUtils.getInstance().shiftDate(firstDay,weekShift);		
+		}
+		else {
+			lastDay = DateUtils.getInstance().isThisWeek(week,month,year) ? 
+					new Date() : DateUtils.getInstance().getWeekLastDay(week,month,year);
+			
+			firstDay = DateUtils.getInstance().shiftDate(lastDay, weekShift);
+		}
+
 		return clbDao.getWeekRegistriesFromAnalyzer( analyzerId,firstDay,lastDay);
 	}
 
@@ -245,11 +256,11 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
 		for(int a = 0 ;a<numberOfYears; a++){
 			for(int l = 0; l < 12; l++ ){
-				
+
 				List<AnalyzerRegistryObject> analyzersRegistries = new ArrayList<AnalyzerRegistryObject>();
-				
+
 				int monthLength = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-				
+
 				for(int m=0; m < monthLength; m++) {
 					for(int b = 0; b < 24 ; b++){
 						for(int k = 0; k < 60; k+=5){
@@ -303,7 +314,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 					}
 					calendar.add(Calendar.DATE, 1);
 				}
-				
+
 				clbDao.saveAnalyzerRegistries(analyzersRegistries);
 				analyzersRegistries.stream().forEach( analyzerRegistry -> analyzer.addAnalyzerRegistry( analyzerRegistry.getId() ) );
 			}
@@ -345,7 +356,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		return clbDao.getLowestAnalyzerRegistryDate();
 	}
 
-	
+
 	public Resource getDataAnalyzerXls() {
 		return dataAnalyzerXls;
 	}

@@ -15,7 +15,6 @@ import org.primefaces.model.chart.LineChartSeries;
 
 import clb.beans.enums.ScaleGraphic;
 import clb.beans.enums.TimeAnalysisType;
-import clb.beans.enums.Weeks;
 import clb.beans.pojos.AnalyzerRegistryGui;
 import clb.beans.pojos.AnalyzerRegistryReductionAlgorithm;
 import clb.business.AnalyzerDataService;
@@ -183,29 +182,21 @@ public class AnalysisBeanChart {
 				int nextMonth = DateUtils.getInstance().getNextMonthFromWeek(week,month,year);
 				int nextYear = DateUtils.getInstance().getNextYearFromWeek(week,month,year);
 
-				if(week == Weeks.WEEK5.getCode()) {
-					
-					int numberOfWeek5days = DateUtils.getInstance().getLastWeekNumberOfDays(month, year);
-					
-					previousSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzerWithWeekShift( 
-											analyzerId, previousWeek, previousMonth, previousYear,numberOfWeek5days);
-					
-					nextSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzerWithWeekShift(
-											analyzerId, nextWeek, nextMonth, nextYear,numberOfWeek5days);
-				}
-				else {
-					previousSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( 
-							analyzerId, previousWeek, previousMonth, previousYear);
-					
-					nextSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer( 
-							analyzerId, nextWeek, nextMonth, nextYear);
-				}
+
+				int numberOfWeek5days = DateUtils.getInstance().geWeekNumberOfDays(month, year, week);
+
+				previousSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzerWithWeekShift( 
+						analyzerId, previousWeek, previousMonth, previousYear,numberOfWeek5days);
+
+				nextSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzerWithWeekShift(
+						analyzerId, nextWeek, nextMonth, nextYear,-numberOfWeek5days);
+
 				prevDateLabel = DateUtils.getInstance().weekFormat(previousWeek, previousMonth, previousYear);
 				nextDateLabel = DateUtils.getInstance().weekFormat(nextWeek, nextMonth, nextYear);
-				
-			    currentSerie.setLabel(BuildingMeterParameterValues.valueOf(buildingMeterSelected).getLabel() + " - " + 
-			    													DateUtils.getInstance().weekFormat(nextWeek, nextMonth, nextYear));
-				
+
+				currentSerie.setLabel(BuildingMeterParameterValues.valueOf(buildingMeterSelected).getLabel() + " - " + 
+						DateUtils.getInstance().weekFormat(week, month, year));
+
 				break;
 			case MONTH:
 
@@ -352,55 +343,46 @@ public class AnalysisBeanChart {
 
 	private String getTimeString(Date currentTime, ScaleGraphic scale, TimeAnalysisType timeAnalysisType) {
 
-		String timeString = "";
+		Date selectedDate = null;
 
 		switch(timeAnalysisType) {
 		case PREVIOUS:
 			switch(scale) {
-				case HOUR:
-					timeString = DateUtils.getInstance().convertDateToSimpleStringFormat(
-							DateUtils.getInstance().getHourReseted(currentTime, true));
+			case HOUR:
+				selectedDate = DateUtils.getInstance().getHourReseted(currentTime, true);
 				break;
-				case DAY:
-					timeString = DateUtils.getInstance().convertDateToSimpleStringFormat(
-							DateUtils.getInstance().getDay(currentTime, true));
+			case DAY:
+				selectedDate = DateUtils.getInstance().getDay(currentTime, true);
 				break;
-				case WEEK:
-
-					timeString = DateUtils.getInstance().convertDateToSimpleStringFormat(
-							DateUtils.getInstance().getWeekToDate(currentTime, true));
+			case WEEK:
+				selectedDate = DateUtils.getInstance().getWeekToDate(currentTime, true);
 				break;
-				case MONTH:
-					timeString = DateUtils.getInstance().convertDateToSimpleStringFormat(
-							DateUtils.getInstance().getMonthToDate(currentTime, true));
+			case MONTH:
+				selectedDate = DateUtils.getInstance().getMonthToDate(currentTime, true);
 				break;
 			}
 			break;
 		case CURRENT:
-			timeString = DateUtils.getInstance().convertDateToSimpleStringFormat(currentTime);
+			selectedDate = currentTime;
 			break;
 		case NEXT:
 			switch(scale) {
-				case HOUR:
-					timeString = DateUtils.getInstance().convertDateToSimpleStringFormat(
-							DateUtils.getInstance().getHourReseted(currentTime, false));
+			case HOUR:
+				selectedDate = DateUtils.getInstance().getHourReseted(currentTime, false);
 				break;
-				case DAY:
-					timeString = DateUtils.getInstance().convertDateToSimpleStringFormat(
-							DateUtils.getInstance().getDay(currentTime, false));
+			case DAY:
+				selectedDate = DateUtils.getInstance().getDay(currentTime, false);
 				break;
-				case WEEK:
-					timeString = DateUtils.getInstance().convertDateToSimpleStringFormat(
-							DateUtils.getInstance().getWeekToDate(currentTime, false));
+			case WEEK:
+				selectedDate = DateUtils.getInstance().getWeekToDate(currentTime, false);
 				break;
-				case MONTH:
-					timeString = DateUtils.getInstance().convertDateToSimpleStringFormat(
-							DateUtils.getInstance().getMonthToDate(currentTime, false));
+			case MONTH:
+				selectedDate = DateUtils.getInstance().getMonthToDate(currentTime, false);
 				break;
 			}
 		}
 
-		return timeString;
+		return DateUtils.getInstance().convertDateToSimpleStringFormat(selectedDate);
 	}
 
 
