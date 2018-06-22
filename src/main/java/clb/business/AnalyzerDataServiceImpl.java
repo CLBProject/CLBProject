@@ -92,21 +92,22 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	}
 
 	@Override
-	public List<AnalyzerRegistryObject> getWeekRegistriesFromAnalyzerWithWeekShift(String analyzerId, int week, int month, int year, int weekShift) {
+	public List<AnalyzerRegistryObject> getWeekRegistriesFromAnalyzerWithWeekShift(String analyzerId, int week, 
+			int month, int year, int weekShift) {
 
 		Date lastDay;
 		Date firstDay;
 		
 		if(weekShift > 0) {
-			firstDay = DateUtils.getInstance().getWeekFirstDayReseted(week,month,year);
-			
-			lastDay = DateUtils.getInstance().isThisWeek(week,month,year) ? 
-					new Date() : DateUtils.getInstance().shiftDate(firstDay,weekShift);		
+			Date tempDate = DateUtils.getInstance().getWeekFirstDayReseted(week,month,year);
+					
+			firstDay = DateUtils.getInstance().shiftDate(tempDate,-7);
+			lastDay = DateUtils.getInstance().shiftDate(firstDay, weekShift);
 		}
 		else {
-			lastDay = DateUtils.getInstance().isThisWeek(week,month,year) ? 
-					new Date() : DateUtils.getInstance().getWeekLastDay(week,month,year);
+			Date tempDate = DateUtils.getInstance().getWeekLastDay(week,month,year);
 			
+			lastDay = DateUtils.getInstance().shiftDate(tempDate,7);
 			firstDay = DateUtils.getInstance().shiftDate(lastDay, weekShift);
 		}
 

@@ -244,15 +244,8 @@ public class DateUtils
 		return hourOutputFormat.format(analysisDate);
 	}
 
-	public String weekFormat(int week, int month, int year) {
-
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.YEAR, year);
-		cal.set(Calendar.MONTH, month);
-		cal.set(Calendar.WEEK_OF_MONTH, week);
-		cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
-
-		return weekFormat.format(cal.getTime());
+	public String weekFormat(Date weekDate) {
+		return weekFormat.format(weekDate);
 	}
 
 	public String monthFormat(int month, int year) {
@@ -361,71 +354,7 @@ public class DateUtils
 		cal.setTime(analysisDate);
 		return getWeekFromByDayOfMonth(cal.get(Calendar.DAY_OF_MONTH));
 	}
-
-	public int getPreviousWeekFromWeek(int week, int month, int year) {
-		Calendar cal = getFromWeek(week,month,year,false); 
-		return getWeekFromByDayOfMonth(cal.get(Calendar.DAY_OF_MONTH));
-	}
-
-	public int getPreviousMonthFromWeek(int week, int month, int year) {
-		Calendar cal = getFromWeek(week,month,year,false); 
-		return cal.get(Calendar.MONTH);
-	}
-
-	public int getPreviousYearFromWeek(int week, int month, int year) {
-		Calendar cal = getFromWeek(week,month,year,false); 
-		return cal.get(Calendar.YEAR);
-	}
-
-	public int getNextWeekFromWeek(int week, int month, int year) {
-		Calendar cal = getFromWeek(week,month,year,true); 
-		return getWeekFromByDayOfMonth(cal.get(Calendar.DAY_OF_MONTH));
-	}
-
-	public int getNextMonthFromWeek(int week, int month, int year) {
-		Calendar cal = getFromWeek(week,month,year,true); 
-		return cal.get(Calendar.MONTH);
-	}
-
-	public int getNextYearFromWeek(int week, int month, int year) {
-		Calendar cal = getFromWeek(week,month,year,true); 
-		return cal.get(Calendar.YEAR);
-	}
-
-	private Calendar getFromWeek(int week, int month, int year, boolean add) {
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.YEAR, year);
-		cal.set(Calendar.MONTH, month);
-		cal.set(Calendar.DAY_OF_MONTH,1+(week-1)*7);
-
-		if(add) {
-			if(week == 5) {
-				//5th week
-				cal.set(Calendar.DAY_OF_MONTH, 1);
-				if(month == 11) {
-					cal.set(Calendar.MONTH, 0);
-					cal.set(Calendar.YEAR, year+1);
-				}
-				else cal.set(Calendar.MONTH, month+1);
-			}
-			else cal.add(Calendar.DATE, 7);
-		}
-		else {
-			if(week == 1) {
-				//5th week
-				cal.set(Calendar.DAY_OF_MONTH, 29);
-				if(month == 1) {
-					cal.set(Calendar.MONTH, 11);
-					cal.set(Calendar.YEAR, year-1);
-				}
-				else cal.set(Calendar.MONTH, month-1);
-			}
-			else cal.add(Calendar.DATE, -7);
-		}
-
-		return cal;
-	}
-
+	
 	private Calendar getFromMonth(int month, int year, boolean add) {
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, year);
@@ -443,7 +372,7 @@ public class DateUtils
 	private int getWeekFromByDayOfMonth(int dayOfMonth) {
 		int week = dayOfMonth/7;
 
-		if(dayOfMonth % 7 == 0) {
+		if((dayOfMonth % 7) == 0) {
 			return week;
 		}
 		else return week + 1;

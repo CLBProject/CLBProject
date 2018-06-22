@@ -201,7 +201,7 @@ form {
 }
 
 /* Change The Combos Backbround Color*/
-.ui-selectonemenu-list{
+.ui-selectonemenu-list {
 	background-color: white !important;
 }
 
@@ -299,10 +299,11 @@ form {
 .analysisChartCSS {
 	font-size: 12px;
 	width: 100% !important;
-	height: 60vh !important;
+	height: 52vh !important;
 }
-.lastAnalysisDiv{
-	height:25vh !important;
+
+.lastAnalysisDiv {
+	height: 25vh !important;
 }
 
 .selectOneMenuAnalysis.ui-selectonemenu {
@@ -314,18 +315,18 @@ form {
 	font-size: 12px !important;
 }
 
-.ui-selectonemenu{
-       vertical-align:top !important;
-       font-size: 12px !important;
+.ui-selectonemenu {
+	vertical-align: top !important;
+	font-size: 12px !important;
 }
 
-.ui-selectonemenu-list-item{
-	   vertical-align:top !important;
-       font-size: 12px  !important;
+.ui-selectonemenu-list-item {
+	vertical-align: top !important;
+	font-size: 12px !important;
 }
 
 .ui-button {
-       font-size: 12px !important;
+	font-size: 12px !important;
 }
 
 .ui-timepicker {
@@ -373,12 +374,6 @@ form {
 	border: 1px solid #0A122A;
 }
 
-.chartPanel.ui-widget-content {
-	background-color: #E0ECF8 !important;
-	width: 99.5% !important;
-	padding:5px !important;
-}
-
 .ui-datatable-selectable {
 	font-size: 14px !important;
 }
@@ -410,25 +405,30 @@ form {
 	text-align: left;
 }
 
-.analysisLabels{
-	font-size:12px !important;
-	color: #0A122A !important;
+.analysisLabels {
+	font-size: 12px !important;
+	color: white !important;
 	vertical-align: middle !important;
 }
 
-.analysisViewDiv{
-	padding-top:10px !important;
-	padding-right:10px !important;
+.analysisViewDiv {
+	padding-top: 10px !important;
+	padding-right: 10px !important;
+	color: white !important;
 }
 
-.timeAnalysis{
+.timeAnalysis {
 	vertical-align: middle !important;
-	color: #0A122A !important;	
+	color: white !important;
 	font-size: 12px !important;
 }
 
-.chartDateCss{
-	color:blue;
-	font-size:10px !important;
-	font-weight:bold;
+.chartDateCss {
+	color: yellow;
+	font-weight: plain;
+	font-size: 14px !important;
+}
+
+.analaysisDateCss {
+	padding-left: 25px;
 }

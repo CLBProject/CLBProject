@@ -172,30 +172,17 @@ public class AnalysisBeanChart {
 
 				break;
 			case WEEK:
-
-				int previousWeek = DateUtils.getInstance().getPreviousWeekFromWeek(week,month,year);
-				int previousMonth = DateUtils.getInstance().getPreviousMonthFromWeek(week,month,year);
-				int previousYear = DateUtils.getInstance().getPreviousYearFromWeek(week,month,year);
-
-
-				int nextWeek = DateUtils.getInstance().getNextWeekFromWeek(week,month,year);
-				int nextMonth = DateUtils.getInstance().getNextMonthFromWeek(week,month,year);
-				int nextYear = DateUtils.getInstance().getNextYearFromWeek(week,month,year);
-
-
+				
 				int numberOfWeek5days = DateUtils.getInstance().geWeekNumberOfDays(month, year, week);
 
 				previousSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzerWithWeekShift( 
-						analyzerId, previousWeek, previousMonth, previousYear,numberOfWeek5days);
+						analyzerId, week, month, year, numberOfWeek5days);
 
 				nextSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzerWithWeekShift(
-						analyzerId, nextWeek, nextMonth, nextYear,-numberOfWeek5days);
+						analyzerId, week, month, year, -numberOfWeek5days);
 
-				prevDateLabel = DateUtils.getInstance().weekFormat(previousWeek, previousMonth, previousYear);
-				nextDateLabel = DateUtils.getInstance().weekFormat(nextWeek, nextMonth, nextYear);
-
-				currentSerie.setLabel(BuildingMeterParameterValues.valueOf(buildingMeterSelected).getLabel() + " - " + 
-						DateUtils.getInstance().weekFormat(week, month, year));
+				prevDateLabel = "Previous Week";
+				prevDateLabel = "Next Week";
 
 				break;
 			case MONTH:
@@ -216,17 +203,19 @@ public class AnalysisBeanChart {
 			default: 
 				break;
 			}
-
-			addPreviousAndNextSeries(scaleGraphic,previousSeriesRegistries,nextSeriesRegistries, prevDateLabel, nextDateLabel);
+			
+			previousSerie = new LineChartSeries(BuildingMeterParameterValues.POWER.getLabel()+" - "+prevDateLabel);
+			nextSerie = new LineChartSeries(BuildingMeterParameterValues.POWER.getLabel() + " - " + nextDateLabel);
+			
+			currentSerie.setLabel(BuildingMeterParameterValues.valueOf(buildingMeterSelected).getLabel());
+			
+			addPreviousAndNextSeries(scaleGraphic,previousSeriesRegistries,nextSeriesRegistries);
 		}
 
 	}
 
 	private void addPreviousAndNextSeries(ScaleGraphic currentScale, List<AnalyzerRegistryObject> previousSeriesRegistries,
-			List<AnalyzerRegistryObject> nextSeriesRegistries,String previousDayLabel, String nextDayLabel){
-
-		previousSerie = new LineChartSeries(BuildingMeterParameterValues.POWER.getLabel()+" - "+previousDayLabel);
-		nextSerie = new LineChartSeries(BuildingMeterParameterValues.POWER.getLabel() + " - " + nextDayLabel);
+			List<AnalyzerRegistryObject> nextSeriesRegistries){
 
 		previousSerie.setShowMarker(false);
 		nextSerie.setShowMarker(false);
@@ -356,7 +345,7 @@ public class AnalysisBeanChart {
 				break;
 			case WEEK:
 				selectedDate = DateUtils.getInstance().getWeekToDate(currentTime, true);
-				break;
+				return DateUtils.getInstance().weekFormat(selectedDate);
 			case MONTH:
 				selectedDate = DateUtils.getInstance().getMonthToDate(currentTime, true);
 				break;
@@ -374,8 +363,8 @@ public class AnalysisBeanChart {
 				selectedDate = DateUtils.getInstance().getDay(currentTime, false);
 				break;
 			case WEEK:
-				selectedDate = DateUtils.getInstance().getWeekToDate(currentTime, false);
-				break;
+				selectedDate = DateUtils.getInstance().getWeekToDate(currentTime, true);
+				return DateUtils.getInstance().convertDateToSimpleStringFormat(selectedDate);
 			case MONTH:
 				selectedDate = DateUtils.getInstance().getMonthToDate(currentTime, false);
 				break;
