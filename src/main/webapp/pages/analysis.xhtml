@@ -18,89 +18,8 @@
 						<td width="175px" align="center"><p:outputLabel
 								styleClass="analysisDivClassMainCell" value="Analysis Menu"></p:outputLabel>
 							<hr /></td>
-						<td align="right"></td>
-					</tr>
-					<tr>
-						<td valign="top" width="175px"><p:selectOneMenu
-								styleClass="selectOneMenuAnalysis"
-								value="#{analysisBean.analysisType}">
-								<f:selectItems value="#{analysisBean.analysisTypes}"
-									var="analysisTyp" itemValue="#{analysisTyp}"
-									itemLabel="#{analysisTyp.label}" />
-							</p:selectOneMenu> <p:spacer height="20"></p:spacer> <p:panel>
-								<div align="center">
-									<c:choose>
-										<c:when test="#{empty analysisBean.buildingSelected}">
-											<p:outputLabel value="No Buildings to Select"></p:outputLabel>
-										</c:when>
-										<c:otherwise>
-											<b><p:outputLabel value="Building"></p:outputLabel></b>
-											<hr />
-											<p:graphicImage width="150px"
-												styleClass="buildingImgAnalysis"
-												value="#{request.contextPath}/../resources/images/buildings/#{analysisBean.buildingSelected.imgPath}" />
-											<br />
-											<p:outputLabel styleClass="analysisPanelTitle"
-												value="#{analysisBean.buildingSelected.name}"></p:outputLabel>
-											<br />
-											<br />
-											<p:commandButton value="Change"
-												oncomplete="PF('selectionPopupBuilding').show()" ajax="true"
-												icon="fa fa-fw fa-building" styleClass="simpleButton" />
-										</c:otherwise>
-									</c:choose>
-								</div>
-							</p:panel> <p:spacer height="5" /> <p:panel>
-								<div align="center">
-									<c:choose>
-										<c:when
-											test="#{empty analysisBean.buildingSelected.buildingMeters}">
-											<p:outputLabel value="No Meters to Select"></p:outputLabel>
-										</c:when>
-										<c:otherwise>
-											<b><p:outputLabel value="Meters"></p:outputLabel></b>
-											<hr />
-											<div align="left">
-												<p:selectOneRadio id="meteresRadio"
-													value="#{analysisBean.analysisDayPojo.buildingMeterSelected}"
-													layout="responsive" columns="1">
-													<f:selectItems
-														value="#{analysisBean.analysisDayPojo.buildingMeterQuickAnalysis}"
-														var="buildingMeter" itemLabel="#{buildingMeter.label}"
-														itemValue="#{buildingMeter}">
-													</f:selectItems>
-													<p:ajax update="@form" event="change"
-														listener="#{analysisBean.updateMeterSelection}" />
-												</p:selectOneRadio>
-											</div>
-										</c:otherwise>
-									</c:choose>
-								</div>
-							</p:panel> <p:spacer height="5" /> <p:panel>
-								<div align="center">
-									<c:choose>
-										<c:when
-											test="#{empty analysisBean.buildingSelected.buildingMeters}">
-											<p:outputLabel value="No Analyzers to Select"></p:outputLabel>
-										</c:when>
-										<c:otherwise>
-											<p:outputLabel styleClass="analysisPanelTitle"
-												value="#{analysisBean.analyzerSelected.name}"></p:outputLabel>
-											<hr />
-											<p:commandButton value="Change"
-												oncomplete="PF('selectionPopupAnalyzer').show()" ajax="true"
-												icon="fa fa-fw fa-building" styleClass="simpleButton" />
-										</c:otherwise>
-									</c:choose>
-								</div>
-							</p:panel></td>
-						<td valign="top" align="center">
+						<td valign="top" align="center" rowspan="2">
 							<div align="right" class="analysisViewDiv">
-								<div align="left" class="analaysisDateCss">
-									<p:outputLabel styleClass="chartDateCss"
-										value="#{analysisBean.analysisDatePrettyFormat}" />
-								</div>
-								<p:spacer height="10"/>
 								<!-- Week Options -->
 								<p:outputPanel rendered="#{analysisBean.scaleGraphic == 'WEEK'}">
 									<p:outputLabel value="Year:" styleClass="analysisLabels"
@@ -260,17 +179,19 @@
 									<p:chart styleClass="analysisChartCSS" id="chartDayId"
 										responsive="true" widgetVar="chartDayId"
 										model="#{analysisBean.analysisDayPojo.lineModel}" type="line" />
-									<p:spacer height="30" />
-									<p:outputLabel styleClass="timeAnalysis"
-										value="Time Analysis: " for="allowTimeComp"></p:outputLabel>
+								<br/>
+								<br/>
+								<div align="left" class="analaysisDateCss">
+									<p:outputLabel styleClass="timeAnalysis" value="Time Analysis "
+										for="allowTimeComp"></p:outputLabel>
 									<p:spacer width="2" />
 									<p:selectBooleanCheckbox widgetVar="allowTimeComp"
 										id="allowTimeComp" label="Time Analysis"
 										value="#{analysisBean.analysisDayPojo.nextAndPreviousSelected}">
-
 										<p:ajax update="@form"
 											listener="#{analysisBean.updatePreviousAndNextSeries}" />
 									</p:selectBooleanCheckbox>
+								</div>
 								</c:when>
 								<c:otherwise>
 									<div>
@@ -279,6 +200,82 @@
 								</c:otherwise>
 							</c:choose>
 						</td>
+					</tr>
+					<tr>
+						<td valign="top" width="175px"><p:selectOneMenu
+								styleClass="selectOneMenuAnalysis"
+								value="#{analysisBean.analysisType}">
+								<f:selectItems value="#{analysisBean.analysisTypes}"
+									var="analysisTyp" itemValue="#{analysisTyp}"
+									itemLabel="#{analysisTyp.label}" />
+							</p:selectOneMenu> <p:spacer height="20"></p:spacer> <p:panel>
+								<div align="center">
+									<c:choose>
+										<c:when test="#{empty analysisBean.buildingSelected}">
+											<p:outputLabel value="No Buildings to Select"></p:outputLabel>
+										</c:when>
+										<c:otherwise>
+											<b><p:outputLabel value="Building"></p:outputLabel></b>
+											<hr />
+											<p:graphicImage width="150px"
+												styleClass="buildingImgAnalysis"
+												value="#{request.contextPath}/../resources/images/buildings/#{analysisBean.buildingSelected.imgPath}" />
+											<br />
+											<p:outputLabel styleClass="analysisPanelTitle"
+												value="#{analysisBean.buildingSelected.name}"></p:outputLabel>
+											<br />
+											<br />
+											<p:commandButton value="Change"
+												oncomplete="PF('selectionPopupBuilding').show()" ajax="true"
+												icon="fa fa-fw fa-building" styleClass="simpleButton" />
+										</c:otherwise>
+									</c:choose>
+								</div>
+							</p:panel> <p:spacer height="5" /> <p:panel>
+								<div align="center">
+									<c:choose>
+										<c:when
+											test="#{empty analysisBean.buildingSelected.buildingMeters}">
+											<p:outputLabel value="No Meters to Select"></p:outputLabel>
+										</c:when>
+										<c:otherwise>
+											<b><p:outputLabel value="Meters"></p:outputLabel></b>
+											<hr />
+											<div align="left">
+												<p:selectOneRadio id="meteresRadio"
+													value="#{analysisBean.analysisDayPojo.buildingMeterSelected}"
+													layout="responsive" columns="1">
+													<f:selectItems
+														value="#{analysisBean.analysisDayPojo.buildingMeterQuickAnalysis}"
+														var="buildingMeter" itemLabel="#{buildingMeter.label}"
+														itemValue="#{buildingMeter}">
+													</f:selectItems>
+													<p:ajax update="@form" event="change"
+														listener="#{analysisBean.updateMeterSelection}" />
+												</p:selectOneRadio>
+											</div>
+										</c:otherwise>
+									</c:choose>
+								</div>
+							</p:panel> <p:spacer height="5" /> <p:panel>
+								<div align="center">
+									<c:choose>
+										<c:when
+											test="#{empty analysisBean.buildingSelected.buildingMeters}">
+											<p:outputLabel value="No Analyzers to Select"></p:outputLabel>
+										</c:when>
+										<c:otherwise>
+											<p:outputLabel styleClass="analysisPanelTitle"
+												value="#{analysisBean.analyzerSelected.name}"></p:outputLabel>
+											<hr />
+											<p:commandButton value="Change"
+												oncomplete="PF('selectionPopupAnalyzer').show()" ajax="true"
+												icon="fa fa-fw fa-building" styleClass="simpleButton" />
+										</c:otherwise>
+									</c:choose>
+								</div>
+							</p:panel></td>
+
 					</tr>
 				</table>
 			</h:form>

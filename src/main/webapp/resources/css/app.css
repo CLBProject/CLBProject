@@ -419,8 +419,8 @@ form {
 
 .timeAnalysis {
 	vertical-align: middle !important;
-	color: white !important;
-	font-size: 12px !important;
+	color: yellow !important;
+	font-size: 14px !important;
 }
 
 .chartDateCss {

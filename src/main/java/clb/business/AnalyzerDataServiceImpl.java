@@ -75,10 +75,18 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
 	@Override
 	public List<AnalyzerRegistryObject> getDayRegistriesFromAnalyzer( String analyzerId , Date timeFrame) {
-		return clbDao.getDayRegistriesFromAnalyzer( analyzerId, timeFrame );
+		if(DateUtils.getInstance().isToday(timeFrame)) {
+			Date nowDate = new Date();
+			Date currentDateReseted = DateUtils.getInstance().getDayReseted(nowDate);
+			return clbDao.getDayRegistriesFromAnalyzer(analyzerId, currentDateReseted, nowDate);
+
+		} 
+		else {
+			Date currentDateReseted = DateUtils.getInstance().getDayReseted(timeFrame);
+			Date nextDayReseted = DateUtils.getInstance().getDay(currentDateReseted,true);
+			return clbDao.getDayRegistriesFromAnalyzer(analyzerId, currentDateReseted,nextDayReseted);
+		}
 	}
-
-
 
 	@Override
 	public List<AnalyzerRegistryObject> getWeekRegistriesFromAnalyzer(String analyzerId, int week, int month, int year) {
@@ -86,9 +94,9 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		Date lastDay = DateUtils.getInstance().isThisWeek(week,month,year) ? 
 				new Date() : DateUtils.getInstance().getWeekLastDay(week,month,year);
 
-		Date firstDay = DateUtils.getInstance().getWeekFirstDayReseted(week,month,year);
+				Date firstDay = DateUtils.getInstance().getWeekFirstDayReseted(week,month,year);
 
-		return clbDao.getWeekRegistriesFromAnalyzer( analyzerId,firstDay,lastDay);
+				return clbDao.getWeekRegistriesFromAnalyzer( analyzerId,firstDay,lastDay);
 	}
 
 	@Override
@@ -97,16 +105,16 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
 		Date lastDay;
 		Date firstDay;
-		
+
 		if(weekShift > 0) {
 			Date tempDate = DateUtils.getInstance().getWeekFirstDayReseted(week,month,year);
-					
+
 			firstDay = DateUtils.getInstance().shiftDate(tempDate,-7);
 			lastDay = DateUtils.getInstance().shiftDate(firstDay, weekShift);
 		}
 		else {
 			Date tempDate = DateUtils.getInstance().getWeekLastDay(week,month,year);
-			
+
 			lastDay = DateUtils.getInstance().shiftDate(tempDate,7);
 			firstDay = DateUtils.getInstance().shiftDate(lastDay, weekShift);
 		}

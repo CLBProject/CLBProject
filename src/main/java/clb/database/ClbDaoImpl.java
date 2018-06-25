@@ -248,26 +248,8 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	}
 
 	@Override
-	public List<AnalyzerRegistryObject> getDayRegistriesFromAnalyzer( String analyzerId, Date timeFrameNow ) {
-
-
-		if(DateUtils.getInstance().isToday(timeFrameNow)) {
-			Date nowDate = new Date();
-			Date currentDateReseted = DateUtils.getInstance().getDayReseted(nowDate);
-			Date previousDate = DateUtils.getInstance().getDay(nowDate, false);
-
-			List<AnalyzerRegistryObject> firstDayRegistries =  processRegistries(analyzerId, currentDateReseted, nowDate);
-			List<AnalyzerRegistryObject> secondDayRegistries =  processRegistries(analyzerId, previousDate , currentDateReseted);
-
-			firstDayRegistries.addAll(secondDayRegistries);
-
-			return firstDayRegistries;
-		} 
-		else {
-			Date currentDateReseted = DateUtils.getInstance().getDayReseted(timeFrameNow);
-			Date nextDayReseted = DateUtils.getInstance().getDay(currentDateReseted,true);
-			return  processRegistries(analyzerId, currentDateReseted, nextDayReseted);
-		}
+	public List<AnalyzerRegistryObject> getDayRegistriesFromAnalyzer( String analyzerId, Date from, Date to) {
+		return  processRegistries(analyzerId, from, to);
 	}
 
 

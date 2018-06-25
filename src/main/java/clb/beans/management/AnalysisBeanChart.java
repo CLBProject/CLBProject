@@ -106,8 +106,6 @@ public class AnalysisBeanChart {
 	public void changeSerie(ScaleGraphic currentScale){
 
 		Map<Object, Number> dataSerie = currentSerie.getData();
-		Map<Object, Number> dataPrevSerie = previousSerie != null ? previousSerie.getData() : null;
-		Map<Object, Number> dataNextSerie = nextSerie != null ? nextSerie.getData() : null;
 
 		lineModel.clear();
 
@@ -118,8 +116,11 @@ public class AnalysisBeanChart {
 		currentSerie.setData(dataSerie);
 		lineModel.addSeries( currentSerie );
 
-		//If previous and next are selected
+		//If previous and next are selected load previous and next
 		if(nextAndPreviousSelected) {
+
+			Map<Object, Number> dataPrevSerie = previousSerie != null ? previousSerie.getData() : null;
+			Map<Object, Number> dataNextSerie = nextSerie != null ? nextSerie.getData() : null;
 
 			previousSerie = new LineChartSeries(buildingMeterParamValue.getLabel());
 			nextSerie = new LineChartSeries(buildingMeterParamValue.getLabel());
@@ -139,6 +140,8 @@ public class AnalysisBeanChart {
 	public void affectPreviousAndNextSeries(ScaleGraphic scaleGraphic, Date analysisDate, String analyzerId, int week, int month, int year) {
 		removeNextAndPreviousSeriesRegistries();
 
+		boolean addNextSerie = true;
+
 		if(nextAndPreviousSelected) {
 			List<AnalyzerRegistryObject> previousSeriesRegistries = new ArrayList<AnalyzerRegistryObject>();
 			List<AnalyzerRegistryObject> nextSeriesRegistries = new ArrayList<AnalyzerRegistryObject>();
@@ -153,7 +156,12 @@ public class AnalysisBeanChart {
 				Date nextHour = DateUtils.getInstance().getHourReseted(analysisDate, true);
 
 				previousSeriesRegistries = analyzerDataService.getHourRegistriesFromAnalyzer( analyzerId,previousHour);
-				nextSeriesRegistries = analyzerDataService.getHourRegistriesFromAnalyzer( analyzerId,nextHour);
+
+				//This Hour doesnt have next
+				if(DateUtils.getInstance().isThisHour(analysisDate)) {
+					addNextSerie = false;
+				}
+				else nextSeriesRegistries = analyzerDataService.getHourRegistriesFromAnalyzer( analyzerId,nextHour);
 
 				prevDateLabel = DateUtils.getInstance().hourFormat(previousHour);
 				nextDateLabel = DateUtils.getInstance().hourFormat(nextHour);
@@ -165,24 +173,34 @@ public class AnalysisBeanChart {
 				Date nextDay = DateUtils.getInstance().getDay(analysisDate, true);
 
 				previousSeriesRegistries = analyzerDataService.getDayRegistriesFromAnalyzer( analyzerId, previousDay);
-				nextSeriesRegistries = analyzerDataService.getDayRegistriesFromAnalyzer( analyzerId, nextDay);
+
+				//This Hour doesnt have next
+				if(DateUtils.getInstance().isToday(analysisDate)) {
+					addNextSerie = false;
+				}
+				else nextSeriesRegistries = analyzerDataService.getDayRegistriesFromAnalyzer( analyzerId, nextDay);
 
 				prevDateLabel = DateUtils.getInstance().prettyFormat(previousDay);
 				nextDateLabel = DateUtils.getInstance().prettyFormat(nextDay);
 
 				break;
 			case WEEK:
-				
+
 				int numberOfWeek5days = DateUtils.getInstance().geWeekNumberOfDays(month, year, week);
 
 				previousSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzerWithWeekShift( 
 						analyzerId, week, month, year, numberOfWeek5days);
 
-				nextSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzerWithWeekShift(
+				//This Hour doesnt have next
+				if(DateUtils.getInstance().isThisWeek(week, month, year)) {
+					addNextSerie = false;
+				}
+				else nextSeriesRegistries = analyzerDataService.getWeekRegistriesFromAnalyzerWithWeekShift(
 						analyzerId, week, month, year, -numberOfWeek5days);
 
+
 				prevDateLabel = "Previous Week";
-				prevDateLabel = "Next Week";
+				nextDateLabel = "Next Week";
 
 				break;
 			case MONTH:
@@ -194,7 +212,12 @@ public class AnalysisBeanChart {
 				int nYear = DateUtils.getInstance().getNextYear(month,year);
 
 				previousSeriesRegistries = analyzerDataService.getMonthRegistriesFromAnalyzer( analyzerId, prevMonth, prevYear);
-				nextSeriesRegistries = analyzerDataService.getMonthRegistriesFromAnalyzer( analyzerId, nMonth , nYear);
+
+				//This Hour doesnt have next
+				if(DateUtils.getInstance().isThisMonth(month, year)) {
+					addNextSerie = false;
+				}
+				else nextSeriesRegistries = analyzerDataService.getMonthRegistriesFromAnalyzer( analyzerId, nMonth , nYear);
 
 				prevDateLabel = DateUtils.getInstance().monthFormat(prevMonth, prevYear);
 				nextDateLabel = DateUtils.getInstance().monthFormat(nMonth, nYear);
@@ -203,39 +226,37 @@ public class AnalysisBeanChart {
 			default: 
 				break;
 			}
-			
-			previousSerie = new LineChartSeries(BuildingMeterParameterValues.POWER.getLabel()+" - "+prevDateLabel);
-			nextSerie = new LineChartSeries(BuildingMeterParameterValues.POWER.getLabel() + " - " + nextDateLabel);
-			
+
 			currentSerie.setLabel(BuildingMeterParameterValues.valueOf(buildingMeterSelected).getLabel());
 			
-			addPreviousAndNextSeries(scaleGraphic,previousSeriesRegistries,nextSeriesRegistries);
+			previousSerie = new LineChartSeries(BuildingMeterParameterValues.POWER.getLabel()+" - "+prevDateLabel);
+			initSerie(scaleGraphic,previousSerie,previousSeriesRegistries,previousRegistries, TimeAnalysisType.PREVIOUS);
+			
+			if(addNextSerie) {
+				nextSerie = new LineChartSeries(BuildingMeterParameterValues.POWER.getLabel()+" - "+nextDateLabel);
+				initSerie(scaleGraphic,nextSerie,nextSeriesRegistries,nextRegistries, TimeAnalysisType.NEXT);
+			}
 		}
 
 	}
+	
+	private void initSerie(ScaleGraphic currentScale, LineChartSeries serie, List<AnalyzerRegistryObject> registries, 
+			List<AnalyzerRegistryGui> registriesToProduce, TimeAnalysisType timeAnalysisType) {
 
-	private void addPreviousAndNextSeries(ScaleGraphic currentScale, List<AnalyzerRegistryObject> previousSeriesRegistries,
-			List<AnalyzerRegistryObject> nextSeriesRegistries){
-
-		previousSerie.setShowMarker(false);
-		nextSerie.setShowMarker(false);
-
-		lineModel.addSeries( previousSerie );
-		lineModel.addSeries( nextSerie );
-
-		previousRegistries = AnalyzerRegistryReductionAlgorithm.getInstance().reduceRegistries(previousSeriesRegistries, currentScale);
-		nextRegistries =  AnalyzerRegistryReductionAlgorithm.getInstance().reduceRegistries(nextSeriesRegistries, currentScale);
-
-		setSeriesRegistriesValues(currentScale,previousSerie,previousRegistries,TimeAnalysisType.PREVIOUS);
-		setSeriesRegistriesValues(currentScale,nextSerie,nextRegistries,TimeAnalysisType.NEXT);
+		serie.setShowMarker(false);
+		lineModel.addSeries( serie );
+		registriesToProduce = AnalyzerRegistryReductionAlgorithm.getInstance().reduceRegistries(registries, currentScale);
+		setSeriesRegistriesValues(currentScale,serie,registriesToProduce,timeAnalysisType);
 	}
 
 	private void removeNextAndPreviousSeriesRegistries() {
-		previousSerie.getData().clear();
-		nextSerie.getData().clear();
 
 		lineModel.getSeries().remove(previousSerie);
+		previousSerie.getData().clear();
+		
 		lineModel.getSeries().remove(nextSerie);
+		nextSerie.getData().clear();
+		
 	}
 
 
@@ -345,7 +366,7 @@ public class AnalysisBeanChart {
 				break;
 			case WEEK:
 				selectedDate = DateUtils.getInstance().getWeekToDate(currentTime, true);
-				return DateUtils.getInstance().weekFormat(selectedDate);
+				return DateUtils.getInstance().convertDateToSimpleStringFormat(selectedDate);
 			case MONTH:
 				selectedDate = DateUtils.getInstance().getMonthToDate(currentTime, true);
 				break;
@@ -363,7 +384,7 @@ public class AnalysisBeanChart {
 				selectedDate = DateUtils.getInstance().getDay(currentTime, false);
 				break;
 			case WEEK:
-				selectedDate = DateUtils.getInstance().getWeekToDate(currentTime, true);
+				selectedDate = DateUtils.getInstance().getWeekToDate(currentTime, false);
 				return DateUtils.getInstance().convertDateToSimpleStringFormat(selectedDate);
 			case MONTH:
 				selectedDate = DateUtils.getInstance().getMonthToDate(currentTime, false);

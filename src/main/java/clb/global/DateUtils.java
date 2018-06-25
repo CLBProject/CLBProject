@@ -11,9 +11,9 @@ public class DateUtils
 	private static DateUtils instance;
 	private DateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private DateFormat hourOutputFormat = new SimpleDateFormat("HH:mm:ss");
-	private DateFormat weekFormat = new SimpleDateFormat("EEEE d");
+	private DateFormat weekFormat = new SimpleDateFormat("EEEE dd");
 	private DateFormat monthFormat = new SimpleDateFormat("MMMM yyyy");
-	private DateFormat prettyDateFormat = new SimpleDateFormat("EEEE, d MMMM yyyy, HH:mm:ss");
+	private DateFormat prettyDateFormat = new SimpleDateFormat("EEEE, dd MMMM yyyy");
 
 	public static synchronized DateUtils getInstance() {
 		if (instance == null) {
@@ -417,4 +417,11 @@ public class DateUtils
 		return cal.getTime();
 	}
 
+	public Date shiftHours(Date lastDay, int weekShift) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(lastDay);
+		cal.add(Calendar.HOUR_OF_DAY, weekShift);
+		
+		return cal.getTime();
+	}
 }
