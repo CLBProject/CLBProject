@@ -89,11 +89,11 @@ public class DateUtilsTest {
 		cal.set(Calendar.HOUR_OF_DAY, 5);
 		cal.set(Calendar.DAY_OF_MONTH, 15);
 		
-		cal.setTime(DateUtils.getInstance().getHourReseted(cal.getTime(),false));
+		cal.setTime(DateUtils.getInstance().getHour(cal.getTime(),false));
 		Assert.assertEquals(cal.get(Calendar.HOUR_OF_DAY), 4);
 		
 		cal.set(Calendar.HOUR_OF_DAY, 0);
-		cal.setTime(DateUtils.getInstance().getHourReseted(cal.getTime(),false));
+		cal.setTime(DateUtils.getInstance().getHour(cal.getTime(),false));
 		
 		Assert.assertEquals(cal.get(Calendar.HOUR_OF_DAY), 23);
 		Assert.assertEquals(cal.get(Calendar.DAY_OF_MONTH), 14);
@@ -116,11 +116,11 @@ public class DateUtilsTest {
 		cal.set(Calendar.HOUR_OF_DAY, 5);
 		cal.set(Calendar.DAY_OF_MONTH, 15);
 		
-		cal.setTime(DateUtils.getInstance().getHourReseted(cal.getTime(),true));
+		cal.setTime(DateUtils.getInstance().getHour(cal.getTime(),true));
 		Assert.assertEquals(cal.get(Calendar.HOUR_OF_DAY), 6);
 		
 		cal.set(Calendar.HOUR_OF_DAY, 23);
-		cal.setTime(DateUtils.getInstance().getHourReseted(cal.getTime(),true));
+		cal.setTime(DateUtils.getInstance().getHour(cal.getTime(),true));
 		
 		Assert.assertEquals(cal.get(Calendar.HOUR_OF_DAY), 0);
 		Assert.assertEquals(cal.get(Calendar.DAY_OF_MONTH), 16);

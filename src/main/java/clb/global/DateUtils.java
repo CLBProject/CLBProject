@@ -87,13 +87,19 @@ public class DateUtils
 				dateCal.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH);
 	}
 
-	public Date getHourReseted(Date timeFrame, boolean next) {
+	public Date getHourReseted(Date timeFrame) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(timeFrame);
 
 		cal.set(Calendar.MILLISECOND,0);
 		cal.set(Calendar.MINUTE,0);
 		cal.set(Calendar.SECOND,0);
+		return cal.getTime();
+	}
+
+	public Date getHour(Date timeFrame, boolean next) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(timeFrame);
 
 		if(next)
 			cal.add(Calendar.HOUR_OF_DAY, 1);
@@ -101,7 +107,6 @@ public class DateUtils
 
 		return cal.getTime();
 	}
-
 
 	public Date getDay(Date timeFrame, boolean next) {
 		Calendar cal = Calendar.getInstance();

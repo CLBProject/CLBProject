@@ -34,7 +34,7 @@ public interface ClbDao{
 
     List<BuildingObject> findUserBuildings( String userName );
 
-    List<AnalyzerRegistryObject> getHourRegistriesFromAnalyzer( String analyzerId , Date timeFrame);
+    List<AnalyzerRegistryObject> getHourRegistriesFromAnalyzer( String analyzerId, Date from, Date to );
     
     List<AnalyzerRegistryObject> getDayRegistriesFromAnalyzer( String analyzerId, Date from, Date to);
     

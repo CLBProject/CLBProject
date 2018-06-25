@@ -152,8 +152,8 @@ public class AnalysisBeanChart {
 			switch(scaleGraphic) {
 			case HOUR:
 
-				Date previousHour = DateUtils.getInstance().getHourReseted(analysisDate, false);
-				Date nextHour = DateUtils.getInstance().getHourReseted(analysisDate, true);
+				Date previousHour = DateUtils.getInstance().getHour(analysisDate, false);
+				Date nextHour = DateUtils.getInstance().getHour(analysisDate, true);
 
 				previousSeriesRegistries = analyzerDataService.getHourRegistriesFromAnalyzer( analyzerId,previousHour);
 
@@ -359,7 +359,7 @@ public class AnalysisBeanChart {
 		case PREVIOUS:
 			switch(scale) {
 			case HOUR:
-				selectedDate = DateUtils.getInstance().getHourReseted(currentTime, true);
+				selectedDate = DateUtils.getInstance().getHour(currentTime, true);
 				break;
 			case DAY:
 				selectedDate = DateUtils.getInstance().getDay(currentTime, true);
@@ -378,7 +378,7 @@ public class AnalysisBeanChart {
 		case NEXT:
 			switch(scale) {
 			case HOUR:
-				selectedDate = DateUtils.getInstance().getHourReseted(currentTime, false);
+				selectedDate = DateUtils.getInstance().getHour(currentTime, false);
 				break;
 			case DAY:
 				selectedDate = DateUtils.getInstance().getDay(currentTime, false);

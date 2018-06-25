@@ -214,37 +214,8 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	}
 
 	@Override
-	public List<AnalyzerRegistryObject> getHourRegistriesFromAnalyzer( String analyzerId, Date timeFrame ) {
-
-		Date previousHourDateLimit = null;
-
-		//If this Hour set to current time
-		if(DateUtils.getInstance().isThisHour(timeFrame)) {
-			timeFrame = new Date();
-			previousHourDateLimit = DateUtils.getInstance().getHourReseted(timeFrame,false);
-
-			//If is not today is necessary to join 2 tables
-			if(DateUtils.getInstance().isToday(previousHourDateLimit)) {
-				return  processRegistries( analyzerId, previousHourDateLimit, timeFrame);
-			}
-			else {
-				List<AnalyzerRegistryObject> firstHourRegistries =  processRegistries(analyzerId, previousHourDateLimit, timeFrame);
-				List<AnalyzerRegistryObject> secondHourRegistries =  processRegistries(analyzerId, 
-						DateUtils.getInstance().getHourReseted(previousHourDateLimit, true), timeFrame);
-
-				firstHourRegistries.addAll(secondHourRegistries);
-
-				return firstHourRegistries;
-			}
-		}
-		else {
-			timeFrame = DateUtils.getInstance().getHourReseted(timeFrame,true);
-			previousHourDateLimit = DateUtils.getInstance().getHourReseted(timeFrame,false);
-
-			return  processRegistries( analyzerId, previousHourDateLimit, timeFrame);
-		}
-
-
+	public List<AnalyzerRegistryObject> getHourRegistriesFromAnalyzer( String analyzerId, Date from, Date to ) {
+		return  processRegistries(analyzerId, from, to);
 	}
 
 	@Override

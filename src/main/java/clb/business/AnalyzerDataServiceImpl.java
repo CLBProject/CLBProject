@@ -70,7 +70,21 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
 	@Override
 	public List<AnalyzerRegistryObject> getHourRegistriesFromAnalyzer( String analyzerId , Date timeFrame) {
-		return clbDao.getHourRegistriesFromAnalyzer( analyzerId, timeFrame );
+
+		//If this Hour set to current time
+		if(DateUtils.getInstance().isThisHour(timeFrame)) {
+			timeFrame = new Date();
+			Date previousHourDateLimit = DateUtils.getInstance().getHour(timeFrame,false);
+
+			return  clbDao.getDayRegistriesFromAnalyzer( analyzerId, previousHourDateLimit, timeFrame);
+		}
+		else {
+			timeFrame = DateUtils.getInstance().getHour(timeFrame,true);
+			Date previousHourDateLimit = DateUtils.getInstance().getHour(timeFrame,false);
+
+			return  clbDao.getDayRegistriesFromAnalyzer( analyzerId, previousHourDateLimit, timeFrame);
+		}
+
 	}
 
 	@Override
@@ -94,9 +108,9 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		Date lastDay = DateUtils.getInstance().isThisWeek(week,month,year) ? 
 				new Date() : DateUtils.getInstance().getWeekLastDay(week,month,year);
 
-				Date firstDay = DateUtils.getInstance().getWeekFirstDayReseted(week,month,year);
+		Date firstDay = DateUtils.getInstance().getWeekFirstDayReseted(week,month,year);
 
-				return clbDao.getWeekRegistriesFromAnalyzer( analyzerId,firstDay,lastDay);
+		return clbDao.getWeekRegistriesFromAnalyzer( analyzerId,firstDay,lastDay);
 	}
 
 	@Override
