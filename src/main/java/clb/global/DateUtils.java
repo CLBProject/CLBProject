@@ -210,6 +210,7 @@ public class DateUtils
 	
 	public Date getMonthToDate(Date date,boolean add) {
 		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
 		
 		if(add) {
 			cal.add(Calendar.MONTH, 1);
@@ -226,6 +227,19 @@ public class DateUtils
 		return dateCal.get(Calendar.YEAR) == year;
 	}
 
+	public Date getMonthFirstDay(int month, int year) {	
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.MONTH, month);
+		cal.set(Calendar.YEAR, year);
+		cal.set(Calendar.DAY_OF_MONTH,1);
+		cal.set(Calendar.MILLISECOND,0);
+		cal.set(Calendar.SECOND,0);
+		cal.set(Calendar.MINUTE,0);
+		cal.set(Calendar.HOUR_OF_DAY,0);
+
+		return cal.getTime();
+	}
+	
 	public Date getMonthLastDay(int month, int year) {	
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.MONTH, month);
@@ -236,6 +250,19 @@ public class DateUtils
 		cal.set(Calendar.MINUTE,0);
 		cal.set(Calendar.HOUR_OF_DAY,0);
 
+		return cal.getTime();
+	}
+	
+
+	public Date getMonthLastDay(Date firstDay) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(firstDay);
+		cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+		cal.set(Calendar.MILLISECOND,0);
+		cal.set(Calendar.SECOND,0);
+		cal.set(Calendar.MINUTE,0);
+		cal.set(Calendar.HOUR_OF_DAY,0);
+		
 		return cal.getTime();
 	}
 
@@ -359,20 +386,6 @@ public class DateUtils
 		cal.setTime(analysisDate);
 		return getWeekFromByDayOfMonth(cal.get(Calendar.DAY_OF_MONTH));
 	}
-	
-	private Calendar getFromMonth(int month, int year, boolean add) {
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.YEAR, year);
-		cal.set(Calendar.MONTH, month);
-		cal.set(Calendar.DAY_OF_MONTH, 1);
-
-		if(add) 
-			cal.add(Calendar.MONTH, 1);
-		else
-			cal.add(Calendar.MONTH, -1);
-
-		return cal;
-	}
 
 	private int getWeekFromByDayOfMonth(int dayOfMonth) {
 		int week = dayOfMonth/7;
@@ -381,27 +394,6 @@ public class DateUtils
 			return week;
 		}
 		else return week + 1;
-	}
-	
-
-	public int getPreviousMonth(int month, int year) {
-		Calendar cal = getFromMonth(month,year,false);
-		return cal.get(Calendar.MONTH);
-	}
-
-	public int getPreviousYear(int month, int year) {
-		Calendar cal = getFromMonth(month,year,false);
-		return cal.get(Calendar.YEAR);
-	}
-
-	public int getNextMonth(int month, int year) {
-		Calendar cal = getFromMonth(month,year,true);
-		return cal.get(Calendar.MONTH);
-	}
-
-	public int getNextYear(int month, int year) {
-		Calendar cal = getFromMonth(month,year,true);
-		return cal.get(Calendar.YEAR);
 	}
 	
 	public int geWeekNumberOfDays(int month, int year, int week) {
@@ -421,6 +413,14 @@ public class DateUtils
 		
 		return cal.getTime();
 	}
+	
+	public Date shiftMonth(Date date, int monthShift) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(Calendar.MONTH, monthShift);
+		
+		return cal.getTime();
+	}
 
 	public Date shiftHours(Date lastDay, int weekShift) {
 		Calendar cal = Calendar.getInstance();
@@ -429,4 +429,5 @@ public class DateUtils
 		
 		return cal.getTime();
 	}
+
 }

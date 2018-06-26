@@ -74,15 +74,15 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		//If this Hour set to current time
 		if(DateUtils.getInstance().isThisHour(timeFrame)) {
 			timeFrame = new Date();
-			Date previousHourDateLimit = DateUtils.getInstance().getHour(timeFrame,false);
+			Date previousHourDateLimit = DateUtils.getInstance().getHourReseted(timeFrame);
 
 			return  clbDao.getDayRegistriesFromAnalyzer( analyzerId, previousHourDateLimit, timeFrame);
 		}
 		else {
-			timeFrame = DateUtils.getInstance().getHour(timeFrame,true);
-			Date previousHourDateLimit = DateUtils.getInstance().getHour(timeFrame,false);
+			Date previousHourDateLimit = DateUtils.getInstance().getHourReseted(timeFrame);
+			Date nextHourDateLimit = DateUtils.getInstance().getHour(previousHourDateLimit,true);
 
-			return  clbDao.getDayRegistriesFromAnalyzer( analyzerId, previousHourDateLimit, timeFrame);
+			return  clbDao.getDayRegistriesFromAnalyzer( analyzerId, previousHourDateLimit, nextHourDateLimit);
 		}
 
 	}
@@ -108,9 +108,9 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		Date lastDay = DateUtils.getInstance().isThisWeek(week,month,year) ? 
 				new Date() : DateUtils.getInstance().getWeekLastDay(week,month,year);
 
-		Date firstDay = DateUtils.getInstance().getWeekFirstDayReseted(week,month,year);
+				Date firstDay = DateUtils.getInstance().getWeekFirstDayReseted(week,month,year);
 
-		return clbDao.getWeekRegistriesFromAnalyzer( analyzerId,firstDay,lastDay);
+				return clbDao.getWeekRegistriesFromAnalyzer( analyzerId,firstDay,lastDay);
 	}
 
 	@Override
@@ -134,6 +134,30 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		}
 
 		return clbDao.getWeekRegistriesFromAnalyzer( analyzerId,firstDay,lastDay);
+	}
+
+	@Override
+	public List<AnalyzerRegistryObject> getMonthRegistriesFromAnalyzer(String analyzerId, int month, int year) {
+
+		Date lastDay = DateUtils.getInstance().isThisMonth(month,year) ? 
+				new Date() : DateUtils.getInstance().getDay(DateUtils.getInstance().getMonthLastDay(month,year),true);
+
+		Date firstDay = DateUtils.getInstance().getMonthFirstDay(month, year);
+
+		return clbDao.getMonthRegistriesFromAnalyzer( analyzerId, firstDay , lastDay );
+	}
+
+	@Override
+	public List<AnalyzerRegistryObject> getMonthRegistriesFromAnalyzerWithShift(String analyzerId, int month, int year,
+			int monthShift) {
+
+
+		Date tempDate = DateUtils.getInstance().getMonthFirstDay(month, year);
+
+		Date firstDay = DateUtils.getInstance().shiftMonth(tempDate, monthShift);
+		Date lastDay = DateUtils.getInstance().getDay(DateUtils.getInstance().getMonthLastDay(firstDay),true);
+
+		return clbDao.getMonthRegistriesFromAnalyzer( analyzerId,firstDay,lastDay);
 	}
 
 
@@ -412,15 +436,9 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		this.eventPublisher = eventPublisher;
 	}
 
-
-	@Override
-	public List<AnalyzerRegistryObject> getMonthRegistriesFromAnalyzer(String analyzerId, int month, int year) {
-		return clbDao.getMonthRegistriesFromAnalyzer( analyzerId, month , year );
-	}
-
-
 	@Override
 	public String[] getYearsAvailable() {
 		return clbDao.getYearsAvailable();
 	}
+
 }

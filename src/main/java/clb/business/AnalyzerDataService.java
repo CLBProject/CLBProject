@@ -24,7 +24,12 @@ public interface AnalyzerDataService {
 	
 	public List<AnalyzerRegistryObject> getMonthRegistriesFromAnalyzer(String analyzerId, int month, int year);
 	
+	public List<AnalyzerRegistryObject> getMonthRegistriesFromAnalyzerWithShift(String analyzerId, int month, int year,
+			int monthShift);
+	
 	public Date getLowestAnalyzerRegistryDate();
 
 	public String[] getYearsAvailable();
+
+
 }

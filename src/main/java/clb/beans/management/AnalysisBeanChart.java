@@ -152,9 +152,9 @@ public class AnalysisBeanChart {
 			switch(scaleGraphic) {
 			case HOUR:
 
-				Date previousHour = DateUtils.getInstance().getHour(analysisDate, false);
-				Date nextHour = DateUtils.getInstance().getHour(analysisDate, true);
-
+				Date previousHour = DateUtils.getInstance().getHour(DateUtils.getInstance().getHourReseted(analysisDate), false);
+				Date nextHour = DateUtils.getInstance().getHour(DateUtils.getInstance().getHourReseted(analysisDate), true);
+ 
 				previousSeriesRegistries = analyzerDataService.getHourRegistriesFromAnalyzer( analyzerId,previousHour);
 
 				//This Hour doesnt have next
@@ -205,22 +205,16 @@ public class AnalysisBeanChart {
 				break;
 			case MONTH:
 
-				int prevMonth = DateUtils.getInstance().getPreviousMonth(month,year);
-				int prevYear = DateUtils.getInstance().getPreviousYear(month,year);
-
-				int nMonth = DateUtils.getInstance().getNextMonth(month,year);
-				int nYear = DateUtils.getInstance().getNextYear(month,year);
-
-				previousSeriesRegistries = analyzerDataService.getMonthRegistriesFromAnalyzer( analyzerId, prevMonth, prevYear);
+				previousSeriesRegistries = analyzerDataService.getMonthRegistriesFromAnalyzerWithShift( analyzerId, month, year, -1);
 
 				//This Hour doesnt have next
 				if(DateUtils.getInstance().isThisMonth(month, year)) {
 					addNextSerie = false;
 				}
-				else nextSeriesRegistries = analyzerDataService.getMonthRegistriesFromAnalyzer( analyzerId, nMonth , nYear);
+				else nextSeriesRegistries = analyzerDataService.getMonthRegistriesFromAnalyzerWithShift( analyzerId, month , year, 1);
 
-				prevDateLabel = DateUtils.getInstance().monthFormat(prevMonth, prevYear);
-				nextDateLabel = DateUtils.getInstance().monthFormat(nMonth, nYear);
+				prevDateLabel = "Previous Month";
+				nextDateLabel = "Next Month";
 
 				break;
 			default: 
