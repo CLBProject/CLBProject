@@ -117,21 +117,8 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	public List<AnalyzerRegistryObject> getWeekRegistriesFromAnalyzerWithWeekShift(String analyzerId, int week, 
 			int month, int year, int weekShift) {
 
-		Date lastDay;
-		Date firstDay;
-
-		if(weekShift > 0) {
-			Date tempDate = DateUtils.getInstance().getWeekFirstDayReseted(week,month,year);
-
-			firstDay = DateUtils.getInstance().shiftDate(tempDate,-7);
-			lastDay = DateUtils.getInstance().shiftDate(firstDay, weekShift);
-		}
-		else {
-			Date tempDate = DateUtils.getInstance().getWeekLastDay(week,month,year);
-
-			lastDay = DateUtils.getInstance().shiftDate(tempDate,7);
-			firstDay = DateUtils.getInstance().shiftDate(lastDay, weekShift);
-		}
+		Date lastDay = DateUtils.getInstance().getWeekLastDayShift(week, month, year, weekShift);
+		Date firstDay = DateUtils.getInstance().getWeekFirstDayShift(week, month, year, weekShift);
 
 		return clbDao.getWeekRegistriesFromAnalyzer( analyzerId,firstDay,lastDay);
 	}

@@ -179,19 +179,21 @@
 									<p:chart styleClass="analysisChartCSS" id="chartDayId"
 										responsive="true" widgetVar="chartDayId"
 										model="#{analysisBean.analysisDayPojo.lineModel}" type="line" />
-								<br/>
-								<br/>
-								<div align="left" class="analaysisDateCss">
-									<p:outputLabel styleClass="timeAnalysis" value="Time Analysis "
-										for="allowTimeComp"></p:outputLabel>
-									<p:spacer width="2" />
-									<p:selectBooleanCheckbox widgetVar="allowTimeComp"
-										id="allowTimeComp" label="Time Analysis"
-										value="#{analysisBean.analysisDayPojo.nextAndPreviousSelected}">
-										<p:ajax update="@form"
-											listener="#{analysisBean.updatePreviousAndNextSeries}" />
-									</p:selectBooleanCheckbox>
-								</div>
+									<br />
+									<br />
+									<div align="center" class="analaysisDateCss">
+										<p:panel styleClass="timeAnalysisPanel">
+											<p:outputLabel styleClass="timeAnalysis"
+												value="Time Analysis " for="allowTimeComp"></p:outputLabel>
+											<p:spacer width="2" />
+											<p:selectBooleanCheckbox widgetVar="allowTimeComp"
+												id="allowTimeComp" label="Time Analysis"
+												value="#{analysisBean.analysisDayPojo.nextAndPreviousSelected}">
+												<p:ajax update="@form"
+													listener="#{analysisBean.updatePreviousAndNextSeries}" />
+											</p:selectBooleanCheckbox>
+										</p:panel>
+									</div>
 								</c:when>
 								<c:otherwise>
 									<div>

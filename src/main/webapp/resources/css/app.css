@@ -419,8 +419,8 @@ form {
 
 .timeAnalysis {
 	vertical-align: middle !important;
-	color: yellow !important;
-	font-size: 14px !important;
+	color: #0A122A !important;
+	font-size: 12px !important;
 }
 
 .chartDateCss {
@@ -431,4 +431,8 @@ form {
 
 .analaysisDateCss {
 	padding-left: 25px;
+}
+
+.timeAnalysisPanel{
+	width:150px !important;
 }

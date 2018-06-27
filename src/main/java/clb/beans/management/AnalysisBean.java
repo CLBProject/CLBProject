@@ -255,7 +255,9 @@ public class AnalysisBean implements Serializable{
 	}
 
 	private void updateHoursCombo() {
-
+		
+		hour = Hours.ZERO;
+		
 		if(DateUtils.getInstance().isToday(analysisDate)) {
 			hoursValues = Hours.getHoursLimited(DateUtils.getInstance().getHourFromDate(new Date()));
 		}

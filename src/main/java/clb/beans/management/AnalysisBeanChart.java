@@ -3,7 +3,6 @@ package clb.beans.management;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import org.primefaces.model.chart.Axis;
@@ -74,6 +73,9 @@ public class AnalysisBeanChart {
 		nextSerie = new LineChartSeries(BuildingMeterParameterValues.POWER.getLabel());
 
 		currentSerie.setShowMarker( false );
+		previousSerie.setShowMarker(false);
+		nextSerie.setShowMarker(false);
+		
 		lineModel.addSeries( currentSerie );
 		lineModel.getAxes().put(AxisType.X,new DateAxis());
 
@@ -105,32 +107,16 @@ public class AnalysisBeanChart {
 	 */
 	public void changeSerie(ScaleGraphic currentScale){
 
-		Map<Object, Number> dataSerie = currentSerie.getData();
-
 		lineModel.clear();
 
 		BuildingMeterParameterValues buildingMeterParamValue = BuildingMeterParameterValues.valueOf(buildingMeterSelected);
 
 		currentSerie = new LineChartSeries(buildingMeterParamValue.getLabel());
 		currentSerie.setShowMarker( false );
-		currentSerie.setData(dataSerie);
 		lineModel.addSeries( currentSerie );
-
-		//If previous and next are selected load previous and next
-		if(nextAndPreviousSelected) {
-
-			Map<Object, Number> dataPrevSerie = previousSerie != null ? previousSerie.getData() : null;
-			Map<Object, Number> dataNextSerie = nextSerie != null ? nextSerie.getData() : null;
-
-			previousSerie = new LineChartSeries(buildingMeterParamValue.getLabel());
-			nextSerie = new LineChartSeries(buildingMeterParamValue.getLabel());
-
-			previousSerie.setData(dataPrevSerie);
-			nextSerie.setData(dataNextSerie);
-
-			lineModel.addSeries( previousSerie );
-			lineModel.addSeries( nextSerie );
-		}
+		
+		this.nextAndPreviousSelected = false;
+		
 		setSeriesRegistriesValues(currentScale,currentSerie,this.currentRegistries,TimeAnalysisType.CURRENT);
 	}
 
@@ -199,8 +185,8 @@ public class AnalysisBeanChart {
 						analyzerId, week, month, year, -numberOfWeek5days);
 
 
-				prevDateLabel = "Previous Week";
-				nextDateLabel = "Next Week";
+				prevDateLabel = DateUtils.getInstance().weekFormat(DateUtils.getInstance().getWeekFirstDayShift(week, month, year,numberOfWeek5days));
+				nextDateLabel = DateUtils.getInstance().weekFormat(DateUtils.getInstance().getWeekFirstDayShift(week,month,year,-numberOfWeek5days));
 
 				break;
 			case MONTH:
@@ -213,21 +199,23 @@ public class AnalysisBeanChart {
 				}
 				else nextSeriesRegistries = analyzerDataService.getMonthRegistriesFromAnalyzerWithShift( analyzerId, month , year, 1);
 
-				prevDateLabel = "Previous Month";
-				nextDateLabel = "Next Month";
+				prevDateLabel = DateUtils.getInstance().monthFormat(DateUtils.getInstance().getMonthFirstDayShift(week, month, year,-1));
+				nextDateLabel = DateUtils.getInstance().monthFormat(DateUtils.getInstance().getMonthFirstDayShift(week, month, year,1));
 
 				break;
 			default: 
 				break;
 			}
-
-			currentSerie.setLabel(BuildingMeterParameterValues.valueOf(buildingMeterSelected).getLabel());
 			
-			previousSerie = new LineChartSeries(BuildingMeterParameterValues.POWER.getLabel()+" - "+prevDateLabel);
+			String currentMeterSelected = BuildingMeterParameterValues.valueOf(buildingMeterSelected).getLabel();
+			
+			currentSerie.setLabel(currentMeterSelected);
+			
+			previousSerie = new LineChartSeries(currentMeterSelected+" - "+prevDateLabel);
 			initSerie(scaleGraphic,previousSerie,previousSeriesRegistries,previousRegistries, TimeAnalysisType.PREVIOUS);
 			
 			if(addNextSerie) {
-				nextSerie = new LineChartSeries(BuildingMeterParameterValues.POWER.getLabel()+" - "+nextDateLabel);
+				nextSerie = new LineChartSeries(currentMeterSelected+" - "+nextDateLabel);
 				initSerie(scaleGraphic,nextSerie,nextSeriesRegistries,nextRegistries, TimeAnalysisType.NEXT);
 			}
 		}
@@ -262,14 +250,14 @@ public class AnalysisBeanChart {
 		BuildingMeterParameterValues buildingMeterSel = BuildingMeterParameterValues.valueOf(buildingMeterSelected);
 
 		for(AnalyzerRegistryGui registry: registriesSelected) {
-			Integer asys = registry.getAsys().intValue();
-			Integer hz = registry.getHz().intValue();;
-			Integer kwsys = registry.getKwsys().intValue();;
-			Integer pfsys = registry.getPfsys().intValue();;
-			Integer kvarsys = registry.getKvarsys().intValue();;
-			Integer kvasys = registry.getKvasys().intValue();;
-			Integer vlnsys = registry.getVlnsys().intValue();;
-			Integer vllsys = registry.getVllsys().intValue();;
+			Number asys = getChartNumberFormated(registry.getAsys());
+			Number hz = getChartNumberFormated(registry.getHz());
+			Number kwsys = getChartNumberFormated(registry.getKwsys());
+			Number pfsys = getChartNumberFormated(registry.getPfsys());
+			Number kvarsys = getChartNumberFormated(registry.getKvarsys());
+			Number kvasys = getChartNumberFormated(registry.getKvasys());
+			Number vlnsys = getChartNumberFormated(registry.getVlnsys());
+			Number vllsys = getChartNumberFormated(registry.getVllsys());
 			String currentTime = getTimeString(registry.getCurrentTime(),currentScale,timeAnalysisType);
 
 			switch(buildingMeterSel) {
@@ -338,12 +326,14 @@ public class AnalysisBeanChart {
 		}
 
 		Axis yAxis = lineModel.getAxis(AxisType.Y);
-		yAxis.setTickFormat("%d");
 		yAxis.setLabel(buildingMeterSel.getLabel() + " (" + buildingMeterSel.getUnit() + ")");
 
 		updateSeriesMinAndMaxValue(currentScale);
 	}
 
+	private Number getChartNumberFormated(Double number) {
+		return number > 10 ? number.intValue() : number;
+	}
 
 	private String getTimeString(Date currentTime, ScaleGraphic scale, TimeAnalysisType timeAnalysisType) {
 
@@ -425,8 +415,17 @@ public class AnalysisBeanChart {
 		}
 
 		Axis yAxis = lineModel.getAxis(AxisType.Y);
-		yAxis.setMax(maxValue);
-		yAxis.setMin(minValue);
+
+		if(maxValue > 10) {
+			yAxis.setMax(maxValue+maxValue*0.1);
+			yAxis.setMin(minValue-minValue*0.1);
+			yAxis.setTickFormat("%d");
+		}
+		else {
+			yAxis.setMax(maxValue+1);
+			yAxis.setMin(minValue-1);
+			yAxis.setTickFormat("%.2f");
+		}
 
 		Axis xAxis = lineModel.getAxis(AxisType.X);
 		xAxis.setMax(maxDate);
