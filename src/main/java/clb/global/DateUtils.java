@@ -21,6 +21,14 @@ public class DateUtils
 		}
 		return instance;
 	}
+	
+	public String convertDateToSimpleWeekFormat(int week, int month, int year, int weekShift) {
+		return week + "-" + month + "-" + year + "-" + weekShift;
+	}
+	
+	public String convertDateToSimpleMonthFormat(int month, int year, int weekShift) {
+		return month + "-" + year + "-" + weekShift;
+	}
 
 	public String convertDateToSimpleStringFormat(Date date) {
 		return outputFormat.format( date );
@@ -451,4 +459,5 @@ public class DateUtils
 	public Date getMonthFirstDayShift(int week, int month, int year, int monthShift) {
 		return shiftMonth(getMonthFirstDay(month, year), monthShift);
 	}
+
 }

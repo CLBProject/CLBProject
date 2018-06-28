@@ -43,6 +43,7 @@ public class AnalysisBean implements Serializable{
 	private Date nextAnalisysDate;
 	private String analysisDatePrettyFormat;
 	private AnalysisBeanChart analysisDayPojo;
+	private AnalysisBeanCache analysisBeanCache;
 
 	private List<BuildingObject> buildingsToSelect;
 	private BuildingObject tempBuildingSelected;
@@ -72,6 +73,8 @@ public class AnalysisBean implements Serializable{
 
 	@PostConstruct
 	public void init() {
+		
+		analysisBeanCache = new AnalysisBeanCache(analyzerDataService);
 		
 		todayDate = new Date();
 
@@ -117,9 +120,10 @@ public class AnalysisBean implements Serializable{
 									analyzerSelected = aObj;
 									tempAnalyzerSelected = analyzerSelected;
 
-									analysisDayPojo = new AnalysisBeanChart( buildingSelected.getBuildingMeters(), this.analyzerDataService);
+									analysisDayPojo = new AnalysisBeanChart( buildingSelected.getBuildingMeters(),
+											this.analysisBeanCache);
 
-									fillGraphicData(analyzerDataService.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate) );
+									fillGraphicData(analysisBeanCache.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), DateUtils.getInstance().getDayReseted(analysisDate)) );
 
 									firstTime = true;
 								}
@@ -154,14 +158,14 @@ public class AnalysisBean implements Serializable{
 
 	public void updateHourValues() {
 		analysisDate = DateUtils.getInstance().setHourOfDate(analysisDate,hour.getValue());
-		fillGraphicData(analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate));
+		fillGraphicData(analysisBeanCache.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate));
 	}
 
 	/** Week View Listeners **/
 
 	public void setWeekValue() {
 		analysisDate = DateUtils.getInstance().getWeekFirstDayReseted(week.getCode(),month.getValue(),Integer.parseInt(year));
-		fillGraphicData(  analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerSelected.getId(), 
+		fillGraphicData(  analysisBeanCache.getWeekRegistriesFromAnalyzer( analyzerSelected.getId(), 
 				week.getCode(), month.getValue(), Integer.parseInt(year)) );
 	}
 
@@ -174,7 +178,7 @@ public class AnalysisBean implements Serializable{
 
 		weeks = Weeks.getWeeksLimited(DateUtils.getInstance().getNumberOfMonthWeeks(month.getValue(),Integer.parseInt(year)));
 
-		fillGraphicData(analyzerDataService.getWeekRegistriesFromAnalyzer(analyzerSelected.getId(), 
+		fillGraphicData(analysisBeanCache.getWeekRegistriesFromAnalyzer(analyzerSelected.getId(), 
 				week.getCode(), month.getValue(), Integer.parseInt(year)));
 	}
 
@@ -188,7 +192,7 @@ public class AnalysisBean implements Serializable{
 		monthsValues = Months.getMonthsLimited(DateUtils.getInstance().getNumberOfMonthsInYear(Integer.parseInt(year)));
 		weeks = Weeks.getWeeksLimited(DateUtils.getInstance().getNumberOfMonthWeeks(month.getValue(),Integer.parseInt(year)));
 
-		fillGraphicData(analyzerDataService.getWeekRegistriesFromAnalyzer(analyzerSelected.getId(), week.getCode(), month.getValue(), Integer.parseInt(year)));
+		fillGraphicData(analysisBeanCache.getWeekRegistriesFromAnalyzer(analyzerSelected.getId(), week.getCode(), month.getValue(), Integer.parseInt(year)));
 	}
 
 	/** Month View Listeners **/
@@ -199,7 +203,7 @@ public class AnalysisBean implements Serializable{
 		
 		analysisDate = DateUtils.getInstance().getWeekFirstDayReseted(week.getCode(),month.getValue(), Integer.parseInt(year));
 
-		fillGraphicData(analyzerDataService.getMonthRegistriesFromAnalyzer( analyzerSelected.getId(), month.getValue(), Integer.parseInt(year)));
+		fillGraphicData(analysisBeanCache.getMonthRegistriesFromAnalyzer( analyzerSelected.getId(), month.getValue(), Integer.parseInt(year)));
 	}
 
 	public void setYearValueForMonth() {
@@ -210,7 +214,7 @@ public class AnalysisBean implements Serializable{
 		analysisDate = DateUtils.getInstance().getWeekFirstDayReseted(week.getCode(),month.getValue(),Integer.parseInt(year));
 		monthsValues = Months.getMonthsLimited(DateUtils.getInstance().getNumberOfMonthsInYear(Integer.parseInt(year)));
 		
-		fillGraphicData(analyzerDataService.getMonthRegistriesFromAnalyzer( analyzerSelected.getId(), month.getValue(), Integer.parseInt(year)));
+		fillGraphicData(analysisBeanCache.getMonthRegistriesFromAnalyzer( analyzerSelected.getId(), month.getValue(), Integer.parseInt(year)));
 	}
 
 	private void fillGraphicData(List<AnalyzerRegistryObject> registries) {
@@ -227,19 +231,19 @@ public class AnalysisBean implements Serializable{
 		switch(scaleGraphic) {
 		case HOUR:
 			updateHoursCombo();
-			registries = analyzerDataService.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
+			registries = analysisBeanCache.getHourRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
 			break;
 		case DAY:
-			registries = analyzerDataService.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
+			registries = analysisBeanCache.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
 			break;
 		case WEEK:
-			registries = analyzerDataService.getWeekRegistriesFromAnalyzer( analyzerSelected.getId(), week.getCode(), month.getValue(), Integer.parseInt(year));
+			registries = analysisBeanCache.getWeekRegistriesFromAnalyzer( analyzerSelected.getId(), week.getCode(), month.getValue(), Integer.parseInt(year));
 			break;
 		case MONTH:
-			registries = analyzerDataService.getMonthRegistriesFromAnalyzer( analyzerSelected.getId(), month.getValue(), Integer.parseInt(year));
+			registries = analysisBeanCache.getMonthRegistriesFromAnalyzer( analyzerSelected.getId(), month.getValue(), Integer.parseInt(year));
 			break;
 		default: 
-			registries = analyzerDataService.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
+			registries = analysisBeanCache.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), analysisDate);
 			break;
 		}
 
