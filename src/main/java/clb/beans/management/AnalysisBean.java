@@ -35,9 +35,6 @@ public class AnalysisBean implements Serializable{
 
 	@ManagedProperty("#{analyzerDataService}")
 	private AnalyzerDataService analyzerDataService;
-	
-	@ManagedProperty("#{analysisCacheBean}")
-	private AnalysisCacheBean analysisCacheBean;
 
 	private Date todayDate;
 	private Date minDate;
@@ -75,8 +72,6 @@ public class AnalysisBean implements Serializable{
 
 	@PostConstruct
 	public void init() {
-		
-		analysisCacheBean.testBean();
 		
 		todayDate = new Date();
 
@@ -486,14 +481,5 @@ public class AnalysisBean implements Serializable{
 	public void setNextAnalisysDate(Date nextAnalisysDate) {
 		this.nextAnalisysDate = nextAnalisysDate;
 	}
-
-	public AnalysisCacheBean getAnalysisCacheBean() {
-		return analysisCacheBean;
-	}
-
-	public void setAnalysisCacheBean(AnalysisCacheBean analysisCacheBean) {
-		this.analysisCacheBean = analysisCacheBean;
-	}
-	
 	
 }
