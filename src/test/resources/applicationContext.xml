@@ -19,17 +19,25 @@
 	<context:component-scan base-package="clb.database" />
 	<context:component-scan base-package="clb.database.entities" />
 
+	<bean id="analyzerDataService" class="clb.business.AnalyzerDataServiceImpl"
+		init-method="init" destroy-method="destroy">
+	</bean>
+
 	<bean id="bcryptEncoder"
 		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+
+	<!-- Default bean name is 'mongo' -->
+	<mongo:db-factory/>
+
+	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
+	</bean>
 
 	<bean
 		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
 
 	<mongo:repositories base-package="clb.database" />
 
-	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
-		<constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
-	</bean>
 
 	<bean id="taskExecutor"
 		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
@@ -37,12 +45,6 @@
 		<property name="maxPoolSize" value="10" />
 		<property name="queueCapacity" value="25" />
 	</bean>
-
-	<bean id="analyzerDataService" class="clb.business.AnalyzerDataServiceImpl"
-		init-method="init" destroy-method="destroy">
-	</bean>
-
-	<bean id="userRegistryService" class="clb.business.UserRegistryServiceImpl" />
 
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="host" value="smtp.gmail.com" />

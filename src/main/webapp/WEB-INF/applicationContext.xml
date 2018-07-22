@@ -27,6 +27,7 @@
 		dbname="clb" />
 
 	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
 	</bean>
 
 	<bean
