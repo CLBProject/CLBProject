@@ -13,7 +13,6 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.test.context.ContextConfiguration;
 
 import clb.database.ClbDao;
 
@@ -23,7 +22,6 @@ import clb.database.ClbDao;
 @ComponentScan({ // where the components are
 		"clb.business",
 		"clb.database"})
-@ContextConfiguration(classes = {  })
 public class ConfigurationBusiness {
 
 	@Bean
