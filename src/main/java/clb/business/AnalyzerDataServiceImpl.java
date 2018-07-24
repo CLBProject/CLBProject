@@ -76,13 +76,13 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 			timeFrame = new Date();
 			Date previousHourDateLimit = DateUtils.getInstance().getHourReseted(timeFrame);
 
-			return  clbDao.getDayRegistriesFromAnalyzer( analyzerId, previousHourDateLimit, timeFrame);
+			return  clbDao.getDayHourRegistriesFromAnalyzer( analyzerId, previousHourDateLimit, timeFrame);
 		}
 		else {
 			Date previousHourDateLimit = DateUtils.getInstance().getHourReseted(timeFrame);
 			Date nextHourDateLimit = DateUtils.getInstance().getHour(previousHourDateLimit,true);
 
-			return  clbDao.getDayRegistriesFromAnalyzer( analyzerId, previousHourDateLimit, nextHourDateLimit);
+			return  clbDao.getDayHourRegistriesFromAnalyzer( analyzerId, previousHourDateLimit, nextHourDateLimit);
 		}
 
 	}
@@ -92,13 +92,13 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		if(DateUtils.getInstance().isToday(timeFrame)) {
 			Date nowDate = new Date();
 			Date currentDateReseted = DateUtils.getInstance().getDayReseted(nowDate);
-			return clbDao.getDayRegistriesFromAnalyzer(analyzerId, currentDateReseted, nowDate);
+			return clbDao.getDayHourRegistriesFromAnalyzer(analyzerId, currentDateReseted, nowDate);
 
 		} 
 		else {
 			Date currentDateReseted = DateUtils.getInstance().getDayReseted(timeFrame);
 			Date nextDayReseted = DateUtils.getInstance().getDay(currentDateReseted,true);
-			return clbDao.getDayRegistriesFromAnalyzer(analyzerId, currentDateReseted,nextDayReseted);
+			return clbDao.getDayHourRegistriesFromAnalyzer(analyzerId, currentDateReseted,nextDayReseted);
 		}
 	}
 
@@ -310,7 +310,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 							Date time = currentTimeCalendar.getTime();
 
 							if(dataToExclude.contains( time.getTime())){
-								System.out.println("Date Excluded:" + time);
 								continue;
 							}
 
@@ -353,7 +352,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 				analyzersRegistries.stream().forEach( analyzerRegistry -> analyzer.addAnalyzerRegistry( analyzerRegistry.getId() ) );
 			}
 		}
-		System.out.println("Data Persisted");
 	}
 
 	public void destroy(){

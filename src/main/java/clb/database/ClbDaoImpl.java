@@ -214,12 +214,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	}
 
 	@Override
-	public List<AnalyzerRegistryObject> getHourRegistriesFromAnalyzer( String analyzerId, Date from, Date to ) {
-		return  processRegistries(analyzerId, from, to);
-	}
-
-	@Override
-	public List<AnalyzerRegistryObject> getDayRegistriesFromAnalyzer( String analyzerId, Date from, Date to) {
+	public List<AnalyzerRegistryObject> getDayHourRegistriesFromAnalyzer( String analyzerId, Date from, Date to) {
 		return  processRegistries(analyzerId, from, to);
 	}
 
