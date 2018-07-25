@@ -5,6 +5,7 @@ import codecs, csv
 from ftplib import FTP
 import configparser
 
+FTP_HOST = 'ftp.mobinteg.org'
 
 class AnalyzerRegistry:
     
@@ -115,20 +116,33 @@ def processFile(f):
 
 def processUserFtp(userStr, passStr):
     # Ligar ao FTP e à pasta processed
-    ftp = FTP('ftp.dexcell.com')
+    ftp = FTP(FTP_HOST)
     ftp.login(userStr,passStr)
     print(ftp.getwelcome())
-    ftp.cwd('/processed')
-    
-    #cria lista com todos o ficheiros da pasta e depois escolher o mais recent
-    data = []
+    ftp.cwd("/")
+    dirs = []
+    ftp.retrlines("LIST", (dirs.append))
 
-    ftp.retrlines("LIST", (data.append))
-    words = data[-1].split(None, 8)
-    filename = words[-1].lstrip()
-    print ('Ficheiro mais recente: ', filename)
+    for dir in dirs[3:]:
+        currentDir = dir.split(None, 8)[8]
+        ftp.cwd(currentDir)
+        print('Visiting Dir: ', currentDir)
+        #cria lista com todos o ficheiros da pasta e depois escolher o mais recent
+        data = []
+        
+        ftp.retrlines("LIST", (data.append))
+        words = data[-1].split(None, 8)
+        filename = words[-1].lstrip()
+        print ('Ficheiro mais recente: ', filename)
+        
+        if len(data) > 2 :
+            ftp.retrbinary('RETR '+filename, processFile)
+        else: 
+            print ('No File to Process on this Directory')
+        
+        ftp.cwd("..")
     
-    ftp.retrbinary('RETR '+filename, processFile)
+    
     ftp.quit()
     return;
 
