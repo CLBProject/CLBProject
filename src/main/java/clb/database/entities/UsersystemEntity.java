@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * 
  */
 @Document(collection="Users")
-public class UsersystemEntity implements ClbEntity, Serializable {
+public class UsersystemEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id

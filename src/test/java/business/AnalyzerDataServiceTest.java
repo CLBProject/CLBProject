@@ -1,14 +1,14 @@
 package business;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +33,6 @@ public class AnalyzerDataServiceTest {
 
 	@Autowired
 	private ClbDao clbDao;
-
-	@Before
-	public void setup() {
-	}
 
 	@Test
 	public void getAnalyzerRegistriesNowDateValuesTest() {
@@ -306,5 +302,16 @@ public class AnalyzerDataServiceTest {
 		Assert.assertEquals(yearsReturned[1],"2017");
 		Assert.assertEquals(yearsReturned[2],"2018");
 
+	}
+	
+	@Test
+	public void testLowestAnalyzerRegistryDate() {
+		
+		Date date = new Date();
+		
+		when(clbDao.getLowestAnalyzerRegistryDate()).thenReturn(date);
+		Date currentDate = analyzerDataService.getLowestAnalyzerRegistryDate();
+		
+		Assert.assertEquals(date.toString(), currentDate.toString());
 	}
 }

@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 
 @Document(collection="BuildingsMeters")
-public class BuildingMeterEntity implements ClbEntity, Serializable {
+public class BuildingMeterEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id

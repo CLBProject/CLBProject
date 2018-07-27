@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * 
  */
 @Document(collection="Analyzers")
-public class AnalyzerEntity implements ClbEntity, Serializable {
+public class AnalyzerEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @Id
@@ -20,8 +20,6 @@ public class AnalyzerEntity implements ClbEntity, Serializable {
     private String name;
 
     private List<String> analyzerRegistriesIds;
-
-    private List<String> analyzerRegistriesAverageIds;
 
     public AnalyzerEntity() {
     }
@@ -50,12 +48,4 @@ public class AnalyzerEntity implements ClbEntity, Serializable {
         this.analyzerRegistriesIds = analyzerRegistriesIds;
     }
 
-    public List<String> getAnalyzerRegistriesAverageIds() {
-        return analyzerRegistriesAverageIds;
-    }
-
-    public void setAnalyzerRegistriesAverageIds( List<String> analyzerRegistriesAverageIds ) {
-        this.analyzerRegistriesAverageIds = analyzerRegistriesAverageIds;
-    }
-    
 }
