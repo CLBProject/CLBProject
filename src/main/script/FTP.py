@@ -54,16 +54,22 @@ class AnalyzerRegistry:
         self.phaseSequence = phaseSequence
         self.hZ = hZ
 
-def processFile(f):
-    eachline = f.decode("utf-8").split("\nAC")
+def processData(more_data):
+    dataToProcess = []
+    dataToProcess.append(more_data)
+    
+    print(dataToProcess)
+    
     index = 0
     analyzerRegistries = []
-    for eachlineCommas in eachline:
+    
+    '''
+    for eachlineCommas in dataToProcess:
         c = eachlineCommas.split(";")
         
         if c[0] == 'OK':
             continue
-        
+
         recortType = c[0]
         productType = c[1]
         itemSn = c[2]
@@ -87,7 +93,7 @@ def processFile(f):
         al3 = c[20]
         kWsys = c[21]
         kwl1 = c[22]
-        kwl2 = c[23]
+        kwl2 = c[23]  
         kwl3 = c[24]
         kvarsys = c[25]
         kvarl1 = c[26]
@@ -103,16 +109,14 @@ def processFile(f):
         pfL3 = c[36]
         phaseSequence = c[37]
         hZ = c[38]
-    
+        
         analyzerReg = AnalyzerRegistry(recortType,productType, itemSn, itemLabel, comPort, modBusId,
         date, time, kWh, kWhNeg, viNsys, vlin, vl2n, vl3n, vilSys, vl1l2, vl2l3, vl3l1,
         al1, al2, al3, kWsys, kwl1, kwl2, kwl3, kvarsys, kvarl1, kvarl2, kvarl3, kVasys, 
         kval1, kval2, kval3, pfSys, pfL1, pfL2, pfL3, phaseSequence, hZ)
         
         analyzerRegistries.append(analyzerReg)
-    
-    print(analyzerRegistries[0].productType)
-        
+    '''
 
 def processUserFtp(userStr, passStr):
     # Ligar ao FTP e à pasta processed
@@ -136,7 +140,7 @@ def processUserFtp(userStr, passStr):
         print ('Ficheiro mais recente: ', filename)
         
         if len(data) > 2 :
-            ftp.retrbinary('RETR '+filename, processFile)
+            ftp.retrbinary('RETR '+filename, callback=processData)
         else: 
             print ('No File to Process on this Directory')
         
