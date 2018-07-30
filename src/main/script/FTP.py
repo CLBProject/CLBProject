@@ -4,8 +4,11 @@ import sys
 import codecs, csv
 from ftplib import FTP
 import configparser
+import socket
 
 FTP_HOST = 'ftp.mobinteg.org'
+SERVER_HOST = "localhost"
+PORT = 6006
 
 class AnalyzerRegistry:
     
@@ -53,24 +56,23 @@ class AnalyzerRegistry:
         self.pfL3 = pfL3
         self.phaseSequence = phaseSequence
         self.hZ = hZ
+    
+    def toJson(self):
+        return self.kwl1
 
 def processData(more_data):
-    dataToProcess = []
-    dataToProcess.append(more_data)
+    dataProcessed = more_data.decode("utf-8")
     
-    print(dataToProcess)
     
-    index = 0
-    analyzerRegistries = []
-    
-    '''
-    for eachlineCommas in dataToProcess:
+    for eachlineCommas in dataProcessed.splitlines():
         c = eachlineCommas.split(";")
         
-        if c[0] == 'OK':
-            continue
-
         recortType = c[0]
+        
+        if recortType != 'AC' or len(c) < 39:
+            continue
+        
+        
         productType = c[1]
         itemSn = c[2]
         itemLabel = c[3]
@@ -115,10 +117,12 @@ def processData(more_data):
         al1, al2, al3, kWsys, kwl1, kwl2, kwl3, kvarsys, kvarl1, kvarl2, kvarl3, kVasys, 
         kval1, kval2, kval3, pfSys, pfL1, pfL2, pfL3, phaseSequence, hZ)
         
-        analyzerRegistries.append(analyzerReg)
-    '''
+        sock.send(bytes(analyzerReg.toJson(), 'utf-8'))
+        
+        print(analyzerReg.kwl1)
 
 def processUserFtp(userStr, passStr):
+    
     # Ligar ao FTP e à pasta processed
     ftp = FTP(FTP_HOST)
     ftp.login(userStr,passStr)
@@ -140,7 +144,7 @@ def processUserFtp(userStr, passStr):
         print ('Ficheiro mais recente: ', filename)
         
         if len(data) > 2 :
-            ftp.retrbinary('RETR '+filename, callback=processData)
+            ftp.retrbinary('RETR '+filename, processData)
         else: 
             print ('No File to Process on this Directory')
         
@@ -152,6 +156,9 @@ def processUserFtp(userStr, passStr):
 
 config = configparser.ConfigParser()
 config.read('ftp_users.properties')
+
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock.connect((SERVER_HOST, PORT))  
 
 for each_section in config.sections():
     for (each_key, each_val) in config.items(each_section):

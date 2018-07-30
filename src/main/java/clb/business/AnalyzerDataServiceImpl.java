@@ -20,7 +20,6 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.primefaces.json.JSONException;
-import org.primefaces.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
@@ -129,9 +128,9 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		Date lastDay = DateUtils.getInstance().isThisMonth(month,year) ? 
 				new Date() : DateUtils.getInstance().getDay(DateUtils.getInstance().getMonthLastDay(month,year),true);
 
-		Date firstDay = DateUtils.getInstance().getMonthFirstDay(month, year);
+				Date firstDay = DateUtils.getInstance().getMonthFirstDay(month, year);
 
-		return clbDao.getMonthRegistriesFromAnalyzer( analyzerId, firstDay , lastDay );
+				return clbDao.getMonthRegistriesFromAnalyzer( analyzerId, firstDay , lastDay );
 	}
 
 	@Override
@@ -364,16 +363,17 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 			@Override
 			public void run() {
 
-				try(ServerSocket s = new ServerSocket(1234)){
-					while(true){
-						Socket clientSocket = s.accept();
-						try(Scanner in = new Scanner(clientSocket.getInputStream())){
-							JSONObject jsonObj = new JSONObject(in.nextLine());
-							System.out.println(jsonObj.toString());
+				try(ServerSocket s = new ServerSocket(6006)){
+					Socket clientSocket = s.accept();
+					try(Scanner in = new Scanner(clientSocket.getInputStream())){
+						//JSONObject jsonObj = new JSONObject(in.nextLine());
+						while(true) {
+							while(!in.hasNextLine());
+							System.out.println("Arrived at Server by Script:" + in.nextLine());
 						}
-						catch(JSONException jsonex){
-							jsonex.printStackTrace();
-						}
+					}
+					catch(JSONException jsonex){
+						jsonex.printStackTrace();
 					}
 				} 
 				catch (IOException e) {
