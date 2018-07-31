@@ -5,6 +5,7 @@ import codecs, csv
 from ftplib import FTP
 import configparser
 import socket
+import json
 
 FTP_HOST = 'ftp.mobinteg.org'
 SERVER_HOST = "localhost"
@@ -117,9 +118,7 @@ def processData(more_data):
         al1, al2, al3, kWsys, kwl1, kwl2, kwl3, kvarsys, kvarl1, kvarl2, kvarl3, kVasys, 
         kval1, kval2, kval3, pfSys, pfL1, pfL2, pfL3, phaseSequence, hZ)
         
-        sock.send(bytes(analyzerReg.toJson(), 'utf-8'))
-        
-        print(analyzerReg.kwl1)
+        sock.send(bytes(json.dumps(analyzerReg.__dict__)+"\n", 'utf-8'))
 
 def processUserFtp(userStr, passStr):
     
@@ -150,7 +149,7 @@ def processUserFtp(userStr, passStr):
         
         ftp.cwd("..")
     
-    
+    sock.send(bytes("*exit*", 'utf-8'))
     ftp.quit()
     return;
 

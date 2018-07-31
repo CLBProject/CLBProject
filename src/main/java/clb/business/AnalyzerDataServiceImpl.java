@@ -20,6 +20,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.primefaces.json.JSONException;
+import org.primefaces.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
@@ -364,16 +365,27 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 			public void run() {
 
 				try(ServerSocket s = new ServerSocket(6006)){
-					Socket clientSocket = s.accept();
-					try(Scanner in = new Scanner(clientSocket.getInputStream())){
-						//JSONObject jsonObj = new JSONObject(in.nextLine());
-						while(true) {
-							while(!in.hasNextLine());
-							System.out.println("Arrived at Server by Script:" + in.nextLine());
+					while(true) {
+						Socket clientSocket = s.accept();
+						try(Scanner in = new Scanner(clientSocket.getInputStream())){
+
+							boolean waitingRequests = true;
+
+							while(waitingRequests) {
+								while(!in.hasNext());
+								String line = in.nextLine();
+								
+								waitingRequests = !line.equals("*exit*");
+								
+								if(waitingRequests) {
+									JSONObject jsonObj = new JSONObject(line.split("\n")[0]);
+									clbDao.saveAnalyzerRegistry(new AnalyzerRegistryObject(jsonObj,"1"));
+								}
+							}
 						}
-					}
-					catch(JSONException jsonex){
-						jsonex.printStackTrace();
+						catch(JSONException jsonex){
+							jsonex.printStackTrace();
+						}
 					}
 				} 
 				catch (IOException e) {
