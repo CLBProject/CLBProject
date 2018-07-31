@@ -13,4 +13,5 @@ public class AnalyzerCacheBeanTest {
 	public void testHoursCache() {
 		List<AnalyzerRegistryObject> registryObjects = new ArrayList<AnalyzerRegistryObject>();
 	}
+	
 }

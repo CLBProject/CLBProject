@@ -485,5 +485,13 @@ public class AnalysisBean implements Serializable{
 	public void setNextAnalisysDate(Date nextAnalisysDate) {
 		this.nextAnalisysDate = nextAnalisysDate;
 	}
+
+	public AnalysisBeanCache getAnalysisBeanCache() {
+		return analysisBeanCache;
+	}
+
+	public void setAnalysisBeanCache(AnalysisBeanCache analysisBeanCache) {
+		this.analysisBeanCache = analysisBeanCache;
+	}
 	
 }
