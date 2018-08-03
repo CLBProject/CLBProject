@@ -1,4 +1,4 @@
-package clb.beans.management;
+package clb.ui.beans.utils;
 
 import java.util.Date;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package clb.beans.pojos;
+package clb.ui.beans.utils;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import clb.beans.enums.ScaleGraphic;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.global.DateUtils;
+import clb.ui.beans.pojos.AnalyzerRegistryGui;
+import clb.ui.enums.ScaleGraphic;
 
 public class AnalyzerRegistryReductionAlgorithm {
 

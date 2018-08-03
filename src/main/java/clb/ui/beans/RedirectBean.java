@@ -1,4 +1,4 @@
-package clb.beans.management;
+package clb.ui.beans;
 
 import java.io.Serializable;
 

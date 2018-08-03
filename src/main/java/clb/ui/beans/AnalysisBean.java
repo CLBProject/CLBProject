@@ -1,4 +1,4 @@
-package clb.beans.management;
+package clb.ui.beans;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,17 +12,19 @@ import javax.faces.bean.ViewScoped;
 
 import org.primefaces.event.SelectEvent;
 
-import clb.beans.enums.AnalysisTypes;
-import clb.beans.enums.Hours;
-import clb.beans.enums.Months;
-import clb.beans.enums.ScaleGraphic;
-import clb.beans.enums.Weeks;
 import clb.business.AnalyzerDataService;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.BuildingObject;
 import clb.business.objects.DataLoggerObject;
 import clb.global.DateUtils;
+import clb.ui.beans.utils.AnalysisBeanCache;
+import clb.ui.beans.utils.AnalysisBeanChart;
+import clb.ui.enums.AnalysisTypes;
+import clb.ui.enums.Hours;
+import clb.ui.enums.Months;
+import clb.ui.enums.ScaleGraphic;
+import clb.ui.enums.Weeks;
 
 @ViewScoped
 @ManagedBean

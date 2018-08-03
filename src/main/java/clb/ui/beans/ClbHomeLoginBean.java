@@ -1,4 +1,4 @@
-package clb.beans.management;
+package clb.ui.beans;
 
 import java.io.Serializable;
 
@@ -10,10 +10,10 @@ import javax.faces.context.FacesContext;
 
 import org.primefaces.context.RequestContext;
 
-import clb.beans.pojos.UserLoginPojo;
 import clb.business.UserRegistryService;
 import clb.global.exceptions.UserDoesNotExistException;
 import clb.global.exceptions.UserDoesNotMatchPasswordLoginException;
+import clb.ui.beans.pojos.UserLoginPojo;
 
 @SessionScoped
 @ManagedBean

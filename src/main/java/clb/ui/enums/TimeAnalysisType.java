@@ -1,4 +1,4 @@
-package clb.beans.enums;
+package clb.ui.enums;
 
 public enum TimeAnalysisType {
 

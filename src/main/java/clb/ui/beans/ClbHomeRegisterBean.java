@@ -1,4 +1,4 @@
-package clb.beans.management;
+package clb.ui.beans;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -11,7 +11,6 @@ import javax.faces.context.FacesContext;
 
 import org.primefaces.context.RequestContext;
 
-import clb.beans.pojos.UserRegisterPojo;
 import clb.business.UserRegistryService;
 import clb.business.objects.UsersystemObject;
 import clb.global.exceptions.UserCantResendEmailException;
@@ -20,6 +19,7 @@ import clb.global.exceptions.UserExistsOnRegistryException;
 import clb.global.exceptions.UserNotPersistedException;
 import clb.global.exceptions.UserTokenHasExpiredOnCompleteRegistration;
 import clb.global.exceptions.UserTokenIsNullOnCompleteRegistrationException;
+import clb.ui.beans.pojos.UserRegisterPojo;
 
 @ViewScoped
 @ManagedBean

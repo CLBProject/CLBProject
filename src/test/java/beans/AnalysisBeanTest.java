@@ -6,19 +6,18 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import clb.beans.management.AnalysisBean;
-import clb.beans.management.ClbHomeLoginBean;
-import clb.beans.pojos.UserLoginPojo;
 import clb.business.AnalyzerDataService;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.BuildingMeterObject;
 import clb.business.objects.BuildingObject;
 import clb.business.objects.DataLoggerObject;
 import clb.business.objects.UsersystemObject;
+import clb.ui.beans.AnalysisBean;
+import clb.ui.beans.ClbHomeLoginBean;
+import clb.ui.beans.pojos.UserLoginPojo;
 
 public class AnalysisBeanTest extends AbstractBeanTest{
 
@@ -36,7 +35,7 @@ public class AnalysisBeanTest extends AbstractBeanTest{
 	
 	@Mock
 	UsersystemObject user;
-
+	
 	@Override
 	public void initBean() {
 		
@@ -70,10 +69,6 @@ public class AnalysisBeanTest extends AbstractBeanTest{
 		when(userLoginPojo.getCurrentUser()).thenReturn(user);
 		when(user.getBuildings()).thenReturn(buildings);
 		analysisBean.init();
-	}
-	
-	@Test
-	public void test() {
 	}
 
 	@Override
