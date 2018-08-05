@@ -1,14 +1,14 @@
 package business;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +33,6 @@ public class AnalyzerDataServiceTest {
 
 	@Autowired
 	private ClbDao clbDao;
-
-	@Before
-	public void setup() {
-	}
 
 	@Test
 	public void getAnalyzerRegistriesNowDateValuesTest() {
@@ -146,6 +142,152 @@ public class AnalyzerDataServiceTest {
 		assertEquals(finalReg3Obj.getAn(), 26.8, 0.01);
 		assertEquals(finalReg3Obj.getAnalyzerId(),"3");
 	}
+	
+	@Test
+	public void getAnalyzerRegistriesWeekValuesTest() {
+		
+		//Given
+		AnalyzerRegistryObject analyzerReg1 = new AnalyzerRegistryObject();
+		analyzerReg1.setAnalyzerId("2");
+		analyzerReg1.setKwh(1.7);
+		analyzerReg1.setAn(6.3);
+
+		AnalyzerRegistryObject analyzerReg2 = new AnalyzerRegistryObject();
+		analyzerReg2.setAnalyzerId("2");
+		analyzerReg2.setKwh(0.9);
+		analyzerReg2.setAn(31.3);
+
+
+		List<AnalyzerRegistryObject> weekRegistries = new ArrayList<AnalyzerRegistryObject>();
+		weekRegistries.add(analyzerReg1);
+		weekRegistries.add(analyzerReg2);
+
+
+		//When
+		when(clbDao.getWeekRegistriesFromAnalyzer(any(String.class), any(Date.class) , any(Date.class))).thenReturn(weekRegistries);
+		List<AnalyzerRegistryObject> dayRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer("2",2,2,2018);
+
+
+		AnalyzerRegistryObject finalReg1Obj = dayRegistries.get(0);
+		AnalyzerRegistryObject finalReg2Obj = dayRegistries.get(1);
+
+		//Then
+		assertEquals(dayRegistries.size(), weekRegistries.size());
+		assertEquals(finalReg1Obj.getKwh(), 1.7, 0.01);
+		assertEquals(finalReg1Obj.getAn(), 6.3, 0.01);
+		assertEquals(finalReg1Obj.getAnalyzerId(),"2");
+		assertEquals(finalReg2Obj.getKwh(), 0.9, 0.01);
+		assertEquals(finalReg2Obj.getAn(), 31.3, 0.01);
+		assertEquals(finalReg2Obj.getAnalyzerId(),"2");
+	}
+	
+	@Test
+	public void getAnalyzerRegistriesWeekShiftValuesTest() {
+		
+		//Given
+		AnalyzerRegistryObject analyzerReg1 = new AnalyzerRegistryObject();
+		analyzerReg1.setAnalyzerId("5");
+		analyzerReg1.setKwh(66);
+		analyzerReg1.setAn(12.5);
+
+		AnalyzerRegistryObject analyzerReg2 = new AnalyzerRegistryObject();
+		analyzerReg2.setAnalyzerId("5");
+		analyzerReg2.setKwh(72);
+		analyzerReg2.setAn(18.6);
+
+
+		List<AnalyzerRegistryObject> weekRegistries = new ArrayList<AnalyzerRegistryObject>();
+		weekRegistries.add(analyzerReg1);
+		weekRegistries.add(analyzerReg2);
+
+
+		//When
+		when(clbDao.getWeekRegistriesFromAnalyzer(any(String.class), any(Date.class) , any(Date.class))).thenReturn(weekRegistries);
+		List<AnalyzerRegistryObject> weekRegistriesFinal = analyzerDataService.getWeekRegistriesFromAnalyzerWithWeekShift("5",5,4,2017,2);
+
+
+		AnalyzerRegistryObject finalReg1Obj = weekRegistriesFinal.get(0);
+		AnalyzerRegistryObject finalReg2Obj = weekRegistriesFinal.get(1);
+
+		//Then
+		assertEquals(weekRegistriesFinal.size(), weekRegistries.size());
+		assertEquals(finalReg1Obj.getKwh(), 66, 0.01);
+		assertEquals(finalReg1Obj.getAn(), 12.5, 0.01);
+		assertEquals(finalReg1Obj.getAnalyzerId(),"5");
+		assertEquals(finalReg2Obj.getKwh(), 72, 0.01);
+		assertEquals(finalReg2Obj.getAn(),18.6, 0.01);
+		assertEquals(finalReg2Obj.getAnalyzerId(),"5");
+	}
+	
+	@Test
+	public void getAnalyzerRegistriesMonthValuesTest() {
+		
+		//Given
+		AnalyzerRegistryObject analyzerReg1 = new AnalyzerRegistryObject();
+		analyzerReg1.setAnalyzerId("8");
+		analyzerReg1.setKwh(3.1);
+		analyzerReg1.setAn(4.8);
+
+		AnalyzerRegistryObject analyzerReg2 = new AnalyzerRegistryObject();
+		analyzerReg2.setAnalyzerId("8");
+		analyzerReg2.setKwh(1.1);
+		analyzerReg2.setAn(900);
+
+		List<AnalyzerRegistryObject> monthRegistries = new ArrayList<AnalyzerRegistryObject>();
+		monthRegistries.add(analyzerReg1);
+		monthRegistries.add(analyzerReg2);
+
+		//When
+		when(clbDao.getMonthRegistriesFromAnalyzer(any(String.class), any(Date.class) , any(Date.class))).thenReturn(monthRegistries);
+		List<AnalyzerRegistryObject> monthRegs = analyzerDataService.getMonthRegistriesFromAnalyzer("8",10,2014);
+
+		AnalyzerRegistryObject finalReg1Obj = monthRegs.get(0);
+		AnalyzerRegistryObject finalReg2Obj = monthRegs.get(1);
+
+		//Then
+		assertEquals(monthRegs.size(), monthRegistries.size());
+		assertEquals(finalReg1Obj.getKwh(), 3.1, 0.01);
+		assertEquals(finalReg1Obj.getAn(), 4.8, 0.01);
+		assertEquals(finalReg1Obj.getAnalyzerId(),"8");
+		assertEquals(finalReg2Obj.getKwh(), 1.1, 0.01);
+		assertEquals(finalReg2Obj.getAn(),900, 0.01);
+		assertEquals(finalReg2Obj.getAnalyzerId(),"8");
+	}
+	
+	@Test
+	public void getAnalyzerRegistriesMonthShiftValuesTest() {
+		
+		//Given
+		AnalyzerRegistryObject analyzerReg1 = new AnalyzerRegistryObject();
+		analyzerReg1.setAnalyzerId("7");
+		analyzerReg1.setKwh(70.1);
+		analyzerReg1.setAn(22.8);
+
+		AnalyzerRegistryObject analyzerReg2 = new AnalyzerRegistryObject();
+		analyzerReg2.setAnalyzerId("7");
+		analyzerReg2.setKwh(16.5);
+		analyzerReg2.setAn(87);
+
+		List<AnalyzerRegistryObject> monthRegistries = new ArrayList<AnalyzerRegistryObject>();
+		monthRegistries.add(analyzerReg1);
+		monthRegistries.add(analyzerReg2);
+
+		//When
+		when(clbDao.getMonthRegistriesFromAnalyzer(any(String.class), any(Date.class) , any(Date.class))).thenReturn(monthRegistries);
+		List<AnalyzerRegistryObject> monthRegs = analyzerDataService.getMonthRegistriesFromAnalyzerWithShift("7",9,2016,4);
+
+		AnalyzerRegistryObject finalReg1Obj = monthRegs.get(0);
+		AnalyzerRegistryObject finalReg2Obj = monthRegs.get(1);
+
+		//Then
+		assertEquals(monthRegs.size(), monthRegistries.size());
+		assertEquals(finalReg1Obj.getKwh(), 70.1, 0.01);
+		assertEquals(finalReg1Obj.getAn(), 22.8, 0.01);
+		assertEquals(finalReg1Obj.getAnalyzerId(),"7");
+		assertEquals(finalReg2Obj.getKwh(), 16.5, 0.01);
+		assertEquals(finalReg2Obj.getAn(),87, 0.01);
+		assertEquals(finalReg2Obj.getAnalyzerId(),"7");
+	}
 
 	@Test
 	public void testGetYearsAvailable() {
@@ -160,5 +302,16 @@ public class AnalyzerDataServiceTest {
 		Assert.assertEquals(yearsReturned[1],"2017");
 		Assert.assertEquals(yearsReturned[2],"2018");
 
+	}
+	
+	@Test
+	public void testLowestAnalyzerRegistryDate() {
+		
+		Date date = new Date();
+		
+		when(clbDao.getLowestAnalyzerRegistryDate()).thenReturn(date);
+		Date currentDate = analyzerDataService.getLowestAnalyzerRegistryDate();
+		
+		Assert.assertEquals(date.toString(), currentDate.toString());
 	}
 }

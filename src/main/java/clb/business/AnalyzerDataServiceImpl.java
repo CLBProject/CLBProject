@@ -41,7 +41,7 @@ import clb.global.DateUtils;
 
 @Service
 public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializable{
-
+	
 	/** 
 	 * 
 	 */
@@ -108,9 +108,9 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		Date lastDay = DateUtils.getInstance().isThisWeek(week,month,year) ? 
 				new Date() : DateUtils.getInstance().getWeekLastDay(week,month,year);
 
-				Date firstDay = DateUtils.getInstance().getWeekFirstDayReseted(week,month,year);
+		Date firstDay = DateUtils.getInstance().getWeekFirstDayReseted(week,month,year);
 
-				return clbDao.getWeekRegistriesFromAnalyzer( analyzerId,firstDay,lastDay);
+		return clbDao.getWeekRegistriesFromAnalyzer( analyzerId,firstDay,lastDay);
 	}
 
 	@Override

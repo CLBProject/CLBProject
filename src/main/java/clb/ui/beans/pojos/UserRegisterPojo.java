@@ -1,4 +1,4 @@
-package clb.beans.pojos;
+package clb.ui.beans.pojos;
 
 import java.io.Serializable;
 import java.util.Date;

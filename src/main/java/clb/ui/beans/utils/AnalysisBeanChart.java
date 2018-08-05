@@ -1,4 +1,4 @@
-package clb.beans.management;
+package clb.ui.beans.utils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,14 +12,13 @@ import org.primefaces.model.chart.DateAxis;
 import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
 
-import clb.beans.enums.ScaleGraphic;
-import clb.beans.enums.TimeAnalysisType;
-import clb.beans.pojos.AnalyzerRegistryGui;
-import clb.beans.pojos.AnalyzerRegistryReductionAlgorithm;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.BuildingMeterObject;
 import clb.global.BuildingMeterParameterValues;
 import clb.global.DateUtils;
+import clb.ui.beans.pojos.AnalyzerRegistryGui;
+import clb.ui.enums.ScaleGraphic;
+import clb.ui.enums.TimeAnalysisType;
 
 public class AnalysisBeanChart {
 

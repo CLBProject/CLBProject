@@ -1,4 +1,4 @@
-package clb.beans.management;
+package clb.ui.beans.filters;
 
 import java.io.IOException;
 
@@ -12,6 +12,8 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import clb.ui.beans.ClbHomeLoginBean;
  
 @WebFilter(filterName = "AuthFilter", urlPatterns = {"*.xhtml"})
 public class ClbHomeBeanFilter implements Filter {

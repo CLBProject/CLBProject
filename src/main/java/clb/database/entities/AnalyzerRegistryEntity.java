@@ -16,7 +16,7 @@ import com.mongodb.DBObject;
  */
 
 @Document
-public class AnalyzerRegistryEntity implements ClbEntity, Serializable {
+public class AnalyzerRegistryEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
