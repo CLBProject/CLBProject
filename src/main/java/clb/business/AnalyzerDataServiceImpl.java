@@ -379,7 +379,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 								
 								if(waitingRequests) {
 									JSONObject jsonObj = new JSONObject(line.split("\n")[0]);
-									clbDao.saveAnalyzerRegistry(new AnalyzerRegistryObject(jsonObj,"1"));
+									clbDao.saveAnalyzerRegistry(new AnalyzerRegistryObject(jsonObj));
 								}
 							}
 						}

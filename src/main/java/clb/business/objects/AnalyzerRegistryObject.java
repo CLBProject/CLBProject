@@ -201,7 +201,7 @@ public class AnalyzerRegistryObject implements Serializable {
     }
 
 
-    public AnalyzerRegistryObject(JSONObject jsonObj, String analyzerId) {
+    public AnalyzerRegistryObject(JSONObject jsonObj) {
         this.analyzerId = analyzerId;
         this.al1 = jsonObj.getDouble("al1");
         this.al2 = jsonObj.getDouble("al2");
