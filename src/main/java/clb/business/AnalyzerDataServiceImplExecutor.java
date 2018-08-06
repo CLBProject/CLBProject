@@ -39,13 +39,17 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 
 						//Send Users
 						if(command.equals("*getUsersInfo*")) {
-							List<JSONObject> jsonToSend = clbDao.getAllUsers().stream()
-									.map(UsersystemObject::toJson)
-									.collect(Collectors.toList());
-
-							for(JSONObject json: jsonToSend) {
-								clientSocket.getOutputStream().write(json.toString().getBytes());
-							}
+//							List<JSONObject> jsonToSend = clbDao.getAllUsers().stream()
+//									.map(UsersystemObject::toJson)
+//									.collect(Collectors.toList());
+//
+//							for(JSONObject json: jsonToSend) {
+//								clientSocket.getOutputStream().write(json.toString().getBytes());
+//							}
+							clientSocket.getOutputStream().write("{json1:test1}\n".getBytes());
+							clientSocket.getOutputStream().write("{json2:test2}\n".getBytes());
+							clientSocket.getOutputStream().write("*end*".getBytes());
+							clientSocket.getOutputStream().flush();
 						}
 						//Persist Data Objects
 						else if(command.equals("*persistDataObject*")){
