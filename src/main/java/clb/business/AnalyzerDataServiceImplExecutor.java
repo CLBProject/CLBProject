@@ -32,7 +32,7 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 				try(Scanner in = new Scanner(clientSocket.getInputStream())){
 
 					boolean waitingRequests = true;
-
+					
 					while(waitingRequests) {
 						while(!in.hasNext());
 						String command = in.nextLine();
@@ -46,6 +46,9 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 							for(JSONObject json: jsonToSend) {
 								clientSocket.getOutputStream().write(json.toString().getBytes());
 							}
+							
+							clientSocket.getOutputStream().write("Test1".getBytes());
+							clientSocket.getOutputStream().write("Test2".getBytes());
 						}
 						//Persist Data Objects
 						else if(command.equals("*persistDataObject*")){

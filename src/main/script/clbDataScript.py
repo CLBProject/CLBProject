@@ -3,7 +3,6 @@ import os
 import sys
 import codecs, csv
 from ftplib import FTP
-import configparser
 import socket
 import json
 
@@ -118,12 +117,23 @@ def processData(more_data):
         al1, al2, al3, kWsys, kwl1, kwl2, kwl3, kvarsys, kvarl1, kvarl2, kvarl3, kVasys, 
         kval1, kval2, kval3, pfSys, pfL1, pfL2, pfL3, phaseSequence, hZ)
         
-        # sock.send(bytes(json.dumps(analyzerReg.__dict__)+"\n", 'utf-8'))
+        sock.send(bytes(json.dumps(analyzerReg.__dict__)+"\n", 'utf-8'))
 
-def processUserFtp(userStr, passStr):
+def processUserFtp():
     
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect((SERVER_HOST, PORT))  
+
     # Ligar ao FTP e à pasta processed
     ftp = FTP(FTP_HOST)
+    
+    print("Sending getUsersInfo")
+    sock.send(bytes("*getUsersInfo*", 'utf-8'))
+    print("Receiving from getUsersInfo")
+    data = sock.recv(10240)
+    stringdata = data.decode('utf-8')
+    print(stringdata)
+
     ftp.login(userStr,passStr)
     print(ftp.getwelcome())
     ftp.cwd("/")
@@ -141,7 +151,7 @@ def processUserFtp(userStr, passStr):
         
         for file in data:
             filename = file.split(None, 8)[-1].lstrip()
-            print ('Ficheiro mais recente: ', filename)
+            print ('Ficheiro: ', filename)
             
             if len(data) > 2 :
                 ftp.retrbinary('RETR '+filename, processData)
@@ -150,17 +160,10 @@ def processUserFtp(userStr, passStr):
             
         ftp.cwd("..")
     
-    #sock.send(bytes("*exit*", 'utf-8'))
+    sock.send(bytes("*exit*", 'utf-8'))
     ftp.quit()
     return;
 
-config = configparser.ConfigParser()
-config.read('schools/ftp_users.properties')
+processUserFtp()
 
-#sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#sock.connect((SERVER_HOST, PORT))  
-
-for each_section in config.sections():
-    for (each_key, each_val) in config.items(each_section):
-        processUserFtp(each_key, each_val)
 
