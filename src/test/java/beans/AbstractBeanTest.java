@@ -44,8 +44,6 @@ public abstract class AbstractBeanTest {
 					
 					bean.getClass().getDeclaredMethod(methodForGet).invoke(bean);
 					bean.getClass().getDeclaredMethod(methodForSet,f.getType()).invoke(bean, newInstance);
-					
-					System.out.println("Method Get " + methodForGet + " , methodForSet: " + methodForSet);
 				}
 
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException

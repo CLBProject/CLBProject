@@ -47,7 +47,6 @@ public class UserRegistryServiceImpl implements UserRegistryService, Serializabl
             .useUpper(true)
             .build();
 
-    private static final int PASSWORD_GEN_LENGTH = 10;
 
     @Override
     @Transactional
@@ -82,9 +81,10 @@ public class UserRegistryServiceImpl implements UserRegistryService, Serializabl
         cal.setTime(cal.getTime());
         cal.add(Calendar.MINUTE, timeOfSession);
         user.setExpiryDate(cal.getTime());
-
+        
         user.setPassword( passwordEncoder.encode( user.getPassword() ) );
         user.setToken( generateUserToken() );
+        user.setFtpPassword( passwordEncoder.encode( passwordGenerator.generate()));
         
         clbDao.saveUsersystem( user );
 
@@ -138,7 +138,7 @@ public class UserRegistryServiceImpl implements UserRegistryService, Serializabl
             throw new UserCantResendEmailException();
         }
 
-        String newPassword = passwordGenerator.generate( PASSWORD_GEN_LENGTH );
+        String newPassword = passwordGenerator.generate( );
         String newToken = generateUserToken();
 
         user.setPassword( passwordEncoder.encode( newPassword ) );

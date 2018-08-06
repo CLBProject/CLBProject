@@ -22,8 +22,6 @@ public class DataLoggerEntity implements Serializable {
 
 	private String name;
 	
-	private String ftpaddress;
-	
 	@DBRef
 	private List<AnalyzerEntity> analyzers;
 
@@ -44,14 +42,6 @@ public class DataLoggerEntity implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getFtpaddress() {
-		return this.ftpaddress;
-	}
-
-	public void setFtpaddress(String ftpaddress) {
-		this.ftpaddress = ftpaddress;
 	}
 
     public List<AnalyzerEntity> getAnalyzers() {

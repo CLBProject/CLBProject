@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Random;
 
 public final class PasswordGenerator {
+	
+    private static final int PASSWORD_GEN_LENGTH = 10;
 
     private static final String LOWER = "abcdefghijklmnopqrstuvwxyz";
     private static final String UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -112,14 +114,10 @@ public final class PasswordGenerator {
      * @return a password that uses the categories you define when constructing
      * the object with a probability.
      */
-    public String generate(int length) {
-        // Argument Validation.
-        if (length <= 0) {
-            return "";
-        }
+    public String generate() {
 
         // Variables.
-        StringBuilder password = new StringBuilder(length);
+        StringBuilder password = new StringBuilder(PASSWORD_GEN_LENGTH);
         Random random = new Random(System.nanoTime());
 
         // Collect the categories to use.
@@ -138,7 +136,7 @@ public final class PasswordGenerator {
         }
 
         // Build the password.
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < PASSWORD_GEN_LENGTH; i++) {
             String charCategory = charCategories.get(random.nextInt(charCategories.size()));
             int position = random.nextInt(charCategory.length());
             password.append(charCategory.charAt(position));

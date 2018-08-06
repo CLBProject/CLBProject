@@ -13,8 +13,6 @@ public class DataLoggerObject
 
     private String name;
     
-    private String ftpAddress;
-    
     private List<AnalyzerObject> analyzers;
 
     public DataLoggerObject(){
@@ -24,7 +22,6 @@ public class DataLoggerObject
     public DataLoggerObject( DataLoggerEntity dataLogger ) {
         this.dataloggerid = dataLogger.getDataloggerid();
         this.name = dataLogger.getName();
-        this.ftpAddress = dataLogger.getFtpaddress();
         this.analyzers = dataLogger.getAnalyzers() != null ? 
         		dataLogger.getAnalyzers().stream().map(AnalyzerObject::new).collect(Collectors.toList()) : null;
     }
@@ -33,7 +30,6 @@ public class DataLoggerObject
         DataLoggerEntity dataLogEntity = new DataLoggerEntity();
         dataLogEntity.setDataloggerid( this.dataloggerid );
         dataLogEntity.setName( this.name );
-        dataLogEntity.setFtpaddress(this.ftpAddress);
         dataLogEntity.setAnalyzers( this.analyzers != null ? 
         		this.analyzers.stream().map(AnalyzerObject::toEntity).collect(Collectors.toList()) : null);
         return dataLogEntity;
@@ -47,33 +43,21 @@ public class DataLoggerObject
     	analyzers.add(analyzerObject);
     }
 
-
     public String getDataloggerid() {
         return dataloggerid;
     }
-
 
     public void setDataloggerid( String dataloggerid ) {
         this.dataloggerid = dataloggerid;
     }
 
-
     public String getName() {
         return name;
     }
 
-
     public void setName( String name ) {
         this.name = name;
     }
-
-	public String getFtpAddress() {
-		return ftpAddress;
-	}
-
-	public void setFtpAddress(String ftpAddress) {
-		this.ftpAddress = ftpAddress;
-	}
 
 	public List<AnalyzerObject> getAnalyzers() {
 		return analyzers;

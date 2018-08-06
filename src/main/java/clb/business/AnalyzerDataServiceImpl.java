@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.Serializable;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -13,14 +11,11 @@ import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.Set;
 
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.primefaces.json.JSONException;
-import org.primefaces.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
@@ -41,7 +36,7 @@ import clb.global.DateUtils;
 
 @Service
 public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializable{
-	
+
 	/** 
 	 * 
 	 */
@@ -58,6 +53,10 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
 	@Autowired 
 	private ApplicationEventPublisher eventPublisher;
+
+	public void init(){
+		taskExecutor.execute(new AnalyzerDataServiceImplExecutor(this.clbDao));
+	}
 
 	@Override
 	@Transactional
@@ -108,9 +107,9 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		Date lastDay = DateUtils.getInstance().isThisWeek(week,month,year) ? 
 				new Date() : DateUtils.getInstance().getWeekLastDay(week,month,year);
 
-		Date firstDay = DateUtils.getInstance().getWeekFirstDayReseted(week,month,year);
+				Date firstDay = DateUtils.getInstance().getWeekFirstDayReseted(week,month,year);
 
-		return clbDao.getWeekRegistriesFromAnalyzer( analyzerId,firstDay,lastDay);
+				return clbDao.getWeekRegistriesFromAnalyzer( analyzerId,firstDay,lastDay);
 	}
 
 	@Override
@@ -188,7 +187,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
 			DataLoggerObject dl = new DataLoggerObject();
 			dl.setName( "Data Logger "+ (j+1) );
-			dl.setFtpAddress( "ftp://noftp" );
 			building.addDataLogger(dl);
 
 			AnalyzerObject ana = new AnalyzerObject();
@@ -358,42 +356,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
 	}
 
-
-	public void init(){
-		taskExecutor.execute(new Runnable() {
-			@Override
-			public void run() {
-
-				try(ServerSocket s = new ServerSocket(6006)){
-					while(true) {
-						Socket clientSocket = s.accept();
-						try(Scanner in = new Scanner(clientSocket.getInputStream())){
-
-							boolean waitingRequests = true;
-
-							while(waitingRequests) {
-								while(!in.hasNext());
-								String line = in.nextLine();
-								
-								waitingRequests = !line.equals("*exit*");
-								
-								if(waitingRequests) {
-									JSONObject jsonObj = new JSONObject(line.split("\n")[0]);
-									clbDao.saveAnalyzerRegistry(new AnalyzerRegistryObject(jsonObj));
-								}
-							}
-						}
-						catch(JSONException jsonex){
-							jsonex.printStackTrace();
-						}
-					}
-				} 
-				catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	@Override
 	public Date getLowestAnalyzerRegistryDate() {

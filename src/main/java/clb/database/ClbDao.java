@@ -27,6 +27,8 @@ public interface ClbDao{
 	void saveUsersystem(UsersystemObject userSystemObject);
 	
 	void saveUsers(List<UsersystemObject> users);
+	
+	List<UsersystemObject> getAllUsers();
 
     UsersystemObject findUserByToken( String token );
 

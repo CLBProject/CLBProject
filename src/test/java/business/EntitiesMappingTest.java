@@ -345,7 +345,6 @@ public class EntitiesMappingTest {
 		
 		DataLoggerObject dlobj = new DataLoggerObject();
 		dlobj.setDataloggerid("1");
-		dlobj.setFtpAddress("ftp://add");
 		dlobj.setName("dl1");
 		
 		List<AnalyzerObject> analyzers = new ArrayList<AnalyzerObject>();
@@ -363,7 +362,6 @@ public class EntitiesMappingTest {
 		DataLoggerEntity dlEnt = dlobj.toEntity();
 		
 		assertEquals(dlobj.getDataloggerid(),dlEnt.getDataloggerid());
-		assertEquals(dlobj.getFtpAddress(),dlEnt.getFtpaddress());
 		assertEquals(dlobj.getName(),dlEnt.getName());
 		
 		List<AnalyzerEntity> analyzersMapped = dlEnt.getAnalyzers();

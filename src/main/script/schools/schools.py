@@ -4,12 +4,9 @@ import sys
 import codecs, csv
 from ftplib import FTP
 import configparser
-import socket
 import json
 
 FTP_HOST = 'ftp.mobinteg.org'
-SERVER_HOST = "localhost"
-PORT = 6006
 
 class AnalyzerRegistry:
     
@@ -64,7 +61,6 @@ class AnalyzerRegistry:
 def processData(more_data):
     dataProcessed = more_data.decode("utf-8")
     
-    
     for eachlineCommas in dataProcessed.splitlines():
         c = eachlineCommas.split(";")
         
@@ -72,8 +68,7 @@ def processData(more_data):
         
         if recortType != 'AC' or len(c) < 39:
             continue
-        
-        
+
         productType = c[1]
         itemSn = c[2]
         itemLabel = c[3]
@@ -118,7 +113,7 @@ def processData(more_data):
         al1, al2, al3, kWsys, kwl1, kwl2, kwl3, kvarsys, kvarl1, kvarl2, kvarl3, kVasys, 
         kval1, kval2, kval3, pfSys, pfL1, pfL2, pfL3, phaseSequence, hZ)
         
-        sock.send(bytes(json.dumps(analyzerReg.__dict__)+"\n", 'utf-8'))
+        print('Value of kWh: ', analyzerReg.kwl1)
 
 def processUserFtp(userStr, passStr):
     
@@ -133,31 +128,25 @@ def processUserFtp(userStr, passStr):
     for dir in dirs[3:]:
         currentDir = dir.split(None, 8)[8]
         ftp.cwd(currentDir)
-        print('Visiting Dir: ', currentDir)
-        #cria lista com todos o ficheiros da pasta e depois escolher o mais recent
         data = []
         
         ftp.retrlines("LIST", (data.append))
         words = data[-1].split(None, 8)
         filename = words[-1].lstrip()
-        print ('Ficheiro mais recente: ', filename)
         
         if len(data) > 2 :
+            print (currentDir, '- Ficheiro mais recente: ', filename)
             ftp.retrbinary('RETR '+filename, processData)
         else: 
-            print ('No File to Process on this Directory')
+            print (currentDir , '- No File to Process on this School')
         
         ftp.cwd("..")
-    
-    sock.send(bytes("*exit*", 'utf-8'))
+        
     ftp.quit()
     return;
 
 config = configparser.ConfigParser()
 config.read('ftp_users.properties')
-
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-sock.connect((SERVER_HOST, PORT))  
 
 for each_section in config.sections():
     for (each_key, each_val) in config.items(each_section):

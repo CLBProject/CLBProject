@@ -150,6 +150,11 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 		userSystemMongoRepository.save(userSystemEntity);
 		userSystemEntity.setUserid(userSystemObject.getUserid());
 	}
+	
+	@Override
+	public List<UsersystemObject> getAllUsers(){
+		return userSystemMongoRepository.findAll().stream().map(UsersystemObject::new).collect(Collectors.toList());
+	}
 
 	@Override
 	public UsersystemObject findUserByToken( String token) {
