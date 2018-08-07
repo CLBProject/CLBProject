@@ -118,56 +118,60 @@ def processData(more_data):
         al1, al2, al3, kWsys, kwl1, kwl2, kwl3, kvarsys, kvarl1, kvarl2, kvarl3, kVasys, 
         kval1, kval2, kval3, pfSys, pfL1, pfL2, pfL3, phaseSequence, hZ)
         
+        sock.send(bytes('*persistDataObject*\n', 'utf-8'))
         sock.send(bytes(json.dumps(analyzerReg.__dict__)+"\n", 'utf-8'))
 
 def processUserFtp():
     
     sock.send(bytes('*getUsersInfo*\n', 'utf-8'))
     
-    received = recv_basic()
+    jsonInfo = recv_basic()
     
-    print('Received: ' , received)
+    for userInfo in jsonInfo:
+        ftp = FTP(FTP_HOST)
+        ftp.login(userInfo['userftp'],userInfo['passwordftp'])
+        print(ftp.getwelcome())
+        ftp.cwd("/")
+        dirs = []
+        ftp.retrlines("LIST", (dirs.append))
     
-    # Ligar ao FTP e à pasta processed
-    ftp = FTP(FTP_HOST)
-    ftp.login(userStr,passStr)
-    print(ftp.getwelcome())
-    ftp.cwd("/")
-    dirs = []
-    ftp.retrlines("LIST", (dirs.append))
+        for dir in dirs[3:]:
+            currentDir = dir.split(None, 8)[8]
+            ftp.cwd(currentDir)
+            print('Visiting Dir: ', currentDir)
+            #cria lista com todos o ficheiros da pasta e depois escolher o mais recent
+            data = []
+            
+            ftp.retrlines("LIST", (data.append))
+            
+            index = 0
+            
+            for file in data:
+                #Ignore the first two files
+                if index > 1:
+                    filename = file.split(None, 8)[-1].lstrip()
+                    print ('Ficheiro mais recente: ', filename)
 
-    for dir in dirs[3:]:
-        currentDir = dir.split(None, 8)[8]
-        ftp.cwd(currentDir)
-        print('Visiting Dir: ', currentDir)
-        #cria lista com todos o ficheiros da pasta e depois escolher o mais recent
-        data = []
+                    ftp.retrbinary('RETR '+filename, processData)
+                
+                index = index + 1
+                
+            ftp.cwd("..")
         
-        ftp.retrlines("LIST", (data.append))
-        
-        for file in data:
-            filename = file.split(None, 8)[-1].lstrip()
-            print ('Ficheiro mais recente: ', filename)
-            
-            if len(data) > 2 :
-                ftp.retrbinary('RETR '+filename, processData)
-            else: 
-                print ('No File to Process on this Directory')
-            
-        ftp.cwd("..")
-    
-    sock.send(bytes("*exit*", 'utf-8'))
-    ftp.quit()
+        sock.send(bytes("*exit*", 'utf-8'))
+        ftp.quit()
     return;
 
 def recv_basic():
-    total_data=''
+    total_data=[]
     while True:
         data = sock.recv(8192)
-        total_data += data.decode('utf-8')
+        dataStr = data.decode('utf-8')
         
-        if total_data.endswith("*end*"):
+        if dataStr.endswith("*end*"):
             break
+        
+        total_data.append(json.loads(dataStr))
         
     return total_data
 
