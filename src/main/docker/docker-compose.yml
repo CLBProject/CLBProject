@@ -1,0 +1,92 @@
+version: "3"
+volumes:
+    jenkins_home:
+    sonarqube_conf:
+    sonarqube_data:
+    sonarqube_extensions:
+    sonarqube_bundled-plugins:
+    postgresql:
+    postgresql_data:
+services:
+  jenkins:
+    # replace username/repo:tag with your name and image details
+    image: clbproject/clbjenks:v1
+    volumes:
+     - jenkins_home:/var/jenkins_home
+    deploy:
+      replicas: 1
+      mode: replicated
+      resources:
+        limits:
+          cpus: "0.3"
+    ports:
+      - "8080:8080"
+    networks:
+      - overlay
+    environment:
+    - JAVA_OPTS:-Djava.awt.headless=true
+  sonarqube:
+    image: sonarqube:latest
+    deploy:
+      replicas: 1
+      mode: replicated
+      resources:
+        limits:
+          cpus: "0.3"
+    ports:
+       - "9000:9000"
+    volumes:
+      - sonarqube_conf:/opt/sonarqube/conf
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_bundled-plugins:/opt/sonarqube/lib/bundled-plugins
+    networks:
+      - overlay
+    environment:
+       - SONARQUBE_JDBC_URL=jdbc:postgresql://db:5432/sonar
+  db:
+      image: postgres:latest
+      deploy:
+          replicas: 1
+          mode: replicated
+          resources:
+            limits:
+              cpus: "0.3"
+      volumes:
+          - postgresql:/var/lib/postgresql
+          # This needs explicit mapping due to https://github.com/docker-library/postgres/blob/4e48e3228a30763913ece952c611e5e9b95c8759/Dockerfile.template#L52
+          - postgresql_data:/var/lib/postgresql/data
+      networks:
+        - overlay
+      environment:
+       - POSTGRES_USER=sonar
+       - POSTGRES_PASSWORD=sonar
+  ftp:
+        image: stilliard/pure-ftpd:latest
+        deploy:
+          replicas: 1
+          mode: replicated
+          resources:
+            limits:
+              cpus: "0.3"
+        ports:
+          - "22:22"
+        networks:
+          - overlay
+  mongo:
+        image: mongo:3.6
+        deploy:
+          replicas: 1
+          mode: replicated
+          resources:
+            limits:
+              cpus: "0.3"
+        ports:
+          - "27017:27017"
+        #environment:
+        #    MONGO_INITDB_ROOT_USERNAME: "admin"
+        #    MONGO_INITDB_ROOT_PASSWORD: "123456"
+networks:
+  overlay:
+
+
