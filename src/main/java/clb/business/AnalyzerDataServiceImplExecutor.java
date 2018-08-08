@@ -3,26 +3,23 @@ package clb.business;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 import org.primefaces.json.JSONException;
 import org.primefaces.json.JSONObject;
 
 import clb.business.exceptions.IlegalCommandAppException;
-import clb.business.objects.AnalyzerRegistryObject;
-import clb.business.objects.UsersystemObject;
 import clb.database.ClbDao;
 
 public class AnalyzerDataServiceImplExecutor implements Runnable{
 
 	private ClbDao clbDao;
-	
+
 	public AnalyzerDataServiceImplExecutor(ClbDao clbDao) {
 		this.clbDao = clbDao;
 	}
-	
+
 	@Override
 	public void run() {
 
@@ -31,38 +28,43 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 				Socket clientSocket = s.accept();
 				try(Scanner in = new Scanner(clientSocket.getInputStream())){
 
-					boolean waitingRequests = true;
+					boolean exit = false;
 					
-					while(waitingRequests) {
-						while(!in.hasNext());
+					while(clientSocket.isConnected() && !exit) {
 						String command = in.nextLine();
 
 						//Send Users
 						if(command.equals("*getUsersInfo*")) {
-							List<JSONObject> jsonToSend = clbDao.getAllUsers().stream()
-									.map(UsersystemObject::toJson)
-									.collect(Collectors.toList());
+							//							List<JSONObject> jsonToSend = clbDao.getAllUsers().stream()
+							//									.map(UsersystemObject::toJson)
+							//									.collect(Collectors.toList());
+							//
+							//							for(JSONObject json: jsonToSend) {
+							//								clientSocket.getOutputStream().write(json.toString().getBytes());
+							//							}
+							char s1 = '"';
 
-							for(JSONObject json: jsonToSend) {
-								clientSocket.getOutputStream().write(json.toString().getBytes());
-							}
-							
-							clientSocket.getOutputStream().write("Test1".getBytes());
-							clientSocket.getOutputStream().write("Test2".getBytes());
+							clientSocket.getOutputStream().write(("{"+s1+"userftp"+s1+":"+s1+"greenworld@ventosdepoupanca.com"+s1+", "
+									+ ""+s1+"passwordftp"+s1+":"+s1+"l#_YqMoJe%coJUbF"+s1+"}\n").getBytes());
+							clientSocket.getOutputStream().flush();
+							clientSocket.getOutputStream().write(("{"+s1+"userftp"+s1+":"+s1+"greenworld@ventosdepoupanca.com"+s1+", "
+									+ ""+s1+"passwordftp"+s1+":"+s1+"l#_YqMoJe%coJUbF"+s1+"}\n").getBytes());
+							clientSocket.getOutputStream().flush();
+							clientSocket.getOutputStream().write("*end*".getBytes());
+							clientSocket.getOutputStream().flush();
 						}
 						//Persist Data Objects
 						else if(command.equals("*persistDataObject*")){
-							JSONObject jsonObj = new JSONObject(command.split("\n")[0]);
-							clbDao.saveAnalyzerRegistry(new AnalyzerRegistryObject(jsonObj));
+							JSONObject jsonObj = new JSONObject(in.nextLine());
+							//clbDao.saveAnalyzerRegistry(new AnalyzerRegistryObject(jsonObj));
 						}
-						//Exit
 						else if(command.equals("*exit*")){
-							waitingRequests = false;
+							exit = true;
 						}
 						else throw new IlegalCommandAppException();
 					}
 				}
-				catch(JSONException | IlegalCommandAppException ex){
+				catch(JSONException | IlegalCommandAppException | NoSuchElementException ex){
 					ex.printStackTrace();
 				}
 			}

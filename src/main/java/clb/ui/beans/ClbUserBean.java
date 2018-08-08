@@ -1,6 +1,5 @@
 package clb.ui.beans;
 
-import java.io.IOException;
 import java.io.Serializable;
 
 import javax.faces.bean.ManagedBean;
@@ -33,15 +32,6 @@ public class ClbUserBean implements Serializable{
         this.mapModel = mapModel;
     }
 
-    public void runUserDataFill() {
-        if(clbHomeLoginBean.getUserLoginPojo().getUsername() != null) {
-            try {
-                analyzerDataService.persistDataForUser( clbHomeLoginBean.getUserLoginPojo().getUsername() );
-            } catch( IOException e ) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     public AnalyzerDataService getAnalyzerDataService() {
         return analyzerDataService;

@@ -8,8 +8,6 @@ import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.UsersystemObject;
 
 public interface AnalyzerDataService {
-	
-    public void persistDataForUser(String username) throws IOException;
     
     public UsersystemObject getUserData(String username);
     
