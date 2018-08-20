@@ -20,7 +20,7 @@ services:
         limits:
           cpus: "0.3"
     ports:
-      - "8080:8080"
+      - "6080:8080"
     networks:
       - overlay
     environment:
@@ -61,31 +61,6 @@ services:
       environment:
        - POSTGRES_USER=sonar
        - POSTGRES_PASSWORD=sonar
-  ftp:
-        image: stilliard/pure-ftpd:latest
-        deploy:
-          replicas: 1
-          mode: replicated
-          resources:
-            limits:
-              cpus: "0.3"
-        ports:
-          - "22:22"
-        networks:
-          - overlay
-  mongo:
-        image: mongo:3.6
-        deploy:
-          replicas: 1
-          mode: replicated
-          resources:
-            limits:
-              cpus: "0.3"
-        ports:
-          - "27017:27017"
-        environment:
-            MONGO_INITDB_ROOT_USERNAME: "admin"
-            MONGO_INITDB_ROOT_PASSWORD: "123456"
 networks:
   overlay:
 

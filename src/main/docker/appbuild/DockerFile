@@ -1,0 +1,8 @@
+FROM alpine/git
+WORKDIR /app
+RUN git clone --single-branch -b PythonSchools https://github.com/CLBProject/CLBProject
+
+FROM maven:3.5-jdk-8-alpine
+WORKDIR /app
+COPY --from=0 /app/CLBProject /app 
+ENTRYPOINT mvn clean install && mvn tomcat7:run && /bin/bash
