@@ -183,7 +183,7 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.connect((SERVER_HOST, PORT))  
 
 config = configparser.ConfigParser()
-config.read('schools/ftp_users.properties')
+config.read('ftp_users.properties')
 
 for each_section in config.sections():
     for (each_key, each_val) in config.items(each_section):
