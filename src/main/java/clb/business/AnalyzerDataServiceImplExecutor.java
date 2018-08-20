@@ -12,6 +12,7 @@ import org.primefaces.json.JSONException;
 import org.primefaces.json.JSONObject;
 
 import clb.business.exceptions.IlegalCommandAppException;
+import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.UsersystemObject;
 import clb.database.ClbDao;
 
@@ -42,17 +43,20 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 									.map(UsersystemObject::toJson)
 									.collect(Collectors.toList());
 
-//							for(JSONObject json: jsonToSend) {
-//								clientSocket.getOutputStream().write(json.toString().getBytes());
-//								clientSocket.getOutputStream().flush();
-//							}	
+							for(JSONObject json: jsonToSend) {
+								clientSocket.getOutputStream().write(json.toString().getBytes());
+								clientSocket.getOutputStream().flush();
+							}	
 							
 							JSONObject usersSend = new JSONObject();
 							
-							usersSend.append("userftp", "greenworld@ventosdepoupanca.com");
-							usersSend.append("passwordftp", "l#_YqMoJe%%coJUbF");
+							final String user = "greenworld@ventosdepoupanca.com";
+							final String passwd = "l#_YqMoJe%coJUbF";
+							
+							usersSend.put("userftp", user);
+							usersSend.put("passwordftp", passwd);
 							clientSocket.getOutputStream().write(usersSend.toString().getBytes());
-//							clientSocket.getOutputStream().flush();
+							clientSocket.getOutputStream().flush();
 							
 							clientSocket.getOutputStream().write("*end*".getBytes());
 						}
@@ -60,7 +64,7 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 						else if(command.equals("*persistDataObject*")){
 							JSONObject jsonObj = new JSONObject(in.nextLine());
 							System.out.println(jsonObj.toString());
-							//clbDao.saveAnalyzerRegistry(new AnalyzerRegistryObject(jsonObj));
+							clbDao.saveAnalyzerRegistry(new AnalyzerRegistryObject(jsonObj));
 						}
 						else if(command.equals("*exit*")){
 							exit = true;

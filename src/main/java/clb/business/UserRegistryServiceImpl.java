@@ -145,6 +145,8 @@ public class UserRegistryServiceImpl implements UserRegistryService, Serializabl
         user.setToken( newToken );
         user.setLastSentEmail( new Date() );
         
+        String ftpPassword = createUserFtpAccount( username );
+        
         clbDao.saveUsersystem( user );
 
         String subject = "Recover Password";
@@ -156,7 +158,15 @@ public class UserRegistryServiceImpl implements UserRegistryService, Serializabl
     }
 
 
-    @Override
+    private String createUserFtpAccount(String username) {
+    	String ftpPassword = passwordGenerator.generate( );
+
+    		//TODO Create FTP Account
+    		
+    	return ftpPassword;
+	}
+
+	@Override
     public void resendEmail( String username , int nrOfMinutesNecessaryToResend) throws UserDoesNotExistException, UserCantResendEmailException {
         UsersystemObject user = clbDao.findUserByUserName( username );
 

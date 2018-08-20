@@ -3,6 +3,7 @@ import os
 import sys
 import codecs, csv
 from ftplib import FTP
+import configparser
 import socket
 import json
 
@@ -120,45 +121,40 @@ def processData(more_data):
         sock.send(bytes('*persistDataObject*\n', 'utf-8'))
         sock.send(bytes(json.dumps(analyzerReg.__dict__)+"\n", 'utf-8'))
 
-def processUserFtp():
+def processUserFtp(userftp,passwordftp):
 
-    sock.send(bytes('*getUsersInfo*\n', 'utf-8'))
+    ftp = FTP(FTP_HOST)
+    ftp.login(userftp,passwordftp)
+    print(ftp.getwelcome())
+    ftp.cwd("/")
+    dirs = []
+    ftp.retrlines("LIST", (dirs.append))
     
-    jsonInfoArray = recv_basic()
-    
-    for jsonInfo in jsonInfoArray:
-        ftp = FTP(FTP_HOST)
-        userInfo = json.loads(jsonInfo)
-        ftp.login(userInfo['userftp'],userInfo['passwordftp'])
-        print(ftp.getwelcome())
-        ftp.cwd("/")
-        dirs = []
-        ftp.retrlines("LIST", (dirs.append))
-    
-        for dir in dirs[3:]:
-            currentDir = dir.split(None, 8)[8]
-            ftp.cwd(currentDir)
-            print('Visiting Dir: ', currentDir)
-            #cria lista com todos o ficheiros da pasta e depois escolher o mais recent
-            data = []
+    for dir in dirs[3:]:
+        currentDir = dir.split(None, 8)[8]
+        ftp.cwd(currentDir)
+        print('Visiting Dir: ', currentDir)
+        #cria lista com todos o ficheiros da pasta e depois escolher o mais recent
+        data = []
+          
+        ftp.retrlines("LIST", (data.append))
             
-            ftp.retrlines("LIST", (data.append))
+        index = 0
             
-            index = 0
-            
-            for file in data:
-                #Ignore the first two files
-                if index > 10000:
-                    filename = file.split(None, 8)[-1].lstrip()
-                    #print ('Ficheiro mais recente: ', filename)
+        for file in data:
+            #Ignore the first two files
+            if index > 1:
+                filename = file.split(None, 8)[-1].lstrip()
+                #print ('Ficheiro mais recente: ', filename)
 
-                    ftp.retrbinary('RETR '+filename, processData)
+                ftp.retrbinary('RETR '+filename, processData)
+            else:
+                print(file)
+            index = index + 1
                 
-                index = index + 1
-                
-            ftp.cwd("..")
+        ftp.cwd("..")
 
-        ftp.quit()
+    ftp.quit()
         
     sock.send(bytes("*exit*\n", 'utf-8'))
     return;
@@ -185,6 +181,12 @@ def recv_basic():
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.connect((SERVER_HOST, PORT))  
-processUserFtp()
+
+config = configparser.ConfigParser()
+config.read('schools/ftp_users.properties')
+
+for each_section in config.sections():
+    for (each_key, each_val) in config.items(each_section):
+        processUserFtp(each_key, each_val)
 
 
