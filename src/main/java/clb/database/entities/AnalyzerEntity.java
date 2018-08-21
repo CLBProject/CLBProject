@@ -16,8 +16,8 @@ public class AnalyzerEntity implements Serializable {
     
     @Id
     private String id;
-
-    private String name;
+    
+    private String codeName;
 
     private List<String> analyzerRegistriesIds;
 
@@ -32,15 +32,15 @@ public class AnalyzerEntity implements Serializable {
 		this.id = id;
 	}
 
-	public String getName() {
-        return this.name;
-    }
+	public String getCodeName() {
+		return codeName;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setCodeName(String codeName) {
+		this.codeName = codeName;
+	}
 
-    public List<String> getAnalyzerRegistriesIds() {
+	public List<String> getAnalyzerRegistriesIds() {
         return analyzerRegistriesIds;
     }
 

@@ -301,13 +301,13 @@ public class EntitiesMappingTest {
 
 		AnalyzerObject analyzerObj = new AnalyzerObject();
 		analyzerObj.setId("1L");
-		analyzerObj.setName("Analyzer Name1");
+		analyzerObj.setCodeName("Analyzer Name1");
 		analyzerObj.setAnalyzerRegistriesIds(analyzerRegistriesIds);
 		
 		AnalyzerEntity analyzerEnt = analyzerObj.toEntity();
 		
 		assertEquals(analyzerEnt.getId(),analyzerObj.getId());
-		assertEquals(analyzerEnt.getName(),analyzerObj.getName());
+		assertEquals(analyzerEnt.getCodeName(),analyzerObj.getCodeName());
 		
 		List<String> analyzerAverageRegistriesIdsMapped = analyzerEnt.getAnalyzerRegistriesIds();
 		
@@ -325,13 +325,13 @@ public class EntitiesMappingTest {
 
 		AnalyzerEntity analyzerEnt = new AnalyzerEntity();
 		analyzerEnt.setId("2L");
-		analyzerEnt.setName("Analyzer Name2");
+		analyzerEnt.setCodeName("Analyzer Name2");
 		analyzerEnt.setAnalyzerRegistriesIds(analyzerRegistriesIds);
 		
 		AnalyzerObject analyzerObj = new AnalyzerObject(analyzerEnt);
 		
 		assertEquals(analyzerObj.getId(),analyzerEnt.getId());
-		assertEquals(analyzerObj.getName(),analyzerEnt.getName());
+		assertEquals(analyzerObj.getCodeName(),analyzerEnt.getCodeName());
 		
 		List<String> analyzerAverageRegistriesIdsMapped = analyzerObj.getAnalyzerRegistriesIds();
 		

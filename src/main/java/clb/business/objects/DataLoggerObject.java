@@ -10,6 +10,8 @@ public class DataLoggerObject
 {
 
     private String dataloggerid;
+    
+    private String code;
 
     private String name;
     
@@ -65,6 +67,14 @@ public class DataLoggerObject
 
 	public void setAnalyzers(List<AnalyzerObject> analyzers) {
 		this.analyzers = analyzers;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
     
     

@@ -8,8 +8,8 @@ import clb.database.entities.AnalyzerEntity;
 public class AnalyzerObject implements ClbObject
 {
     private String id;
-
-	private String name;
+    
+    private String codeName;
 
 	private List<String> analyzerRegistriesIds;
 
@@ -19,7 +19,7 @@ public class AnalyzerObject implements ClbObject
 
 	public AnalyzerObject(AnalyzerEntity analyzerEntity){
 		this.id = analyzerEntity.getId();
-		this.name = analyzerEntity.getName();
+		this.codeName = analyzerEntity.getCodeName();
 		this.analyzerRegistriesIds = analyzerEntity.getAnalyzerRegistriesIds();
 	}
 
@@ -30,7 +30,7 @@ public class AnalyzerObject implements ClbObject
 			analyzerEntity.setId( this.id );
 		}
 		
-		analyzerEntity.setName( this.name );
+		analyzerEntity.setCodeName( this.codeName );
 		analyzerEntity.setAnalyzerRegistriesIds(this.analyzerRegistriesIds);
 		return analyzerEntity;
 	}
@@ -51,15 +51,16 @@ public class AnalyzerObject implements ClbObject
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+
+	public String getCodeName() {
+		return codeName;
 	}
 
-	public void setName( String name ) {
-		this.name = name;
+	public void setCodeName(String codeName) {
+		this.codeName = codeName;
 	}
 
-    public List<String> getAnalyzerRegistriesIds() {
+	public List<String> getAnalyzerRegistriesIds() {
         return analyzerRegistriesIds;
     }
 

@@ -3,8 +3,10 @@ package clb.business;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Set;
@@ -14,7 +16,9 @@ import org.primefaces.json.JSONException;
 import org.primefaces.json.JSONObject;
 
 import clb.business.exceptions.IlegalCommandAppException;
+import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
+import clb.business.objects.BuildingObject;
 import clb.business.objects.UsersystemObject;
 import clb.database.ClbDao;
 
@@ -35,7 +39,10 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 				try(Scanner in = new Scanner(clientSocket.getInputStream())){
 					
 					boolean exit = false;
-
+					
+					Map<String,AnalyzerObject> analyzerNames = new HashMap<String,AnalyzerObject>();
+					Set<String> buildingsNames = new HashSet<String>();
+					 
 					while(clientSocket.isConnected() && !exit) {
 						String command = in.nextLine();
 
@@ -66,12 +73,35 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 						else if(command.equals("*persistDataObject*")){
 							JSONObject jsonObj = new JSONObject(in.nextLine());
 							
-							String analyzerId = jsonObj.getString("itemSn");
-							String bulildingName = jsonObj.getString("buildingName");
+							String analyzerCode = jsonObj.getString("itemSn");
+							
+							AnalyzerObject analyzerObject = analyzerNames.get(analyzerCode);
+							
+							if(analyzerObject == null) {
+								analyzerObject = new AnalyzerObject();
+								analyzerObject.setCodeName(analyzerCode);
+								clbDao.saveAnalyzer(analyzerObject);
+								analyzerNames.put(analyzerCode,analyzerObject);
+							}
+							
+							jsonObj.put("analyzerId", analyzerObject.getId());
+							
+							String buildingName = jsonObj.getString("buildingName");
+							
+							if(!buildingsNames.contains(buildingName)) {
+								BuildingObject buildingObject = new BuildingObject();
+								buildingObject.setName(buildingName);
+								clbDao.saveBuilding(buildingObject);							
+								buildingsNames.add(buildingName);
+							}
 							
 							clbDao.saveAnalyzerRegistry( new AnalyzerRegistryObject(jsonObj));
 						}
 						else if(command.equals("*exit*")){
+							
+							analyzerNames = null;
+							buildingsNames = null;
+							
 							exit = true;
 						}
 						else throw new IlegalCommandAppException();

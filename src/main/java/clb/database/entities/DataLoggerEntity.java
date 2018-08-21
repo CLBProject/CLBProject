@@ -19,6 +19,8 @@ public class DataLoggerEntity implements Serializable {
 
 	@Id
 	private String dataloggerid;
+	
+	private String code;
 
 	private String name;
 	
@@ -59,4 +61,14 @@ public class DataLoggerEntity implements Serializable {
 		
 		analyzers.add(analyzer);
 	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+	
+	
 }

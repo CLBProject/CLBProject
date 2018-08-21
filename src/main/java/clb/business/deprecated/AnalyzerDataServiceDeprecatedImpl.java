@@ -91,7 +91,7 @@ public class AnalyzerDataServiceDeprecatedImpl implements AnalyzerDataServiceDep
 			building.addDataLogger(dl);
 
 			AnalyzerObject ana = new AnalyzerObject();
-			ana.setName( "Analyzer " + (j+1));
+			ana.setCodeName( "Analyzer " + (j+1));
 			dl.addAnalyzer(ana);
 
 			XSSFSheet worksheet = workbook.getSheetAt( j );
