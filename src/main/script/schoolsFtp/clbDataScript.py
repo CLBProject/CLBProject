@@ -14,9 +14,9 @@ PORT = 6006
 class AnalyzerRegistry:
     
     def __init__(self, recortType,productType, itemSn, itemLabel, comPort, modBusId,
-        date, time, kWh, kWhNeg, viNsys, vlin, vl2n, vl3n, vilSys, vl1l2, vl2l3, vl3l1,
-        al1, al2, al3, kWsys, kwl1, kwl2, kwl3, kvarsys, kvarl1, kvarl2, kvarl3, kVasys, 
-        kval1, kval2, kval3, pfSys, pfL1, pfL2, pfL3, phaseSequence, hZ):
+        date, time, kwh, kWhNeg, vlnsys, vl1n, vl2n, vl3n, vllsys, vl1l2, vl2l3, vl3l1,
+        al1, al2, al3, kwsys, kwl1, kwl2, kwl3, kvarsys, kvarl1, kvarl2, kvarl3, kvasys, 
+        kval1, kval2, kval3, pfsys, pfl1, pfl2, pfl3, phaseSequence, hZ, buildingName):
         
         self.recortType = recortType
         self.productType = productType
@@ -26,20 +26,20 @@ class AnalyzerRegistry:
         self.modBusId = modBusId
         self.date = date
         self.time = time
-        self.kWh = kWh
+        self.kwh = kwh
         self.kWhNeg = kWhNeg
-        self.viNsys = viNsys
-        self.vlin = vlin
+        self.vlnsys = vlnsys
+        self.vl1n = vl1n
         self.vl2n = vl2n
         self.vl3n = vl3n
-        self.vilSys = vilSys
+        self.vllsys = vllsys
         self.vl1l2 = vl1l2
         self.vl2l3 = vl2l3
         self.vl3l1 = vl3l1
         self.al1 = al1
         self.al2 = al2
         self.al3 = al3
-        self.kWsys = kWsys
+        self.kwsys = kwsys
         self.kwl1 = kwl1
         self.kwl2 = kwl2
         self.kwl3 = kwl3
@@ -47,21 +47,22 @@ class AnalyzerRegistry:
         self.kvarl1 = kvarl1
         self.kvarl2 = kvarl2
         self.kvarl3 = kvarl3
-        self.kVasys = kVasys
+        self.kvasys = kvasys
         self.kval1 = kval1
         self.kval2 = kval2
         self.kval3 = kval3
-        self.pfSys = pfSys
-        self.pfL1 = pfL1
-        self.pfL2 = pfL2
-        self.pfL3 = pfL3
+        self.pfsys = pfsys
+        self.pfl1 = pfl1
+        self.pfl2 = pfl2
+        self.pfl3 = pfl3
         self.phaseSequence = phaseSequence
         self.hZ = hZ
+        self.buildingName = buildingName
     
     def toJson(self):
         return self.kwl1
 
-def processData(more_data):
+def processData(more_data, filename):
     dataProcessed = more_data.decode("utf-8")
     
     
@@ -81,20 +82,20 @@ def processData(more_data):
         modBusId = c[5]
         date = c[6]
         time = c[7]
-        kWh = c[8]
+        kwh = c[8]
         kWhNeg = c[9]
-        viNsys = c[10]
-        vlin = c[11]
+        vlnsys = c[10]
+        vl1n = c[11]
         vl2n = c[12]
         vl3n = c[13]
-        vilSys = c[14]
+        vllsys = c[14]
         vl1l2 = c[15]
         vl2l3 = c[16]
         vl3l1 = c[17]
         al1 = c[18]
         al2 = c[19]
         al3 = c[20]
-        kWsys = c[21]
+        kwsys = c[21]
         kwl1 = c[22]
         kwl2 = c[23]  
         kwl3 = c[24]
@@ -102,21 +103,21 @@ def processData(more_data):
         kvarl1 = c[26]
         kvarl2 = c[27]
         kvarl3 = c[28]
-        kVasys = c[29]
+        kvasys = c[29]
         kval1 = c[30]
         kval2 = c[31]
         kval3 = c[32]
-        pfSys = c[33]
-        pfL1 = c[34]
-        pfL2 = c[35]
-        pfL3 = c[36]
+        pfsys = c[33]
+        pfl1 = c[34]
+        pfl2 = c[35]
+        pfl3 = c[36]
         phaseSequence = c[37]
         hZ = c[38]
         
         analyzerReg = AnalyzerRegistry(recortType,productType, itemSn, itemLabel, comPort, modBusId,
-        date, time, kWh, kWhNeg, viNsys, vlin, vl2n, vl3n, vilSys, vl1l2, vl2l3, vl3l1,
-        al1, al2, al3, kWsys, kwl1, kwl2, kwl3, kvarsys, kvarl1, kvarl2, kvarl3, kVasys, 
-        kval1, kval2, kval3, pfSys, pfL1, pfL2, pfL3, phaseSequence, hZ)
+        date, time, kwh, kWhNeg, vlnsys, vl1n, vl2n, vl3n, vllsys, vl1l2, vl2l3, vl3l1,
+        al1, al2, al3, kwsys, kwl1, kwl2, kwl3, kvarsys, kvarl1, kvarl2, kvarl3, kvasys, 
+        kval1, kval2, kval3, pfsys, pfl1, pfl2, pfl3, phaseSequence, hZ, filename)
         
         sock.send(bytes('*persistDataObject*\n', 'utf-8'))
         sock.send(bytes(json.dumps(analyzerReg.__dict__)+"\n", 'utf-8'))
@@ -147,7 +148,7 @@ def processUserFtp(userftp,passwordftp):
                 filename = file.split(None, 8)[-1].lstrip()
                 #print ('Ficheiro mais recente: ', filename)
 
-                ftp.retrbinary('RETR '+filename, processData)
+                ftp.retrbinary('RETR '+filename,  lambda block: processData(block, currentDir))
             else:
                 print(file)
             index = index + 1

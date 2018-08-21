@@ -3,9 +3,11 @@ package clb.business;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.primefaces.json.JSONException;
@@ -31,7 +33,7 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 			while(true) {
 				Socket clientSocket = s.accept();
 				try(Scanner in = new Scanner(clientSocket.getInputStream())){
-
+					
 					boolean exit = false;
 
 					while(clientSocket.isConnected() && !exit) {
@@ -63,8 +65,11 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 						//Persist Data Objects
 						else if(command.equals("*persistDataObject*")){
 							JSONObject jsonObj = new JSONObject(in.nextLine());
-							System.out.println(jsonObj.toString());
-							clbDao.saveAnalyzerRegistry(new AnalyzerRegistryObject(jsonObj));
+							
+							String analyzerId = jsonObj.getString("itemSn");
+							String bulildingName = jsonObj.getString("buildingName");
+							
+							clbDao.saveAnalyzerRegistry( new AnalyzerRegistryObject(jsonObj));
 						}
 						else if(command.equals("*exit*")){
 							exit = true;
