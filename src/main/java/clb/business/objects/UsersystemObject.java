@@ -8,8 +8,6 @@ import java.util.stream.Collectors;
 
 import org.primefaces.json.JSONObject;
 
-import com.google.gson.JsonObject;
-
 import clb.database.entities.UsersystemEntity;
 
 public class UsersystemObject implements ClbObject, Serializable

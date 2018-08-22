@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import clb.business.objects.UsersystemObject;
+import clb.business.utils.PasswordGenerator;
 import clb.database.ClbDao;
-import clb.global.PasswordGenerator;
 import clb.global.exceptions.UserCantResendEmailException;
 import clb.global.exceptions.UserDoesNotExistException;
 import clb.global.exceptions.UserDoesNotMatchPasswordLoginException;

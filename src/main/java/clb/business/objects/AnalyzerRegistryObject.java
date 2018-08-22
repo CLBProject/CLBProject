@@ -3,8 +3,6 @@ package clb.business.objects;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.primefaces.json.JSONObject;
-
 import clb.database.entities.AnalyzerRegistryEntity;
 
 public class AnalyzerRegistryObject implements Serializable {
@@ -199,70 +197,6 @@ public class AnalyzerRegistryObject implements Serializable {
         this.vllsys = analyzerRegEntity.getVllsys();
         this.vlnsys = analyzerRegEntity.getVlnsys();
     }
-
-
-    public AnalyzerRegistryObject(JSONObject jsonObj) {
-        this.analyzerId = jsonObj.getString("analyzerId");
-        this.al1 = jsonObj.getDouble("al1");
-        this.al2 = jsonObj.getDouble("al2");
-        this.al3 = jsonObj.getDouble("al3");
-     // this.an = jsonObj.getDouble("an");
-     // this.asys = jsonObj.getDouble("asys");
-        this.comport = jsonObj.getInt("comPort");
-        this.currenttime = new Date(jsonObj.getLong("date")*1000);
-     // this.epochformat = new Date(jsonObj.getLong("epochFormat"));
-     // this.hourmeterkwh = jsonObj.getDouble("hourmeterkwh");
-     // this.hourmeterkwhnegative = jsonObj.getDouble("hourmeterkwhnegative");
-        this.hz = jsonObj.getDouble("hZ");
-        this.itemlabel = jsonObj.getString("itemLabel");
-     // this.kvahl = jsonObj.getDouble("kvahl");
-     // this.kvahl1 = jsonObj.getDouble("kvahl1");
-     // this.kvahl2 = jsonObj.getDouble("kvahl2");
-     // this.kvahl3 = jsonObj.getDouble("kvahl3");
-        this.kval1 = jsonObj.getDouble("kval1");
-        this.kval2 = jsonObj.getDouble("kval2");
-        this.kval3 = jsonObj.getDouble("kval3");
-     // this.kvarh = jsonObj.getDouble("kvarh");
-        this.kvarl1 = jsonObj.getDouble("kvarl1");
-        this.kvarl2 = jsonObj.getDouble("kvarl2");
-        this.kvarl3 = jsonObj.getDouble("kvarl3");
-        this.kvarsys = jsonObj.getDouble("kvarsys");
-        this.kvasys = jsonObj.getDouble("kvasys");
-        this.kwsys = jsonObj.getDouble("kwsys");
-        this.kwh = jsonObj.getDouble("kwh");
-     // this.kwhl1 = jsonObj.getDouble("kwhl1");
-     // this.kwhl2 = jsonObj.getDouble("kwhl2");
-     // this.kwhl3 = jsonObj.getDouble("kwhl3");
-        this.kwl1 = jsonObj.getDouble("kwl1");
-        this.kwl2 = jsonObj.getDouble("kwl2");
-        this.kwl3 = jsonObj.getDouble("kwl3");
-        this.modbusid =jsonObj.getInt("modBusId");
-        this.pfl1 = jsonObj.getDouble("pfl1");
-        this.pfl2 = jsonObj.getDouble("pfl2");
-        this.pfl3 = jsonObj.getDouble("pfl3");
-        this.pfsys = jsonObj.getDouble("pfsys");
-        this.producttype = jsonObj.getString("productType");
-        this.recorttype = jsonObj.getString("recortType");
-    //  this.rfc3339format = new Date(jsonObj.getLong("rfc3339format"));
-    //  this.temperature = jsonObj.getDouble("temperature");
-//      this.thdal1 = jsonObj.getDouble("thdal1");
-//      this.thdal2 = jsonObj.getDouble("thdal2");
-//      this.thdal3 = jsonObj.getDouble("thdal3");
-//      this.thdvl1n = jsonObj.getDouble("thdvl1n");
-//      this.thdvl2n = jsonObj.getDouble("thdvl2n");
-//      this.thdvl3n = jsonObj.getDouble("thdvl3n");
-//      this.vadmd = jsonObj.getDouble("vadmd");
-//      this.vardmd = jsonObj.getDouble("vardmd");
-        this.vl1l2 = jsonObj.getDouble("vl1l2");
-        this.vl1n = jsonObj.getDouble("vl1n");
-        this.vl2l3 = jsonObj.getDouble("vl2l3");
-        this.vl2n = jsonObj.getDouble("vl2n");
-        this.vl3l1 = jsonObj.getDouble("vl3l1");
-        this.vl3n = jsonObj.getDouble("vl3n");
-        this.vllsys = jsonObj.getDouble("vllsys");
-        this.vlnsys = jsonObj.getDouble("vlnsys");
-	}
-
 
 	public AnalyzerRegistryEntity toEntity() {
         AnalyzerRegistryEntity anaRegEntity = new AnalyzerRegistryEntity();
