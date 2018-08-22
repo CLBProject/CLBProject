@@ -57,16 +57,6 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 								clientSocket.getOutputStream().flush();
 							}	
 							
-							JSONObject usersSend = new JSONObject();
-							
-							final String user = "greenworld@ventosdepoupanca.com";
-							final String passwd = "l#_YqMoJe%coJUbF";
-							
-							usersSend.put("userftp", user);
-							usersSend.put("passwordftp", passwd);
-							clientSocket.getOutputStream().write(usersSend.toString().getBytes());
-							clientSocket.getOutputStream().flush();
-							
 							clientSocket.getOutputStream().write("*end*".getBytes());
 						}
 						//Persist Data Objects

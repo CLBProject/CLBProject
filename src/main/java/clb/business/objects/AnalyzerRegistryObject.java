@@ -209,7 +209,7 @@ public class AnalyzerRegistryObject implements Serializable {
      // this.an = jsonObj.getDouble("an");
      // this.asys = jsonObj.getDouble("asys");
         this.comport = jsonObj.getInt("comPort");
-        this.currenttime = new Date(jsonObj.getLong("date"));
+        this.currenttime = new Date(jsonObj.getLong("date")*1000);
      // this.epochformat = new Date(jsonObj.getLong("epochFormat"));
      // this.hourmeterkwh = jsonObj.getDouble("hourmeterkwh");
      // this.hourmeterkwhnegative = jsonObj.getDouble("hourmeterkwhnegative");
