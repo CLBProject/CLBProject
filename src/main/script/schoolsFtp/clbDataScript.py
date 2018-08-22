@@ -146,7 +146,7 @@ def processUserFtp(userftp,passwordftp):
             #Ignore the first two files
             if index > 1:
                 filename = file.split(None, 8)[-1].lstrip()
-                print ('Ficheiro mais recente: ', filename)
+                #print ('Ficheiro mais recente: ', filename)
 
                 ftp.retrbinary('RETR '+filename,  lambda block: processData(block, currentDir), 1024)
                 

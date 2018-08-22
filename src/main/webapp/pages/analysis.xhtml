@@ -217,23 +217,24 @@
 											<p:outputLabel value="No Buildings to Select"></p:outputLabel>
 										</c:when>
 										<c:otherwise>
-											<b><p:outputLabel value="Building"></p:outputLabel></b>
+											<b><p:outputLabel styleClass="analysisPanelTitle"
+												value="#{analysisBean.buildingSelected.name}"></p:outputLabel></b>
 											<hr />
+											<c:if test="#{analysisBean.buildingSelected.imgPath}">
 											<p:graphicImage width="150px"
 												styleClass="buildingImgAnalysis"
 												value="#{request.contextPath}/../resources/images/buildings/#{analysisBean.buildingSelected.imgPath}" />
 											<br />
-											<p:outputLabel styleClass="analysisPanelTitle"
-												value="#{analysisBean.buildingSelected.name}"></p:outputLabel>
-											<br />
-											<br />
+											<br/>
+											</c:if>
 											<p:commandButton value="Change"
 												oncomplete="PF('selectionPopupBuilding').show()" ajax="true"
 												icon="fa fa-fw fa-building" styleClass="simpleButton" />
 										</c:otherwise>
 									</c:choose>
 								</div>
-							</p:panel> <p:spacer height="5" /> <p:panel>
+							</p:panel> <p:spacer height="5" /> 
+							<p:panel style="width:200px !important">
 								<div align="center">
 									<c:choose>
 										<c:when
@@ -268,7 +269,7 @@
 										</c:when>
 										<c:otherwise>
 											<p:outputLabel styleClass="analysisPanelTitle"
-												value="#{analysisBean.analyzerSelected.name}"></p:outputLabel>
+												value="#{analysisBean.analyzerSelected.codeName}"></p:outputLabel>
 											<hr />
 											<p:commandButton value="Change"
 												oncomplete="PF('selectionPopupAnalyzer').show()" ajax="true"

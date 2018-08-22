@@ -3,6 +3,7 @@ package clb.business;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,11 +17,13 @@ import org.primefaces.json.JSONObject;
 import clb.business.exceptions.IlegalCommandAppException;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
+import clb.business.objects.BuildingMeterObject;
 import clb.business.objects.BuildingObject;
 import clb.business.objects.DataLoggerObject;
 import clb.business.objects.UsersystemObject;
 import clb.business.utils.JsonUtils;
 import clb.database.ClbDao;
+import clb.global.BuildingMeterParameterValues;
 
 public class AnalyzerDataServiceImplExecutor implements Runnable{
 
@@ -103,14 +106,24 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 						}
 						else if(command.equals("*exit*")){
 							
+							List<BuildingMeterObject> buildingMeters = new ArrayList<BuildingMeterObject>();
+							
+							for(BuildingMeterParameterValues buildingMeterParameter: BuildingMeterParameterValues.values()) {
+								BuildingMeterObject buildingMeterObject = new BuildingMeterObject();
+								buildingMeterObject.setName( buildingMeterParameter.getLabel() );
+								buildingMeterObject.setLabelKey( buildingMeterParameter.name() );
+								buildingMeterObject.setUnit(buildingMeterParameter.getUnit());
+
+								clbDao.saveBuildingMeter( buildingMeterObject );
+								
+								buildingMeters.add(buildingMeterObject);
+							}
+							
 							analyzerNames.values().stream().forEach(analyzer -> clbDao.saveAnalyzer(analyzer));
 							dataLoggerNames.values().stream().forEach(dataLogger -> clbDao.saveDataLogger(dataLogger));
 							buildingsNames.values().stream().forEach(building -> {
+								buildingMeters.stream().forEach(buildingMeter -> building.addBuildingMeter(buildingMeter));
 								clbDao.saveBuilding(building);
-								clbDao.getAllUsers().stream().forEach(user -> {
-									user.addBuilding(building);
-									clbDao.saveUsersystem(user);
-								});
 							});
 							
 							analyzerNames = null;
