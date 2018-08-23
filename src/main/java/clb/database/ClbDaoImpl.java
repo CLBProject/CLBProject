@@ -155,6 +155,21 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	public List<UsersystemObject> getAllUsers(){
 		return userSystemMongoRepository.findAll().stream().map(UsersystemObject::new).collect(Collectors.toList());
 	}
+	
+	@Override
+	public List<BuildingObject> getAllBuildings(){
+		return buildingsMongoRepository.findAll().stream().map(BuildingObject::new).collect(Collectors.toList());
+	}
+	
+	@Override
+	public List<DataLoggerObject> getAllDataLoggers() {
+		return dataLoggerMongoRepository.findAll().stream().map(DataLoggerObject::new).collect(Collectors.toList());
+	}
+	
+	@Override
+	public List<AnalyzerObject> getAllAnalyzers() {
+		return analyzerMongoRepository.findAll().stream().map(AnalyzerObject::new).collect(Collectors.toList());
+	}
 
 	@Override
 	public UsersystemObject findUserByToken( String token) {
@@ -338,5 +353,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	public void setMongoTemplate( MongoTemplate mongoTemplate ) {
 		this.mongoTemplate = mongoTemplate;
 	}
+
+
 
 }

@@ -29,6 +29,12 @@ public interface ClbDao{
 	void saveUsers(List<UsersystemObject> users);
 	
 	List<UsersystemObject> getAllUsers();
+	
+	List<BuildingObject> getAllBuildings();
+
+	List<DataLoggerObject> getAllDataLoggers();
+	
+	List<AnalyzerObject> getAllAnalyzers();
 
     UsersystemObject findUserByToken( String token );
 
@@ -46,6 +52,6 @@ public interface ClbDao{
 
 	String[] getYearsAvailable();
 
-
+	
 
 }

@@ -24,6 +24,10 @@ public class ClbUserBean implements Serializable{
     @ManagedProperty("#{clbHomeLoginBean}")
     private ClbHomeLoginBean clbHomeLoginBean;
 
+    public void fillUserWithBuildings() {
+    	analyzerDataService.fillUserWithAllBuildings(clbHomeLoginBean.getUserLoginPojo().getCurrentUser());
+    }
+    
     public MapModel getMapModel() {
         return mapModel;
     }

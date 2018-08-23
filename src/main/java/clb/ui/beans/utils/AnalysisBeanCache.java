@@ -13,42 +13,70 @@ public class AnalysisBeanCache {
 
 	private AnalyzerDataService analyzerDataService;
 
-	private Map<String,List<AnalyzerRegistryObject>> hoursCache;
-	private Map<String,List<AnalyzerRegistryObject>> dayCache;
-	private Map<String,List<AnalyzerRegistryObject>> weekCache;
-	private Map<String,List<AnalyzerRegistryObject>> monthCache;
+	private Map<String,Map<String,List<AnalyzerRegistryObject>>> hoursCache;
+	private Map<String,Map<String,List<AnalyzerRegistryObject>>> dayCache;
+	private Map<String,Map<String,List<AnalyzerRegistryObject>>> weekCache;
+	private Map<String,Map<String,List<AnalyzerRegistryObject>>> monthCache;
 
 	public AnalysisBeanCache(AnalyzerDataService analyzerDataService) {
 		this.analyzerDataService = analyzerDataService;
 
-		hoursCache = new HashMap<String,List<AnalyzerRegistryObject>>();
-		dayCache = new HashMap<String,List<AnalyzerRegistryObject>>();
-		weekCache = new HashMap<String,List<AnalyzerRegistryObject>>();
-		monthCache = new HashMap<String,List<AnalyzerRegistryObject>>();
+		hoursCache = new HashMap<String,Map<String,List<AnalyzerRegistryObject>>>();
+		dayCache = new HashMap<String,Map<String,List<AnalyzerRegistryObject>>>();
+		weekCache = new HashMap<String,Map<String,List<AnalyzerRegistryObject>>>();
+		monthCache = new HashMap<String,Map<String,List<AnalyzerRegistryObject>>>();
 	}
 
 	public List<AnalyzerRegistryObject> getHourRegistriesFromAnalyzer( String analyzerId, Date timeFrame ){
-		final String hourKey = DateUtils.getInstance().convertDateToSimpleStringFormat(timeFrame);
-		List<AnalyzerRegistryObject> values = hoursCache.get(hourKey);
 
-		if(values == null) {
+		Map<String,List<AnalyzerRegistryObject>> hours = hoursCache.get(analyzerId);
+		final String hourKey = DateUtils.getInstance().convertDateToSimpleStringFormat(timeFrame);
+
+		if(hours == null) {
+
 			List<AnalyzerRegistryObject> hoursRegistries = analyzerDataService.getHourRegistriesFromAnalyzer(analyzerId, timeFrame);
-			hoursCache.put(hourKey, hoursRegistries);
+			Map<String,List<AnalyzerRegistryObject>> hourRegs = new HashMap<String,List<AnalyzerRegistryObject>>();
+			hourRegs.put(hourKey, hoursRegistries);
+			hoursCache.put(analyzerId, hourRegs);
+
 			return hoursRegistries;
 		}
-		return values;
+		else {
+			List<AnalyzerRegistryObject> hoursRegistriesFromMap = hours.get(hourKey);
+
+			if(hoursRegistriesFromMap == null) {
+				hoursRegistriesFromMap = analyzerDataService.getHourRegistriesFromAnalyzer(analyzerId, timeFrame);
+				hours.put(hourKey, hoursRegistriesFromMap);
+			}
+
+			return hoursRegistriesFromMap;
+		}
 	}
 
 	public List<AnalyzerRegistryObject> getDayRegistriesFromAnalyzer( String analyzerId, Date timeFrame ){
-		final String dayKey = DateUtils.getInstance().convertDateToSimpleStringFormat(timeFrame);
-		List<AnalyzerRegistryObject> values = dayCache.get(dayKey);
 
-		if(values == null) {
+		Map<String,List<AnalyzerRegistryObject>> days = dayCache.get(analyzerId);
+		final String dayKey = DateUtils.getInstance().convertDateToSimpleStringFormat(timeFrame);
+
+		if(days == null) {
+
 			List<AnalyzerRegistryObject> dayRegistries = analyzerDataService.getDayRegistriesFromAnalyzer(analyzerId, timeFrame);
-			dayCache.put(dayKey, dayRegistries);
+			Map<String,List<AnalyzerRegistryObject>> dayRegs = new HashMap<String,List<AnalyzerRegistryObject>>();
+			dayRegs.put(dayKey, dayRegistries);
+			dayCache.put(analyzerId, dayRegs);
+
 			return dayRegistries;
 		}
-		return values;
+		else {
+			List<AnalyzerRegistryObject> dayRegistriesFromMap = days.get(dayKey);
+
+			if(dayRegistriesFromMap == null) {
+				dayRegistriesFromMap = analyzerDataService.getDayRegistriesFromAnalyzer(analyzerId, timeFrame);
+				days.put(dayKey, dayRegistriesFromMap);
+			}
+
+			return dayRegistriesFromMap;
+		}
 	}
 
 	public List<AnalyzerRegistryObject> getWeekRegistriesFromAnalyzer(String analyzerId, int week, int month, 
@@ -58,10 +86,11 @@ public class AnalysisBeanCache {
 
 	public List<AnalyzerRegistryObject> getWeekRegistriesFromAnalyzerWithShift(String analyzerId, int week, int month, 
 			int year, int weekShift) {
-		final String weekKey = DateUtils.getInstance().convertDateToSimpleWeekFormat(week,month,year,weekShift);
-		List<AnalyzerRegistryObject> values = weekCache.get(weekKey);
 
-		if(values == null) {
+		Map<String,List<AnalyzerRegistryObject>> weeks = weekCache.get(analyzerId);
+		final String weekKey = DateUtils.getInstance().convertDateToSimpleWeekFormat(week,month,year,weekShift);
+
+		if(weeks == null) {
 			List<AnalyzerRegistryObject> weekRegistries;
 			if(weekShift == 0) {
 				weekRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer(analyzerId, week, month, year);
@@ -69,10 +98,26 @@ public class AnalysisBeanCache {
 			else {
 				weekRegistries = analyzerDataService.getWeekRegistriesFromAnalyzerWithWeekShift(analyzerId, week, month, year,weekShift);
 			}
-			weekCache.put(weekKey, weekRegistries);
+			Map<String,List<AnalyzerRegistryObject>> weekRegs = new HashMap<String,List<AnalyzerRegistryObject>>();
+			weekRegs.put(weekKey, weekRegistries);
+			weekCache.put(analyzerId, weekRegs);
 			return weekRegistries;
 		}
-		return values;
+		else {
+			List<AnalyzerRegistryObject> weekRegistriesFromMap = weeks.get(weekKey);
+
+			if(weekRegistriesFromMap == null) {
+				if(weekShift == 0) {
+					weekRegistriesFromMap = analyzerDataService.getWeekRegistriesFromAnalyzer(analyzerId, week, month, year);
+				}
+				else {
+					weekRegistriesFromMap = analyzerDataService.getWeekRegistriesFromAnalyzerWithWeekShift(analyzerId, week, month, year,weekShift);
+				}
+				weeks.put(weekKey, weekRegistriesFromMap);
+			}
+			return weekRegistriesFromMap;
+		}
+
 	}
 
 	public List<AnalyzerRegistryObject> getMonthRegistriesFromAnalyzer(String analyzerId, int month, int year) {
@@ -80,10 +125,11 @@ public class AnalysisBeanCache {
 	}
 
 	public List<AnalyzerRegistryObject> getMonthRegistriesFromAnalyzerWithShift(String analyzerId, int month, int year, int monthShift) {
-		final String monthKey = DateUtils.getInstance().convertDateToSimpleMonthFormat(month,year,monthShift);
-		List<AnalyzerRegistryObject> values = monthCache.get(monthKey);
 
-		if(values == null) {
+		Map<String,List<AnalyzerRegistryObject>> months = monthCache.get(analyzerId);
+		final String monthKey = DateUtils.getInstance().convertDateToSimpleMonthFormat(month,year,monthShift);
+
+		if(months == null) {
 			List<AnalyzerRegistryObject> monthRegistries;
 			if(monthShift == 0) {
 				monthRegistries =  analyzerDataService.getMonthRegistriesFromAnalyzer(analyzerId, month, year);
@@ -91,10 +137,26 @@ public class AnalysisBeanCache {
 			else {
 				monthRegistries = analyzerDataService.getMonthRegistriesFromAnalyzerWithShift(analyzerId, month, year, monthShift);
 			}
-			monthCache.put(monthKey, monthRegistries);
+			
+			Map<String,List<AnalyzerRegistryObject>> monthRegs = new HashMap<String,List<AnalyzerRegistryObject>>();
+			monthRegs.put(monthKey, monthRegistries);
+			monthCache.put(analyzerId, monthRegs);
 			return monthRegistries;
 		}
-		return values;
+		else {
+			List<AnalyzerRegistryObject> monthRegistriesFromMap = months.get(monthKey);
+
+			if(monthRegistriesFromMap == null) {
+				if(monthShift == 0) {
+					monthRegistriesFromMap =  analyzerDataService.getMonthRegistriesFromAnalyzer(analyzerId, month, year);
+				}
+				else {
+					monthRegistriesFromMap = analyzerDataService.getMonthRegistriesFromAnalyzerWithShift(analyzerId, month, year, monthShift);
+				}
+				months.put(monthKey, monthRegistriesFromMap);
+			}
+			return monthRegistriesFromMap;
+		}
 	}
 
 }

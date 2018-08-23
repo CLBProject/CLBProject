@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.UsersystemObject;
@@ -159,6 +160,15 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	@Override
 	public String[] getYearsAvailable() {
 		return clbDao.getYearsAvailable();
+	}
+
+	@Override
+	@Transactional
+	public void fillUserWithAllBuildings(UsersystemObject user) {
+		clbDao.getAllBuildings().stream().forEach(building -> user.addBuilding(building));;
+		clbDao.saveUsersystem(user);
+		
+		System.out.println("User added!");
 	}
 
 }
