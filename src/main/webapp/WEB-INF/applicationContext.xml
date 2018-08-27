@@ -32,7 +32,7 @@
 		
 		
 	<!-- Default bean name is 'mongo' -->
-	<mongo:mongo host="localhost" port="27017" />
+	<mongo:mongo host="192.168.99.100" port="27017" />
 
 	<bean id="mongoCredentials" class="org.springframework.data.authentication.UserCredentials">
 		<constructor-arg name="username" value="admin" />
