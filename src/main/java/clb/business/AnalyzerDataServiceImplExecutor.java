@@ -3,7 +3,6 @@ package clb.business;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +28,8 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 
 	private ClbDao clbDao;
 
+
+
 	public AnalyzerDataServiceImplExecutor(ClbDao clbDao) {
 		this.clbDao = clbDao;
 	}
@@ -41,12 +42,10 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 				Socket clientSocket = s.accept();
 				try(Scanner in = new Scanner(clientSocket.getInputStream())){
 					
-					boolean exit = false;
-					
-					Map<String,AnalyzerObject> analyzerNames = new HashMap<String,AnalyzerObject>();
-					Map<String,DataLoggerObject> dataLoggerNames = new HashMap<String,DataLoggerObject>();
 					Map<String,BuildingObject> buildingsNames = new HashMap<String,BuildingObject>();
-					 
+					AnalyzerObject analyzerObject = null;
+					
+					boolean exit = false;
 					while(clientSocket.isConnected() && !exit) {
 						String command = in.nextLine();
 
@@ -60,42 +59,25 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 								clientSocket.getOutputStream().write(json.toString().getBytes());
 								clientSocket.getOutputStream().flush();
 							}	
-							
-							clientSocket.getOutputStream().write("*end*".getBytes());
+
+							clientSocket.getOutputStream().write("*endUsersInfo*".getBytes());
 						}
 						//Persist Data Objects
 						else if(command.equals("*persistDataObject*")){
 							JSONObject jsonObj = new JSONObject(in.nextLine());
-							
+
 							String buildingName = jsonObj.getString("buildingName");
-							
+
 							BuildingObject buildingObject = buildingsNames.get(buildingName);
-							DataLoggerObject dataLoggerObject = dataLoggerNames.get(buildingName);
 							
 							if(buildingObject == null) {
 								
-								dataLoggerObject = new DataLoggerObject();
-								dataLoggerObject.setCode(buildingName);
-								
-								buildingObject = new BuildingObject();
-								buildingObject.setName(buildingName);
-								buildingObject.addDataLogger(dataLoggerObject);
-								
-								buildingsNames.put(buildingName,buildingObject);
-								dataLoggerNames.put(buildingName,dataLoggerObject);
-							}
-							
-							
-							String analyzerCode = jsonObj.getString("itemSn");
-							
-							AnalyzerObject analyzerObject = analyzerNames.get(analyzerCode);
-							
-							if(analyzerObject == null) {
 								analyzerObject = new AnalyzerObject();
-								analyzerObject.setCodeName(analyzerCode);
-								analyzerNames.put(analyzerCode,analyzerObject);
+								analyzerObject.setCodeName("Analyzer For Building " + buildingName);
 								clbDao.saveAnalyzer(analyzerObject);
-								dataLoggerObject.addAnalyzer(analyzerObject);
+								
+								buildingObject = saveBuildingStructure(buildingName,analyzerObject);
+								buildingsNames.put(buildingName,buildingObject);
 							}
 							
 							jsonObj.put("analyzerId", analyzerObject.getId());
@@ -104,32 +86,13 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 							clbDao.saveAnalyzerRegistry( analyzerRegistry);
 							analyzerObject.addAnalyzerRegistry(analyzerRegistry.getAnalyzerId());
 						}
-						else if(command.equals("*exit*")){
-							
-							List<BuildingMeterObject> buildingMeters = new ArrayList<BuildingMeterObject>();
-							
-							for(BuildingMeterParameterValues buildingMeterParameter: BuildingMeterParameterValues.values()) {
-								BuildingMeterObject buildingMeterObject = new BuildingMeterObject();
-								buildingMeterObject.setName( buildingMeterParameter.getLabel() );
-								buildingMeterObject.setLabelKey( buildingMeterParameter.name() );
-								buildingMeterObject.setUnit(buildingMeterParameter.getUnit());
+						else if(command.equals("*exitPersistDataObject*")){
 
-								clbDao.saveBuildingMeter( buildingMeterObject );
-								
-								buildingMeters.add(buildingMeterObject);
-							}
-							
-							analyzerNames.values().stream().forEach(analyzer -> clbDao.saveAnalyzer(analyzer));
-							dataLoggerNames.values().stream().forEach(dataLogger -> clbDao.saveDataLogger(dataLogger));
-							buildingsNames.values().stream().forEach(building -> {
-								buildingMeters.stream().forEach(buildingMeter -> building.addBuildingMeter(buildingMeter));
-								clbDao.saveBuilding(building);
-							});
-							
-							analyzerNames = null;
-							dataLoggerNames = null;
+							clbDao.saveAnalyzer(analyzerObject);
+
+							analyzerObject = null;
 							buildingsNames = null;
-							
+
 							exit = true;
 						}
 						else throw new IlegalCommandAppException();
@@ -144,6 +107,32 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 			e.printStackTrace();
 		}
 
+	}
+
+	private BuildingObject saveBuildingStructure(String buildingName, AnalyzerObject analyzerObject) {
+		DataLoggerObject dataLoggerObject = new DataLoggerObject();
+		dataLoggerObject.setCode(buildingName);
+		dataLoggerObject.addAnalyzer(analyzerObject);
+		clbDao.saveDataLogger(dataLoggerObject);
+		
+		BuildingObject buildingObject = new BuildingObject();
+		buildingObject.setName(buildingName);
+		buildingObject.addDataLogger(dataLoggerObject);
+
+
+		for(BuildingMeterParameterValues buildingMeterParameter: BuildingMeterParameterValues.values()) {
+			BuildingMeterObject buildingMeterObject = new BuildingMeterObject();
+			buildingMeterObject.setName( buildingMeterParameter.getLabel() );
+			buildingMeterObject.setLabelKey( buildingMeterParameter.name() );
+			buildingMeterObject.setUnit(buildingMeterParameter.getUnit());
+
+			clbDao.saveBuildingMeter( buildingMeterObject );
+
+			buildingObject.addBuildingMeter(buildingMeterObject);
+		}
+		clbDao.saveBuilding(buildingObject);
+		
+		return buildingObject;
 	}
 
 }

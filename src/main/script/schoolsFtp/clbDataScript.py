@@ -152,8 +152,9 @@ def processUserFtp(userftp,passwordftp):
         ftp.cwd("..")
 
     ftp.quit()
-        
-    sock.send(bytes("*exitPersistData*\n", 'utf-8'))
+
+    sock.send(bytes("*exitPersistDataObject*\n", 'utf-8'))
+    
     return;
 
 def recv_basic():

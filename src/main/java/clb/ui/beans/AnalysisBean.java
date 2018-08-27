@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -15,6 +16,7 @@ import org.primefaces.event.SelectEvent;
 import clb.business.AnalyzerDataService;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
+import clb.business.objects.BuildingMeterObject;
 import clb.business.objects.BuildingObject;
 import clb.business.objects.DataLoggerObject;
 import clb.global.DateUtils;
@@ -75,9 +77,9 @@ public class AnalysisBean implements Serializable{
 
 	@PostConstruct
 	public void init() {
-		
+
 		analysisBeanCache = new AnalysisBeanCache(analyzerDataService);
-		
+
 		todayDate = new Date();
 
 		analysisDate = new Date();
@@ -106,39 +108,48 @@ public class AnalysisBean implements Serializable{
 		if(clbHomeLoginBean.getUserLoginPojo().getCurrentUser().getBuildings() != null && 
 				clbHomeLoginBean.getUserLoginPojo().getCurrentUser().getBuildings().size() > 0 ) {
 
-			buildingsToSelect = clbHomeLoginBean.getUserLoginPojo().getCurrentUser().getBuildings();
+			buildingsToSelect = initBuildingObjects();
 
-			boolean firstTime = false;
+			if(buildingsToSelect != null && buildingsToSelect.size() > 0)
+				initChartForBuilding(buildingsToSelect.get(0));
+		}
+	}
 
-			for(BuildingObject bObj: clbHomeLoginBean.getUserLoginPojo().getCurrentUser().getBuildings()) {
-				if(bObj.getBuildingMeters() != null && bObj.getBuildingMeters().size() > 0 && bObj.getDataLoggers() != null) {
-					for(DataLoggerObject dlObj: bObj.getDataLoggers()) {
-						if(dlObj.getAnalyzers() != null) {
-							for(AnalyzerObject aObj : dlObj.getAnalyzers()) {
-								if(!firstTime) {
-									buildingSelected = bObj;
-									tempBuildingSelected = buildingSelected;
-									analyzersSelected = dlObj.getAnalyzers(); 
-									analyzerSelected = aObj;
-									tempAnalyzerSelected = analyzerSelected;
+	private List<BuildingObject> initBuildingObjects() {
+		return clbHomeLoginBean.getUserLoginPojo().getCurrentUser().getBuildings().stream().filter(building -> {
+			boolean hasAnalyzers = building.getDataLoggers().stream().filter(dl -> dl.getAnalyzers() != null && dl.getAnalyzers().size() > 0).count() > 0;
+			boolean hasMeters = building.getBuildingMeters() != null && building.getBuildingMeters().size() > 0;
 
-									analysisDayPojo = new AnalysisBeanChart( buildingSelected.getBuildingMeters(),
-											this.analysisBeanCache);
+			return hasAnalyzers && hasMeters;
+		}).collect(Collectors.toList());
+	}
 
-									fillGraphicData(analysisBeanCache.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), DateUtils.getInstance().getDayReseted(analysisDate)) );
+	private void initChartForBuilding(BuildingObject bObj) {
+		buildingSelected = bObj;
+		tempBuildingSelected = buildingSelected;
 
-									firstTime = true;
-								}
-							}
-						}
-					}
-				}
+		List<BuildingMeterObject> meters = bObj.getBuildingMeters();
+		List<DataLoggerObject> dataLoggers = bObj.getDataLoggers();
+
+		analysisDayPojo = new AnalysisBeanChart( meters, this.analysisBeanCache);
+
+		for(DataLoggerObject dlSelected: dataLoggers) {
+			List<AnalyzerObject> analyzers = dlSelected.getAnalyzers();
+
+			if(analyzers != null && analyzers.size() > 0) {
+				analyzersSelected = analyzers;
+				analyzerSelected = analyzers.get(0);
+				tempAnalyzerSelected = analyzerSelected;
+
+				fillGraphicData(analysisBeanCache.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), DateUtils.getInstance().getDayReseted(analysisDate)) );
+				break;
 			}
 		}
 	}
 
 	public void selectBuilding() {
 		buildingSelected = tempBuildingSelected;
+		initChartForBuilding(buildingSelected); 
 	}
 
 	public void selectAnalyzer() {
@@ -175,7 +186,7 @@ public class AnalysisBean implements Serializable{
 	public void setMonthValueForWeek() {
 
 		week = Weeks.WEEK1;
-		
+
 		analysisDate = DateUtils.getInstance().getWeekFirstDayReseted(week.getCode(),month.getValue(), Integer.parseInt(year));
 
 		weeks = Weeks.getWeeksLimited(DateUtils.getInstance().getNumberOfMonthWeeks(month.getValue(),Integer.parseInt(year)));
@@ -188,7 +199,7 @@ public class AnalysisBean implements Serializable{
 
 		week = Weeks.WEEK1;
 		month = Months.JANUARY;
-		
+
 		analysisDate = DateUtils.getInstance().getWeekFirstDayReseted(week.getCode(),month.getValue(),Integer.parseInt(year));
 
 		monthsValues = Months.getMonthsLimited(DateUtils.getInstance().getNumberOfMonthsInYear(Integer.parseInt(year)));
@@ -202,7 +213,7 @@ public class AnalysisBean implements Serializable{
 	public void setMonthValueForMonth() {
 
 		week = Weeks.WEEK1;
-		
+
 		analysisDate = DateUtils.getInstance().getWeekFirstDayReseted(week.getCode(),month.getValue(), Integer.parseInt(year));
 
 		fillGraphicData(analysisBeanCache.getMonthRegistriesFromAnalyzer( analyzerSelected.getId(), month.getValue(), Integer.parseInt(year)));
@@ -212,10 +223,10 @@ public class AnalysisBean implements Serializable{
 
 		week = Weeks.WEEK1;
 		month = Months.JANUARY;
-		
+
 		analysisDate = DateUtils.getInstance().getWeekFirstDayReseted(week.getCode(),month.getValue(),Integer.parseInt(year));
 		monthsValues = Months.getMonthsLimited(DateUtils.getInstance().getNumberOfMonthsInYear(Integer.parseInt(year)));
-		
+
 		fillGraphicData(analysisBeanCache.getMonthRegistriesFromAnalyzer( analyzerSelected.getId(), month.getValue(), Integer.parseInt(year)));
 	}
 
@@ -262,9 +273,9 @@ public class AnalysisBean implements Serializable{
 	}
 
 	private void updateHoursCombo() {
-		
+
 		hour = Hours.ZERO;
-		
+
 		if(DateUtils.getInstance().isToday(analysisDate)) {
 			hoursValues = Hours.getHoursLimited(DateUtils.getInstance().getHourFromDate(new Date()));
 		}
@@ -495,5 +506,5 @@ public class AnalysisBean implements Serializable{
 	public void setAnalysisBeanCache(AnalysisBeanCache analysisBeanCache) {
 		this.analysisBeanCache = analysisBeanCache;
 	}
-	
+
 }

@@ -280,6 +280,7 @@ form {
 
 .analysisDiv {
 	background-color: #0A122A !important;
+	height: 100vh;
 }
 
 .analysisDivClass {

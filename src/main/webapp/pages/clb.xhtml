@@ -11,45 +11,7 @@
 		<ui:include src="./general/menutab.xhtml" />
 		<h:form>
 			<div class="mainDivClass">
-				<h:panelGrid width="100%" columns="2"
-					columnClasses="mainPanelCol1, mainPanelCol2" cellspacing="10">
-					<p:column>
-						<div align="left" class="mainDivDetail">
-							<div align="right" class="mainDivDetailDate">
-								<h:outputLabel value="Last entry date: 06/11/2017 at 23:25"></h:outputLabel>
-							</div>
-							<h:outputText value="Building 1" class="mainDivDetailTitle" />
-							<br /> <br />
-							<h:outputText value="- Monitor 1" class="mainDivDetailText" />
-							<br />
-							<h:outputText value="- Monitor 2" class="mainDivDetailText" />
-							<br />
-							<h:outputText value="- Monitor 3" class="mainDivDetailText" />
-							<br />
-							<h:outputText value="- Monitor 4" class="mainDivDetailText" />
-						</div>
-						<p:spacer height="3" />
-						<div align="left" class="mainDivDetail">
-							<div align="right" class="mainDivDetailDate">
-								<h:outputLabel value="Last entry date: 06/11/2017 at 23:25"></h:outputLabel>
-							</div>
-							<h:outputText value="Building 2" class="mainDivDetailTitle" />
-							<br /> <br />
-							<h:outputText value="- Monitor 1" class="mainDivDetailText" />
-							<br />
-							<h:outputText value="- Monitor 2" class="mainDivDetailText" />
-							<br />
-							<h:outputText value="- Monitor 3" class="mainDivDetailText" />
-							<br />
-							<h:outputText value="- Monitor 4" class="mainDivDetailText" />
-						</div>
-					</p:column>
-					<p:column>
-						<p:gmap id="gmap" center="36.890257,30.707417" zoom="13"
-							type="HYBRID" style="width:100%;height:400px"
-							model="#{clbUserBean.mapModel}" onPointClick="" widgetVar="map" />
-					</p:column>
-				</h:panelGrid>
+				<p:commandButton action="#{clbUserBean.fillUserWithBuildings}" value="Add Buildings To User" type="submit"></p:commandButton>
 			</div>
 		</h:form>
 		<ui:include src="./general/footer.xhtml" />
