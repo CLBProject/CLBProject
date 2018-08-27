@@ -3,6 +3,7 @@ package clb.business;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -14,6 +15,7 @@ import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.UsersystemObject;
 import clb.database.ClbDao;
 import clb.global.DateUtils;
+import clb.global.springutils.InjectLogger;
 
 @Service
 public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializable{
@@ -31,6 +33,9 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
 	@Autowired 
 	private ApplicationEventPublisher eventPublisher;
+
+	@InjectLogger
+	private Logger log;
 
 	public void init(){
 		taskExecutor.execute(new AnalyzerDataServiceImplExecutor(this.clbDao));
@@ -167,7 +172,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	public void fillUserWithAllBuildings(UsersystemObject user) {
 		clbDao.getAllBuildings().stream().forEach(building -> user.addBuilding(building));;
 		clbDao.saveUsersystem(user);
-		
+
 		System.out.println("User added!");
 	}
 
