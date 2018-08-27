@@ -1,4 +1,4 @@
-package beans;
+package ui;
 
 import static org.mockito.Mockito.when;
 

@@ -145,6 +145,7 @@ def processUserFtp(userftp,passwordftp):
             if index > 1:
                     filename = file.split(None, 8)[-1].lstrip()
                     #print ('Ficheiro mais recente: ', filename)
+                    #ftp.set_pasv(False)
                     ftp.retrlines('RETR ' + filename, lambda line: processData(line, currentDir))
             
             index = index +1

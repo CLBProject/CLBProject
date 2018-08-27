@@ -2,26 +2,19 @@ package clb.ui.enums;
 
 public enum ScaleGraphic
 {
-    HOUR("Hour",1),
-    DAY("Day",96),
-    WEEK("Week",168),
-    MONTH("Month",124);
+    HOUR("Hour"),
+    DAY("Day"),
+    WEEK("Week"),
+    MONTH("Month");
     
     private String label;
     
-    private int maxRegistries;
-    
-    ScaleGraphic(String label, int maxRegistries){
+    ScaleGraphic(String label){
         this.label = label;
-        this.maxRegistries = maxRegistries;
     }
 
     public String getLabel() {
         return label;
     }
-
-	public int getMaxRegistries() {
-		return maxRegistries;
-	}
     
 }

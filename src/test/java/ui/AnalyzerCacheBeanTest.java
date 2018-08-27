@@ -1,4 +1,4 @@
-package beans;
+package ui;
 
 import org.junit.Test;
 
