@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.global.DateUtils;
 import clb.ui.beans.pojos.AnalyzerRegistryGui;
@@ -14,6 +17,7 @@ import clb.ui.enums.ScaleGraphic;
 
 public class AnalyzerRegistryReductionAlgorithm {
 
+	private final Logger logger = LoggerFactory.getLogger(AnalyzerRegistryReductionAlgorithm.class);
 	private static AnalyzerRegistryReductionAlgorithm instance;
 
 	public static synchronized AnalyzerRegistryReductionAlgorithm getInstance() {
@@ -65,7 +69,7 @@ public class AnalyzerRegistryReductionAlgorithm {
 				registryReduced.add(averageAnalyzerRegistryObject(registriesReducedEntry.getValue(),
 						registriesReducedEntry.getKey()));
 			} catch (ParseException e) {
-				e.printStackTrace();
+				logger.error("Error while Reducing Registries for Algorithm", e);
 			}
 		}
 

@@ -10,6 +10,8 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import org.primefaces.context.RequestContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import clb.business.UserRegistryService;
 import clb.business.objects.UsersystemObject;
@@ -25,6 +27,8 @@ import clb.ui.beans.pojos.UserRegisterPojo;
 @ManagedBean
 public class ClbHomeRegisterBean implements Serializable{
 
+	private final Logger logger = LoggerFactory.getLogger(ClbHomeRegisterBean.class);
+	
     private static final long serialVersionUID = 1L;
     private UserRegisterPojo user;
 
@@ -48,7 +52,6 @@ public class ClbHomeRegisterBean implements Serializable{
     private final static String USER_TOKEN_NOT_FOUND_RESULT = "Token wasnt found for User Registry!";
     private final static String USER_TOKEN_HAS_EXPIRED = "Token has expired for this User!";
     
-
     @PostConstruct
     public void init() {
         
@@ -58,7 +61,7 @@ public class ClbHomeRegisterBean implements Serializable{
             try {
                 FacesContext.getCurrentInstance().getExternalContext().redirect( "clb.xhtml" );
             } catch( IOException e ) {
-                e.printStackTrace();
+            	logger.error("Error while redirecting to clb.xhtml" , e);
             }
         }
         

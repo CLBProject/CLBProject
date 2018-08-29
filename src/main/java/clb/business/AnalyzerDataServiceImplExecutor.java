@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 
 import org.primefaces.json.JSONException;
 import org.primefaces.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import clb.business.exceptions.IlegalCommandAppException;
 import clb.business.objects.AnalyzerObject;
@@ -26,9 +28,8 @@ import clb.global.BuildingMeterParameterValues;
 
 public class AnalyzerDataServiceImplExecutor implements Runnable{
 
+	private final Logger logger = LoggerFactory.getLogger(AnalyzerDataServiceImplExecutor.class);
 	private ClbDao clbDao;
-
-
 
 	public AnalyzerDataServiceImplExecutor(ClbDao clbDao) {
 		this.clbDao = clbDao;
@@ -100,11 +101,12 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 				}
 				catch(JSONException | IlegalCommandAppException | NoSuchElementException ex){
 					ex.printStackTrace();
+					logger.error("Error on Processing Script Commands" , ex.getMessage());
 				}
 			}
 		} 
 		catch (IOException e) {
-			e.printStackTrace();
+			logger.error("Error on Accepting Connections from Script" , e.getMessage());
 		}
 
 	}
