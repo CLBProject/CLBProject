@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.mockito.asm.tree.analysis.Analyzer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
@@ -150,22 +151,22 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 		userSystemMongoRepository.save(userSystemEntity);
 		userSystemEntity.setUserid(userSystemObject.getUserid());
 	}
-	
+
 	@Override
 	public List<UsersystemObject> getAllUsers(){
 		return userSystemMongoRepository.findAll().stream().map(UsersystemObject::new).collect(Collectors.toList());
 	}
-	
+
 	@Override
 	public List<BuildingObject> getAllBuildings(){
 		return buildingsMongoRepository.findAll().stream().map(BuildingObject::new).collect(Collectors.toList());
 	}
-	
+
 	@Override
 	public List<DataLoggerObject> getAllDataLoggers() {
 		return dataLoggerMongoRepository.findAll().stream().map(DataLoggerObject::new).collect(Collectors.toList());
 	}
-	
+
 	@Override
 	public List<AnalyzerObject> getAllAnalyzers() {
 		return analyzerMongoRepository.findAll().stream().map(AnalyzerObject::new).collect(Collectors.toList());
@@ -243,15 +244,15 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	public List<AnalyzerRegistryObject> getWeekRegistriesFromAnalyzer(String analyzerId, Date firstDay, Date lastDay) {
 
 		List<AnalyzerRegistryObject> weekRegistries = new ArrayList<AnalyzerRegistryObject>();
-		
+
 		if(DateUtils.getInstance().isTheSameDay(lastDay, firstDay)) {
 			final Date nextDay = DateUtils.getInstance().getDay(firstDay,true);
 			weekRegistries.addAll(processRegistries(analyzerId, firstDay,nextDay));
 		}
-		
+
 		while(!DateUtils.getInstance().isTheSameDay(lastDay, firstDay)){
 			final Date nextDay = DateUtils.getInstance().getDay(firstDay,true);
-			
+
 			weekRegistries.addAll(processRegistries(analyzerId, firstDay,nextDay));
 
 			firstDay = nextDay;
@@ -270,7 +271,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 			final Date nextDay = DateUtils.getInstance().getDay(firstDay,true);
 			monthRegistries.addAll(processRegistries(analyzerId, firstDay,nextDay));
 		}
-		
+
 		while(!DateUtils.getInstance().isTheSameDay(lastDay, firstDay)){
 			monthRegistries.addAll(processRegistries(analyzerId, firstDay, 
 					DateUtils.getInstance().getDay(firstDay,true)));
@@ -352,6 +353,28 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
 	public void setMongoTemplate( MongoTemplate mongoTemplate ) {
 		this.mongoTemplate = mongoTemplate;
+	}
+
+	@Override
+	public Date getLatestDateForAnalyzer(String analyzerCodeName) {
+
+		AnalyzerEntity analyzer = analyzerMongoRepository.findAnalyzerByCodename(analyzerCodeName);
+
+		if(analyzer != null) {
+			DBObject dbObj = new BasicDBObject("analyzerId",analyzer.getId());
+
+			List<String> analyzersSorted = mongoTemplate.getCollectionNames().stream()
+					.filter(collname -> collname.startsWith(ANALYZER_REGISTIES_COLL_NAME))
+					.sorted((f1, f2) -> f2.compareTo(f1))
+					.collect(Collectors.toList());
+			
+
+			analyzersSorted.stream()
+				.filter( collection -> mongoTemplate.getCollection(collection).find(dbObj).count() > 0)
+				.findFirst();
+		}
+		
+		return null;
 	}
 
 

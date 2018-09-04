@@ -87,6 +87,12 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 							clbDao.saveAnalyzerRegistry( analyzerRegistry);
 							analyzerObject.addAnalyzerRegistry(analyzerRegistry.getAnalyzerId());
 						}
+						else if(command.equals("*getLatestPersistedDate*")) {
+							String analyzerCodeName = in.nextLine();
+							
+							clientSocket.getOutputStream().write(clbDao.getLatestDateForAnalyzer(analyzerCodeName).toString().getBytes());
+							clientSocket.getOutputStream().flush();
+						}
 						else if(command.equals("*exitPersistDataObject*")){
 
 							clbDao.saveAnalyzer(analyzerObject);
