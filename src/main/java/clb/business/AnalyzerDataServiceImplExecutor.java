@@ -89,8 +89,10 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 						}
 						else if(command.equals("*getLatestPersistedDate*")) {
 							String analyzerCodeName = in.nextLine();
+							Long latestDateForAnalyzer = clbDao.getLatestDateForAnalyzer(analyzerCodeName);
 							
-							clientSocket.getOutputStream().write(clbDao.getLatestDateForAnalyzer(analyzerCodeName).toString().getBytes());
+							clientSocket.getOutputStream().write(latestDateForAnalyzer.toString() != null ? 
+																latestDateForAnalyzer.toString().getBytes() : "".getBytes());
 							clientSocket.getOutputStream().flush();
 						}
 						else if(command.equals("*exitPersistDataObject*")){

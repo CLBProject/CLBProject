@@ -128,9 +128,6 @@ def processUserFtp(userftp,passwordftp):
     ftp.cwd("/")
     dirs = []
     ftp.retrlines("LIST", (dirs.append))
-
-    sock.send(bytes('*getLatestPersistedDate*\n', 'utf-8'))
-    latestPersistedDate = recv_basic()
     
     for dir in dirs[3:]:
         currentDir = dir.split(None, 8)[8]
@@ -142,6 +139,11 @@ def processUserFtp(userftp,passwordftp):
         ftp.retrlines("LIST", (data.append))
             
         index = 0
+
+        sock.send(bytes('*getLatestPersistedDate*\n', 'utf-8'))
+        sock.send(bytes('Analyzer For Building ' + currentDir + '\n', 'utf-8'))
+
+        latestPersistedDate = recv_basic()
             
         for file in data:
             #Ignore the first two files

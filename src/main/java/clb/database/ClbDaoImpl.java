@@ -9,7 +9,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.mockito.asm.tree.analysis.Analyzer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
@@ -17,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.mongodb.BasicDBObject;
 import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 
 import clb.business.objects.AnalyzerObject;
@@ -356,22 +356,28 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	}
 
 	@Override
-	public Date getLatestDateForAnalyzer(String analyzerCodeName) {
+	public Long getLatestDateForAnalyzer(String analyzerCodeName) {
 
 		AnalyzerEntity analyzer = analyzerMongoRepository.findAnalyzerByCodename(analyzerCodeName);
 
 		if(analyzer != null) {
-			DBObject dbObj = new BasicDBObject("analyzerId",analyzer.getId());
-
-			List<String> analyzersSorted = mongoTemplate.getCollectionNames().stream()
+			
+			Optional<Object> analyzerCurrentTime = mongoTemplate.getCollectionNames().stream()
 					.filter(collname -> collname.startsWith(ANALYZER_REGISTIES_COLL_NAME))
 					.sorted((f1, f2) -> f2.compareTo(f1))
-					.collect(Collectors.toList());
+					.map(collName -> 
+						mongoTemplate.getCollection(collName)
+							.find(new BasicDBObject("analyzerId",analyzer.getId()))
+							.sort(new BasicDBObject("currenttime", new Date()))
+							.one()
+					)
+					.map(dbobj -> dbobj.get("currenttime"))
+					.findFirst();	
 			
-
-			analyzersSorted.stream()
-				.filter( collection -> mongoTemplate.getCollection(collection).find(dbObj).count() > 0)
-				.findFirst();
+			if (analyzerCurrentTime.isPresent())
+				return ((Date) analyzerCurrentTime.get()).getTime();
+			else
+				return null;
 		}
 		
 		return null;

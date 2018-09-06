@@ -52,7 +52,7 @@ public interface ClbDao{
 
 	String[] getYearsAvailable();
 
-	Date getLatestDateForAnalyzer(String analyzerCodeName);
+	Long getLatestDateForAnalyzer(String analyzerCodeName);
 
 	
 
