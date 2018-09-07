@@ -361,25 +361,29 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 		AnalyzerEntity analyzer = analyzerMongoRepository.findAnalyzerByCodename(analyzerCodeName);
 
 		if(analyzer != null) {
-			
-			Optional<Object> analyzerCurrentTime = mongoTemplate.getCollectionNames().stream()
+
+			DBCursor dbObj = (DBCursor) mongoTemplate.getCollectionNames().stream()
 					.filter(collname -> collname.startsWith(ANALYZER_REGISTIES_COLL_NAME))
 					.sorted((f1, f2) -> f2.compareTo(f1))
 					.map(collName -> 
-						mongoTemplate.getCollection(collName)
-							.find(new BasicDBObject("analyzerId",analyzer.getId()))
-							.sort(new BasicDBObject("currenttime", new Date()))
-							.one()
-					)
-					.map(dbobj -> dbobj.get("currenttime"))
-					.findFirst();	
+						 mongoTemplate.getCollection(collName)
+						.find(new BasicDBObject("analyzerId",analyzer.getId()))
+					);
 			
-			if (analyzerCurrentTime.isPresent())
-				return ((Date) analyzerCurrentTime.get()).getTime();
-			else
+//			if(dbObj != null) {
+//				dbObj.sort(dbObj.get("currenttime"))
+//				( dbObj -> dbObj.get("currenttime")
+//					 .sorted((f3, f4) -> ((Date)f4).compareTo((Date)f3))
+//					 .findFirst();
+//			}
+//									
+//
+//			if (analyzerCurrentTime.isPresent())
+//				return ((Date) analyzerCurrentTime.get()).getTime();
+//			else
 				return null;
 		}
-		
+
 		return null;
 	}
 
