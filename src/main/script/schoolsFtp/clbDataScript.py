@@ -2,15 +2,16 @@ import glob
 import os
 import sys
 import codecs, csv
-from ftplib import FTP
+import ftplib
 import configparser
 import socket
 import json
-import threading
+import time
 
 FTP_HOST = 'ftp.mobinteg.org'
 SERVER_HOST = "localhost"
 PORT = 6006
+filesProcessed = []
 
 class AnalyzerRegistry:
     
@@ -122,7 +123,7 @@ def processData(line, filename):
 
 def processUserFtp(userftp,passwordftp):
 
-    ftp = FTP(FTP_HOST)
+    ftp = ftplib.FTP(FTP_HOST, timeout=100)
     ftp.login(userftp,passwordftp)
     print(ftp.getwelcome())
     ftp.cwd("/")
@@ -144,9 +145,19 @@ def processUserFtp(userftp,passwordftp):
             #Ignore the first two files
             if index > 1:
                     filename = file.split(None, 8)[-1].lstrip()
-                    #print ('Ficheiro mais recente: ', filename)
-                    #ftp.set_pasv(False)
-                    ftp.retrlines('RETR ' + filename, lambda line: processData(line, currentDir))
+                    fileInArray = filename+"_"+currentDir
+                    
+                    try:
+                        if fileInArray not in filesProcessed:
+                            ftp.voidcmd("NOOP")
+                            
+                            #if index % 20 == 0:
+                            ftp.retrlines('RETR ' + filename, lambda line: processData(line, currentDir))
+                            
+                            filesProcessed.append(fileInArray)
+                    except ftplib.all_errors as e:
+                        print(e)
+                        processUserFtp(userftp,passwordftp)
             
             index = index +1
                 
@@ -158,25 +169,7 @@ def processUserFtp(userftp,passwordftp):
     
     return;
 
-def recv_basic():
-    finalData=[]
-    
-    while True:
-        data = sock.recv(8192)
-        total_data = data.decode('utf-8').split("\nAC")
-        
-        breaking = False
-        
-        for tdata in total_data:
-            if tdata == "*end*":
-               breaking = True
-            else: 
-                finalData.append(tdata)
-            
-        if breaking == True:
-            break
 
-    return finalData
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.connect((SERVER_HOST, PORT))  

@@ -62,6 +62,7 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 							}	
 
 							clientSocket.getOutputStream().write("*endUsersInfo*".getBytes());
+							clientSocket.getOutputStream().flush();
 						}
 						//Persist Data Objects
 						else if(command.equals("*persistDataObject*")){
@@ -86,6 +87,9 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 							AnalyzerRegistryObject analyzerRegistry = JsonUtils.getInstance().toAnalyzerRegistryObject(jsonObj);
 							clbDao.saveAnalyzerRegistry( analyzerRegistry);
 							analyzerObject.addAnalyzerRegistry(analyzerRegistry.getAnalyzerId());
+							
+							clientSocket.getOutputStream().write("acknowledge*".getBytes());
+							clientSocket.getOutputStream().flush();
 						}
 						else if(command.equals("*exitPersistDataObject*")){
 
