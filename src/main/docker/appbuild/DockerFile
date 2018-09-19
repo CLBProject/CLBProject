@@ -1,6 +1,6 @@
 FROM alpine/git
 WORKDIR /app
-RUN git clone --single-branch -b PythonSchools https://github.com/CLBProject/CLBProject
+RUN git clone --single-branch -b develop https://github.com/CLBProject/CLBProject
 
 FROM maven:3.5-jdk-8-alpine
 WORKDIR /app
