@@ -119,7 +119,7 @@ def processData(line, filename, latestRegistry):
     kval1, kval2, kval3, pfsys, pfl1, pfl2, pfl3, phaseSequence, hZ, filename)
     
     #only send when date is smaller then latestRegistry
-    if latestRegistry < date :
+    if latestRegistry == '' or latestRegistry < date :
         print('Registry Persisted For: ' + filename + ' , at Date: ' + date)
         sock.send(bytes('*persistDataObject*\n', 'utf-8'))
         sock.send(bytes(json.dumps(analyzerReg.__dict__)+"\n", 'utf-8'))
