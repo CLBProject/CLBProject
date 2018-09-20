@@ -3,6 +3,7 @@ package clb.business;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,9 +95,10 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 						else if(command.equals("*getLatestPersistedDate*")) {
 							String analyzerCodeName = in.nextLine();
 							Long latestDateForAnalyzer = clbDao.getLatestDateForAnalyzer(analyzerCodeName);
-							
+
 							clientSocket.getOutputStream().write(latestDateForAnalyzer.toString() != null ? 
-																latestDateForAnalyzer.toString().getBytes() : "".getBytes());
+																(latestDateForAnalyzer.toString()+"\n").getBytes() : "\n".getBytes());
+							clientSocket.getOutputStream().write("*end*".getBytes());
 							clientSocket.getOutputStream().flush();
 						}
 						else if(command.equals("*exitPersistDataObject*")){

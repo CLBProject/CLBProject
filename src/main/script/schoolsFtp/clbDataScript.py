@@ -151,8 +151,9 @@ def processUserFtp(userftp,passwordftp):
                         if fileInArray not in filesProcessed:
                             ftp.voidcmd("NOOP")
                             
-                            #if index % 20 == 0:
-                            ftp.retrlines('RETR ' + filename, lambda line: processData(line, currentDir))
+                            if index % 5 == 0:
+                            	print(filename)
+                            	ftp.retrlines('RETR ' + filename, lambda line: processData(line, currentDir))
                             
                             filesProcessed.append(fileInArray)
                     except ftplib.all_errors as e:

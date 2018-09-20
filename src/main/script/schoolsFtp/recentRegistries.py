@@ -2,15 +2,16 @@ import glob
 import os
 import sys
 import codecs, csv
-from ftplib import FTP
+import ftplib
 import configparser
 import socket
 import json
-import threading
+import time
 
 FTP_HOST = 'ftp.mobinteg.org'
 SERVER_HOST = "localhost"
 PORT = 6006
+filesProcessed = []
 
 class AnalyzerRegistry:
     
@@ -63,7 +64,7 @@ class AnalyzerRegistry:
     def toJson(self):
         return self.kwl1
 
-def processData(line, filename):
+def processData(line, filename, latestRegistry):
     
     c = line.split(";")
         
@@ -117,12 +118,15 @@ def processData(line, filename):
     al1, al2, al3, kwsys, kwl1, kwl2, kwl3, kvarsys, kvarl1, kvarl2, kvarl3, kvasys, 
     kval1, kval2, kval3, pfsys, pfl1, pfl2, pfl3, phaseSequence, hZ, filename)
     
-    sock.send(bytes('*persistDataObject*\n', 'utf-8'))
-    sock.send(bytes(json.dumps(analyzerReg.__dict__)+"\n", 'utf-8'))
+    #only send when date is smaller then latestRegistry
+    if latestRegistry < date :
+        print('Registry Persisted For: ' + filename + ' , at Date: ' + date)
+        sock.send(bytes('*persistDataObject*\n', 'utf-8'))
+        sock.send(bytes(json.dumps(analyzerReg.__dict__)+"\n", 'utf-8'))
 
 def processUserFtp(userftp,passwordftp):
 
-    ftp = FTP(FTP_HOST)
+    ftp = ftplib.FTP(FTP_HOST, timeout=100)
     ftp.login(userftp,passwordftp)
     print(ftp.getwelcome())
     ftp.cwd("/")
@@ -139,19 +143,31 @@ def processUserFtp(userftp,passwordftp):
         ftp.retrlines("LIST", (data.append))
             
         index = 0
-
+        
         sock.send(bytes('*getLatestPersistedDate*\n', 'utf-8'))
         sock.send(bytes('Analyzer For Building ' + currentDir + '\n', 'utf-8'))
 
         latestPersistedDate = recv_basic()
-            
+        #print('Latest Date: ' + latestPersistedDate)
+        
         for file in data:
             #Ignore the first two files
             if index > 1:
                     filename = file.split(None, 8)[-1].lstrip()
-                    #print ('Ficheiro mais recente: ', filename)
-                    #ftp.set_pasv(False)
-                    ftp.retrlines('RETR ' + filename, lambda line: processData(line, currentDir))
+                    fileInArray = filename+"_"+currentDir
+                    
+                    try:
+                        if fileInArray not in filesProcessed:
+                            ftp.voidcmd("NOOP")
+                            
+                            #if index % 5 == 0:
+                            #print(filename)
+                            ftp.retrlines('RETR ' + filename, lambda line: processData(line, currentDir, latestPersistedDate))
+                            
+                            filesProcessed.append(fileInArray)
+                    except ftplib.all_errors as e:
+                        print(e)
+                        processUserFtp(userftp,passwordftp)
             
             index = index +1
                 
@@ -160,15 +176,15 @@ def processUserFtp(userftp,passwordftp):
     ftp.quit()
 
     sock.send(bytes("*exitPersistDataObject*\n", 'utf-8'))
-
+    
     return;
 
 def recv_basic():
-    finalData=[]
+    finalData = []
     
     while True:
         data = sock.recv(8192)
-        total_data = data.decode('utf-8').split("\nAC")
+        total_data = data.decode('utf-8').split("\n")
         
         breaking = False
         
@@ -181,7 +197,7 @@ def recv_basic():
         if breaking == True:
             break
 
-    return finalData
+    return finalData[0]
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.connect((SERVER_HOST, PORT))  
@@ -192,5 +208,3 @@ config.read('ftp_users.properties')
 for each_section in config.sections():
     for (each_key, each_val) in config.items(each_section):
         processUserFtp(each_key, each_val)
-
-
