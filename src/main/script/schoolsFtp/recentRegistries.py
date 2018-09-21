@@ -158,7 +158,7 @@ def processUserFtp(userftp,passwordftp):
                     
                     try:
                         if fileInArray not in filesProcessed:
-                            ftp.voidcmd("NOOP")
+                            ftp.sendcmd("NOOP")
                             
                             #if index % 5 == 0:
                             #print(filename)

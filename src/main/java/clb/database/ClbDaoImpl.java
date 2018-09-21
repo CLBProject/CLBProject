@@ -3,6 +3,7 @@ package clb.database;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -365,12 +366,18 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
 			mongoTemplate.getCollectionNames().stream()
 					.filter(collname -> collname.startsWith(ANALYZER_REGISTIES_COLL_NAME))
-					.sorted((f1, f2) -> f2.compareTo(f1))
 					.forEach(collName -> 
 						 mongoTemplate.getCollection(collName).find(new BasicDBObject("analyzerId",analyzer.getId()))
-								 .forEach(result -> listTimes.add((Date)result.get( "currenttime" ))));
+								 .forEach(result -> {
+									 Object currentTime = result.get( "currenttime" );
+									 
+									 if(currentTime != null) {
+										 listTimes.add((Date)currentTime);
+									 }}));
 			
-			return listTimes.stream().sorted((f1, f2) -> f2.compareTo(f1)).findFirst().orElse(null).getTime();
+			Collections.sort(listTimes);
+			
+			return listTimes.size() > 0 ? listTimes.get(listTimes.size()-1).getTime() : null;
 		}
 
 		return null;
