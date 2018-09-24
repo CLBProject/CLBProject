@@ -54,6 +54,8 @@ public interface ClbDao{
 
 	Long getLatestDateForAnalyzer(String analyzerCodeName);
 
+	BuildingObject getBuildingByName(String buildingName);
+
 	
 
 }

@@ -383,6 +383,17 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 		return null;
 	}
 
+	@Override
+	public BuildingObject getBuildingByName(String buildingName) {
+		BuildingEntity bEntity = buildingsMongoRepository.getBuildingByName(buildingName);
+		
+		if(bEntity != null) {
+			return new BuildingObject(bEntity);
+		}
+		
+		return null;
+	}
+
 
 
 }

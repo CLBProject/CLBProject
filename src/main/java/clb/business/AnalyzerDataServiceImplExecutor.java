@@ -3,9 +3,7 @@ package clb.business;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -44,8 +42,8 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 				Socket clientSocket = s.accept();
 				try(Scanner in = new Scanner(clientSocket.getInputStream())){
 
-					Map<String,BuildingObject> buildingsNames = new HashMap<String,BuildingObject>();
 					AnalyzerObject analyzerObject = null;
+					BuildingObject buildingObject = null;
 
 					boolean exit = false;
 					while(clientSocket.isConnected() && !exit) {
@@ -76,16 +74,15 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 
 							String buildingName = jsonObj.getString("buildingName");
 
-							BuildingObject buildingObject = buildingsNames.get(buildingName);
+							if(buildingObject == null || !buildingObject.getName().equals(buildingName)) {
 
-							if(buildingObject == null) {
-
+								buildingObject = clbDao.getBuildingByName(buildingName);
+								
 								analyzerObject = new AnalyzerObject();
 								analyzerObject.setCodeName("Analyzer For Building " + buildingName);
 								clbDao.saveAnalyzer(analyzerObject);
 
 								buildingObject = saveBuildingStructure(buildingName,analyzerObject);
-								buildingsNames.put(buildingName,buildingObject);
 							}
 
 							jsonObj.put("analyzerId", analyzerObject.getId());
@@ -102,7 +99,7 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 
 							String analyzerCodeName = in.nextLine();
 							Long latestDateForAnalyzer = clbDao.getLatestDateForAnalyzer(analyzerCodeName);
-
+							
 							clientSocket.getOutputStream().write(latestDateForAnalyzer != null ? 
 									(latestDateForAnalyzer.toString()+"\n").getBytes() : "\n".getBytes());
 							clientSocket.getOutputStream().write(AnalyzerCommand.END.getValue().getBytes());
@@ -114,7 +111,7 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 							clbDao.saveAnalyzer(analyzerObject);
 
 							analyzerObject = null;
-							buildingsNames = null;
+							buildingObject = null;
 
 							exit = true;
 							break;
