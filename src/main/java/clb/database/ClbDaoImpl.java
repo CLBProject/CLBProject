@@ -361,22 +361,22 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 		AnalyzerEntity analyzer = analyzerMongoRepository.findAnalyzerByCodename(analyzerCodeName);
 
 		if(analyzer != null) {
-			
+
 			List<Date> listTimes = new ArrayList<Date>();
 
 			mongoTemplate.getCollectionNames().stream()
-					.filter(collname -> collname.startsWith(ANALYZER_REGISTIES_COLL_NAME))
-					.forEach(collName -> 
-						 mongoTemplate.getCollection(collName).find(new BasicDBObject("analyzerId",analyzer.getId()))
-								 .forEach(result -> {
-									 Object currentTime = result.get( "currenttime" );
-									 
-									 if(currentTime != null) {
-										 listTimes.add((Date)currentTime);
-									 }}));
-			
+			.filter(collname -> collname.startsWith(ANALYZER_REGISTIES_COLL_NAME))
+			.forEach(collName -> 
+			mongoTemplate.getCollection(collName).find(new BasicDBObject("analyzerId",analyzer.getId()))
+			.forEach(result -> {
+				Object currentTime = result.get( "currenttime" );
+
+				if(currentTime != null) {
+					listTimes.add((Date)currentTime);
+				}}));
+
 			Collections.sort(listTimes);
-			
+
 			return listTimes.size() > 0 ? listTimes.get(listTimes.size()-1).getTime() : null;
 		}
 
@@ -386,11 +386,22 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	@Override
 	public BuildingObject getBuildingByName(String buildingName) {
 		BuildingEntity bEntity = buildingsMongoRepository.getBuildingByName(buildingName);
-		
+
 		if(bEntity != null) {
 			return new BuildingObject(bEntity);
 		}
-		
+
+		return null;
+	}
+
+	@Override
+	public AnalyzerObject getAnalyzerByCodeName(String analyzerCodeName) {
+		AnalyzerEntity aEntity = analyzerMongoRepository.findAnalyzerByCodename(analyzerCodeName);
+
+		if(aEntity != null) {
+			return new AnalyzerObject(aEntity);
+		}
+
 		return null;
 	}
 

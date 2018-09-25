@@ -56,6 +56,8 @@ public interface ClbDao{
 
 	BuildingObject getBuildingByName(String buildingName);
 
+	AnalyzerObject getAnalyzerByCodeName(String analyzerCodeName);
+
 	
 
 }

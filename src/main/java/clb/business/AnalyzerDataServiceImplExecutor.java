@@ -54,7 +54,7 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 
 						switch(command) {
 						case GET_USERS_INFO:
-							
+
 							//Send Users
 							List<JSONObject> jsonToSend = clbDao.getAllUsers().stream()
 							.map(UsersystemObject::toJson)
@@ -68,21 +68,25 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 							clientSocket.getOutputStream().write(AnalyzerCommand.END_USERS_INFO.getValue().getBytes());
 							clientSocket.getOutputStream().flush();
 							break;
-							
+
 						case PERSIST_DATA_OBJECT:
 							JSONObject jsonObj = new JSONObject(in.nextLine());
 
 							String buildingName = jsonObj.getString("buildingName");
 
 							if(buildingObject == null || !buildingObject.getName().equals(buildingName)) {
-
-								buildingObject = clbDao.getBuildingByName(buildingName);
 								
-								analyzerObject = new AnalyzerObject();
-								analyzerObject.setCodeName("Analyzer For Building " + buildingName);
-								clbDao.saveAnalyzer(analyzerObject);
+								String analyzerCodeName = "Analyzer For Building " + buildingName;
+								
+								buildingObject = clbDao.getBuildingByName(buildingName);
+								analyzerObject = clbDao.getAnalyzerByCodeName(analyzerCodeName);
 
-								buildingObject = saveBuildingStructure(buildingName,analyzerObject);
+								if(buildingObject == null) {
+									buildingObject = saveBuildingStructure(buildingName,analyzerObject);
+									analyzerObject = new AnalyzerObject();
+									analyzerObject.setCodeName(analyzerCodeName);
+									clbDao.saveAnalyzer(analyzerObject);
+								}
 							}
 
 							jsonObj.put("analyzerId", analyzerObject.getId());
@@ -94,18 +98,20 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 							clientSocket.getOutputStream().write(AnalyzerCommand.ACKNOWLEDGE.getValue().getBytes());
 							clientSocket.getOutputStream().flush();
 							break;
-							
+
 						case GET_LATEST_PERSISTED_DATE:
 
 							String analyzerCodeName = in.nextLine();
 							Long latestDateForAnalyzer = clbDao.getLatestDateForAnalyzer(analyzerCodeName);
+
+							System.out.println(latestDateForAnalyzer);
 							
 							clientSocket.getOutputStream().write(latestDateForAnalyzer != null ? 
 									(latestDateForAnalyzer.toString()+"\n").getBytes() : "\n".getBytes());
 							clientSocket.getOutputStream().write(AnalyzerCommand.END.getValue().getBytes());
 							clientSocket.getOutputStream().flush();
 							break;
-							
+
 						case EXIT_PERSIST_DATA_OBJECT:
 
 							clbDao.saveAnalyzer(analyzerObject);
@@ -115,7 +121,7 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 
 							exit = true;
 							break;
-							
+
 						default: throw new IlegalCommandAppException();
 						}
 					}

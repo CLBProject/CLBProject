@@ -120,7 +120,7 @@ def processData(line, filename, latestRegistry):
     
     #only send when date is smaller then latestRegistry
     if latestRegistry == '' or latestRegistry < date :
-        print('Registry Persisted For: ' + filename + ' , at Date: ' + date)
+        print('Registry Persisted For: ' + filename + ' , at Date: ' + date + " , with latestRegistry " + latestRegistry)
         sock.send(bytes('*persistDataObject*\n', 'utf-8'))
         sock.send(bytes(json.dumps(analyzerReg.__dict__)+"\n", 'utf-8'))
 
