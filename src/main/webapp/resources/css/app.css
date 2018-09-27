@@ -52,8 +52,8 @@ form {
 }
 
 .noRegClass {
-	color: #0A122A !important;
-	font-size: 22px ! important;
+	color: #CED8F6 !important;
+	font-size: 28px ! important;
 	font-family: Arial, Helvetica, sans-serif;
 	font-weight: bold;
 }
@@ -300,11 +300,12 @@ form {
 .analysisChartCSS {
 	font-size: 12px;
 	width: 100% !important;
-	height: 52vh !important;
+	height: 65vh !important;
 }
 
 .lastAnalysisDiv {
 	height: 25vh !important;
+	background-color: #0A122A !important;
 }
 
 .selectOneMenuAnalysis.ui-selectonemenu {

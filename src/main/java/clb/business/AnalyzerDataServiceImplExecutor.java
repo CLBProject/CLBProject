@@ -39,8 +39,7 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 
 		try(ServerSocket s = new ServerSocket(6006)){
 			while(true) {
-				Socket clientSocket = s.accept();
-				try(Scanner in = new Scanner(clientSocket.getInputStream())){
+				try(Socket clientSocket = s.accept(); Scanner in = new Scanner(clientSocket.getInputStream())){
 
 					AnalyzerObject analyzerObject = null;
 					BuildingObject buildingObject = null;
@@ -82,10 +81,10 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 								analyzerObject = clbDao.getAnalyzerByCodeName(analyzerCodeName);
 
 								if(buildingObject == null) {
-									buildingObject = saveBuildingStructure(buildingName,analyzerObject);
 									analyzerObject = new AnalyzerObject();
 									analyzerObject.setCodeName(analyzerCodeName);
 									clbDao.saveAnalyzer(analyzerObject);
+									buildingObject = saveBuildingStructure(buildingName,analyzerObject);
 								}
 							}
 
@@ -103,8 +102,6 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 
 							String analyzerCodeName = in.nextLine();
 							Long latestDateForAnalyzer = clbDao.getLatestDateForAnalyzer(analyzerCodeName);
-
-							System.out.println(latestDateForAnalyzer);
 							
 							clientSocket.getOutputStream().write(latestDateForAnalyzer != null ? 
 									(latestDateForAnalyzer.toString()+"\n").getBytes() : "\n".getBytes());
@@ -133,6 +130,7 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 			}
 		} 
 		catch (IOException e) {
+			e.printStackTrace();
 			logger.error("Error on Accepting Connections from Script" , e.getMessage());
 		}
 

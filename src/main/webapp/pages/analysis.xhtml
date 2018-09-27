@@ -118,7 +118,7 @@
 										styleClass="timeFrame">
 										<p:ajax event="dateSelect"
 											listener="#{analysisBean.analysisDayCalendarSelect}"
-											update=":analysisForm"></p:ajax>
+											update="analysisForm"></p:ajax>
 									</p:calendar>
 									<p:spacer width="40" height="1" />
 									<p:outputLabel value="View:" styleClass="analysisLabels"
@@ -173,34 +173,31 @@
 											itemLabel="#{analysisScale.label}" />
 									</p:selectOneMenu>
 								</p:outputPanel>
-							</div> <c:choose>
-								<c:when
-									test="#{analysisBean.analysisDayPojo.lineModel.series[0].data.size() > 0}">
-									<p:chart styleClass="analysisChartCSS" id="chartDayId"
-										responsive="true" widgetVar="chartDayId"
-										model="#{analysisBean.analysisDayPojo.lineModel}" type="line" />
-									<br />
-									<br />
-									<div align="center" class="analaysisDateCss">
-										<p:panel styleClass="timeAnalysisPanel">
-											<p:outputLabel styleClass="timeAnalysis"
-												value="Time Analysis " for="allowTimeComp"></p:outputLabel>
-											<p:spacer width="2" />
-											<p:selectBooleanCheckbox widgetVar="allowTimeComp"
-												id="allowTimeComp" label="Time Analysis"
-												value="#{analysisBean.analysisDayPojo.nextAndPreviousSelected}">
-												<p:ajax update="@form"
-													listener="#{analysisBean.updatePreviousAndNextSeries}" />
-											</p:selectBooleanCheckbox>
-										</p:panel>
-									</div>
-								</c:when>
-								<c:otherwise>
-									<div>
-										<h2 class="noRegClass">No Data to Display for this Date!</h2>
-									</div>
-								</c:otherwise>
-							</c:choose>
+							</div> <p:outputPanel
+								rendered="#{analysisBean.analysisDayPojo.lineModel.series[0].data.size() gt 0}">
+								<p:chart styleClass="analysisChartCSS" id="chartDayId"
+									responsive="true" widgetVar="chartDayId"
+									model="#{analysisBean.analysisDayPojo.lineModel}" type="line" />
+								<br />
+								<br />
+								<div align="center" class="analaysisDateCss">
+									<p:panel styleClass="timeAnalysisPanel">
+										<p:outputLabel styleClass="timeAnalysis"
+											value="Time Analysis " for="allowTimeComp"></p:outputLabel>
+										<p:spacer width="2" />
+										<p:selectBooleanCheckbox widgetVar="allowTimeComp"
+											id="allowTimeComp" label="Time Analysis"
+											value="#{analysisBean.analysisDayPojo.nextAndPreviousSelected}">
+											<p:ajax update="@form"
+												listener="#{analysisBean.updatePreviousAndNextSeries}" />
+										</p:selectBooleanCheckbox>
+									</p:panel>
+								</div>
+							</p:outputPanel> 
+							<p:outputPanel rendered="#{analysisBean.analysisDayPojo.lineModel.series[0].data.size() lt 1}">
+								<h2 class="noRegClass">No Data to Display for this Date!</h2>
+							</p:outputPanel>
+
 						</td>
 					</tr>
 					<tr>
@@ -218,14 +215,14 @@
 										</c:when>
 										<c:otherwise>
 											<b><p:outputLabel styleClass="analysisPanelTitle"
-												value="#{analysisBean.buildingSelected.name}"></p:outputLabel></b>
+													value="#{analysisBean.buildingSelected.name}"></p:outputLabel></b>
 											<hr />
 											<c:if test="#{analysisBean.buildingSelected.imgPath}">
-											<p:graphicImage width="150px"
-												styleClass="buildingImgAnalysis"
-												value="#{request.contextPath}/../resources/images/buildings/#{analysisBean.buildingSelected.imgPath}" />
-											<br />
-											<br/>
+												<p:graphicImage width="150px"
+													styleClass="buildingImgAnalysis"
+													value="#{request.contextPath}/../resources/images/buildings/#{analysisBean.buildingSelected.imgPath}" />
+												<br />
+												<br />
 											</c:if>
 											<p:commandButton value="Change"
 												oncomplete="PF('selectionPopupBuilding').show()" ajax="true"
@@ -233,8 +230,7 @@
 										</c:otherwise>
 									</c:choose>
 								</div>
-							</p:panel> <p:spacer height="5" /> 
-							<p:panel style="width:200px !important">
+							</p:panel> <p:spacer height="5" /> <p:panel style="width:200px !important">
 								<div align="center">
 									<c:choose>
 										<c:when
