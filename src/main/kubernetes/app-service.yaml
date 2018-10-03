@@ -1,0 +1,12 @@
+apiVersion: latest
+kind: Service
+metadata:
+  name: app-service
+  labels:
+    run: app-pod
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    run: app-deploy

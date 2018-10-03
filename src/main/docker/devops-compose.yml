@@ -61,6 +61,18 @@ services:
       environment:
        - POSTGRES_USER=sonar
        - POSTGRES_PASSWORD=sonar
+  ftp:
+        image: stilliard/pure-ftpd:latest
+        deploy:
+          replicas: 1
+          mode: replicated
+          resources:
+            limits:
+              cpus: "0.3"
+        ports:
+          - "22:22"
+        networks:
+          - overlay
 networks:
   overlay:
 

@@ -1,0 +1,28 @@
+apiVersion: latest
+kind: Deployment
+metadata:
+  name: app-deploy
+spec:
+  selector:
+    matchLabels:
+      run: app-deploy
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        run: app-deploy
+    spec:
+      containers:
+      - name: mongoDb
+        image: tutum/mongodb
+        ports:
+          - containerPort: 27017
+        env:
+          - name: dbEnvironment
+            MONGODB_USER: "admin"
+            MONGODB_PASS: "123456"
+            MONGODB_DATABASE: "clb"
+      - name: clbapp
+        image: clbproject/clbapp
+        ports:
+          - containerPort: 8080
