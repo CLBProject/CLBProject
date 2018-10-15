@@ -29,7 +29,7 @@ kubectl exec mongod-0 -c mongod-container -- mongo --eval 'rs.status();'
 echo "Creating user: 'admin'"
 kubectl exec mongod-0 -c mongod-container -- mongo --eval 'db.getSiblingDB("admin").createUser({user:"admin",pwd:"'"${1}"'",roles:[{role:"root",db:"admin"}]});'
 echo "User 'admin' created! Creating user for clb database..."
-kubectl exec mongod-0 -c mongod-container -- mongo --eval 'use clb;db.auth("admin","'"${1}"'");db.getSiblingDB("clb").createUser({user:"admin",pwd:"'"${1}"'",roles:[{role:"root",db:"admin"}]});'
+kubectl exec mongod-0 -c mongod-container -- mongo admin -u admin -p "123456" --eval 'db.getSiblingDB("clb").createUser({user:"admin",pwd:"'"${1}"'",roles:[{role:"root",db:"admin"}]});'
 echo "User Created on clb database!"
 echo
 sleep 40

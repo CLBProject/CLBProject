@@ -46,7 +46,6 @@ spec:
             defaultMode: 256
       containers:
         - name: mongod-container
-          #image: pkdone/mongo-ent:3.4
           image: mongo 
           env:
           - name: MONGO_USER
@@ -84,6 +83,9 @@ spec:
               mountPath: /etc/secrets-volume
             - name: mongodb-persistent-storage-claim
               mountPath: /data/db
+        
+        - name: apprun
+          image: clbproject/clbapp:latest 
   volumeClaimTemplates:
   - metadata:
       name: mongodb-persistent-storage-claim
