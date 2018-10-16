@@ -19,6 +19,9 @@ metadata:
 spec:
   serviceName: mongodb-service
   replicas: 3
+  ports:
+  - port: 8080
+    protocol: TCP
   template:
     metadata:
       labels:
@@ -85,7 +88,9 @@ spec:
               mountPath: /data/db
         
         - name: apprun
-          image: clbproject/clbapp:latest 
+          image: clbproject/clbapp:latest
+          ports:
+          - containerPort: 8080
   volumeClaimTemplates:
   - metadata:
       name: mongodb-persistent-storage-claim
