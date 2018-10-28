@@ -1,46 +1,33 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: mongodb-service
-  labels:
-    name: mongo
-spec:
-  ports:
-  - port: 27017
-    targetPort: 27017
-  clusterIP: None
-  selector:
-    role: mongo
----
 apiVersion: apps/v1beta1
 kind: StatefulSet
 metadata:
-  name: mongod
+  name: apprun-app
 spec:
-  serviceName: mongodb-service
-  replicas: 3
+  serviceName: apprun-app
+  replicas: 2
   ports:
   - port: 8080
     protocol: TCP
   template:
     metadata:
       labels:
-        role: mongo
+        role: mongod
         environment: test
         replicaset: MainRepSet
+        app: apprun-service
     spec:
       affinity:
         podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: replicaset
-                  operator: In
-                  values:
-                  - MainRepSet
-              topologyKey: kubernetes.io/hostname
+           preferredDuringSchedulingIgnoredDuringExecution:
+           - weight: 100
+             podAffinityTerm:
+               labelSelector:
+                 matchExpressions:
+                 - key: replicaset
+                   operator: In
+                   values:
+                   - MainRepSet
+               topologyKey: kubernetes.io/hostname
       terminationGracePeriodSeconds: 10
       volumes:
         - name: secrets-volume
@@ -49,12 +36,12 @@ spec:
             defaultMode: 256
       containers:
         - name: mongod-container
-          image: mongo 
+          image: mongo
           env:
           - name: MONGO_USER
             value: "admin"
           - name: MONGO_PASSWORD
-            value: "123456"
+            value: "1234567"
           - name: MONGO_DATABASE
             value: "clb"
           command:
@@ -86,7 +73,6 @@ spec:
               mountPath: /etc/secrets-volume
             - name: mongodb-persistent-storage-claim
               mountPath: /data/db
-        
         - name: apprun
           image: clbproject/clbapp:latest
           ports:
@@ -101,3 +87,31 @@ spec:
       resources:
         requests:
           storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apprun-svc
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  selector:
+    app: apprun-service
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: apprun-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: \"false\"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        backend:
+          serviceName: apprun-svc
+          servicePort: 80
