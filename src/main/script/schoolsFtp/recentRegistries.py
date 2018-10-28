@@ -13,11 +13,12 @@ SERVER_HOST = "localhost"
 PORT = 6006
 filesProcessed = []
 
+
 class AnalyzerRegistry:
     
-    def __init__(self, recortType,productType, itemSn, itemLabel, comPort, modBusId,
+    def __init__(self, recortType, productType, itemSn, itemLabel, comPort, modBusId,
         date, time, kwh, kWhNeg, vlnsys, vl1n, vl2n, vl3n, vllsys, vl1l2, vl2l3, vl3l1,
-        al1, al2, al3, kwsys, kwl1, kwl2, kwl3, kvarsys, kvarl1, kvarl2, kvarl3, kvasys, 
+        al1, al2, al3, kwsys, kwl1, kwl2, kwl3, kvarsys, kvarl1, kvarl2, kvarl3, kvasys,
         kval1, kval2, kval3, pfsys, pfl1, pfl2, pfl3, phaseSequence, hZ, buildingName):
         
         self.recortType = recortType
@@ -64,6 +65,7 @@ class AnalyzerRegistry:
     def toJson(self):
         return self.kwl1
 
+
 def processData(line, filename, latestRegistry):
     
     c = line.split(";")
@@ -72,7 +74,6 @@ def processData(line, filename, latestRegistry):
         
     if recortType != 'AC' or len(c) < 39:
         return
-        
         
     productType = c[1]
     itemSn = c[2]
@@ -113,21 +114,22 @@ def processData(line, filename, latestRegistry):
     phaseSequence = c[37]
     hZ = c[38]
         
-    analyzerReg = AnalyzerRegistry(recortType,productType, itemSn, itemLabel, comPort, modBusId,
+    analyzerReg = AnalyzerRegistry(recortType, productType, itemSn, itemLabel, comPort, modBusId,
     date, time, kwh, kWhNeg, vlnsys, vl1n, vl2n, vl3n, vllsys, vl1l2, vl2l3, vl3l1,
-    al1, al2, al3, kwsys, kwl1, kwl2, kwl3, kvarsys, kvarl1, kvarl2, kvarl3, kvasys, 
+    al1, al2, al3, kwsys, kwl1, kwl2, kwl3, kvarsys, kvarl1, kvarl2, kvarl3, kvasys,
     kval1, kval2, kval3, pfsys, pfl1, pfl2, pfl3, phaseSequence, hZ, filename)
     
-    #only send when date is smaller then latestRegistry
+    # only send when date is smaller then latestRegistry
     if latestRegistry == '' or latestRegistry < date :
         print('Registry Persisted For: ' + filename + ' , at Date: ' + date + " , with latestRegistry " + latestRegistry)
         sock.send(bytes('*persistDataObject*\n', 'utf-8'))
-        sock.send(bytes(json.dumps(analyzerReg.__dict__)+"\n", 'utf-8'))
+        sock.send(bytes(json.dumps(analyzerReg.__dict__) + "\n", 'utf-8'))
 
-def processUserFtp(userftp,passwordftp):
+
+def processUserFtp(userftp, passwordftp):
 
     ftp = ftplib.FTP(FTP_HOST, timeout=100)
-    ftp.login(userftp,passwordftp)
+    ftp.login(userftp, passwordftp)
     print(ftp.getwelcome())
     ftp.cwd("/")
     dirs = []
@@ -137,7 +139,7 @@ def processUserFtp(userftp,passwordftp):
         currentDir = dir.split(None, 8)[8]
         ftp.cwd(currentDir)
         print('Visiting Dir: ', currentDir)
-        #cria lista com todos o ficheiros da pasta e depois escolher o mais recent
+        # cria lista com todos o ficheiros da pasta e depois escolher o mais recent
         data = []
           
         ftp.retrlines("LIST", (data.append))
@@ -148,28 +150,28 @@ def processUserFtp(userftp,passwordftp):
         sock.send(bytes('Analyzer For Building ' + currentDir + '\n', 'utf-8'))
 
         latestPersistedDate = recv_basic()
-        #print('Latest Date: ' + latestPersistedDate)
+        # print('Latest Date: ' + latestPersistedDate)
         
         for file in data:
-            #Ignore the first two files
+            # Ignore the first two files
             if index > 1:
                     filename = file.split(None, 8)[-1].lstrip()
-                    fileInArray = filename+"_"+currentDir
+                    fileInArray = filename + "_" + currentDir
                     
                     try:
                         if fileInArray not in filesProcessed:
                             ftp.sendcmd("NOOP")
                             
-                            #if index % 5 == 0:
-                            #print(filename)
+                            # if index % 5 == 0:
+                            #print('Downloading File: ' + filename)
                             ftp.retrlines('RETR ' + filename, lambda line: processData(line, currentDir, latestPersistedDate))
                             
                             filesProcessed.append(fileInArray)
                     except ftplib.all_errors as e:
                         print(e)
-                        processUserFtp(userftp,passwordftp)
+                        processUserFtp(userftp, passwordftp)
             
-            index = index +1
+            index = index + 1
                 
         ftp.cwd("..")
 
@@ -178,6 +180,7 @@ def processUserFtp(userftp,passwordftp):
     sock.send(bytes("*exitPersistDataObject*\n", 'utf-8'))
     
     return;
+
 
 def recv_basic():
     finalData = []
@@ -198,6 +201,7 @@ def recv_basic():
             break
 
     return finalData[0]
+
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.connect((SERVER_HOST, PORT))  
