@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * 
  */
 @Document(collection="Users")
-public class UsersystemEntity implements ClbEntity, Serializable {
+public class UsersystemEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
@@ -36,6 +36,8 @@ public class UsersystemEntity implements ClbEntity, Serializable {
 	private Date lastSentEmail;
 	
 	private boolean enabled;
+	
+	private String ftpPassword;
 	
 	@DBRef
 	private List<BuildingEntity> buildings;
@@ -130,6 +132,14 @@ public class UsersystemEntity implements ClbEntity, Serializable {
     public void setLastSentEmail( Date lastSentEmail ) {
         this.lastSentEmail = lastSentEmail;
     }
+
+	public String getFtpPassword() {
+		return ftpPassword;
+	}
+
+	public void setFtpPassword(String ftpPassword) {
+		this.ftpPassword = ftpPassword;
+	}
 	
     
 }

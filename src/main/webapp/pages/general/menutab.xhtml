@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="../template/ui.xhtml">
+	<ui:define name="body">
+		<h:form id="bannerForm">
+			<table width="100%" class="homeMainDivBannerClass" cellpadding="5">
+				<tr>
+					<td align="left" valign="middle"></td>
+					<td align="right" valign="top"><p:spacer width="25" /> <p:graphicImage
+							value="#{request.contextPath}/../resources/images/dashboard.png"></p:graphicImage>
+						<p:spacer width="2" /> <p:commandLink value="Dashboard"
+							styleClass="menuLink" ajax="false" type="submit"
+							action="#{redirectBean.redirectTo('clb.xhtml?faces-redirect=true')}"></p:commandLink>
+						<p:spacer width="25" /> <p:graphicImage
+							value="#{request.contextPath}/../resources/images/graph.png"></p:graphicImage>
+						<p:spacer width="2" /> <p:commandLink value="Analysis"
+							styleClass="menuLink" ajax="false" type="submit"
+							action="#{redirectBean.redirectTo('analysis.xhtml?faces-redirect=true')}"></p:commandLink>
+						<p:spacer width="25" /> <p:graphicImage
+							value="#{request.contextPath}/../resources/images/maintenance.png"></p:graphicImage>
+						<p:spacer width="2" /> <p:commandLink value="Building Management"
+							styleClass="menuLink"></p:commandLink> <p:spacer width="25" /> <p:graphicImage
+							value="#{request.contextPath}/../resources/images/forum.png"></p:graphicImage>
+						<p:spacer width="2" /> <p:commandLink value="Forum"
+							styleClass="menuLink"></p:commandLink> <p:spacer width="25" /> <p:graphicImage
+							value="#{request.contextPath}/../resources/images/account.png"></p:graphicImage>
+						<p:spacer width="2" /> <p:commandLink value="Account"
+							styleClass="menuLink"></p:commandLink> <p:spacer width="15" /> <p:spacer
+							width="1" height="23" styleClass="menuSeparator" /></td>
+					<td align="center" valign="top" width="110px"><h:panelGrid
+							columns="1" styleClass="homeMainDivBannerClass">
+							<p:column>
+								<p:commandButton styleClass="signButton" value="Log Out"
+									action="#{clbHomeLoginBean.logout}"></p:commandButton>
+							</p:column>
+						</h:panelGrid></td>
+				</tr>
+			</table>
+		</h:form>
+	</ui:define>
+</ui:composition>

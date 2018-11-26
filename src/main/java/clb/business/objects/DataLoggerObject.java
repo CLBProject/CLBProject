@@ -10,10 +10,10 @@ public class DataLoggerObject
 {
 
     private String dataloggerid;
+    
+    private String code;
 
     private String name;
-    
-    private String ftpAddress;
     
     private List<AnalyzerObject> analyzers;
 
@@ -24,7 +24,6 @@ public class DataLoggerObject
     public DataLoggerObject( DataLoggerEntity dataLogger ) {
         this.dataloggerid = dataLogger.getDataloggerid();
         this.name = dataLogger.getName();
-        this.ftpAddress = dataLogger.getFtpaddress();
         this.analyzers = dataLogger.getAnalyzers() != null ? 
         		dataLogger.getAnalyzers().stream().map(AnalyzerObject::new).collect(Collectors.toList()) : null;
     }
@@ -32,7 +31,7 @@ public class DataLoggerObject
     public DataLoggerEntity toEntity() {
         DataLoggerEntity dataLogEntity = new DataLoggerEntity();
         dataLogEntity.setDataloggerid( this.dataloggerid );
-        dataLogEntity.setFtpaddress(this.ftpAddress);
+        dataLogEntity.setName( this.name );
         dataLogEntity.setAnalyzers( this.analyzers != null ? 
         		this.analyzers.stream().map(AnalyzerObject::toEntity).collect(Collectors.toList()) : null);
         return dataLogEntity;
@@ -46,33 +45,21 @@ public class DataLoggerObject
     	analyzers.add(analyzerObject);
     }
 
-
     public String getDataloggerid() {
         return dataloggerid;
     }
-
 
     public void setDataloggerid( String dataloggerid ) {
         this.dataloggerid = dataloggerid;
     }
 
-
     public String getName() {
         return name;
     }
 
-
     public void setName( String name ) {
         this.name = name;
     }
-
-	public String getFtpAddress() {
-		return ftpAddress;
-	}
-
-	public void setFtpAddress(String ftpAddress) {
-		this.ftpAddress = ftpAddress;
-	}
 
 	public List<AnalyzerObject> getAnalyzers() {
 		return analyzers;
@@ -80,6 +67,14 @@ public class DataLoggerObject
 
 	public void setAnalyzers(List<AnalyzerObject> analyzers) {
 		this.analyzers = analyzers;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
     
     

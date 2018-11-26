@@ -4,29 +4,84 @@ body {
 	margin: 0px !important;
 }
 
-.logoClass{
+.ui-g-12 {
+	padding: 0 !important;
+}
+
+.ui-md-12 {
+	padding: 0 !important;
+}
+
+.footer {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	background-color: #EFEFFB;
+	color: #0A122A !important;
+	text-align: center;
+	font-size: 12px !important;
+	padding-top: 10px !important;
+	padding-bottom: 10px !important;
+}
+
+form {
+	margin-bottom: 0;
+}
+
+.ui-paginator {
+	font-size: 12px !important;
+}
+
+.ui-widget-content {
+	background: #CED8F6 !important;
+}
+
+.menuSeparator {
+	position: relative;
+	bottom: -2px;
+	background-color: #0A122A;
+	margin-left: 10px;
+	margin-right: 10px
+}
+
+.logoClass {
 	color: #DF7401 !important;
 	font-size: 22px ! important;
 	font-family: Arial, Helvetica, sans-serif;
 }
 
-.ui-message-error-detail{
-	font-size: 12px !important;
-	width:100%;
+.noRegClass {
+	color: #CED8F6 !important;
+	font-size: 28px ! important;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
 }
 
-.homeMainDivClass{
+.ui-message-error-detail {
+	font-size: 12px !important;
+	width: 100%;
+}
+
+.homeMainDivClass {
 	background-color: #0A122A;
 	color: white !important;
 	width: 100%;
-	height:100vh;
+	height: 100vh;
 }
 
-.homeMainDivBannerClass{
-	background-color: #CED8F6 !important;
+.homeMainDivBannerClass {
+	background-color: #EFEFFB !important;
 	color: #0A122A !important;
 	font-size: 12px;
 	font-weight: bold;
+	border-spacing: 0;
+}
+
+.menuLink {
+	color: #0A122A !important;
+	text-decoration: none !important;
+	font-size: 12px !important;
 }
 
 .mainDivClass {
@@ -35,7 +90,7 @@ body {
 	padding-top: 10px;
 	padding-left: 20px;
 	padding-right: 20px;
-	height:100vh;
+	height: 100vh;
 }
 
 .mainDivClassHeader {
@@ -66,6 +121,26 @@ body {
 	text-align: center !important;
 }
 
+.ui-button.simpleButton {
+	width: 100px !important;
+	background-color: #0B3861 !important;
+	color: white !important;
+	font-weight: normal;
+	font-size: 12px !important;
+	font-family: Arial, Helvetica, sans-serif !important;
+	text-align: center !important;
+}
+
+.menuAnalysisButton {
+	width: 100% !important;
+	background-color: #0B3861 !important;
+	color: white !important;
+	font-weight: normal;
+	font-size: 12px !important;
+	font-family: Arial, Helvetica, sans-serif !important;
+	text-align: center !important;
+}
+
 .ui-button.signButtonExtended {
 	width: 300px !important;
 	padding: 5px !important;
@@ -77,8 +152,8 @@ body {
 	text-align: center !important;
 }
 
-.ui-widget-content {
-	background-color: #CED8F6 !important;
+.signUpPanel.ui-widget-content {
+	background: #CED8F6 !important;
 }
 
 .mainPanelCol1 {
@@ -125,17 +200,24 @@ body {
 	font-family: Arial, Helvetica, sans-serif !important;
 }
 
-.ui-dialog-title-dialog {
-	text-align: center;	
+/* Change The Combos Backbround Color*/
+.ui-selectonemenu-list {
+	background-color: white !important;
 }
 
-.ui-widget-content.mainTable {
+/* Popups Title Text */
+.ui-dialog-title-dialog {
+	text-align: center;
+}
+
+.mainTable.ui-widget-content {
 	background-color: #CED8F6 !important;
 	border: 0;
 }
 
 .ui-widget.mainTable {
 	color: #0A122A;
+	background-color: #CED8F6 !important;
 	font-family: Arial, Helvetica, sans-serif !important;
 	font-weight: bold;
 }
@@ -153,24 +235,24 @@ body {
 }
 
 .ui-widget-overlay {
-   opacity: 0.7 !important;
+	opacity: 0.7 !important;
 }
 
-.linkClass{
+.linkClass {
 	color: white !important;
 }
 
-.successDialogDiv{
-	padding:5px;
+.successDialogDiv {
+	padding: 5px;
 }
 
-.recoverPasswordDiv{
+.recoverPasswordDiv {
 	font-size: 16px !important;
 }
 
-.recoverLinkPassword{
+.recoverLinkPassword {
 	color: #013ADF !important;
-	font-size:16px !important;
+	font-size: 16px !important;
 }
 
 .ui-panelGrid.successGrid {
@@ -180,18 +262,179 @@ body {
 	padding: 0 !important;
 }
 
-.signUpPanel.ui-panel{
+.signUpPanel.ui-panel {
 	width: 650px;
 	font-size: 20px !important;
 	font-weight: normal !important;
 	padding: 0;
 }
 
-.signUpPanel.ui-panel .ui-panel-titlebar{
+.signUpPanel.ui-panel .ui-panel-titlebar {
 	background-color: #0A122A !important;
 	color: white;
 }
 
-.badUserText{
+.badUserText {
 	font-size: 16px !important;
+}
+
+.analysisDiv {
+	background-color: #0A122A !important;
+	height: 100vh;
+}
+
+.analysisDivClass {
+	color: white !important;
+	font-size: 12px !important;
+	font-family: Arial, Helvetica, sans-serif !important;
+	font-weight: bold !important;
+	padding-right: 30px !important;
+	padding-left: 30px !important;
+}
+
+.analysisDivClassMainCell {
+	font-size: 20px !important;
+	font-weight: bold;
+}
+
+.analysisChartCSS {
+	font-size: 12px;
+	width: 100% !important;
+	height: 65vh !important;
+}
+
+.lastAnalysisDiv {
+	height: 25vh !important;
+	background-color: #0A122A !important;
+}
+
+.selectOneMenuAnalysis.ui-selectonemenu {
+	width: 85% !important;
+}
+
+.ui-datepicker {
+	background: white !important;
+	font-size: 12px !important;
+}
+
+.ui-selectonemenu {
+	vertical-align: top !important;
+	font-size: 12px !important;
+}
+
+.ui-selectonemenu-list-item {
+	vertical-align: top !important;
+	font-size: 12px !important;
+}
+
+.ui-button {
+	font-size: 12px !important;
+}
+
+.ui-timepicker {
+	background: white !important;
+	font-size: 12px !important;
+}
+
+.ui-datepicker-header {
+	background: #0A122A !important;
+	color: #CED8F6 !important;
+	font-size: 12px !important;
+}
+
+.hasDatePicker.ui-inputfield {
+	background: white !important;
+	font-size: 12px !important;
+}
+
+.hasTimePicker.ui-inputfield {
+	background: white !important;
+}
+
+.ui-selectonemenu {
+	vertical-align: middle !important;
+}
+
+.ui-selectonemenu .ui-selectonemenu-label {
+	background: white !important;
+	color: #0A122A !important;
+}
+
+.analysisPanelTitle {
+	font-size: 14px !important;
+	color: #0A122A !important;
+}
+
+.analysisTitle {
+	font-size: 16px !important;
+	color: #0A122A !important;
+	font-weight: bold;
+}
+
+.buildingImgAnalysis {
+	padding: 5px !important;
+	border: 1px solid #0A122A;
+}
+
+.ui-datatable-selectable {
+	font-size: 14px !important;
+}
+
+.ui-datatable-selectable.ui-state-hover {
+	background-color: #81BEF7 !important;
+	color: white !important;
+}
+
+.ui-datatable-selectable.ui-state-highlight {
+	background-color: #0B3861 !important;
+	color: white !important;
+}
+
+.ui-datatable-tablewrapper thead {
+	display: none;
+}
+
+.dataTableColumn {
+	text-align: center;
+}
+
+.accPanelMeters {
+	font-size: 12px !important;
+	color: #0A122A;
+}
+
+.meterPanelCss {
+	text-align: left;
+}
+
+.analysisLabels {
+	font-size: 12px !important;
+	color: white !important;
+	vertical-align: middle !important;
+}
+
+.analysisViewDiv {
+	padding-top: 10px !important;
+	padding-right: 10px !important;
+	color: white !important;
+}
+
+.timeAnalysis {
+	vertical-align: middle !important;
+	color: #0A122A !important;
+	font-size: 12px !important;
+}
+
+.chartDateCss {
+	color: yellow;
+	font-weight: plain;
+	font-size: 14px !important;
+}
+
+.analaysisDateCss {
+	padding-left: 25px;
+}
+
+.timeAnalysisPanel{
+	width:150px !important;
 }

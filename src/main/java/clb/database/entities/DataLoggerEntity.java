@@ -14,15 +14,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 
 @Document(collection="DataLoggers")
-public class DataLoggerEntity implements ClbEntity, Serializable {
+public class DataLoggerEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	private String dataloggerid;
+	
+	private String code;
 
 	private String name;
-	
-	private String ftpaddress;
 	
 	@DBRef
 	private List<AnalyzerEntity> analyzers;
@@ -46,14 +46,6 @@ public class DataLoggerEntity implements ClbEntity, Serializable {
 		this.name = name;
 	}
 
-	public String getFtpaddress() {
-		return this.ftpaddress;
-	}
-
-	public void setFtpaddress(String ftpaddress) {
-		this.ftpaddress = ftpaddress;
-	}
-
     public List<AnalyzerEntity> getAnalyzers() {
         return analyzers;
     }
@@ -69,4 +61,14 @@ public class DataLoggerEntity implements ClbEntity, Serializable {
 		
 		analyzers.add(analyzer);
 	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+	
+	
 }

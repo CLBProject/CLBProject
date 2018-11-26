@@ -1,7 +1,7 @@
 package clb.business.objects;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 
 import clb.database.entities.AnalyzerRegistryEntity;
 
@@ -10,6 +10,8 @@ public class AnalyzerRegistryObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String id;
+	
+	private String analyzerId;
 
 	private double al1;
 
@@ -23,9 +25,9 @@ public class AnalyzerRegistryObject implements Serializable {
 
 	private int comport;
 
-	private Timestamp currenttime;
+	private Date currenttime;
 
-	private Timestamp epochformat;
+	private Date epochformat;
 
 	private double hourmeterkwh;
 
@@ -91,7 +93,7 @@ public class AnalyzerRegistryObject implements Serializable {
 
 	private String recorttype;
 
-	private Timestamp rfc3339format;
+	private Date rfc3339format;
 
 	private double temperature;
 
@@ -127,7 +129,6 @@ public class AnalyzerRegistryObject implements Serializable {
 
 	private double vlnsys;
 
-	private AnalyzerObject analyzer;
 
 	public AnalyzerRegistryObject() {
 	}
@@ -136,6 +137,7 @@ public class AnalyzerRegistryObject implements Serializable {
     public AnalyzerRegistryObject(AnalyzerRegistryEntity analyzerRegEntity) {
         super();
         this.id = analyzerRegEntity.getId();
+        this.analyzerId = analyzerRegEntity.getAnalyzerId();
         this.al1 = analyzerRegEntity.getAl1();
         this.al2 = analyzerRegEntity.getAl2();
         this.al3 = analyzerRegEntity.getAl3();
@@ -161,6 +163,7 @@ public class AnalyzerRegistryObject implements Serializable {
         this.kvarl3 = analyzerRegEntity.getKvarl3();
         this.kvarsys = analyzerRegEntity.getKvarsys();
         this.kvasys = analyzerRegEntity.getKvasys();
+        this.kwsys = analyzerRegEntity.getKwsys();
         this.kwh = analyzerRegEntity.getKwh();
         this.kwhl1 = analyzerRegEntity.getKwhl1();
         this.kwhl2 = analyzerRegEntity.getKwhl2();
@@ -195,10 +198,10 @@ public class AnalyzerRegistryObject implements Serializable {
         this.vlnsys = analyzerRegEntity.getVlnsys();
     }
 
-
-    public AnalyzerRegistryEntity toEntity() {
+	public AnalyzerRegistryEntity toEntity() {
         AnalyzerRegistryEntity anaRegEntity = new AnalyzerRegistryEntity();
         anaRegEntity.setId(id);
+        anaRegEntity.setAnalyzerId( this.analyzerId );
         anaRegEntity.setAl1(al1);
         anaRegEntity.setAl2(al2);
         anaRegEntity.setAl3(al3);
@@ -212,6 +215,7 @@ public class AnalyzerRegistryObject implements Serializable {
         anaRegEntity.setHz(hz);
         anaRegEntity.setItemlabel(itemlabel);
         anaRegEntity.setKvahl(kvahl);
+        anaRegEntity.setKvahl1(kvahl1);
         anaRegEntity.setKvahl2(kvahl2);
         anaRegEntity.setKvahl3(kvahl3);
         anaRegEntity.setKval1(kval1);
@@ -253,7 +257,7 @@ public class AnalyzerRegistryObject implements Serializable {
         anaRegEntity.setVl2l3(vl2l3);
         anaRegEntity.setVl2n(vl2n);
         anaRegEntity.setVl3l1(vl3l1);
-        anaRegEntity.setVl3n(thdvl3n);
+        anaRegEntity.setVl3n(vl3n);
         anaRegEntity.setVllsys(vllsys);
         anaRegEntity.setVlnsys(vlnsys);
         
@@ -317,19 +321,19 @@ public class AnalyzerRegistryObject implements Serializable {
 		this.comport = comport;
 	}
 
-	public Timestamp getCurrenttime() {
+	public Date getCurrenttime() {
 		return this.currenttime;
 	}
 
-	public void setCurrenttime(Timestamp currenttime) {
+	public void setCurrenttime(Date currenttime) {
 		this.currenttime = currenttime;
 	}
 
-	public Timestamp getEpochformat() {
+	public Date getEpochformat() {
 		return this.epochformat;
 	}
 
-	public void setEpochformat(Timestamp epochformat) {
+	public void setEpochformat(Date epochformat) {
 		this.epochformat = epochformat;
 	}
 
@@ -589,11 +593,11 @@ public class AnalyzerRegistryObject implements Serializable {
 		this.recorttype = recorttype;
 	}
 
-	public Timestamp getRfc3339format() {
+	public Date getRfc3339format() {
 		return this.rfc3339format;
 	}
 
-	public void setRfc3339format(Timestamp rfc3339format) {
+	public void setRfc3339format(Date rfc3339format) {
 		this.rfc3339format = rfc3339format;
 	}
 
@@ -733,12 +737,16 @@ public class AnalyzerRegistryObject implements Serializable {
 		this.vlnsys = vlnsys;
 	}
 
-    public AnalyzerObject getAnalyzer() {
-        return analyzer;
+
+    public String getAnalyzerId() {
+        return analyzerId;
     }
 
-    public void setAnalyzer( AnalyzerObject analyzer ) {
-        this.analyzer = analyzer;
-    }
 
+    public void setAnalyzerId( String analyzerId ) {
+        this.analyzerId = analyzerId;
+    }
+	
+	
+    
 }

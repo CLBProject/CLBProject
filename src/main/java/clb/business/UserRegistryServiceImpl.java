@@ -1,7 +1,6 @@
 package clb.business;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
@@ -15,8 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import clb.business.objects.UsersystemObject;
+import clb.business.utils.PasswordGenerator;
 import clb.database.ClbDao;
-import clb.global.PasswordGenerator;
 import clb.global.exceptions.UserCantResendEmailException;
 import clb.global.exceptions.UserDoesNotExistException;
 import clb.global.exceptions.UserDoesNotMatchPasswordLoginException;
@@ -48,13 +47,15 @@ public class UserRegistryServiceImpl implements UserRegistryService, Serializabl
             .useUpper(true)
             .build();
 
-    private static final int PASSWORD_GEN_LENGTH = 10;
 
     @Override
     @Transactional
-    public void validateUserLogin( String userName , String password) throws UserDoesNotExistException, UserDoesNotMatchPasswordLoginException{
+    public UsersystemObject validateUserLogin( String userName , String password) throws UserDoesNotExistException, UserDoesNotMatchPasswordLoginException{
+        
+        UsersystemObject userObject = null;
+        
         if(userName != null && password != null) {
-            UsersystemObject userObject = clbDao.findUserByUserName(userName);
+            userObject = clbDao.findUserByUserName(userName);
 
             if (userObject == null)
                 throw new UserDoesNotExistException();
@@ -63,7 +64,8 @@ public class UserRegistryServiceImpl implements UserRegistryService, Serializabl
                 throw new UserDoesNotMatchPasswordLoginException();
             }
         }
-
+        
+        return userObject;
     }
 
     @Override
@@ -76,10 +78,10 @@ public class UserRegistryServiceImpl implements UserRegistryService, Serializabl
             throw new UserExistsOnRegistryException();
 
         Calendar cal = Calendar.getInstance();
-        cal.setTime(new Timestamp(cal.getTime().getTime()));
+        cal.setTime(cal.getTime());
         cal.add(Calendar.MINUTE, timeOfSession);
         user.setExpiryDate(cal.getTime());
-
+        
         user.setPassword( passwordEncoder.encode( user.getPassword() ) );
         user.setToken( generateUserToken() );
         
@@ -135,7 +137,7 @@ public class UserRegistryServiceImpl implements UserRegistryService, Serializabl
             throw new UserCantResendEmailException();
         }
 
-        String newPassword = passwordGenerator.generate( PASSWORD_GEN_LENGTH );
+        String newPassword = passwordGenerator.generate( );
         String newToken = generateUserToken();
 
         user.setPassword( passwordEncoder.encode( newPassword ) );
@@ -152,8 +154,7 @@ public class UserRegistryServiceImpl implements UserRegistryService, Serializabl
         eventPublisher.publishEvent(new UserRegistrySendEmailEvent(username, subject, textMsg));
     }
 
-
-    @Override
+	@Override
     public void resendEmail( String username , int nrOfMinutesNecessaryToResend) throws UserDoesNotExistException, UserCantResendEmailException {
         UsersystemObject user = clbDao.findUserByUserName( username );
 

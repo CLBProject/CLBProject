@@ -11,7 +11,7 @@ import clb.global.exceptions.UserTokenIsNullOnCompleteRegistrationException;
 
 public interface UserRegistryService {
     
-    void validateUserLogin( String userName , String password ) throws UserDoesNotExistException,UserDoesNotMatchPasswordLoginException;
+    UsersystemObject validateUserLogin( String userName , String password ) throws UserDoesNotExistException,UserDoesNotMatchPasswordLoginException;
 
     void registerUser( UsersystemObject user, int timeOfSession ) 
             throws UserExistsOnRegistryException, UserNotPersistedException;
