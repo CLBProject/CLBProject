@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="template/ui.xhtml">
+	<ui:define name="body">
+		<f:metadata>
+			<f:event type="preRenderView"
+				listener="#{clbHomeRegisterBean.registerUser}" />
+		</f:metadata>
+		<div class="homeMainDivClass">
+			<h:form id="bannerForm">
+				<table width="100%" class="homeMainDivBannerClass">
+					<tr>
+						<td width="1%"></td>
+						<td align="left" valign="middle"><p:outputLabel
+								styleClass="logoClass">LEnergy Logo</p:outputLabel></td>
+						<td align="right" valign="top"></td>
+					</tr>
+				</table>
+				<div align="center">
+					<p:spacer height="20"></p:spacer>
+					<p:panel styleClass="signUpPanel" rendered="#{empty clbHomeRegisterBean.registerResult}">
+						<p:outputLabel
+							value="User was registered! Please click on the link below to enter in the application:"></p:outputLabel>
+						<br />
+						<br />
+						<p:commandLink value="CLB" ajax="true" udpate="@form :bannerForm"
+							action="#{redirectBean.redirectTo('clb.xhtml?faces-redirect=true')}"></p:commandLink>
+					</p:panel>
+					<p:panel styleClass="signUpPanel" rendered="#{not empty clbHomeRegisterBean.registerResult}">
+						<p:panelGrid columns="2" styleClass="successGrid">
+							<p:column>
+								<p:graphicImage
+									value="${pageContext.request.contextPath}/resources/images/error.png"></p:graphicImage>
+							</p:column>
+							<p:column>
+								<p:outputLabel styleClass="badUserText"
+									value="#{clbHomeRegisterBean.registerResult}"></p:outputLabel>
+							</p:column>
+						</p:panelGrid>
+					</p:panel>
+				</div>
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>

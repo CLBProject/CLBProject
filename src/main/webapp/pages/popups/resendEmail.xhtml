@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="../template/ui.xhtml">
+	<ui:define name="body">
+		<p:dialog widgetVar="resendEmail" id="resendEmail"
+			modal="true" position="center center" draggable="false"
+			closable="true" header="Resend Email" closeOnEscape="true"
+			styleClass="logoClass" resizable="false">
+			<h:form>
+				<div class="recoverPasswordDiv">
+					<p:panelGrid columns="3" styleClass="successGrid">
+						<p:column>
+							<p:outputLabel styleClass="recoverPasswordDiv" for="emailUser">Username:</p:outputLabel>
+						</p:column>
+						<p:column>
+							<p:inputText styleClass="recoverPasswordDiv" id="emailUser" validatorMessage="User is not valid!"
+								label="emailUser" value="#{clbHomeRegisterBean.user.username}">
+								<f:validateRegex
+									pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+							</p:inputText>
+						</p:column>
+						<p:column>
+							<p:message for="emailUser" />
+						</p:column>
+					</p:panelGrid>
+					<br />
+					<div align="center">
+						<p:commandButton styleClass="signButton"
+							action="#{clbHomeRegisterBean.resendEmail}" value="Resend"
+							onstart="document.body.style.cursor='wait'" ajax="true" update="@form"
+							oncomplete="
+									document.body.style.cursor='default';
+									if (!args.validationFailed){ 
+										if (args.userNotFoundResendEmail === true ){ 
+											PF('unSuccessPaneluserNotFoundResendEmail').show();
+										}
+										else if (args.timeNotPassedLastEmail === true ){ 
+											PF('unSuccessPaneltimeNotPassedLastEmail').show();
+										}
+										else PF('successPanelresendEmail').show();  
+									}"></p:commandButton>
+					</div>
+				</div>
+			</h:form>
+		</p:dialog>
+		<ui:include src="successDialog.xhtml">
+			<ui:param name="id" value="resendEmail" />
+			<ui:param name="successMessage"
+				value="A new email was sent to your email account! If you dont receive an email in 24h please contact the staff." />
+			<ui:param name="path" value="index.xhtml?faces-redirect=true" />
+		</ui:include>
+		<ui:include src="unSuccessDialog.xhtml">
+			<ui:param name="idUnsuccess" value="userNotFoundResendEmail" />
+			<ui:param name="unSuccessMessage" value="User not found, cant resend the email!" />
+		</ui:include>
+		<ui:include src="unSuccessDialog.xhtml">
+			<ui:param name="idUnsuccess" value="timeNotPassedLastEmail" />
+			<ui:param name="unSuccessMessage" value="Wait some time before send a new email" />
+		</ui:include>
+	</ui:define>
+</ui:composition>
