@@ -1,76 +1,97 @@
 package clb.business.objects;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import clb.database.entities.AnalyzerEntity;
-import clb.database.entities.AnalyzerRegistryEntity;
 
-public class AnalyzerObject
+public class AnalyzerObject implements ClbObject
 {
+    private String id;
 
-    private long analyzerid;
+	private String name;
 
-    private String name;
+	private List<AnalyzerRegistryObject> analyzerRegistries;
 
-    private DataLoggerObject dataLogger;
+	private List<AnalyzerRegistryAverageObject> analyzerAverageRegistries;
 
-    private List<AnalyzerRegistryObject> analyzerRegistries;
-    
-    public AnalyzerObject(){
-        
+	public AnalyzerObject(){
+
+	}
+
+	public AnalyzerObject(AnalyzerEntity analyzerEntity){
+		this.id = analyzerEntity.getId();
+		this.name = analyzerEntity.getName();
+		this.analyzerRegistries = analyzerEntity.getAnalyzerRegistries() != null ? 
+				analyzerEntity.getAnalyzerRegistries().stream().map(AnalyzerRegistryObject::new).collect(Collectors.toList()) : null;
+		this.analyzerAverageRegistries = analyzerEntity.getAnalyzerRegistries() != null ? 
+				analyzerEntity.getAnalyzerRegistriesAverage().stream().map(AnalyzerRegistryAverageObject::new).collect(Collectors.toList()) : null;
+	}
+
+	public AnalyzerEntity toEntity(){
+		AnalyzerEntity analyzerEntity = new AnalyzerEntity();
+		
+		if(this.id != null) {
+			analyzerEntity.setId( this.id );
+		}
+		
+		analyzerEntity.setName( this.name );
+		analyzerEntity.setAnalyzerRegistries(this.analyzerRegistries != null ?
+				this.analyzerRegistries.stream().map(AnalyzerRegistryObject::toEntity).collect(Collectors.toList()) : null);
+		
+		analyzerEntity.setAnalyzerRegistriesAverage(this.analyzerAverageRegistries != null ?
+				this.analyzerAverageRegistries.stream().map(AnalyzerRegistryAverageObject::toEntity).collect(Collectors.toList()) : null);
+		return analyzerEntity;
+	}
+	
+    public void addAnalyzerRegistry(AnalyzerRegistryObject analyzerRegistryObject) {
+    	if(analyzerRegistries == null) {
+    		analyzerRegistries = new ArrayList<AnalyzerRegistryObject>();
+    	}
+    	
+    	analyzerRegistries.add(analyzerRegistryObject);
     }
     
-    public AnalyzerObject(AnalyzerEntity analyzerEntity){
-        this.analyzerid = analyzerEntity.getAnalyzerid();
-        this.name = analyzerEntity.getName();
-        this.dataLogger = analyzerEntity.getDataLogger() != null ? new DataLoggerObject(analyzerEntity.getDataLogger()) : new DataLoggerObject();
-        this.analyzerRegistries = analyzerEntity.getAnalyzerRegistries() != null ?
-        		analyzerEntity.getAnalyzerRegistries().stream().map(AnalyzerRegistryObject::new).collect(Collectors.toList()) : null;
-    }
-    
-    public AnalyzerEntity toEntity(){
-        AnalyzerEntity analyzerEntity = new AnalyzerEntity();
-        analyzerEntity.setAnalyzerid( this.analyzerid );
-        analyzerEntity.setName( this.name );
-        analyzerEntity.setDataLogger( this.dataLogger != null ? this.dataLogger.toEntity() : null );
-        analyzerEntity.setAnalyzerRegistries( this.analyzerRegistries != null ?
-        		this.analyzerRegistries.stream().map( AnalyzerRegistryObject::toEntity).collect(Collectors.toList()) : null);
-        
-        return analyzerEntity;
+    public void addAnalyzerRegistryAverage(AnalyzerRegistryAverageObject analyzerRegistryObject) {
+    	if(analyzerAverageRegistries == null) {
+    		analyzerAverageRegistries = new ArrayList<AnalyzerRegistryAverageObject>();
+    	}
+    	
+    	analyzerAverageRegistries.add(analyzerRegistryObject);
     }
 
-    public long getAnalyzerid() {
-        return analyzerid;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public void setAnalyzerid( long analyzerid ) {
-        this.analyzerid = analyzerid;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName( String name ) {
-        this.name = name;
-    }
+	public void setName( String name ) {
+		this.name = name;
+	}
 
-    public DataLoggerObject getDataLogger() {
-        return dataLogger;
-    }
+	public List<AnalyzerRegistryObject> getAnalyzerRegistries() {
+		return analyzerRegistries;
+	}
 
-    public void setDataLogger( DataLoggerObject dataLogger ) {
-        this.dataLogger = dataLogger;
-    }
+	public void setAnalyzerRegistries(List<AnalyzerRegistryObject> analyzerRegistries) {
+		this.analyzerRegistries = analyzerRegistries;
+	}
 
-    public List<AnalyzerRegistryObject> getAnalyzerRegistries() {
-        return analyzerRegistries;
-    }
+	public List<AnalyzerRegistryAverageObject> getAnalyzerAverageRegistries() {
+		return analyzerAverageRegistries;
+	}
 
-    public void setAnalyzerRegistries( List<AnalyzerRegistryObject> analyzerRegistries ) {
-        this.analyzerRegistries = analyzerRegistries;
-    }
-    
-    
+	public void setAnalyzerAverageRegistries(List<AnalyzerRegistryAverageObject> analyzerAverageRegistries) {
+		this.analyzerAverageRegistries = analyzerAverageRegistries;
+	}
+
+	
 }

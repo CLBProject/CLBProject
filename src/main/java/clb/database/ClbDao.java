@@ -1,35 +1,31 @@
 package clb.database;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
-import clb.database.entities.AnalyzerRegistryEntity;
+import clb.business.objects.AnalyzerObject;
+import clb.business.objects.AnalyzerRegistryAverageObject;
+import clb.business.objects.AnalyzerRegistryObject;
+import clb.business.objects.BuildingObject;
+import clb.business.objects.DataLoggerObject;
+import clb.business.objects.UsersystemObject;
 
-public interface ClbDao<T extends Serializable> {
+public interface ClbDao{
 
-    void create( T entity );
-    
-    T update( T entity );
-    
-    void delete( T entity );
-
-	void persistData(List<T> data);
-
-	List<AnalyzerRegistryEntity> getAllCurrentAnalyzerRegistryData();
+	void saveAnalyzer(AnalyzerObject analyzerObject);
 	
-	List<AnalyzerRegistryEntity> getAnalyzerRegistriesByDay(Date date);
+	void saveAnalyzerRegistry(AnalyzerRegistryObject analyzerRegistryObject);
 	
-	List<AnalyzerRegistryEntity> getAnalyzerRegistriesByDayAndHour(Date date, String hour); 
-
-    void flush();
-
-	List<Integer> getRegistryYears();
+	void saveAnalyzerRegistryAverage(AnalyzerRegistryAverageObject analyzerRegistryAverageObject);
 	
-	Collection<?> getYearMonthAverages(Integer year);
-
-    Collection<?> getYearMonthDaysAverages( Integer yearSelected, Integer monthSelected );
-
+	void saveDataLogger(DataLoggerObject dataLoggerObject);
 	
+	void saveBuilding(BuildingObject buildingObject);
+	
+	void saveUsersystem(UsersystemObject userSystemObject);
+	
+	void saveUsers(List<UsersystemObject> users);
+
+    UsersystemObject findUserByToken( String token );
+
+    UsersystemObject findUserByUserName( String userName );
 }

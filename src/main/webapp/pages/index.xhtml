@@ -8,124 +8,168 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	template="template/ui.xhtml">
 	<ui:define name="body">
-		<div class="mainDiv" align="center">
-			<h:form id="chartFormId">
-				<p:panelGrid styleClass="mainTable"
-					columnClasses="mainTableLeft mainTableRight">
-					<p:column styleClass="mainTableLeft">
-						<h:outputText value="Variables:" styleClass="titleFont"></h:outputText>
-						<br />
-						<br />
-						<div align="left" class="paddingLeft">
-							<p:selectBooleanCheckbox widgetVar="cbAL2" id="cbAL2"
-								itemLabel="AL2" label="AL2" value="#{graphicBean.aL2Check}">
-								<p:ajax process="@this" event="change" update="@form"
-									listener="#{graphicBean.updateChartSeries2}" />
-							</p:selectBooleanCheckbox>
-							<br />
-							<p:selectBooleanCheckbox widgetVar="cbAL3" id="cbAL3"
-								itemLabel="AL3" label="AL3" value="#{graphicBean.aL3Check}">
-								<p:ajax process="@this" event="change" update="@form"
-									listener="#{graphicBean.updateChartSeries3}" />
-							</p:selectBooleanCheckbox>
-							<br />
-							<p:selectBooleanCheckbox widgetVar="cbAL1" id="cbAL1"
-								itemLabel="AL1" label="AL1" value="#{graphicBean.aL1Check}">
-								<p:ajax process="@this" event="change" update="@form"
-									listener="#{graphicBean.updateChartSeries1}" />
-							</p:selectBooleanCheckbox>
-						</div>
-						<br />
-						<hr />
-						<h:outputText value="Scale:" styleClass="titleFont"></h:outputText>
-						<br />
-						<br />
-						<div align="left" class="paddingLeft">
-							<p:selectOneRadio layout="pageDirection"
-								value="#{graphicBean.scaleSelected}">
-								<p:ajax listener="#{graphicBean.changeScale}" update="chartFormId"></p:ajax>
-								<c:forEach items="#{graphicBean.scaleValues}" var="value">
-									<f:selectItem itemLabel="#{value.label}" itemValue="#{value}" />
-								</c:forEach>
-							</p:selectOneRadio>
-						</div>
-					</p:column>
-					<p:column styleClass="mainTableRight">
-						<div align="center" class="fullWidth">
-							<p:outputLabel rendered="#{graphicBean.enableYearGraphic or graphicBean.enableMonthGraphic}" for="years" value="Year:" styleClass="titleFont"></p:outputLabel>
-							<p:spacer rendered="#{graphicBean.enableYearGraphic or graphicBean.enableMonthGraphic}" width="5" />
-							<p:selectOneMenu rendered="#{graphicBean.enableYearGraphic}" id="years" value="#{graphicBean.yearSelected}">
-								<p:ajax event="change" listener="#{graphicBean.updateYearGraphic}" update="chartFormId"></p:ajax>
-								<f:selectItems value="#{graphicBean.years}"/>
-							</p:selectOneMenu>
-							<p:selectOneMenu rendered="#{graphicBean.enableMonthGraphic}" id="yearsMonths" value="#{graphicBean.yearSelected}">
-								<p:ajax event="change" listener="#{graphicBean.updateMonthGraphic}" update="chartFormId"></p:ajax>
-								<f:selectItems value="#{graphicBean.years}"/>
-							</p:selectOneMenu>
-							<p:spacer rendered="#{graphicBean.enableMonthGraphic}" width="20" />
-							<p:outputLabel rendered="#{graphicBean.enableMonthGraphic}" for="months" value="Month:" styleClass="titleFont"></p:outputLabel>
-							<p:spacer rendered="#{graphicBean.enableMonthGraphic}" width="5" />
-							<p:selectOneMenu rendered="#{graphicBean.enableMonthGraphic}" id="months" value="#{graphicBean.monthSelected}">
-								<p:ajax event="change" listener="#{graphicBean.updateMonthGraphic}" update="chartFormId"></p:ajax>
-								<f:selectItems value="#{graphicBean.months}" var="newmonth" itemLabel="#{newmonth.label}" itemValue="#{newmonth}"/>
-							</p:selectOneMenu>
-							<p:outputLabel rendered="#{graphicBean.enableDayGraphic or graphicBean.enableDayHoursGraphic}" for="forDay" value="Day:" styleClass="titleFont"></p:outputLabel>
-							<p:spacer rendered="#{graphicBean.enableDayGraphic or graphicBean.enableDayHoursGraphic}" width="5" />
-							<p:calendar widgetVar="forDay" pattern="dd/MM/yy" id="forDay" rendered="#{graphicBean.enableDayGraphic}"
-								value="#{graphicBean.dayDate}">
-								<p:ajax event="dateSelect" listener="#{graphicBean.onDaySelect}"
-									update=":chartFormId" />
-							</p:calendar>
-							<p:calendar widgetVar="forDay" pattern="dd/MM/yy" id="forDayHours" rendered="#{graphicBean.enableDayHoursGraphic}"
-								value="#{graphicBean.dayDate}">
-								<p:ajax event="dateSelect" listener="#{graphicBean.onDayHourSelect}"
-									update=":chartFormId" />
-							</p:calendar>
-							<p:spacer width="30" rendered="#{graphicBean.enableDayHoursGraphic}"/>
-							<p:outputLabel rendered="#{graphicBean.enableDayHoursGraphic}" for="hours" value="Time: " styleClass="titleFont"></p:outputLabel>
-							<p:spacer rendered="#{graphicBean.enableDayHoursGraphic}" width="5" />
-							<p:selectOneMenu rendered="#{graphicBean.enableDayHoursGraphic}" id="hours" value="#{graphicBean.hourSelected}">
-								<p:ajax event="change" listener="#{graphicBean.updateDayHoursGraphic}" update="chartFormId"></p:ajax>
-								<f:selectItems value="#{graphicBean.hours}" var="newhour" itemLabel="#{newhour.label}" itemValue="#{newhour.value}"/>
-							</p:selectOneMenu>
-						</div>
-						<div align="center">
-							<p:chart id="chartHourId" rendered="#{graphicBean.enableDayHoursGraphic}" 
-								widgetVar="chartHourId" styleClass="chartCSS" type="line"
-								model="#{graphicBean.graphicDayHoursPojo.lineModel}" />
-							<p:chart id="chartDayId" rendered="#{graphicBean.enableDayGraphic}"
-								widgetVar="chartDayId" styleClass="chartCSS" type="line"
-								model="#{graphicBean.graphicDayPojo.lineModel}" />
-							<p:chart rendered="#{graphicBean.enableYearGraphic}" styleClass="chartCSS" id="chartYearId" widgetVar="chartYearId" 
-								model="#{graphicBean.graphicYearPojo.barModel}" type="bar" style="height:300px"/>
-							<p:chart rendered="#{graphicBean.enableMonthGraphic}" styleClass="chartCSS" id="chartMonthId" widgetVar="chartMonthId" 
-								model="#{graphicBean.graphicMonthPojo.lineModel}" type="line" style="height:300px"/>
-							<p:outputLabel rendered="#{not graphicBean.enableDayGraphic and not graphicBean.enableDayHoursGraphic and 
-													   not graphicBean.enableMonthGraphic and not graphicBean.enableYearGraphic}"
-								value="No Graphic to Display" styleClass="warningFont"></p:outputLabel>
-						</div>
-						<br />
-						<div align="center" class="fullWidth">
-							<p:commandButton type="button" value="Reset Zoom" rendered="#{graphicBean.enableDayHoursGraphic}"
-								icon="ui-icon-cancel" 
-								onclick="PF('chartHourId').resetZoom()" />
-							<p:commandButton type="button" value="Reset Zoom" rendered="#{graphicBean.enableDayGraphic}"
-								icon="ui-icon-cancel" 
-								onclick="PF('chartDayId').resetZoom()" />
-							<p:commandButton type="button" value="Reset Zoom" rendered="#{graphicBean.enableYearGraphic}"
-								icon="ui-icon-cancel" 
-								onclick="PF('chartYearId').resetZoom()" />
-							<p:commandButton type="button" value="Reset Zoom" rendered="#{graphicBean.enableMonthGraphic}"
-								icon="ui-icon-cancel" 
-								onclick="PF('chartMonthId').resetZoom()" />
-							<p:spacer width="10" />
-							<p:commandButton type="submit" value="Fill Database Script"
-								ajax="false" actionListener="#{graphicBean.fillDatabaseScript}"></p:commandButton>
-						</div>
-						<br />
-					</p:column>
-				</p:panelGrid>
+		<div class="homeMainDivClass">
+			<h:form id="bannerForm">
+				<table width="100%" class="homeMainDivBannerClass">
+					<tr>
+						<td width="1%"></td>
+						<td align="left" valign="middle"><p:outputLabel
+								styleClass="logoClass">LEnergy Logo</p:outputLabel></td>
+						<td align="right" valign="top"><h:panelGrid columns="9"
+								styleClass="homeMainDivBannerClass">
+								<p:column>
+									<p:outputLabel for="emailUser">Username:</p:outputLabel>
+								</p:column>
+								<p:column>
+									<p:spacer width="2" />
+								</p:column>
+								<p:column>
+									<p:inputText id="emailUser" label="emailUser"
+										value="#{clbHomeLoginBean.userName}" />
+								</p:column>
+								<p:column>
+									<p:spacer width="30" />
+								</p:column>
+								<p:column>
+									<p:outputLabel for="passwordUser">Password:</p:outputLabel>
+								</p:column>
+								<p:column>
+									<p:spacer width="2" />
+								</p:column>
+								<p:column>
+									<p:inputText label="passwordUser" id="passwordUser"
+										value="#{clbHomeLoginBean.password}" type="password" />
+								</p:column>
+								<p:column>
+									<p:spacer width="40" />
+								</p:column>
+								<p:column>
+									<p:commandButton styleClass="signButton" value="Sign In"
+										action="#{clbHomeLoginBean.loginUser}" ajax="true"
+										update="@form"
+										oncomplete="if (args.cantLoginUserNotFound === true )
+													{ 
+														PF('unSuccessPaneldoesnexistUnsuccess').show();
+													}
+													if (args.cantLoginPasswordDoesntMatch === true)
+													{
+														PF('unSuccessPanelpasswordnotmatchUnsuccess').show();
+													}
+													"></p:commandButton>
+								</p:column>
+							</h:panelGrid></td>
+					</tr>
+				</table>
 			</h:form>
+			<p:spacer height="100" />
+			<div align="center">
+				<h:form id="registerForm">
+					<p:panel header="Sign Up" styleClass="signUpPanel">
+						<p:spacer height="10" />
+						<p:panelGrid columns="3" styleClass="mainTable">
+							<p:column>
+								<p:outputLabel>Name</p:outputLabel>
+							</p:column>
+							<p:column>
+								<p:inputText validatorMessage="Name too short!"
+									requiredMessage="Name is required!" id="nameUser"
+									value="#{clbHomeRegisterBean.user.name}" required="true"
+									label="nameUser">
+									<f:validateLength minimum="3"></f:validateLength>
+								</p:inputText>
+							</p:column>
+							<p:column>
+								<p:message for="nameUser" />
+							</p:column>
+							<p:column>
+								<p:outputLabel>Email</p:outputLabel>
+							</p:column>
+							<p:column>
+								<p:inputText requiredMessage="Email is required!"
+									validatorMessage="Email is not valid!"
+									value="#{clbHomeRegisterBean.user.username}" required="true"
+									label="emailUser" id="emailUser">
+									<f:validateRegex
+										pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+								</p:inputText>
+							</p:column>
+							<p:column>
+								<p:message for="emailUser" />
+							</p:column>
+							<p:column>
+								<p:outputLabel>Password</p:outputLabel>
+							</p:column>
+							<p:column>
+								<p:inputText requiredMessage="Password is required!"
+									value="#{clbHomeRegisterBean.user.password}"
+									label="passwordUser" id="passwordUser" required="true"
+									type="password"
+									validatorMessage="Al least 6 characters are needed!">
+									<f:validateLength minimum="6"></f:validateLength>
+								</p:inputText>
+							</p:column>
+							<p:column>
+								<p:message for="passwordUser" />
+							</p:column>
+							<p:column>
+								<p:outputLabel>Address</p:outputLabel>
+							</p:column>
+							<p:column>
+								<p:inputTextarea rows="5"
+									value="#{clbHomeRegisterBean.user.address}"></p:inputTextarea>
+							</p:column>
+							<p:column>
+							</p:column>
+						</p:panelGrid>
+						<p:spacer height="20" />
+						<div align="center">
+							<p:commandLink oncomplete="PF('resendEmail').show()" value="Resend Registration Email" styleClass="recoverLinkPassword"></p:commandLink>
+							<br/>
+							<p:commandLink oncomplete="PF('recoverPassword').show()" value="Forget your password?" styleClass="recoverLinkPassword"></p:commandLink>
+							<br/>
+							<br/>
+							<p:commandButton
+								action="#{clbHomeRegisterBean.registerUserAccount}"
+								validateClient="true" styleClass="signButtonExtended"
+								value="Register" ajax="true"
+								onstart="document.body.style.cursor='wait'"
+								oncomplete="
+											document.body.style.cursor='default';
+											if (!args.validationFailed){
+												document.body.style.cursor = 'default'; 
+												if (args.userExists === true ){ 
+													PF('unSuccessPanelalexistsUnsuccess').show();
+												}
+												else if (args.unexpectedError === true ){ 
+													PF('unSuccessPanelunexpectedUnsuccess').show();
+												}
+												else PF('successPanelregistry').show(); 
+											}"
+								update="registerForm"></p:commandButton>
+						</div>
+					</p:panel>
+				</h:form>
+			</div>
 		</div>
+		<ui:include src="./popups/recoverPassword.xhtml"/>
+		<ui:include src="./popups/resendEmail.xhtml"/>
+		<ui:include src="./popups/successDialog.xhtml">
+			<ui:param name="id" value="registry"></ui:param>
+			<ui:param name="successMessage"
+				value="User was created successfully! Check your Email to Confirm Registration, if you dont receive an email in 24h please contact the staff." />
+			<ui:param name="path" value="index.xhtml?faces-redirect=true" />
+		</ui:include>
+		<ui:include src="./popups/unSuccessDialog.xhtml">
+			<ui:param name="idUnsuccess" value="doesnexistUnsuccess" />
+			<ui:param name="unSuccessMessage" value="User does not exist!" />
+		</ui:include>
+		<ui:include src="./popups/unSuccessDialog.xhtml">
+			<ui:param name="idUnsuccess" value="passwordnotmatchUnsuccess" />
+			<ui:param name="unSuccessMessage" value="User passwords didnt match" />
+		</ui:include>
+		<ui:include src="./popups/unSuccessDialog.xhtml">
+			<ui:param name="idUnsuccess" value="alexistsUnsuccess" />
+			<ui:param name="unSuccessMessage" value="User can't be registered because already exists" />
+		</ui:include>
 	</ui:define>
 </ui:composition>

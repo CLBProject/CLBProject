@@ -1,93 +1,80 @@
 package clb.database.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
-import clb.database.entities.AnalyzerRegistryEntity;
-
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * The persistent class for the ANALYZER database table.
  * 
  */
-@Entity
-@Table(name="ANALYZER")
-@NamedQuery(name="Analyzer.findAll", query="SELECT a FROM AnalyzerEntity a")
-public class AnalyzerEntity implements Serializable {
-	private static final long serialVersionUID = 1L;
+@Document(collection="Analyzers")
+public class AnalyzerEntity implements ClbEntity, Serializable {
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long analyzerid;
+    @Id
+    private String id;
 
-	private String name;
+    private String name;
 
-	//bi-directional many-to-one association to DataLogger
-	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="DATALOGGERID")
-	private DataLoggerEntity dataLogger;
+    @DBRef
+    private List<AnalyzerRegistryEntity> analyzerRegistries;
 
-	//bi-directional many-to-one association to AnalyzerRegistry
-	@OneToMany(mappedBy="analyzer")
-	private List<AnalyzerRegistryEntity> analyzerRegistries;
+    @DBRef
+    private List<AnalyzerRegistryAverageEntity> analyzerRegistriesAverage;
 
-	public AnalyzerEntity() {
+    public AnalyzerEntity() {
+    }
+
+	public String getId() {
+		return id;
 	}
 
-	public long getAnalyzerid() {
-		return this.analyzerid;
-	}
-
-	public void setAnalyzerid(long analyzerid) {
-		this.analyzerid = analyzerid;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getName() {
-		return this.name;
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<AnalyzerRegistryEntity> getAnalyzerRegistries() {
+        return analyzerRegistries;
+    }
+
+    public void setAnalyzerRegistries( List<AnalyzerRegistryEntity> analyzerRegistries ) {
+        this.analyzerRegistries = analyzerRegistries;
+    }
+
+    public void addAnalyzerRegistry(AnalyzerRegistryEntity analyzerRegistry) {
+        if(this.analyzerRegistries == null)
+            analyzerRegistries = new ArrayList<AnalyzerRegistryEntity>();
+
+        analyzerRegistries.add(analyzerRegistry);
+    }
+    
+    public void setAnalyzerRegistriesAverage( List<AnalyzerRegistryAverageEntity> analyzerRegistriesAverage ) {
+        this.analyzerRegistriesAverage = analyzerRegistriesAverage;
+    }
+
+    public void addAnalyzerRegistryAverage(AnalyzerRegistryAverageEntity analyzerRegistryAverage) {
+        if(this.analyzerRegistriesAverage == null)
+            analyzerRegistriesAverage = new ArrayList<AnalyzerRegistryAverageEntity>();
+
+        analyzerRegistriesAverage.add(analyzerRegistryAverage);
+    }
+
+	public List<AnalyzerRegistryAverageEntity> getAnalyzerRegistriesAverage() {
+		return analyzerRegistriesAverage;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public DataLoggerEntity getDataLogger() {
-		return this.dataLogger;
-	}
-
-	public void setDataLogger(DataLoggerEntity dataLogger) {
-		this.dataLogger = dataLogger;
-	}
-
-	public List<AnalyzerRegistryEntity> getAnalyzerRegistries() {
-		return this.analyzerRegistries;
-	}
-
-	public void setAnalyzerRegistries(List<AnalyzerRegistryEntity> analyzerRegistries) {
-		this.analyzerRegistries = analyzerRegistries;
-	}
-
-	public AnalyzerRegistryEntity addAnalyzerRegistry(AnalyzerRegistryEntity analyzerRegistry) {
-		getAnalyzerRegistries().add(analyzerRegistry);
-		analyzerRegistry.setAnalyzer(this);
-
-		return analyzerRegistry;
-	}
-
-	public AnalyzerRegistryEntity removeAnalyzerRegistry(AnalyzerRegistryEntity analyzerRegistry) {
-		getAnalyzerRegistries().remove(analyzerRegistry);
-		analyzerRegistry.setAnalyzer(null);
-
-		return analyzerRegistry;
-	}
-
+    
 }

@@ -1,122 +1,178 @@
 package clb.database;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import clb.business.objects.AnalyzerObject;
+import clb.business.objects.AnalyzerRegistryAverageObject;
+import clb.business.objects.AnalyzerRegistryObject;
+import clb.business.objects.BuildingObject;
+import clb.business.objects.DataLoggerObject;
+import clb.business.objects.UsersystemObject;
+import clb.database.entities.AnalyzerEntity;
+import clb.database.entities.AnalyzerRegistryAverageEntity;
 import clb.database.entities.AnalyzerRegistryEntity;
+import clb.database.entities.BuildingEntity;
+import clb.database.entities.DataLoggerEntity;
+import clb.database.entities.UsersystemEntity;
+import clb.database.repository.AnalyzerMongoRepository;
+import clb.database.repository.AnalyzerRegistryAverageMongoRepository;
+import clb.database.repository.AnalyzerRegistryMongoRepository;
+import clb.database.repository.BuildingsMongoRepository;
+import clb.database.repository.DataLoggerMongoRepository;
+import clb.database.repository.UsersystemMongoRepository;
 
+@Service
+public class ClbDaoImpl implements ClbDao, Serializable{
 
-public class ClbDaoImpl<T extends Serializable> implements ClbDao<T>, Serializable{
-
-    /**
+	/**
      * 
      */
     private static final long serialVersionUID = 1L;
+    
 
+    @Autowired
+	private AnalyzerMongoRepository analyzerMongoRepository;
+	
+	@Autowired
+	private AnalyzerRegistryAverageMongoRepository analyzerRegistryAverageMongoRepository;
+	
+	@Autowired
+	private AnalyzerRegistryMongoRepository analyzerRegistryMongoRepository;
+	
+	@Autowired
+	private BuildingsMongoRepository buildingsMongoRepository;
+	
+	@Autowired
+	private DataLoggerMongoRepository dataLoggerMongoRepository;
+	
+	@Autowired
+	private UsersystemMongoRepository userSystemMongoRepository;
+	
+	@Autowired
+	private AnalyzerRegistryMongoRepository averageRegistryMongoRespository;
+	
+	public ClbDaoImpl() {
+	    
+	}
+	
+	@Override
+	public void saveAnalyzer(AnalyzerObject analyzerObject) {
+	    AnalyzerEntity analyzerEntity = analyzerObject.toEntity(); 
+		analyzerMongoRepository.save(analyzerEntity);
+		analyzerObject.setId(analyzerEntity.getId());
+	}
+	
+	@Override
+	public void saveAnalyzerRegistry(AnalyzerRegistryObject analyzerRegistryObject) {
+	    AnalyzerRegistryEntity analyzerRegistryEntity = analyzerRegistryObject.toEntity();
+		analyzerRegistryMongoRepository.save(analyzerRegistryEntity);
+		analyzerRegistryObject.setId(analyzerRegistryEntity.getId());
+	}
+	
+	@Override
+	public void saveAnalyzerRegistryAverage(AnalyzerRegistryAverageObject analyzerRegistryAverageObject) {
+	    AnalyzerRegistryAverageEntity analyzerRegistryAverageEntity = analyzerRegistryAverageObject.toEntity();
+		analyzerRegistryAverageMongoRepository.save(analyzerRegistryAverageEntity);
+		analyzerRegistryAverageObject.setId(analyzerRegistryAverageEntity.getId());
+	}
+	
+	@Override
+	public void saveDataLogger(DataLoggerObject dataLoggerObject) {
+	    DataLoggerEntity dataLoggerEntity = dataLoggerObject.toEntity(); 
+		dataLoggerMongoRepository.save(dataLoggerEntity);
+		dataLoggerObject.setDataloggerid(dataLoggerEntity.getDataloggerid());
+	}
+	
+	@Override
+	public void saveBuilding(BuildingObject buildingObject) {
+	    BuildingEntity buildingEntity = buildingObject.toEntity();
+		buildingsMongoRepository.save(buildingEntity);
+		buildingObject.setBuildingid(buildingEntity.getBuildingid());
+	}
+	
+	@Override
+	public void saveUsersystem(UsersystemObject userSystemObject) {
+	    UsersystemEntity userSystemEntity = userSystemObject.toEntity();
+		userSystemMongoRepository.save(userSystemEntity);
+		userSystemEntity.setUserid(userSystemObject.getUserid());
+	}
 
-    @PersistenceContext(unitName = "clbDatabase")
-    protected EntityManager entityManager;
-
-    public void create( T entity ){
-        entityManager.persist( entity );
-    }
-
-    public T update( T entity ){
-        return entityManager.merge( entity );
-    }
-
-    public void delete( T entity ){
-        entityManager.remove( entity );
-    }
-
-    public EntityManager getEntityManager() {
-        return entityManager;
-    }
-
-    public void setEntityManager( EntityManager entityManager ) {
-        this.entityManager = entityManager;
+    @Override
+    public UsersystemObject findUserByToken( String token) {
+        UsersystemEntity userEntity = userSystemMongoRepository.findUserbyToken( token );
+        return userEntity != null ? new UsersystemObject(userEntity) : null;
     }
 
     @Override
-    public void persistData(List<T> data) {
-        data.stream().forEach(object -> entityManager.persist(object));
+    public UsersystemObject findUserByUserName( String userName ) {
+        UsersystemEntity userEntity = userSystemMongoRepository.findUserbyUsername( userName );
+        return userEntity != null ? new UsersystemObject(userEntity) : null;
     }
+	
+	@Override
+	public void saveUsers(List<UsersystemObject> userSystemObjectList) {
+		userSystemObjectList.stream().forEach(userSObj -> userSystemMongoRepository.save(userSObj.toEntity()));
+	}
 
-    /**
-     * @return All Analyzer Registries
-     */
-    @Override
-    public List<AnalyzerRegistryEntity> getAllCurrentAnalyzerRegistryData() {
-        return entityManager.createNamedQuery("AnalyzerRegistry.findAll",AnalyzerRegistryEntity.class).getResultList();
-    }
+	public AnalyzerMongoRepository getAnalyzerMongoRepository() {
+		return analyzerMongoRepository;
+	}
 
-    @Override
-    public void flush() {
-        entityManager.flush();
-        entityManager.clear();
-    }
+	public void setAnalyzerMongoRepository(AnalyzerMongoRepository analyzerMongoRepository) {
+		this.analyzerMongoRepository = analyzerMongoRepository;
+	}
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public List<AnalyzerRegistryEntity> getAnalyzerRegistriesByDay(Date date) {
-        Query q = entityManager.createNamedQuery("AnalyzerRegistry.findAllByDay",AnalyzerRegistryEntity.class);
-        q.setParameter("currentdate", date);
+	public AnalyzerRegistryAverageMongoRepository getAnalyzerRegistryAverageMongoRepository() {
+		return analyzerRegistryAverageMongoRepository;
+	}
 
-        List<AnalyzerRegistryEntity> resultList = q.getResultList();
+	public void setAnalyzerRegistryAverageMongoRepository(
+			AnalyzerRegistryAverageMongoRepository analyzerRegistryAverageMongoRepository) {
+		this.analyzerRegistryAverageMongoRepository = analyzerRegistryAverageMongoRepository;
+	}
 
-        return resultList == null ? new ArrayList<AnalyzerRegistryEntity>() : resultList;
-    }
+	public AnalyzerRegistryMongoRepository getAnalyzerRegistryMongoRepository() {
+		return analyzerRegistryMongoRepository;
+	}
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public List<AnalyzerRegistryEntity> getAnalyzerRegistriesByDayAndHour(Date date, String hour) {
-        Query q = entityManager.createNamedQuery("AnalyzerRegistry.findAllByDayHour",AnalyzerRegistryEntity.class);
-        q.setParameter("currentdate", date);
-        q.setParameter("currenthour", hour);
+	public void setAnalyzerRegistryMongoRepository(AnalyzerRegistryMongoRepository analyzerRegistryMongoRepository) {
+		this.analyzerRegistryMongoRepository = analyzerRegistryMongoRepository;
+	}
 
-        List<AnalyzerRegistryEntity> resultList = q.getResultList();
+	public BuildingsMongoRepository getBuildingsMongoRepository() {
+		return buildingsMongoRepository;
+	}
 
-        return resultList == null ? new ArrayList<AnalyzerRegistryEntity>() : resultList;
-    }
+	public void setBuildingsMongoRepository(BuildingsMongoRepository buildingsMongoRepository) {
+		this.buildingsMongoRepository = buildingsMongoRepository;
+	}
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public List<Integer> getRegistryYears() {
-        Query q = entityManager.createNativeQuery("select year(currentDate) from ANALYZER_REGISTRY group by year(currentDate)");
+	public DataLoggerMongoRepository getDataLoggerMongoRepository() {
+		return dataLoggerMongoRepository;
+	}
 
-        List<Integer> resultList = q.getResultList();
+	public void setDataLoggerMongoRepository(DataLoggerMongoRepository dataLoggerMongoRepository) {
+		this.dataLoggerMongoRepository = dataLoggerMongoRepository;
+	}
 
-        return resultList == null ? new ArrayList<Integer>() : resultList;
-    }
+	public UsersystemMongoRepository getUserSystemMongoRepository() {
+		return userSystemMongoRepository;
+	}
 
-    @Override
-    public Collection<?> getYearMonthAverages(Integer year){
-        Query q = entityManager.createNativeQuery("select avg(al1), avg(al2), avg(al3), year(currentDate), month(currentDate) "
-                + "from analyzer_registry "
-                + "where year(currentDate) = ?1 "
-                + "group by year(currentDate), month(currentdate)");		
-        q.setParameter(1, year);
+	public void setUserSystemMongoRepository(UsersystemMongoRepository userSystemMongoRepository) {
+		this.userSystemMongoRepository = userSystemMongoRepository;
+	}
 
-        return q.getResultList();
-    }
+	public AnalyzerRegistryMongoRepository getAverageRegistryMongoRespository() {
+		return averageRegistryMongoRespository;
+	}
 
-    @Override
-    public Collection<?> getYearMonthDaysAverages( Integer yearSelected, Integer monthSelected ) {
-        Query q = entityManager.createNativeQuery("select avg(al1), avg(al2), avg(al3), year(currentdate), month(currentdate),day(currentdate) "
-                + "from clb.analyzer_registry "
-                + "where year(currentdate) = ?1 and month(currentdate) = ?2 "
-                + "group by year(currentdate),month(currentdate), day(currentdate)");       
-        q.setParameter(1, yearSelected);
-        q.setParameter(2, monthSelected);
-
-        return q.getResultList();
-    }
-
+	public void setAverageRegistryMongoRespository(AnalyzerRegistryMongoRepository averageRegistryMongoRespository) {
+		this.averageRegistryMongoRespository = averageRegistryMongoRespository;
+	}
+	
 }

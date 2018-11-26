@@ -1,43 +1,40 @@
 package clb.database.entities;
 
 import java.io.Serializable;
-import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * The persistent class for the DATA_LOGGER database table.
  * 
  */
-@Entity
-@Table(name="DATA_LOGGER")
-@NamedQuery(name="DataLogger.findAll", query="SELECT d FROM DataLoggerEntity d")
-public class DataLoggerEntity implements Serializable {
+
+@Document(collection="DataLoggers")
+public class DataLoggerEntity implements ClbEntity, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long dataloggerid;
+	private String dataloggerid;
 
 	private String name;
-
-	//bi-directional many-to-one association to Analyzer
-	@OneToMany(mappedBy="dataLogger")
+	
+	private String ftpaddress;
+	
+	@DBRef
 	private List<AnalyzerEntity> analyzers;
-
-	//bi-directional many-to-one association to Building
-	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="BUILDINGID")
-	private BuildingEntity building;
 
 	public DataLoggerEntity() {
 	}
 
-	public long getDataloggerid() {
+	public String getDataloggerid() {
 		return this.dataloggerid;
 	}
 
-	public void setDataloggerid(long dataloggerid) {
+	public void setDataloggerid(String dataloggerid) {
 		this.dataloggerid = dataloggerid;
 	}
 
@@ -49,34 +46,27 @@ public class DataLoggerEntity implements Serializable {
 		this.name = name;
 	}
 
-	public List<AnalyzerEntity> getAnalyzers() {
-		return this.analyzers;
+	public String getFtpaddress() {
+		return this.ftpaddress;
 	}
 
-	public void setAnalyzers(List<AnalyzerEntity> analyzers) {
-		this.analyzers = analyzers;
+	public void setFtpaddress(String ftpaddress) {
+		this.ftpaddress = ftpaddress;
 	}
 
-	public AnalyzerEntity addAnalyzer(AnalyzerEntity analyzer) {
-		getAnalyzers().add(analyzer);
-		analyzer.setDataLogger(this);
+    public List<AnalyzerEntity> getAnalyzers() {
+        return analyzers;
+    }
 
-		return analyzer;
+    public void setAnalyzers( List<AnalyzerEntity> analyzers ) {
+        this.analyzers = analyzers;
+    }
+	
+	public void addAnalyzer(AnalyzerEntity analyzer) {
+		if(this.analyzers == null) {
+			analyzers = new ArrayList<AnalyzerEntity>();
+		}
+		
+		analyzers.add(analyzer);
 	}
-
-	public AnalyzerEntity removeAnalyzer(AnalyzerEntity analyzer) {
-		getAnalyzers().remove(analyzer);
-		analyzer.setDataLogger(null);
-
-		return analyzer;
-	}
-
-	public BuildingEntity getBuilding() {
-		return this.building;
-	}
-
-	public void setBuilding(BuildingEntity building) {
-		this.building = building;
-	}
-
 }

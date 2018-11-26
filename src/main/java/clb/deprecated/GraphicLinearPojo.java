@@ -85,13 +85,8 @@ public class GraphicLinearPojo {
 
         Axis yAxis = lineModel.getAxis(AxisType.Y);
         yAxis.setLabel("Power");
-<<<<<<< HEAD:src/main/java/clb/beans/pojos/GraphicLinearPojo.java
-        yAxis.setMin(minValue - minValue*0.05);
-        yAxis.setMax(maxValue + maxValue*0.05);
-=======
         //yAxis.setMin(new Double(minValue - minValue*0.05).intValue());
         //yAxis.setMax(new Double(maxValue + maxValue*0.05).intValue());
->>>>>>> 1f6fa284475686915235e657293699f5e89dcc6a:src/main/java/clb/deprecated/GraphicLinearPojo.java
 
     }
 
@@ -138,13 +133,8 @@ public class GraphicLinearPojo {
 
         Axis yAxis = lineModel.getAxis(AxisType.Y);
         yAxis.setLabel("Power");
-<<<<<<< HEAD:src/main/java/clb/beans/pojos/GraphicLinearPojo.java
-        yAxis.setMin(minValue - minValue*0.05);
-        yAxis.setMax(maxValue + maxValue*0.05);
-=======
         //yAxis.setMin(new Double(minValue - minValue*0.05).intValue());
         //yAxis.setMax(new Double(maxValue + maxValue*0.05).intValue());
->>>>>>> 1f6fa284475686915235e657293699f5e89dcc6a:src/main/java/clb/deprecated/GraphicLinearPojo.java
 
     }
 
@@ -198,13 +188,8 @@ public class GraphicLinearPojo {
         Axis yAxis = lineModel.getAxis(AxisType.Y);
         yAxis.setLabel("Power");
 
-<<<<<<< HEAD:src/main/java/clb/beans/pojos/GraphicLinearPojo.java
-        yAxis.setMin(minValue - minValue*0.05);
-        yAxis.setMax(maxValue + maxValue*0.05);
-=======
        // yAxis.setMin(new Double(minValue - minValue*0.05).intValue());;
       //  yAxis.setMax(new Double(maxValue + maxValue*0.05).intValue());
->>>>>>> 1f6fa284475686915235e657293699f5e89dcc6a:src/main/java/clb/deprecated/GraphicLinearPojo.java
 
     }
 

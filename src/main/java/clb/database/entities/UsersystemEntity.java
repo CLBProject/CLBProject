@@ -1,26 +1,23 @@
 package clb.database.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 
 /**
  * The persistent class for the USERSYSTEM database table.
  * 
  */
-@Entity
-@Table(name="USERSYSTEM")
-@NamedQuery(name="Usersystem.findAll", query="SELECT u FROM UsersystemEntity u")
-public class UsersystemEntity implements Serializable {
+@Document(collection="Users")
+public class UsersystemEntity implements ClbEntity, Serializable {
 	private static final long serialVersionUID = 1L;
-
+	
 	@Id
 	private String userid;
 
@@ -31,9 +28,16 @@ public class UsersystemEntity implements Serializable {
 	private String password;
 
 	private String username;
-
-	//bi-directional many-to-one association to Building
-	@OneToMany(mappedBy="usersystem", cascade=CascadeType.ALL)
+	
+	private String token;
+	
+	private Date expiryDate;
+	
+	private Date lastSentEmail;
+	
+	private boolean enabled;
+	
+	@DBRef
 	private List<BuildingEntity> buildings;
 
 	public UsersystemEntity() {
@@ -79,26 +83,53 @@ public class UsersystemEntity implements Serializable {
 		this.username = username;
 	}
 
-	public List<BuildingEntity> getBuildings() {
-		return this.buildings;
-	}
+    public List<BuildingEntity> getBuildings() {
+        return buildings;
+    }
 
-	public void setBuildings(List<BuildingEntity> buildings) {
-		this.buildings = buildings;
-	}
+    public void setBuildings( List<BuildingEntity> buildings ) {
+        this.buildings = buildings;
+    }
+	
+    public void addBuilding(BuildingEntity building) {
+    	if(buildings == null) {
+    		buildings = new ArrayList<BuildingEntity>();
+    	}
+    	
+    	buildings.add(building);
+    }
 
-	public BuildingEntity addBuilding(BuildingEntity building) {
-		getBuildings().add(building);
-		building.setUsersystem(this);
+    public String getToken() {
+        return token;
+    }
 
-		return building;
-	}
+    public void setToken( String token ) {
+        this.token = token;
+    }
 
-	public BuildingEntity removeBuilding(BuildingEntity building) {
-		getBuildings().remove(building);
-		building.setUsersystem(null);
+    public Date getExpiryDate() {
+        return expiryDate;
+    }
 
-		return building;
-	}
+    public void setExpiryDate( Date expiryDate ) {
+        this.expiryDate = expiryDate;
+    }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled( boolean enabled ) {
+        this.enabled = enabled;
+    }
+
+    public Date getLastSentEmail() {
+        return lastSentEmail;
+    }
+
+    public void setLastSentEmail( Date lastSentEmail ) {
+        this.lastSentEmail = lastSentEmail;
+    }
+	
+    
 }

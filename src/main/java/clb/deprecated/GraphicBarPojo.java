@@ -70,11 +70,7 @@ public class GraphicBarPojo {
         yAxis.setLabel("Power");
 
         yAxis.setMin(0);
-<<<<<<< HEAD:src/main/java/clb/beans/pojos/GraphicBarPojo.java
-        yAxis.setMax(maxValue + maxValue*0.05);
-=======
         //yAxis.setMax(new Double(maxValue + maxValue*0.05).intValue());
->>>>>>> 1f6fa284475686915235e657293699f5e89dcc6a:src/main/java/clb/deprecated/GraphicBarPojo.java
 
     }
 

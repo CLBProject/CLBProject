@@ -2,7 +2,6 @@ package clb.business.objects;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Date;
 
 import clb.database.entities.AnalyzerRegistryEntity;
 
@@ -10,7 +9,7 @@ public class AnalyzerRegistryObject implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private long regid;
+	private String id;
 
 	private double al1;
 
@@ -24,9 +23,7 @@ public class AnalyzerRegistryObject implements Serializable {
 
 	private int comport;
 
-	private Date currentdate;
-
-	private String currenttime;
+	private Timestamp currenttime;
 
 	private Timestamp epochformat;
 
@@ -130,11 +127,7 @@ public class AnalyzerRegistryObject implements Serializable {
 
 	private double vlnsys;
 
-	//bi-directional many-to-one association to Analyzer
 	private AnalyzerObject analyzer;
-
-	//bi-directional many-to-one association to AnalyzerRegistryExtraInfo
-	//private List<AnalyzerRegistryExtraInfo> analyzerRegistryExtraInfos;
 
 	public AnalyzerRegistryObject() {
 	}
@@ -142,14 +135,13 @@ public class AnalyzerRegistryObject implements Serializable {
 
     public AnalyzerRegistryObject(AnalyzerRegistryEntity analyzerRegEntity) {
         super();
-        this.regid = analyzerRegEntity.getRegid();
+        this.id = analyzerRegEntity.getId();
         this.al1 = analyzerRegEntity.getAl1();
         this.al2 = analyzerRegEntity.getAl2();
         this.al3 = analyzerRegEntity.getAl3();
         this.an = analyzerRegEntity.getAn();
         this.asys = analyzerRegEntity.getAsys();
         this.comport = analyzerRegEntity.getComport();
-        this.currentdate = analyzerRegEntity.getCurrentdate();
         this.currenttime = analyzerRegEntity.getCurrenttime();
         this.epochformat = analyzerRegEntity.getEpochformat();
         this.hourmeterkwh = analyzerRegEntity.getHourmeterkwh();
@@ -201,20 +193,18 @@ public class AnalyzerRegistryObject implements Serializable {
         this.vl3n = analyzerRegEntity.getVl3n();
         this.vllsys = analyzerRegEntity.getVllsys();
         this.vlnsys = analyzerRegEntity.getVlnsys();
-        this.analyzer = analyzerRegEntity.getAnalyzer() != null ? new AnalyzerObject( analyzerRegEntity.getAnalyzer() ) : new AnalyzerObject();
     }
 
 
     public AnalyzerRegistryEntity toEntity() {
         AnalyzerRegistryEntity anaRegEntity = new AnalyzerRegistryEntity();
-        anaRegEntity.setRegid(regid);
+        anaRegEntity.setId(id);
         anaRegEntity.setAl1(al1);
         anaRegEntity.setAl2(al2);
         anaRegEntity.setAl3(al3);
         anaRegEntity.setAn(an);
         anaRegEntity.setAsys(asys);
         anaRegEntity.setComport(comport);
-        anaRegEntity.setCurrentdate(currentdate);
         anaRegEntity.setCurrenttime(currenttime);
         anaRegEntity.setEpochformat(epochformat);
         anaRegEntity.setHourmeterkwh(hourmeterkwh);
@@ -266,18 +256,17 @@ public class AnalyzerRegistryObject implements Serializable {
         anaRegEntity.setVl3n(thdvl3n);
         anaRegEntity.setVllsys(vllsys);
         anaRegEntity.setVlnsys(vlnsys);
-        anaRegEntity.setAnalyzer( analyzer != null ? analyzer.toEntity() : null);
         
         return anaRegEntity;
     }
+    
 
-
-	public long getRegid() {
-		return this.regid;
+	public String getId() {
+		return id;
 	}
 
-	public void setRegid(long regid) {
-		this.regid = regid;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public double getAl1() {
@@ -328,19 +317,11 @@ public class AnalyzerRegistryObject implements Serializable {
 		this.comport = comport;
 	}
 
-	public Date getCurrentdate() {
-		return this.currentdate;
-	}
-
-	public void setCurrentdate(Date currentdate) {
-		this.currentdate = currentdate;
-	}
-
-	public String getCurrenttime() {
+	public Timestamp getCurrenttime() {
 		return this.currenttime;
 	}
 
-	public void setCurrenttime(String currenttime) {
+	public void setCurrenttime(Timestamp currenttime) {
 		this.currenttime = currenttime;
 	}
 
@@ -759,6 +740,5 @@ public class AnalyzerRegistryObject implements Serializable {
     public void setAnalyzer( AnalyzerObject analyzer ) {
         this.analyzer = analyzer;
     }
-	
-	
+
 }
