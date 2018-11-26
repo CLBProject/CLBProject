@@ -4,9 +4,9 @@
 ##
 
 # Delete mongod stateful set + mongodb service + secrets + host vm configuer daemonset
-kubectl delete ingress apprun-ingress
-kubectl delete services apprun-svc
-kubectl delete statefulsets apprun
+# kubectl delete ingress apprun-ingress
+kubectl delete svc/mongo
+kubectl delete statefulsets/mongod-service
 kubectl delete secret shared-bootstrap-data
 sleep 3
 

@@ -1,12 +1,11 @@
 apiVersion: apps/v1beta1
 kind: StatefulSet
 metadata:
-  name: apprun-app
+  name: mongod-service
 spec:
-  serviceName: apprun-app
   replicas: 2
   ports:
-  - port: 8080
+  - port: 27017
     protocol: TCP
   template:
     metadata:
@@ -14,7 +13,7 @@ spec:
         role: mongod
         environment: test
         replicaset: MainRepSet
-        app: apprun-service
+        app: mongod-service
     spec:
       affinity:
         podAntiAffinity:
@@ -45,22 +44,22 @@ spec:
           - name: MONGO_DATABASE
             value: "clb"
           command:
-            - "numactl"
-            - "--interleave=all"
-            - "mongod"
-            - "--wiredTigerCacheSizeGB"
-            - "0.1"
-            - "--bind_ip"
-            - "0.0.0.0"
-            - "--replSet"
-            - "MainRepSet"
-            - "--auth"
-            - "--clusterAuthMode"
-            - "keyFile"
-            - "--keyFile"
-            - "/etc/secrets-volume/internal-auth-mongodb-keyfile"
-            - "--setParameter"
-            - "authenticationMechanisms=SCRAM-SHA-1"
+           - "numactl"
+           - "--interleave=all"
+           - "mongod"
+           - "--wiredTigerCacheSizeGB"
+           - "0.1"
+           - "--bind_ip"
+           - "0.0.0.0"
+           - "--replSet"
+           - "MainRepSet"
+           - "--auth"
+           - "--clusterAuthMode"
+           - "keyFile"
+           - "--keyFile"
+           - "/etc/secrets-volume/internal-auth-mongodb-keyfile"
+           - "--setParameter"
+           - "authenticationMechanisms=SCRAM-SHA-1"
           resources:
             requests:
               cpu: 0.2
@@ -73,10 +72,6 @@ spec:
               mountPath: /etc/secrets-volume
             - name: mongodb-persistent-storage-claim
               mountPath: /data/db
-        - name: apprun
-          image: clbproject/clbapp:latest
-          ports:
-          - containerPort: 8080
   volumeClaimTemplates:
   - metadata:
       name: mongodb-persistent-storage-claim
@@ -87,31 +82,3 @@ spec:
       resources:
         requests:
           storage: 1Gi
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: apprun-svc
-spec:
-  ports:
-  - port: 80
-    targetPort: 8080
-    protocol: TCP
-    name: http
-  selector:
-    app: apprun-service
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: apprun-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: \"false\"
-spec:
-  rules:
-  - http:
-      paths:
-      - path: /
-        backend:
-          serviceName: apprun-svc
-          servicePort: 80
