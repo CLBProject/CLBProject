@@ -15,16 +15,6 @@ services:
             MONGODB_USER: "admin"
             MONGODB_PASS: "123456"
             MONGODB_DATABASE: "clb"
-  apprun:
-        image: clbproject/clbapp:latest
-        deploy:
-          replicas: 1
-          mode: replicated
-          resources:
-            limits:
-              cpus: "0.5"
-        ports:
-          - "8080:8080"
 networks:
   overlay:
 

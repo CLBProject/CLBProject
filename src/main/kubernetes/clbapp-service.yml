@@ -4,9 +4,13 @@ metadata:
   name: clbapp-svc
 spec:
   ports:
-  - port: 80
+  - name: http
+    port: 80
     targetPort: clbapp-port
     protocol: TCP
+  - name: ftpscript
+    port: 6006
+    targetPort: ftps-port
   selector:
     app: clbapp
   type: LoadBalancer
