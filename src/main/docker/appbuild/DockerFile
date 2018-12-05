@@ -4,5 +4,6 @@ RUN git clone --single-branch -b develop https://github.com/CLBProject/CLBProjec
 
 FROM maven:3.5-jdk-8-alpine
 WORKDIR /app
-COPY --from=0 /app/CLBProject /app 
+COPY --from=0 /app/CLBProject /app
+COPY --from=0 /app/CLBProject/src/main/script/schoolsFtp/recentRegistries.py /home/vagrant/scripting/recentRegistries.py
 ENTRYPOINT mvn clean install && mvn tomcat7:run && /bin/bash
