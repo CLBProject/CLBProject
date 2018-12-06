@@ -122,8 +122,8 @@ def processData(line, filename, latestRegistry):
     # only send when date is smaller then latestRegistry
     if latestRegistry == '' or latestRegistry < date :
         print('Registry Persisted For: ' + filename + ' , at Date: ' + date + " , with latestRegistry " + latestRegistry)
-        sock.send(bytes('*persistDataObject*\n', 'utf-8'))
-        sock.send(bytes(json.dumps(analyzerReg.__dict__) + "\n", 'utf-8'))
+        sock.send('*persistDataObject*\n'.encode('utf-8'))
+        sock.send((json.dumps(analyzerReg.__dict__) + "\n").encode('utf-8'))
 
 
 def processUserFtp(userftp, passwordftp):
@@ -146,8 +146,8 @@ def processUserFtp(userftp, passwordftp):
             
         index = 0
         
-        sock.send(bytes('*getLatestPersistedDate*\n', 'utf-8'))
-        sock.send(bytes('Analyzer For Building ' + currentDir + '\n', 'utf-8'))
+        sock.send('*getLatestPersistedDate*\n'.encode('utf-8'))
+        sock.send(('Analyzer For Building ' + currentDir + '\n').encode('utf-8'))
 
         latestPersistedDate = recv_basic()
         # print('Latest Date: ' + latestPersistedDate)
@@ -177,7 +177,7 @@ def processUserFtp(userftp, passwordftp):
 
     ftp.quit()
 
-    sock.send(bytes("*exitPersistDataObject*\n", 'utf-8'))
+    sock.send("*exitPersistDataObject*\n".encode('utf-8'))
     
     return;
 
