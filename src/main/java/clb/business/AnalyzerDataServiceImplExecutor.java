@@ -15,15 +15,14 @@ import org.slf4j.LoggerFactory;
 
 import clb.business.enums.AnalyzerCommand;
 import clb.business.exceptions.IlegalCommandAppException;
+import clb.business.objects.AnalyzerMeterObject;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
-import clb.business.objects.BuildingMeterObject;
 import clb.business.objects.BuildingObject;
-import clb.business.objects.DataLoggerObject;
 import clb.business.objects.UsersystemObject;
 import clb.business.utils.JsonUtils;
 import clb.database.ClbDao;
-import clb.global.BuildingMeterParameterValues;
+import clb.global.AnalyzerMeterValues;
 
 public class AnalyzerDataServiceImplExecutor implements Runnable{
 
@@ -83,8 +82,25 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 								if(buildingObject == null) {
 									analyzerObject = new AnalyzerObject();
 									analyzerObject.setCodeName(analyzerCodeName);
+									
+									for(AnalyzerMeterValues mterValue: AnalyzerMeterValues.values()) {
+										AnalyzerMeterObject analyzerMeterObject = new AnalyzerMeterObject();
+										analyzerMeterObject.setName( mterValue.getLabel() );
+										analyzerMeterObject.setLabelKey( mterValue.name() );
+										analyzerMeterObject.setUnit(mterValue.getUnit());
+
+										clbDao.saveAnalyzerMeter( analyzerMeterObject );
+
+										analyzerObject.addAnalyzerMeter(analyzerMeterObject);
+									}
+									
 									clbDao.saveAnalyzer(analyzerObject);
-									buildingObject = saveBuildingStructure(buildingName,analyzerObject);
+									
+									buildingObject = new BuildingObject();
+									buildingObject.setName(buildingName);
+									buildingObject.addAnalyzer(analyzerObject);
+
+									clbDao.saveBuilding(buildingObject);
 								}
 							}
 
@@ -137,30 +153,5 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 	}
 
 
-	private BuildingObject saveBuildingStructure(String buildingName, AnalyzerObject analyzerObject) {
-		DataLoggerObject dataLoggerObject = new DataLoggerObject();
-		dataLoggerObject.setCode(buildingName);
-		dataLoggerObject.addAnalyzer(analyzerObject);
-		clbDao.saveDataLogger(dataLoggerObject);
-
-		BuildingObject buildingObject = new BuildingObject();
-		buildingObject.setName(buildingName);
-		buildingObject.addDataLogger(dataLoggerObject);
-
-
-		for(BuildingMeterParameterValues buildingMeterParameter: BuildingMeterParameterValues.values()) {
-			BuildingMeterObject buildingMeterObject = new BuildingMeterObject();
-			buildingMeterObject.setName( buildingMeterParameter.getLabel() );
-			buildingMeterObject.setLabelKey( buildingMeterParameter.name() );
-			buildingMeterObject.setUnit(buildingMeterParameter.getUnit());
-
-			clbDao.saveBuildingMeter( buildingMeterObject );
-
-			buildingObject.addBuildingMeter(buildingMeterObject);
-		}
-		clbDao.saveBuilding(buildingObject);
-
-		return buildingObject;
-	}
 
 }

@@ -2,6 +2,7 @@ package clb.business.objects;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import clb.database.entities.AnalyzerEntity;
 
@@ -12,6 +13,8 @@ public class AnalyzerObject implements ClbObject
     private String codeName;
 
 	private List<String> analyzerRegistriesIds;
+	
+    private List<AnalyzerMeterObject> analyzerMeters;
 
 	public AnalyzerObject(){
 
@@ -21,6 +24,8 @@ public class AnalyzerObject implements ClbObject
 		this.id = analyzerEntity.getId();
 		this.codeName = analyzerEntity.getCodeName();
 		this.analyzerRegistriesIds = analyzerEntity.getAnalyzerRegistriesIds();
+		this.analyzerMeters = analyzerEntity.getAnalyzerMeters() != null ?
+				analyzerEntity.getAnalyzerMeters().stream().map(AnalyzerMeterObject::new).collect( Collectors.toList()) : null;
 	}
 
 	public AnalyzerEntity toEntity(){
@@ -32,6 +37,10 @@ public class AnalyzerObject implements ClbObject
 		
 		analyzerEntity.setCodeName( this.codeName );
 		analyzerEntity.setAnalyzerRegistriesIds(this.analyzerRegistriesIds);
+		
+		analyzerEntity.setAnalyzerMeters( this.analyzerMeters != null ? 
+                this.analyzerMeters.stream().map( AnalyzerMeterObject::toEntity ).collect( Collectors.toList() ) : null);
+		
 		return analyzerEntity;
 	}
 	
@@ -67,5 +76,21 @@ public class AnalyzerObject implements ClbObject
     public void setAnalyzerRegistriesIds( List<String> analyzerRegistriesIds ) {
         this.analyzerRegistriesIds = analyzerRegistriesIds;
     }
+
+	public List<AnalyzerMeterObject> getAnalyzerMeters() {
+		return analyzerMeters;
+	}
+
+	public void setAnalyzerMeters(List<AnalyzerMeterObject> analyzerMeters) {
+		this.analyzerMeters = analyzerMeters;
+	}
+
+	public void addAnalyzerMeter(AnalyzerMeterObject analyzerMeterObject) {
+		if(this.analyzerMeters == null) {
+			this.analyzerMeters = new ArrayList<AnalyzerMeterObject>();
+		}
+		
+		this.analyzerMeters.add(analyzerMeterObject);
+	}
 	
 }

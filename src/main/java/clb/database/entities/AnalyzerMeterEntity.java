@@ -1,10 +1,8 @@
 package clb.database.entities;
 
 import java.io.Serializable;
-import java.util.List;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -13,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 
 @Document(collection="BuildingsMeters")
-public class BuildingMeterEntity implements Serializable {
+public class AnalyzerMeterEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -25,10 +23,7 @@ public class BuildingMeterEntity implements Serializable {
 	
 	private String labelKey;
 
-	@DBRef
-	private List<BuildingMeterEntity> buildingMeterParameters;
-
-	public BuildingMeterEntity() {
+	public AnalyzerMeterEntity() {
 	}
 
 
@@ -49,16 +44,6 @@ public class BuildingMeterEntity implements Serializable {
 
     public void setName( String name ) {
         this.name = name;
-    }
-
-
-    public List<BuildingMeterEntity> getBuildingMeterParameters() {
-        return buildingMeterParameters;
-    }
-
-
-    public void setBuildingMeterParameters( List<BuildingMeterEntity> buildingMeterParameters ) {
-        this.buildingMeterParameters = buildingMeterParameters;
     }
 
 

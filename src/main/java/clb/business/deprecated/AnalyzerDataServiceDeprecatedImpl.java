@@ -22,14 +22,13 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import clb.business.objects.AnalyzerMeterObject;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
-import clb.business.objects.BuildingMeterObject;
 import clb.business.objects.BuildingObject;
-import clb.business.objects.DataLoggerObject;
 import clb.business.objects.UsersystemObject;
 import clb.database.ClbDao;
-import clb.global.BuildingMeterParameterValues;
+import clb.global.AnalyzerMeterValues;
 
 @Service
 public class AnalyzerDataServiceDeprecatedImpl implements AnalyzerDataServiceDeprecated, Serializable{
@@ -72,28 +71,12 @@ public class AnalyzerDataServiceDeprecatedImpl implements AnalyzerDataServiceDep
 		building2.setImgPath( "building2.jpg" );
 		userObject.addBuilding(building2);
 
-		for(BuildingMeterParameterValues buildingMeterParameter: BuildingMeterParameterValues.values()) {
-			BuildingMeterObject buildingMeterObject = new BuildingMeterObject();
-			buildingMeterObject.setName( buildingMeterParameter.getLabel() );
-			buildingMeterObject.setLabelKey( buildingMeterParameter.name() );
-			buildingMeterObject.setUnit(buildingMeterParameter.getUnit());
-
-			clbDao.saveBuildingMeter( buildingMeterObject );
-
-			building.addBuildingMeter( buildingMeterObject);
-			building2.addBuildingMeter( buildingMeterObject);
-		}
-
 		for(int j = 0; j<workbook.getNumberOfSheets();j++){
-
-			DataLoggerObject dl = new DataLoggerObject();
-			dl.setName( "Data Logger "+ (j+1) );
-			building.addDataLogger(dl);
 
 			AnalyzerObject ana = new AnalyzerObject();
 			ana.setCodeName( "Analyzer " + (j+1));
-			dl.addAnalyzer(ana);
-
+			building.addAnalyzer(ana);
+			
 			XSSFSheet worksheet = workbook.getSheetAt( j );
 
 			Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
@@ -164,8 +147,18 @@ public class AnalyzerDataServiceDeprecatedImpl implements AnalyzerDataServiceDep
 
 			persistDummyAnalyzerRegistries( ana, dataToExclueOnDummy);
 
+			for(AnalyzerMeterValues analyzerMeter: AnalyzerMeterValues.values()) {
+				AnalyzerMeterObject analyzerMeterObject = new AnalyzerMeterObject();
+				analyzerMeterObject.setName( analyzerMeter.getLabel() );
+				analyzerMeterObject.setLabelKey( analyzerMeter.name() );
+				analyzerMeterObject.setUnit(analyzerMeter.getUnit());
+
+				clbDao.saveAnalyzerMeter( analyzerMeterObject );
+				
+				ana.addAnalyzerMeter(analyzerMeterObject);
+			}
+			
 			clbDao.saveAnalyzer(ana);
-			clbDao.saveDataLogger(dl);
 		}
 
 		clbDao.saveBuilding(building);

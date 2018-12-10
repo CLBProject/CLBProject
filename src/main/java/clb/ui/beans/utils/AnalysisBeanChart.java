@@ -13,8 +13,8 @@ import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
 
 import clb.business.objects.AnalyzerRegistryObject;
-import clb.business.objects.BuildingMeterObject;
-import clb.global.BuildingMeterParameterValues;
+import clb.business.objects.AnalyzerMeterObject;
+import clb.global.AnalyzerMeterValues;
 import clb.global.DateUtils;
 import clb.ui.beans.pojos.AnalyzerRegistryGui;
 import clb.ui.enums.ScaleGraphic;
@@ -34,7 +34,7 @@ public class AnalysisBeanChart {
 	private static final String DATE_FORMAT_GRAPHIC_WEEK= "%A %#d, %B";
 
 	private String buildingMeterSelected;
-	private BuildingMeterParameterValues[] buildingMeterQuickAnalysis;
+	private AnalyzerMeterValues[] buildingMeterQuickAnalysis;
 
 	private LineChartSeries currentSerie;
 	private LineChartSeries previousSerie;
@@ -48,11 +48,11 @@ public class AnalysisBeanChart {
 
 	private AnalysisBeanCache analysisBeanCache;
 
-	public AnalysisBeanChart(List<BuildingMeterObject> buildingMetersObject, AnalysisBeanCache analysisBeanCache){
+	public AnalysisBeanChart(List<AnalyzerMeterObject> buildingMetersObject, AnalysisBeanCache analysisBeanCache){
 		
 		this.analysisBeanCache = analysisBeanCache;
 
-		buildingMeterQuickAnalysis = BuildingMeterParameterValues.values();
+		buildingMeterQuickAnalysis = AnalyzerMeterValues.values();
 
 		lineModel = new LineChartModel();
 		lineModel.setZoom(false);
@@ -64,11 +64,11 @@ public class AnalysisBeanChart {
 		lineModel.setShowDatatip( false );
 
 		//Default
-		buildingMeterSelected = BuildingMeterParameterValues.POWER.name();
+		buildingMeterSelected = AnalyzerMeterValues.POWER.name();
 
-		currentSerie = new LineChartSeries(BuildingMeterParameterValues.POWER.getLabel());
-		previousSerie = new LineChartSeries(BuildingMeterParameterValues.POWER.getLabel());
-		nextSerie = new LineChartSeries(BuildingMeterParameterValues.POWER.getLabel());
+		currentSerie = new LineChartSeries(AnalyzerMeterValues.POWER.getLabel());
+		previousSerie = new LineChartSeries(AnalyzerMeterValues.POWER.getLabel());
+		nextSerie = new LineChartSeries(AnalyzerMeterValues.POWER.getLabel());
 
 		currentSerie.setShowMarker( false );
 		previousSerie.setShowMarker(false);
@@ -107,7 +107,7 @@ public class AnalysisBeanChart {
 
 		lineModel.clear();
 
-		BuildingMeterParameterValues buildingMeterParamValue = BuildingMeterParameterValues.valueOf(buildingMeterSelected);
+		AnalyzerMeterValues buildingMeterParamValue = AnalyzerMeterValues.valueOf(buildingMeterSelected);
 
 		currentSerie = new LineChartSeries(buildingMeterParamValue.getLabel());
 		currentSerie.setShowMarker( false );
@@ -205,7 +205,7 @@ public class AnalysisBeanChart {
 				break;
 			}
 			
-			String currentMeterSelected = BuildingMeterParameterValues.valueOf(buildingMeterSelected).getLabel();
+			String currentMeterSelected = AnalyzerMeterValues.valueOf(buildingMeterSelected).getLabel();
 			
 			currentSerie.setLabel(currentMeterSelected);
 			
@@ -245,7 +245,7 @@ public class AnalysisBeanChart {
 			List<AnalyzerRegistryGui> registriesSelected, TimeAnalysisType timeAnalysisType){
 
 
-		BuildingMeterParameterValues buildingMeterSel = BuildingMeterParameterValues.valueOf(buildingMeterSelected);
+		AnalyzerMeterValues buildingMeterSel = AnalyzerMeterValues.valueOf(buildingMeterSelected);
 
 		for(AnalyzerRegistryGui registry: registriesSelected) {
 			Number asys = getChartNumberFormated(registry.getAsys());
@@ -447,11 +447,11 @@ public class AnalysisBeanChart {
 		this.buildingMeterSelected = buildingMeterSelected;
 	}
 
-	public BuildingMeterParameterValues[] getBuildingMeterQuickAnalysis() {
+	public AnalyzerMeterValues[] getBuildingMeterQuickAnalysis() {
 		return buildingMeterQuickAnalysis;
 	}
 
-	public void setBuildingMeterQuickAnalysis(BuildingMeterParameterValues[] buildingMeterQuickAnalysis) {
+	public void setBuildingMeterQuickAnalysis(AnalyzerMeterValues[] buildingMeterQuickAnalysis) {
 		this.buildingMeterQuickAnalysis = buildingMeterQuickAnalysis;
 	}
 

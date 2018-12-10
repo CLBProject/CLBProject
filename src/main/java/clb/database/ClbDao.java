@@ -3,11 +3,10 @@ package clb.database;
 import java.util.Date;
 import java.util.List;
 
+import clb.business.objects.AnalyzerMeterObject;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
-import clb.business.objects.BuildingMeterObject;
 import clb.business.objects.BuildingObject;
-import clb.business.objects.DataLoggerObject;
 import clb.business.objects.UsersystemObject;
 
 public interface ClbDao{
@@ -18,11 +17,9 @@ public interface ClbDao{
 	
 	void saveAnalyzerRegistry(AnalyzerRegistryObject analyzerRegistryObject);
 	
-	void saveDataLogger(DataLoggerObject dataLoggerObject);
+	void saveAnalyzerMeter(AnalyzerMeterObject buildingMeterObject);
 	
 	void saveBuilding(BuildingObject buildingObject);
-	
-	void saveBuildingMeter(BuildingMeterObject buildingMeterObject);
 	
 	void saveUsersystem(UsersystemObject userSystemObject);
 	
@@ -31,8 +28,6 @@ public interface ClbDao{
 	List<UsersystemObject> getAllUsers();
 	
 	List<BuildingObject> getAllBuildings();
-
-	List<DataLoggerObject> getAllDataLoggers();
 	
 	List<AnalyzerObject> getAllAnalyzers();
 

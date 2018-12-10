@@ -11,10 +11,10 @@ import org.junit.Test;
 
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
-import clb.business.objects.DataLoggerObject;
+import clb.business.objects.BuildingObject;
 import clb.database.entities.AnalyzerEntity;
 import clb.database.entities.AnalyzerRegistryEntity;
-import clb.database.entities.DataLoggerEntity;
+import clb.database.entities.BuildingEntity;
 
 public class EntitiesMappingTest {
 
@@ -343,9 +343,9 @@ public class EntitiesMappingTest {
 	@Test
 	public void testDataLoggerObjectToEntity() {
 		
-		DataLoggerObject dlobj = new DataLoggerObject();
-		dlobj.setDataloggerid("1");
-		dlobj.setName("dl1");
+		BuildingObject bobj = new BuildingObject();
+		bobj.setBuildingid("b01");
+		bobj.setName("dl1");
 		
 		List<AnalyzerObject> analyzers = new ArrayList<AnalyzerObject>();
 		
@@ -357,14 +357,14 @@ public class EntitiesMappingTest {
 		
 		analyzers.add(aobj1);
 		analyzers.add(aobj2);
-		dlobj.setAnalyzers(analyzers);
+		bobj.setAnalyzers(analyzers);
 		
-		DataLoggerEntity dlEnt = dlobj.toEntity();
+		BuildingEntity bEnt = bobj.toEntity();
 		
-		assertEquals(dlobj.getDataloggerid(),dlEnt.getDataloggerid());
-		assertEquals(dlobj.getName(),dlEnt.getName());
+		assertEquals(bobj.getBuildingid(),bEnt.getBuildingid());
+		assertEquals(bobj.getName(),bEnt.getName());
 		
-		List<AnalyzerEntity> analyzersMapped = dlEnt.getAnalyzers();
+		List<AnalyzerEntity> analyzersMapped = bEnt.getAnalyzers();
 		
 		assertEquals(analyzers.size(), analyzersMapped.size());
 		assertEquals(analyzersMapped.get(0).getId(),"1");

@@ -3,9 +3,9 @@ package clb.database.repository;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import clb.database.entities.DataLoggerEntity;
+import clb.database.entities.AnalyzerMeterEntity;
 
 @Repository
-public interface DataLoggerMongoRepository extends MongoRepository<DataLoggerEntity, String>{
+public interface AnalyzerMetersMongoRepository extends MongoRepository<AnalyzerMeterEntity, String>{
 
 }

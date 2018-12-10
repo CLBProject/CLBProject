@@ -16,9 +16,7 @@ import org.primefaces.event.SelectEvent;
 import clb.business.AnalyzerDataService;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
-import clb.business.objects.BuildingMeterObject;
 import clb.business.objects.BuildingObject;
-import clb.business.objects.DataLoggerObject;
 import clb.global.DateUtils;
 import clb.ui.beans.utils.AnalysisBeanCache;
 import clb.ui.beans.utils.AnalysisBeanChart;
@@ -117,8 +115,13 @@ public class AnalysisBean implements Serializable{
 
 	private List<BuildingObject> initBuildingObjects() {
 		return clbHomeLoginBean.getUserLoginPojo().getCurrentUser().getBuildings().stream().filter(building -> {
-			boolean hasAnalyzers = building.getDataLoggers().stream().filter(dl -> dl.getAnalyzers() != null && dl.getAnalyzers().size() > 0).count() > 0;
-			boolean hasMeters = building.getBuildingMeters() != null && building.getBuildingMeters().size() > 0;
+			
+			List<AnalyzerObject> buildingAnalyzers = building.getAnalyzers() ;
+			
+			boolean hasAnalyzers = buildingAnalyzers != null && buildingAnalyzers.size() > 0;
+			boolean hasMeters = buildingAnalyzers.stream()
+					.filter(buildingAnalyzer -> buildingAnalyzer.getAnalyzerMeters().size() > 0)
+					.collect(Collectors.toList()).size() > 0;
 
 			return hasAnalyzers && hasMeters;
 		}).collect(Collectors.toList());
@@ -128,23 +131,17 @@ public class AnalysisBean implements Serializable{
 		buildingSelected = bObj;
 		tempBuildingSelected = buildingSelected;
 
-		List<BuildingMeterObject> meters = bObj.getBuildingMeters();
-		List<DataLoggerObject> dataLoggers = bObj.getDataLoggers();
+		List<AnalyzerObject> analyzers = bObj.getAnalyzers();
+		
+		if(analyzers != null && analyzers.size() > 0) {
+			analyzersSelected = analyzers;
+			analyzerSelected = analyzers.get(0);
+			tempAnalyzerSelected = analyzerSelected;
 
-		analysisDayPojo = new AnalysisBeanChart( meters, this.analysisBeanCache);
-
-		for(DataLoggerObject dlSelected: dataLoggers) {
-			List<AnalyzerObject> analyzers = dlSelected.getAnalyzers();
-
-			if(analyzers != null && analyzers.size() > 0) {
-				analyzersSelected = analyzers;
-				analyzerSelected = analyzers.get(0);
-				tempAnalyzerSelected = analyzerSelected;
-
-				fillGraphicData(analysisBeanCache.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), DateUtils.getInstance().getDayReseted(analysisDate)) );
-				break;
-			}
+			fillGraphicData(analysisBeanCache.getDayRegistriesFromAnalyzer( analyzerSelected.getId(), DateUtils.getInstance().getDayReseted(analysisDate)) );
 		}
+		
+		analysisDayPojo = new AnalysisBeanChart( analyzerSelected.getAnalyzerMeters(), this.analysisBeanCache);
 	}
 
 	public void selectBuilding() {

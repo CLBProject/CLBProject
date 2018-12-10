@@ -1,6 +1,6 @@
 package clb.global;
 
-public enum BuildingMeterParameterValues
+public enum AnalyzerMeterValues
 {
     VOLTAGE("Voltage","Volts"),
     VOLTAGE_BETWEEN_PHASES("Voltage B. Phases","Volts"),
@@ -14,7 +14,7 @@ public enum BuildingMeterParameterValues
     private String label;
     private String unit;
     
-    BuildingMeterParameterValues(String label, String unit) {
+    AnalyzerMeterValues(String label, String unit) {
         this.label = label;
         this.unit = unit;
     }

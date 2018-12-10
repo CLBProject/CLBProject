@@ -19,22 +19,19 @@ import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 
+import clb.business.objects.AnalyzerMeterObject;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
-import clb.business.objects.BuildingMeterObject;
 import clb.business.objects.BuildingObject;
-import clb.business.objects.DataLoggerObject;
 import clb.business.objects.UsersystemObject;
 import clb.database.entities.AnalyzerEntity;
+import clb.database.entities.AnalyzerMeterEntity;
 import clb.database.entities.AnalyzerRegistryEntity;
 import clb.database.entities.BuildingEntity;
-import clb.database.entities.BuildingMeterEntity;
-import clb.database.entities.DataLoggerEntity;
 import clb.database.entities.UsersystemEntity;
+import clb.database.repository.AnalyzerMetersMongoRepository;
 import clb.database.repository.AnalyzerMongoRepository;
-import clb.database.repository.BuildingsMetersMongoRepository;
 import clb.database.repository.BuildingsMongoRepository;
-import clb.database.repository.DataLoggerMongoRepository;
 import clb.database.repository.UsersystemMongoRepository;
 import clb.global.DateUtils;
 
@@ -54,10 +51,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	private BuildingsMongoRepository buildingsMongoRepository;
 
 	@Autowired
-	private BuildingsMetersMongoRepository buildingsMetersMongoRepository;
-
-	@Autowired
-	private DataLoggerMongoRepository dataLoggerMongoRepository;
+	private AnalyzerMetersMongoRepository buildingsMetersMongoRepository;
 
 	@Autowired
 	private UsersystemMongoRepository userSystemMongoRepository;
@@ -125,13 +119,6 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	}
 
 	@Override
-	public void saveDataLogger(DataLoggerObject dataLoggerObject) {
-		DataLoggerEntity dataLoggerEntity = dataLoggerObject.toEntity(); 
-		dataLoggerMongoRepository.save(dataLoggerEntity);
-		dataLoggerObject.setDataloggerid(dataLoggerEntity.getDataloggerid());
-	}
-
-	@Override
 	public void saveBuilding(BuildingObject buildingObject) {
 		BuildingEntity buildingEntity = buildingObject.toEntity();
 		buildingsMongoRepository.save(buildingEntity);
@@ -139,8 +126,8 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	}
 
 	@Override
-	public void saveBuildingMeter(BuildingMeterObject buildingMeterObject) {
-		BuildingMeterEntity buildingMeterEntity = buildingMeterObject.toEntity();
+	public void saveAnalyzerMeter(AnalyzerMeterObject buildingMeterObject) {
+		AnalyzerMeterEntity buildingMeterEntity = buildingMeterObject.toEntity();
 		buildingsMetersMongoRepository.save(buildingMeterEntity);
 		buildingMeterObject.setBuildingMeterId( buildingMeterEntity.getBuildingMeterId() );
 	}
@@ -160,11 +147,6 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	@Override
 	public List<BuildingObject> getAllBuildings(){
 		return buildingsMongoRepository.findAll().stream().map(BuildingObject::new).collect(Collectors.toList());
-	}
-
-	@Override
-	public List<DataLoggerObject> getAllDataLoggers() {
-		return dataLoggerMongoRepository.findAll().stream().map(DataLoggerObject::new).collect(Collectors.toList());
 	}
 
 	@Override
@@ -205,14 +187,6 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 		this.buildingsMongoRepository = buildingsMongoRepository;
 	}
 
-	public DataLoggerMongoRepository getDataLoggerMongoRepository() {
-		return dataLoggerMongoRepository;
-	}
-
-	public void setDataLoggerMongoRepository(DataLoggerMongoRepository dataLoggerMongoRepository) {
-		this.dataLoggerMongoRepository = dataLoggerMongoRepository;
-	}
-
 	public UsersystemMongoRepository getUserSystemMongoRepository() {
 		return userSystemMongoRepository;
 	}
@@ -226,11 +200,11 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 		return buildingsMongoRepository.findBuildingsByUsername( userName ).stream().map(BuildingObject::new).collect(Collectors.toList());
 	}
 
-	public BuildingsMetersMongoRepository getBuildingsMetersMongoRepository() {
+	public AnalyzerMetersMongoRepository getBuildingsMetersMongoRepository() {
 		return buildingsMetersMongoRepository;
 	}
 
-	public void setBuildingsMetersMongoRepository( BuildingsMetersMongoRepository buildingsMetersMongoRepository ) {
+	public void setBuildingsMetersMongoRepository( AnalyzerMetersMongoRepository buildingsMetersMongoRepository ) {
 		this.buildingsMetersMongoRepository = buildingsMetersMongoRepository;
 	}
 

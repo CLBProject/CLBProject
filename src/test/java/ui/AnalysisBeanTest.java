@@ -10,10 +10,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import clb.business.AnalyzerDataService;
+import clb.business.objects.AnalyzerMeterObject;
 import clb.business.objects.AnalyzerObject;
-import clb.business.objects.BuildingMeterObject;
 import clb.business.objects.BuildingObject;
-import clb.business.objects.DataLoggerObject;
 import clb.business.objects.UsersystemObject;
 import clb.ui.beans.AnalysisBean;
 import clb.ui.beans.ClbHomeLoginBean;
@@ -42,22 +41,17 @@ public class AnalysisBeanTest extends AbstractBeanTest{
 		List<BuildingObject> buildings = new ArrayList<BuildingObject>();
 		BuildingObject bObject = new BuildingObject();
 		BuildingObject bObject2 = new BuildingObject();
-		DataLoggerObject dlObj = new DataLoggerObject();
-		DataLoggerObject dlObj2 = new DataLoggerObject();
 		AnalyzerObject analObj = new AnalyzerObject();
 		AnalyzerObject analObj2 = new AnalyzerObject();
 		
-		BuildingMeterObject buildingMeterObj = new BuildingMeterObject();
-		BuildingMeterObject buildingMeterObj2 = new BuildingMeterObject();
+		AnalyzerMeterObject anaMeterObj = new AnalyzerMeterObject();
+		AnalyzerMeterObject anaMeterObj2 = new AnalyzerMeterObject();
+
+		bObject.addAnalyzer(analObj);
+		bObject2.addAnalyzer(analObj2);
 		
-		dlObj.addAnalyzer(analObj);
-		dlObj2.addAnalyzer(analObj2);
-		
-		bObject.addDataLogger(dlObj);
-		bObject2.addDataLogger(dlObj2);
-		
-		bObject.addBuildingMeter(buildingMeterObj);
-		bObject2.addBuildingMeter(buildingMeterObj2);
+		analObj.addAnalyzerMeter(anaMeterObj);
+		analObj2.addAnalyzerMeter(anaMeterObj2);
 		
 		buildings.add(bObject);
 		buildings.add(bObject2);

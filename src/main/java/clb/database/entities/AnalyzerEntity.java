@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -20,6 +21,9 @@ public class AnalyzerEntity implements Serializable {
     private String codeName;
 
     private List<String> analyzerRegistriesIds;
+    
+	@DBRef
+	private List<AnalyzerMeterEntity> analyzerMeters;
 
     public AnalyzerEntity() {
     }
@@ -48,4 +52,14 @@ public class AnalyzerEntity implements Serializable {
         this.analyzerRegistriesIds = analyzerRegistriesIds;
     }
 
+	public List<AnalyzerMeterEntity> getAnalyzerMeters() {
+		return analyzerMeters;
+	}
+
+	public void setAnalyzerMeters(List<AnalyzerMeterEntity> analyzerMeters) {
+		this.analyzerMeters = analyzerMeters;
+	}
+
+    
+    
 }
