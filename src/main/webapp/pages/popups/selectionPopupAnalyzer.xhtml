@@ -18,11 +18,11 @@
 					paginatorPosition="bottom"
 					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 					value="#{analysisBean.analyzersSelected}"
-					rows="10" rowKey="#{analyzer.id}" var="analyzer"
+					rows="10" rowKey="#{analyzer.analyzerId}" var="analyzer"
 					selectionMode="single"
 					selection="#{analysisBean.tempAnalyzerSelected}">
 					<p:column styleClass="dataTableColumn">
-						<h:outputText value="#{analyzer.name}"></h:outputText>
+						<h:outputText value="#{analyzer.codeName}"></h:outputText>
 					</p:column>
 				</p:dataTable>
 				<br />

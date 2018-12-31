@@ -34,6 +34,10 @@ public class UsersystemObject implements ClbObject, Serializable
         
     }
     
+    public boolean hasBuildings() {
+    	return buildings != null && buildings.size() > 0;
+    }
+    
     public boolean emailSentItHasntAlreadyPassedEnoughTimeSince(Date currentDateMinusHours) {
         
         if(getLastSentEmail() == null)
@@ -185,6 +189,5 @@ public class UsersystemObject implements ClbObject, Serializable
 	public void setFtpPassword(String ftpPassword) {
 		this.ftpPassword = ftpPassword;
 	}
-    
     
 }

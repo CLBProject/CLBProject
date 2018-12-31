@@ -1,8 +1,8 @@
-package clb.business;
+package clb.business.objects;
 
 import org.springframework.context.ApplicationEvent;
 
-public class UserRegistrySendEmailEvent extends ApplicationEvent {
+public class UserEvent extends ApplicationEvent {
     /**
      * 
      */
@@ -12,7 +12,7 @@ public class UserRegistrySendEmailEvent extends ApplicationEvent {
     private String subject;
     private String userName;
  
-    public UserRegistrySendEmailEvent(
+    public UserEvent(
             String userName, String subject, String textMsg) {
         super(userName);
          

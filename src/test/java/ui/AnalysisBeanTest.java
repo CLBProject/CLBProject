@@ -4,19 +4,19 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import clb.business.AnalyzerDataService;
-import clb.business.objects.AnalyzerMeterObject;
-import clb.business.objects.AnalyzerObject;
-import clb.business.objects.BuildingObject;
-import clb.business.objects.UsersystemObject;
 import clb.ui.beans.AnalysisBean;
 import clb.ui.beans.ClbHomeLoginBean;
-import clb.ui.beans.pojos.UserLoginPojo;
+import clb.ui.beans.objects.AnalyzerGui;
+import clb.ui.beans.objects.AnalyzerMeterGui;
+import clb.ui.beans.objects.BuildingGui;
 
 public class AnalysisBeanTest extends AbstractBeanTest{
 
@@ -29,44 +29,42 @@ public class AnalysisBeanTest extends AbstractBeanTest{
 	@Mock
 	ClbHomeLoginBean clbHomeLoginBean;
 	
-	@Mock
-	UserLoginPojo userLoginPojo;
-	
-	@Mock
-	UsersystemObject user;
-	
+
 	@Override
 	public void initBean() {
 		
-		List<BuildingObject> buildings = new ArrayList<BuildingObject>();
-		BuildingObject bObject = new BuildingObject();
-		BuildingObject bObject2 = new BuildingObject();
-		AnalyzerObject analObj = new AnalyzerObject();
-		AnalyzerObject analObj2 = new AnalyzerObject();
+		List<BuildingGui> buildings = new ArrayList<BuildingGui>();
+		BuildingGui bGui = new BuildingGui();
+		BuildingGui bGui2 = new BuildingGui();
+		AnalyzerGui analObj = new AnalyzerGui();
+		AnalyzerGui analObj2 = new AnalyzerGui();
 		
-		AnalyzerMeterObject anaMeterObj = new AnalyzerMeterObject();
-		AnalyzerMeterObject anaMeterObj2 = new AnalyzerMeterObject();
+		AnalyzerMeterGui anaMeterObj = new AnalyzerMeterGui();
+		AnalyzerMeterGui anaMeterObj2 = new AnalyzerMeterGui();
 
-		bObject.addAnalyzer(analObj);
-		bObject2.addAnalyzer(analObj2);
+		bGui.addAnalyzer(analObj);
+		bGui2.addAnalyzer(analObj2);
 		
 		analObj.addAnalyzerMeter(anaMeterObj);
 		analObj2.addAnalyzerMeter(anaMeterObj2);
 		
-		buildings.add(bObject);
-		buildings.add(bObject2);
+		buildings.add(bGui);
+		buildings.add(bGui2);
 		
 		Date currentDate = new Date();
 		
 		when(analyzerDataService.getLowestAnalyzerRegistryDate()).thenReturn(currentDate);
-		when(clbHomeLoginBean.getUserLoginPojo()).thenReturn(userLoginPojo);
-		when(userLoginPojo.getCurrentUser()).thenReturn(user);
-		when(user.getBuildings()).thenReturn(buildings);
+		when(clbHomeLoginBean.getUserBuildings()).thenReturn(buildings);
 		analysisBean.init();
 	}
 
 	@Override
 	public Object getBean() {
 		return analysisBean;
+	}
+
+	@Override
+	public Set<String> getExecptions() {
+		return new HashSet<String>();
 	}
 }

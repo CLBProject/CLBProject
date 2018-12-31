@@ -13,10 +13,9 @@ import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
 
 import clb.business.objects.AnalyzerRegistryObject;
-import clb.business.objects.AnalyzerMeterObject;
 import clb.global.AnalyzerMeterValues;
 import clb.global.DateUtils;
-import clb.ui.beans.pojos.AnalyzerRegistryGui;
+import clb.ui.beans.objects.AnalyzerRegistryGui;
 import clb.ui.enums.ScaleGraphic;
 import clb.ui.enums.TimeAnalysisType;
 
@@ -48,7 +47,7 @@ public class AnalysisBeanChart {
 
 	private AnalysisBeanCache analysisBeanCache;
 
-	public AnalysisBeanChart(List<AnalyzerMeterObject> buildingMetersObject, AnalysisBeanCache analysisBeanCache){
+	public AnalysisBeanChart(AnalysisBeanCache analysisBeanCache){
 		
 		this.analysisBeanCache = analysisBeanCache;
 

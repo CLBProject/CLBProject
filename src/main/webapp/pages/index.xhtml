@@ -25,7 +25,7 @@
 								</p:column>
 								<p:column>
 									<p:inputText id="emailUser" label="emailUser"
-										value="#{clbHomeLoginBean.userLoginPojo.username}" />
+										value="#{clbHomeLoginBean.loginUsername}" />
 								</p:column>
 								<p:column>
 									<p:spacer width="30" />
@@ -38,7 +38,7 @@
 								</p:column>
 								<p:column>
 									<p:inputText label="passwordUser" id="passwordUser"
-										value="#{clbHomeLoginBean.userLoginPojo.password}" type="password" />
+										value="#{clbHomeLoginBean.loginPassword}" type="password" />
 								</p:column>
 								<p:column>
 									<p:spacer width="40" />
@@ -54,6 +54,10 @@
 													if (args.cantLoginPasswordDoesntMatch === true)
 													{
 														PF('unSuccessPanelpasswordnotmatchUnsuccess').show();
+													}
+													if (args.userNotEnabledYet === true)
+													{
+														PF('unSuccessPaneluserNotEnabledYetUnsuccess').show();
 													}
 													"></p:commandButton>
 								</p:column>
@@ -170,9 +174,18 @@
 			<ui:param name="unSuccessMessage" value="User passwords didnt match" />
 		</ui:include>
 		<ui:include src="./popups/unSuccessDialog.xhtml">
+			<ui:param name="idUnsuccess" value="userNotEnabledYetUnsuccess" />
+			<ui:param name="unSuccessMessage" value="Please validate user token before login." />
+		</ui:include>
+		<ui:include src="./popups/unSuccessDialog.xhtml">
 			<ui:param name="idUnsuccess" value="alexistsUnsuccess" />
 			<ui:param name="unSuccessMessage"
 				value="User can't be registered because already exists" />
+		</ui:include>
+		<ui:include src="./popups/unSuccessDialog.xhtml">
+			<ui:param name="idUnsuccess" value="unexpectedUnsuccess" />
+			<ui:param name="unSuccessMessage"
+				value="There was an error while saving User. Please contact support" />
 		</ui:include>
 		<ui:include src="./general/footer.xhtml" />
 	</ui:define>

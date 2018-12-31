@@ -1,4 +1,4 @@
-package clb.ui.beans.pojos;
+package clb.ui.beans.objects;
 
 import java.util.Date;
 

@@ -6,6 +6,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +28,9 @@ public abstract class AbstractBeanTest {
 				String methodForSet = "set" + f.getName().toUpperCase().charAt(0) + f.getName().substring(1);
 
 				//Invoke Get Methods
-				if(!Modifier.isFinal(f.getModifiers()) && !Modifier.isStatic(f.getModifiers()) && !f.getName().startsWith("$SWITCH_TABLE$")) {
+				if(!Modifier.isFinal(f.getModifiers()) && !Modifier.isStatic(f.getModifiers()) 
+													&& !f.getName().startsWith("$SWITCH_TABLE$")
+													&& !getExecptions().contains(f.getName())) {
 
 					Object newInstance;
 					
@@ -105,4 +108,5 @@ public abstract class AbstractBeanTest {
 
 	public abstract void initBean();
 
+	public abstract Set<String> getExecptions();
 }

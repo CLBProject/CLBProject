@@ -136,7 +136,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	public void saveUsersystem(UsersystemObject userSystemObject) {
 		UsersystemEntity userSystemEntity = userSystemObject.toEntity();
 		userSystemMongoRepository.save(userSystemEntity);
-		userSystemEntity.setUserid(userSystemObject.getUserid());
+		userSystemObject.setUserid(userSystemEntity.getUserid());
 	}
 
 	@Override

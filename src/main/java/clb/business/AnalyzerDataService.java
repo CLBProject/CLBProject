@@ -28,5 +28,5 @@ public interface AnalyzerDataService {
 
 	public String[] getYearsAvailable();
 
-	public void fillUserWithAllBuildings(UsersystemObject user);
+	public void fillUserWithAllBuildings(String username);
 }

@@ -165,11 +165,10 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
 	@Override
 	@Transactional
-	public void fillUserWithAllBuildings(UsersystemObject user) {
+	public void fillUserWithAllBuildings(String username) {
+		final UsersystemObject user = clbDao.findUserByUserName(username);
 		clbDao.getAllBuildings().stream().forEach(building -> user.addBuilding(building));;
 		clbDao.saveUsersystem(user);
-
-		System.out.println("User added!");
 	}
 
 }

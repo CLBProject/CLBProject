@@ -1,6 +1,8 @@
 package clb.ui.beans;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -13,78 +15,120 @@ import org.primefaces.context.RequestContext;
 import clb.business.UserRegistryService;
 import clb.global.exceptions.UserDoesNotExistException;
 import clb.global.exceptions.UserDoesNotMatchPasswordLoginException;
-import clb.ui.beans.pojos.UserLoginPojo;
+import clb.global.exceptions.UserIsNotEnabledYet;
+import clb.ui.beans.objects.BuildingGui;
+import clb.ui.beans.objects.UserSystemGui;
 
 @SessionScoped
 @ManagedBean
-public class ClbHomeLoginBean implements Serializable{
+public class ClbHomeLoginBean implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @ManagedProperty("#{userRegistryService}")
-    private UserRegistryService userRegistryService;
-    
-    private UserLoginPojo userLoginPojo;
+	@ManagedProperty("#{userRegistryService}")
+	private UserRegistryService userRegistryService;
 
-    private final static String CANT_LOGIN_USER_NOT_FOUND_PARAM = "cantLoginUserNotFound";
-    private final static String CANT_LOGIN_PASSWORD_DOESNT_MATCH_PARAM = "cantLoginPasswordDoesntMatch";
+	private String loginUsername;
+	private String loginPassword;
+	
+	private UserSystemGui userUiPojo;
 
-    @PostConstruct
-    public void init() {
-        userLoginPojo = new UserLoginPojo();
-    }
+	private final static String CANT_LOGIN_USER_NOT_FOUND_PARAM = "cantLoginUserNotFound";
+	private final static String CANT_LOGIN_PASSWORD_DOESNT_MATCH_PARAM = "cantLoginPasswordDoesntMatch";
+	private final static String USER_NOT_ENABLED_YET = "userNotEnabledYet";
 
-    public String loginUser() {
+	@PostConstruct
+	public void init() {
+		userUiPojo = new UserSystemGui();
+	}
 
-        RequestContext context = RequestContext.getCurrentInstance();  
+	public String loginUser() {
 
-        try {
-            userLoginPojo.setCurrentUser( userRegistryService.validateUserLogin( userLoginPojo.getUsername(), userLoginPojo.getPassword() ));
-            return "clb";
-        } catch( UserDoesNotExistException e ) {
-           
-            userLoginPojo.setUsername( null );
-            userLoginPojo.setPassword( null );
-            userLoginPojo.setCurrentUser( null );
-           
-            context.addCallbackParam(CANT_LOGIN_USER_NOT_FOUND_PARAM, true);
-            return "index";
-        } catch( UserDoesNotMatchPasswordLoginException e ) {
-            
-            userLoginPojo.setUsername( null );
-            userLoginPojo.setPassword( null );
-            userLoginPojo.setCurrentUser( null );
-            
-            context.addCallbackParam(CANT_LOGIN_PASSWORD_DOESNT_MATCH_PARAM, true);
-            return "index";
-        }
-    }
+		RequestContext context = RequestContext.getCurrentInstance();
 
-    public String logout() {
-        
-        userLoginPojo.setUsername( null );
-        userLoginPojo.setPassword( null );
-        userLoginPojo.setCurrentUser( null );
-        
-        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-        return "index.xhtml?faces-redirect=true";
-    }
+		try {
 
-    public UserRegistryService getUserRegistryService() {
-        return userRegistryService;
-    }
+			userUiPojo = new UserSystemGui(userRegistryService.validateUserLogin(loginUsername, loginPassword));
 
-    public void setUserRegistryService( UserRegistryService userRegistryService ) {
-        this.userRegistryService = userRegistryService;
-    }
+			return "clb";
+		} catch (UserDoesNotExistException e) {
 
-    public UserLoginPojo getUserLoginPojo() {
-        return userLoginPojo;
-    }
+			userUiPojo.setUsername(null);
+			userUiPojo.setPassword(null);
+			userUiPojo.clear();
 
-    public void setUserLoginPojo( UserLoginPojo userLoginPojo ) {
-        this.userLoginPojo = userLoginPojo;
-    }
-    
-    
+			context.addCallbackParam(CANT_LOGIN_USER_NOT_FOUND_PARAM, true);
+			return "index";
+		} catch (UserDoesNotMatchPasswordLoginException e) {
+
+			userUiPojo.setUsername(null);
+			userUiPojo.setPassword(null);
+			userUiPojo.clear();
+
+			context.addCallbackParam(CANT_LOGIN_PASSWORD_DOESNT_MATCH_PARAM, true);
+			return "index";
+		} catch (UserIsNotEnabledYet e) {
+
+			userUiPojo.setUsername(null);
+			userUiPojo.setPassword(null);
+			userUiPojo.clear();
+
+			context.addCallbackParam(USER_NOT_ENABLED_YET, true);
+			return "index";
+		}
+	}
+
+	public String logout() {
+
+		userUiPojo.setUsername(null);
+		userUiPojo.setPassword(null);
+		userUiPojo.clear();
+
+		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+		return "index.xhtml?faces-redirect=true";
+	}
+
+	public boolean hasUserLoggedIn() {
+		return userUiPojo != null && userUiPojo.getUsername() != null && !userUiPojo.getUsername().equals( "" );
+	}
+
+	public boolean userHasBuildings() {
+		return userUiPojo != null && userUiPojo.getBuildings() != null && userUiPojo.getBuildings().size() > 0;
+	}
+
+	
+	public UserRegistryService getUserRegistryService() {
+		return userRegistryService;
+	}
+
+	public void setUserRegistryService(UserRegistryService userRegistryService) {
+		this.userRegistryService = userRegistryService;
+	}
+
+	public String getLoginUsername() {
+		return loginUsername;
+	}
+
+	public void setLoginUsername(String loginUsername) {
+		this.loginUsername = loginUsername;
+	}
+
+	public String getLoginPassword() {
+		return loginPassword;
+	}
+
+	public void setLoginPassword(String loginPassword) {
+		this.loginPassword = loginPassword;
+	}
+
+	public List<BuildingGui> getUserBuildings() {
+		
+		if(userUiPojo.hasBuildings()) {
+			return userUiPojo.getBuildings();
+		}
+		
+		return new ArrayList<BuildingGui>();
+	}
+	
+	
 }

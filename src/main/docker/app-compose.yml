@@ -1,4 +1,8 @@
-version: "3"
+version: "3.2"
+
+volumes:
+  mongodb_data_volume:
+    external: true
 
 services:
   mongo:
@@ -15,6 +19,10 @@ services:
             MONGODB_USER: "admin"
             MONGODB_PASS: "123456"
             MONGODB_DATABASE: "clb"
+        volumes:
+          - type: volume
+            source: mongodb_data_volume
+            target: /data/db
 networks:
   overlay:
 

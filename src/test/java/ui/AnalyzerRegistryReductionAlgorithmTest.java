@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import org.junit.Test;
 
 import clb.business.objects.AnalyzerRegistryObject;
-import clb.ui.beans.pojos.AnalyzerRegistryGui;
+import clb.ui.beans.objects.AnalyzerRegistryGui;
 import clb.ui.beans.utils.AnalyzerRegistryReductionAlgorithm;
 import clb.ui.enums.ScaleGraphic;
 

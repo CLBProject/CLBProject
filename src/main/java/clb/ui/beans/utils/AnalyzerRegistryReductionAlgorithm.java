@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.global.DateUtils;
-import clb.ui.beans.pojos.AnalyzerRegistryGui;
+import clb.ui.beans.objects.AnalyzerRegistryGui;
 import clb.ui.enums.ScaleGraphic;
 
 public class AnalyzerRegistryReductionAlgorithm {

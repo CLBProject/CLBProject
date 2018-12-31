@@ -25,7 +25,9 @@
 						<p:spacer width="25" /> <p:graphicImage
 							value="#{request.contextPath}/../resources/images/maintenance.png"></p:graphicImage>
 						<p:spacer width="2" /> <p:commandLink value="Building Management"
-							styleClass="menuLink"></p:commandLink> <p:spacer width="25" /> <p:graphicImage
+							styleClass="menuLink" ajax="false" type="submit"
+							action="#{redirectBean.redirectTo('buildingManagement.xhtml?faces-redirect=true')}"></p:commandLink> 
+						<p:spacer width="25" /> <p:graphicImage
 							value="#{request.contextPath}/../resources/images/forum.png"></p:graphicImage>
 						<p:spacer width="2" /> <p:commandLink value="Forum"
 							styleClass="menuLink"></p:commandLink> <p:spacer width="25" /> <p:graphicImage

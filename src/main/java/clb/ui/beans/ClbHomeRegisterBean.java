@@ -1,6 +1,5 @@
 package clb.ui.beans;
 
-import java.io.IOException;
 import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
@@ -21,7 +20,7 @@ import clb.global.exceptions.UserExistsOnRegistryException;
 import clb.global.exceptions.UserNotPersistedException;
 import clb.global.exceptions.UserTokenHasExpiredOnCompleteRegistration;
 import clb.global.exceptions.UserTokenIsNullOnCompleteRegistrationException;
-import clb.ui.beans.pojos.UserRegisterPojo;
+import clb.ui.beans.objects.UserSystemGui;
 
 @ViewScoped
 @ManagedBean
@@ -30,7 +29,7 @@ public class ClbHomeRegisterBean implements Serializable{
 	private final Logger logger = LoggerFactory.getLogger(ClbHomeRegisterBean.class);
 	
     private static final long serialVersionUID = 1L;
-    private UserRegisterPojo user;
+    private UserSystemGui user;
 
     @ManagedProperty("#{userRegistryService}")
     private UserRegistryService userRegistryService;
@@ -54,24 +53,14 @@ public class ClbHomeRegisterBean implements Serializable{
     
     @PostConstruct
     public void init() {
-        
-        //If user is logged in redirect
-        if(clbHomeLoginBean != null && clbHomeLoginBean.getUserLoginPojo().getUsername() != null && 
-                !clbHomeLoginBean.getUserLoginPojo().getUsername().equals( "" )) {
-            try {
-                FacesContext.getCurrentInstance().getExternalContext().redirect( "clb.xhtml" );
-            } catch( IOException e ) {
-            	logger.error("Error while redirecting to clb.xhtml" , e);
-            }
-        }
-        
-        user = new UserRegisterPojo();
+       user = new UserSystemGui();
+       registerResult = null;
     }
 
     public void registerUserAccount() {
 
         try {
-            userRegistryService.registerUser(user.toObject(), SESSION_TIME_MINUTES);
+            userRegistryService.registerUser(user.getName(), user.getUsername(), user.getAddress(), user.getPassword(), SESSION_TIME_MINUTES);
         }catch(UserExistsOnRegistryException uee) {
             RequestContext.getCurrentInstance().addCallbackParam( USER_EXISTS_PARAM, true );
         }catch(UserNotPersistedException unpe) {
@@ -82,30 +71,32 @@ public class ClbHomeRegisterBean implements Serializable{
     
     public void resendEmail() {
         try {
+
             userRegistryService.resendEmail(user.getUsername(), MINUTES_NECESSARY_TO_RESEND_EMAIL);
+            
         } catch( UserDoesNotExistException e ) {
             RequestContext.getCurrentInstance().addCallbackParam( USER_NOT_FOUND_ON_RESEND_EMAIL, true );
         } catch( UserCantResendEmailException e ) {
             RequestContext.getCurrentInstance().addCallbackParam( TIME_NOT_PASSED_SINCE_LAST_EMAIL, true );
         }
     }
-
-    public void registerUser() {
+    
+    public String registerUser() {
         String token = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get( "token" );
 
         try {
             
-            registerResult = null;
-            
             UsersystemObject userRegistered = userRegistryService.completeUserRegistration( token);
             
-            clbHomeLoginBean.getUserLoginPojo().setUsername( userRegistered.getUsername() );       
+            clbHomeLoginBean.setLoginUsername( userRegistered.getUsername() );       
             
         } catch( UserTokenIsNullOnCompleteRegistrationException e ) {
             registerResult = USER_TOKEN_NOT_FOUND_RESULT;
         } catch( UserTokenHasExpiredOnCompleteRegistration e ) {
             registerResult = USER_TOKEN_HAS_EXPIRED;
         }
+        
+        return "clb.xhtml?faces-redirect=true";
     }
     
     public void recoverPassword() {
@@ -118,11 +109,11 @@ public class ClbHomeRegisterBean implements Serializable{
         }
     }
     
-    public UserRegisterPojo getUser() {
+    public UserSystemGui getUser() {
         return user;
     }
 
-    public void setUser( UserRegisterPojo user ) {
+    public void setUser( UserSystemGui user ) {
         this.user = user;
     }
 

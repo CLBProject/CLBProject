@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * The persistent class for the USERSYSTEM database table.
  * 
  */
-@Document(collection="Users")
+@Document(collection="UsersSystem")
 public class UsersystemEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

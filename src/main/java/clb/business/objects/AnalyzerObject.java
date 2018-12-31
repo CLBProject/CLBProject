@@ -51,6 +51,14 @@ public class AnalyzerObject implements ClbObject
         
         analyzerRegistriesIds.add(analyzerRegId);
     }
+
+	public void addAnalyzerMeter(AnalyzerMeterObject analyzerMeterObject) {
+		if(this.analyzerMeters == null) {
+			this.analyzerMeters = new ArrayList<AnalyzerMeterObject>();
+		}
+		
+		this.analyzerMeters.add(analyzerMeterObject);
+	}
 	
 	public String getId() {
 		return id;
@@ -85,12 +93,5 @@ public class AnalyzerObject implements ClbObject
 		this.analyzerMeters = analyzerMeters;
 	}
 
-	public void addAnalyzerMeter(AnalyzerMeterObject analyzerMeterObject) {
-		if(this.analyzerMeters == null) {
-			this.analyzerMeters = new ArrayList<AnalyzerMeterObject>();
-		}
-		
-		this.analyzerMeters.add(analyzerMeterObject);
-	}
 	
 }
