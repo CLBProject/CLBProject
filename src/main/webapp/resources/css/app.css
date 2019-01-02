@@ -52,7 +52,7 @@ form {
 }
 
 .noRegClass {
-	color: yellow !important;
+	color: #0A122A !important;
 	font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -289,7 +289,7 @@ form {
 }
 
 .analysisDivClassMainCell {
-	font-size: 18px !important;
+	font-size: 26px !important;
 	font-weight: bold;
 	color: #CED8F6;
 	padding-bottom: 5px;
@@ -436,4 +436,15 @@ form {
 
 .timeFrame .ui-inputfield{
 	width:100px !important;
+}
+
+.ext-box { 
+	display: table; 
+	width:100%; 
+	height:70vh; 
+	background-color: #CED8F6;
+}
+.int-box { 
+	display: table-cell; 
+	vertical-align: middle; 
 }

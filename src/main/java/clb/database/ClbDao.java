@@ -45,7 +45,7 @@ public interface ClbDao{
 	
 	Date getLowestAnalyzerRegistryDate();
 
-	String[] getYearsAvailable();
+	String[] getDatesAvailable();
 
 	Long getLatestDateForAnalyzer(String analyzerCodeName);
 

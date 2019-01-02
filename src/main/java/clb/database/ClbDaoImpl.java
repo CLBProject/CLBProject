@@ -312,10 +312,10 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	}
 
 	@Override
-	public String[] getYearsAvailable() {
+	public String[] getDatesAvailable() {
 		Set<String> yearsValues = this.mongoTemplate.getCollectionNames().stream()
 				.filter(collname -> collname.startsWith(ANALYZER_REGISTIES_COLL_NAME))	
-				.map( colName -> colName.split("_")[1].substring(0, 4))
+				.map(colName -> colName.split("_")[1])
 				.collect(Collectors.toSet());
 
 		return yearsValues.toArray(new String[yearsValues.size()]);

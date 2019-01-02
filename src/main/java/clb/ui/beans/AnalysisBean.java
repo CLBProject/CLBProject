@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -64,11 +66,13 @@ public class AnalysisBean implements Serializable{
 	private Hours hour;
 	private Hours[] hoursValues;
 
+	private Map<String,List<String>> yearAndMonths;
+	
 	private Months month;
-	private Months[] monthsValues;
+	private Set<Months> monthsValues;
 
 	private String year;
-	private String[] years;
+	private Set<String> years;
 
 	private Weeks week;
 	private Weeks[] weeks;
@@ -93,12 +97,25 @@ public class AnalysisBean implements Serializable{
 		hoursValues = Hours.getHoursLimited(DateUtils.getInstance().getHourFromDate(todayDate));
 		hour = Hours.getHourByValue(DateUtils.getInstance().getHourFromDate(todayDate));
 
-		monthsValues = Months.getMonthsLimited(DateUtils.getInstance().getMonthFromDate(todayDate));
-		month = Months.getMonthByValue(DateUtils.getInstance().getMonthFromDate(todayDate));
-
-		year = "" + DateUtils.getInstance().getYearFromDate(todayDate);
-		years = analyzerDataService.getYearsAvailable();
-
+		yearAndMonths = analyzerDataService.getYearsAndMonthsAvailable();
+		
+		if(yearAndMonths != null && yearAndMonths.size() > 0) {
+			years = yearAndMonths.keySet();
+			year = years.iterator().next();
+			
+			List<String> monthsOfYear = yearAndMonths.get(year);
+			
+			if(monthsOfYear != null && monthsOfYear.size() > 0) {
+				monthsValues = monthsOfYear.stream()
+						.map(monthMap -> Months.getMonthByValue(Integer.parseInt(monthMap)))
+						.collect(Collectors.toSet());
+				
+				if(monthsValues != null && monthsValues.size() > 0) {
+					month = monthsValues.iterator().next();
+				}
+			}
+		}
+		
 		week = Weeks.getWeekByValue(DateUtils.getInstance().getWeekFromDate(analysisDate));
 		weeks = Weeks.getWeeksLimited(DateUtils.getInstance().getNumberOfMonthWeeks(month.getValue(),Integer.parseInt(year)));
 
@@ -110,6 +127,14 @@ public class AnalysisBean implements Serializable{
 			if(buildingsToSelect != null && buildingsToSelect.size() > 0)
 				initChartForBuilding(buildingsToSelect.get(0));
 		}
+	}
+
+	public Map<String, List<String>> getYearAndMonths() {
+		return yearAndMonths;
+	}
+
+	public void setYearAndMonths(Map<String, List<String>> yearAndMonths) {
+		this.yearAndMonths = yearAndMonths;
 	}
 
 	private List<BuildingGui> initBuildingObjects() {
@@ -197,7 +222,10 @@ public class AnalysisBean implements Serializable{
 
 		analysisDate = DateUtils.getInstance().getWeekFirstDayReseted(week.getCode(),month.getValue(),Integer.parseInt(year));
 
-		monthsValues = Months.getMonthsLimited(DateUtils.getInstance().getNumberOfMonthsInYear(Integer.parseInt(year)));
+		monthsValues = year != null ? yearAndMonths.get(year).stream()
+				.map(month -> Months.getMonthByValue(Integer.parseInt(month)))
+				.collect(Collectors.toSet()) : null;
+				
 		weeks = Weeks.getWeeksLimited(DateUtils.getInstance().getNumberOfMonthWeeks(month.getValue(),Integer.parseInt(year)));
 
 		fillGraphicData(analysisBeanCache.getWeekRegistriesFromAnalyzer(analyzerSelected.getAnalyzerId(), week.getCode(), month.getValue(), Integer.parseInt(year)));
@@ -220,7 +248,7 @@ public class AnalysisBean implements Serializable{
 		month = Months.JANUARY;
 
 		analysisDate = DateUtils.getInstance().getWeekFirstDayReseted(week.getCode(),month.getValue(),Integer.parseInt(year));
-		monthsValues = Months.getMonthsLimited(DateUtils.getInstance().getNumberOfMonthsInYear(Integer.parseInt(year)));
+		monthsValues = yearAndMonths.get(year).stream().map(month -> Months.valueOf(month)).collect(Collectors.toSet());
 
 		fillGraphicData(analysisBeanCache.getMonthRegistriesFromAnalyzer( analyzerSelected.getAnalyzerId(), month.getValue(), Integer.parseInt(year)));
 	}
@@ -376,11 +404,11 @@ public class AnalysisBean implements Serializable{
 		this.month = month;
 	}
 
-	public Months[] getMonthsValues() {
+	public Set<Months> getMonthsValues() {
 		return monthsValues;
 	}
 
-	public void setMonthsValues(Months[] monthsValues) {
+	public void setMonthsValues(Set<Months> monthsValues) {
 		this.monthsValues = monthsValues;
 	}
 
@@ -416,11 +444,11 @@ public class AnalysisBean implements Serializable{
 		this.year = year;
 	}
 
-	public String[] getYears() {
+	public Set<String> getYears() {
 		return years;
 	}
 
-	public void setYears(String[] years) {
+	public void setYears(Set<String> years) {
 		this.years = years;
 	}
 

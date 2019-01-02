@@ -1,8 +1,11 @@
 package clb.business;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -159,8 +162,25 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	}
 
 	@Override
-	public String[] getYearsAvailable() {
-		return clbDao.getYearsAvailable();
+	public Map<String,List<String>> getYearsAndMonthsAvailable() {
+		
+		Map<String,List<String>> yearsAndMonths = new HashMap<String,List<String>>();
+		
+		for(String date: clbDao.getDatesAvailable()) {
+			String year = date.substring(0,4);
+			String month = date.substring(4,6);
+			
+			List<String> months = yearsAndMonths.get(year);
+			
+			if(months == null) {
+				months = new ArrayList<String>();
+			}
+			
+			months.add(month);
+			yearsAndMonths.put(year, months);
+		}
+		
+		return yearsAndMonths;
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -292,16 +293,26 @@ public class AnalyzerDataServiceTest {
 	@Test
 	public void testGetYearsAvailable() {
 
-		String[] years = {"2016","2017","2018"};
+		String[] dates = {"20160801","20170702","20180501"};
 
-		when(clbDao.getYearsAvailable()).thenReturn(years);
+		when(clbDao.getDatesAvailable()).thenReturn(dates);
 
-		String[] yearsReturned = analyzerDataService.getYearsAvailable();
+		Map<String, List<String>> yearsAndMonths = analyzerDataService.getYearsAndMonthsAvailable();
 
-		Assert.assertEquals(yearsReturned[0],"2016");
-		Assert.assertEquals(yearsReturned[1],"2017");
-		Assert.assertEquals(yearsReturned[2],"2018");
-
+		
+		List<String> firstYearAndMonth = yearsAndMonths.get("2016");
+		List<String> secondYearAndMonth = yearsAndMonths.get("2017");
+		List<String> thirdYearAndMonth = yearsAndMonths.get("2018");
+		
+		Assert.assertEquals(firstYearAndMonth.get(0), "08");
+		Assert.assertEquals(secondYearAndMonth.get(0), "07");
+		Assert.assertEquals(thirdYearAndMonth.get(0), "05");
+		
+		System.out.println(firstYearAndMonth);
+		
+		Assert.assertEquals(firstYearAndMonth.size(), 1);
+		Assert.assertEquals(secondYearAndMonth.size(), 1);
+		Assert.assertEquals(thirdYearAndMonth.size(), 1);
 	}
 	
 	@Test

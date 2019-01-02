@@ -162,7 +162,7 @@ def processUserFtp(userftp, passwordftp):
                         if fileInArray not in filesProcessed:
                             ftp.sendcmd("NOOP")
                             
-                            if index % 500 == 0:
+                            if index % 20 == 0:
                             	#print('Downloading File: ' + filename)
                             	ftp.retrlines('RETR ' + filename, lambda line: processData(line, currentDir, latestPersistedDate))
                             

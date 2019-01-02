@@ -2,6 +2,7 @@ package clb.business;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.UsersystemObject;
@@ -26,7 +27,7 @@ public interface AnalyzerDataService {
 	
 	public Date getLowestAnalyzerRegistryDate();
 
-	public String[] getYearsAvailable();
+	public Map<String,List<String>> getYearsAndMonthsAvailable();
 
 	public void fillUserWithAllBuildings(String username);
 }
