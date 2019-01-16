@@ -17,6 +17,7 @@ import clb.ui.beans.ClbHomeLoginBean;
 import clb.ui.beans.objects.AnalyzerGui;
 import clb.ui.beans.objects.AnalyzerMeterGui;
 import clb.ui.beans.objects.BuildingGui;
+import clb.ui.beans.objects.DivisionGui;
 
 public class AnalysisBeanTest extends AbstractBeanTest{
 
@@ -39,11 +40,17 @@ public class AnalysisBeanTest extends AbstractBeanTest{
 		AnalyzerGui analObj = new AnalyzerGui();
 		AnalyzerGui analObj2 = new AnalyzerGui();
 		
+		DivisionGui divisionG = new DivisionGui();
+		DivisionGui divisionG2 = new DivisionGui();
+		
 		AnalyzerMeterGui anaMeterObj = new AnalyzerMeterGui();
 		AnalyzerMeterGui anaMeterObj2 = new AnalyzerMeterGui();
 
-		bGui.addAnalyzer(analObj);
-		bGui2.addAnalyzer(analObj2);
+		bGui.setMainDivision(divisionG);
+		bGui2.setMainDivision(divisionG2);
+		
+		divisionG.addAnalyzer(analObj);
+		divisionG2.addAnalyzer(analObj2);
 		
 		analObj.addAnalyzerMeter(anaMeterObj);
 		analObj2.addAnalyzerMeter(anaMeterObj2);

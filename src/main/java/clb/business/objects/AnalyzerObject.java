@@ -11,10 +11,10 @@ public class AnalyzerObject implements ClbObject
     private String id;
     
     private String codeName;
-
-	private List<String> analyzerRegistriesIds;
 	
     private List<AnalyzerMeterObject> analyzerMeters;
+    
+    private List<String> analyzerRegistriesIds;
 
 	public AnalyzerObject(){
 
@@ -37,19 +37,18 @@ public class AnalyzerObject implements ClbObject
 		
 		analyzerEntity.setCodeName( this.codeName );
 		analyzerEntity.setAnalyzerRegistriesIds(this.analyzerRegistriesIds);
-		
 		analyzerEntity.setAnalyzerMeters( this.analyzerMeters != null ? 
                 this.analyzerMeters.stream().map( AnalyzerMeterObject::toEntity ).collect( Collectors.toList() ) : null);
 		
 		return analyzerEntity;
 	}
 	
-    public void addAnalyzerRegistry(String analyzerRegId) {
+    public void addAnalyzerRegistryId(String analyzerObjId) {
         if(analyzerRegistriesIds == null) {
-            analyzerRegistriesIds = new ArrayList<String>();
+        	analyzerRegistriesIds = new ArrayList<String>();
         }
         
-        analyzerRegistriesIds.add(analyzerRegId);
+        analyzerRegistriesIds.add(analyzerObjId);
     }
 
 	public void addAnalyzerMeter(AnalyzerMeterObject analyzerMeterObject) {
@@ -76,21 +75,22 @@ public class AnalyzerObject implements ClbObject
 	public void setCodeName(String codeName) {
 		this.codeName = codeName;
 	}
-
-	public List<String> getAnalyzerRegistriesIds() {
-        return analyzerRegistriesIds;
-    }
-
-    public void setAnalyzerRegistriesIds( List<String> analyzerRegistriesIds ) {
-        this.analyzerRegistriesIds = analyzerRegistriesIds;
-    }
-
+	
+	
 	public List<AnalyzerMeterObject> getAnalyzerMeters() {
 		return analyzerMeters;
 	}
 
 	public void setAnalyzerMeters(List<AnalyzerMeterObject> analyzerMeters) {
 		this.analyzerMeters = analyzerMeters;
+	}
+
+	public List<String> getAnalyzerRegistriesIds() {
+		return analyzerRegistriesIds;
+	}
+
+	public void setAnalyzerRegistriesIds(List<String> analyzerRegistriesIds) {
+		this.analyzerRegistriesIds = analyzerRegistriesIds;
 	}
 
 	

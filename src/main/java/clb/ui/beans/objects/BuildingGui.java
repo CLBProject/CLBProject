@@ -1,9 +1,5 @@
 package clb.ui.beans.objects;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -21,7 +17,7 @@ public class BuildingGui {
     
     private String imgPath;
     
-    private List<AnalyzerGui> analyzers;
+    private DivisionGui mainDivision;
 
 	public BuildingGui() {
 	}
@@ -31,8 +27,7 @@ public class BuildingGui {
 		this.buildingid = bObject.getBuildingid();
 		this.name = bObject.getName();
 		this.imgPath = bObject.getImgPath();
-		this.analyzers = bObject.getAnalyzers() != null ?
-				bObject.getAnalyzers().stream().map(AnalyzerGui::new).collect(Collectors.toList()) : null;
+		this.mainDivision = bObject.getMainDivision() != null ? new DivisionGui(bObject.getMainDivision()) : null;
 	}
 	
 	public BuildingObject toObject() {
@@ -40,17 +35,11 @@ public class BuildingGui {
 		
 		bobj.setBuildingid(this.buildingid);
 		bobj.setName(this.name);
+		bobj.setMainDivision(this.mainDivision != null ? this.mainDivision.toObject() : null);
 		
 		return bobj;
 	}
-	
-    public void addAnalyzer(AnalyzerGui dataLoggerObject) {
-        if(analyzers == null) {
-            analyzers = new ArrayList<AnalyzerGui>();
-        }
 
-        analyzers.add(dataLoggerObject);
-    }
 
 	public String getBuildingid() {
 		return buildingid;
@@ -67,13 +56,14 @@ public class BuildingGui {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
 
-	public List<AnalyzerGui> getAnalyzers() {
-		return analyzers;
+	public DivisionGui getMainDivision() {
+		return mainDivision;
 	}
 
-	public void setAnalyzers(List<AnalyzerGui> analyzers) {
-		this.analyzers = analyzers;
+	public void setMainDivision(DivisionGui mainDivision) {
+		this.mainDivision = mainDivision;
 	}
 
 	public String getImgPath() {

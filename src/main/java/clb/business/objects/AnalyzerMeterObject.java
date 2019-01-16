@@ -4,7 +4,7 @@ import clb.database.entities.AnalyzerMeterEntity;
 
 public class AnalyzerMeterObject
 {
-    private String buildingMeterId;
+    private String meterId;
 
     private String name;
     
@@ -17,7 +17,7 @@ public class AnalyzerMeterObject
     }
     
     public AnalyzerMeterObject( AnalyzerMeterEntity analyzerMeterEntity ) {
-        this.buildingMeterId = analyzerMeterEntity.getBuildingMeterId();
+        this.meterId = analyzerMeterEntity.getBuildingMeterId();
         this.name = analyzerMeterEntity.getName();
         this.unit = analyzerMeterEntity.getUnit();
         this.labelKey = analyzerMeterEntity.getLabelKey();
@@ -25,24 +25,25 @@ public class AnalyzerMeterObject
 
     public AnalyzerMeterEntity toEntity() {
         AnalyzerMeterEntity analyzerMeterEntity = new AnalyzerMeterEntity();
-        analyzerMeterEntity.setBuildingMeterId( this.buildingMeterId );
+        analyzerMeterEntity.setBuildingMeterId( this.meterId );
         analyzerMeterEntity.setName( this.name );
         analyzerMeterEntity.setLabelKey( this.labelKey );
         analyzerMeterEntity.setUnit( this.unit );
         
         return analyzerMeterEntity;
     }
-
     
-    public String getBuildingMeterId() {
-        return buildingMeterId;
-    }
+    
 
-    public void setBuildingMeterId( String buildingMeterId ) {
-        this.buildingMeterId = buildingMeterId;
-    }
+    public String getMeterId() {
+		return meterId;
+	}
 
-    public String getName() {
+	public void setMeterId(String meterId) {
+		this.meterId = meterId;
+	}
+
+	public String getName() {
         return name;
     }
 

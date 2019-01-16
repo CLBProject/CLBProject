@@ -1,9 +1,5 @@
 package clb.business.objects;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import clb.database.entities.BuildingEntity;
 
 public class BuildingObject
@@ -16,7 +12,7 @@ public class BuildingObject
 
     private String imgPath;
 
-    private List<AnalyzerObject> analyzers;
+    private DivisionObject mainDivision;
 
     public BuildingObject(){
 
@@ -27,8 +23,7 @@ public class BuildingObject
         this.name = building.getName();
         this.buildingusername = building.getBuildingusername();
         this.imgPath = building.getImgPath();
-        this.analyzers = building.getAnalyzers() != null ? 
-                building.getAnalyzers().stream().map(AnalyzerObject::new).collect(Collectors.toList()) : null;          
+        this.mainDivision = building.getMainDivision() != null ? new DivisionObject(building.getMainDivision()) : null;     
     }
 
     public BuildingEntity toEntity() {
@@ -36,18 +31,9 @@ public class BuildingObject
         buildingEntity.setBuildingid( this.buildingid );
         buildingEntity.setName( this.name );
         buildingEntity.setImgPath( this.imgPath );
-        buildingEntity.setAnalyzers(this.analyzers != null ?
-                this.analyzers.stream().map(AnalyzerObject::toEntity).collect(Collectors.toList()) : null);
+        buildingEntity.setMainDivision(this.mainDivision != null ? this.mainDivision.toEntity() : null);
 
         return buildingEntity;
-    }
-    
-    public void addAnalyzer(AnalyzerObject dataLoggerObject) {
-        if(analyzers == null) {
-            analyzers = new ArrayList<AnalyzerObject>();
-        }
-
-        analyzers.add(dataLoggerObject);
     }
 
     public String getBuildingid() {
@@ -74,16 +60,6 @@ public class BuildingObject
         this.buildingusername = buildingusername;
     }
 
-    
-
-    public List<AnalyzerObject> getAnalyzers() {
-		return analyzers;
-	}
-
-	public void setAnalyzers(List<AnalyzerObject> analyzers) {
-		this.analyzers = analyzers;
-	}
-
 	public String getImgPath() {
         return imgPath;
     }
@@ -91,4 +67,17 @@ public class BuildingObject
     public void setImgPath( String imgPath ) {
         this.imgPath = imgPath;
     }
+
+	public DivisionObject getMainDivision() {
+		return mainDivision;
+	}
+
+	public void setMainDivision(DivisionObject mainDivision) {
+		this.mainDivision = mainDivision;
+	}
+    
+    
 }
+
+
+

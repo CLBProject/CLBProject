@@ -26,6 +26,7 @@ import clb.business.objects.AnalyzerMeterObject;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.BuildingObject;
+import clb.business.objects.DivisionObject;
 import clb.business.objects.UsersystemObject;
 import clb.database.ClbDao;
 import clb.global.AnalyzerMeterValues;
@@ -73,9 +74,14 @@ public class AnalyzerDataServiceDeprecatedImpl implements AnalyzerDataServiceDep
 
 		for(int j = 0; j<workbook.getNumberOfSheets();j++){
 
+			DivisionObject divObj = new DivisionObject();
 			AnalyzerObject ana = new AnalyzerObject();
+			
+			building.setMainDivision(divObj);
+			divObj.addAnalyzer(ana);
+			
 			ana.setCodeName( "Analyzer " + (j+1));
-			building.addAnalyzer(ana);
+			
 			
 			XSSFSheet worksheet = workbook.getSheetAt( j );
 
@@ -143,7 +149,7 @@ public class AnalyzerDataServiceDeprecatedImpl implements AnalyzerDataServiceDep
 
 			clbDao.saveAnalyzerRegistries(analyzerRegistries);
 
-			analyzerRegistries.stream().forEach( analyzerRegistry -> ana.addAnalyzerRegistry( analyzerRegistry.getId() ) );
+			analyzerRegistries.stream().forEach( analyzerRegistry -> ana.addAnalyzerRegistryId( analyzerRegistry.getId() ) );
 
 			persistDummyAnalyzerRegistries( ana, dataToExclueOnDummy);
 
@@ -241,7 +247,7 @@ public class AnalyzerDataServiceDeprecatedImpl implements AnalyzerDataServiceDep
 				}
 
 				clbDao.saveAnalyzerRegistries(analyzersRegistries);
-				analyzersRegistries.stream().forEach( analyzerRegistry -> analyzer.addAnalyzerRegistry( analyzerRegistry.getId() ) );
+				analyzersRegistries.stream().forEach( analyzerRegistry -> analyzer.addAnalyzerRegistryId( analyzerRegistry.getId() ) );
 			}
 		}
 	}

@@ -20,6 +20,7 @@ import clb.business.objects.AnalyzerRegistryObject;
 import clb.global.DateUtils;
 import clb.ui.beans.objects.AnalyzerGui;
 import clb.ui.beans.objects.BuildingGui;
+import clb.ui.beans.objects.DivisionGui;
 import clb.ui.beans.utils.AnalysisBeanCache;
 import clb.ui.beans.utils.AnalysisBeanChart;
 import clb.ui.enums.AnalysisTypes;
@@ -140,7 +141,7 @@ public class AnalysisBean implements Serializable{
 	private List<BuildingGui> initBuildingObjects() {
 		return clbHomeLoginBean.getUserBuildings().stream().filter(building -> {
 			
-			List<AnalyzerGui> buildingAnalyzers = building.getAnalyzers() ;
+			List<AnalyzerGui> buildingAnalyzers = building.getMainDivision() != null ? building.getMainDivision().getAnalyzers() : null;
 			
 			return buildingAnalyzers != null && buildingAnalyzers.stream()
 					.filter(buildingAnalyzer -> buildingAnalyzer.getAnalyzerMeters().size() > 0)
@@ -152,11 +153,11 @@ public class AnalysisBean implements Serializable{
 		buildingSelected = bObj;
 		tempBuildingSelected = buildingSelected;
 
-		List<AnalyzerGui> analyzers = bObj.getAnalyzers();
+		DivisionGui division = bObj.getMainDivision();
 		
-		if(analyzers != null && analyzers.size() > 0) {
-			analyzersSelected = analyzers;
-			analyzerSelected = analyzers.get(0);
+		if(division != null && division.hasAnalyzers()) {
+			analyzersSelected = division.getAnalyzers();
+			analyzerSelected = analyzersSelected.get(0);
 			tempAnalyzerSelected = analyzerSelected;
 			
 			analysisDayPojo = new AnalysisBeanChart( this.analysisBeanCache);

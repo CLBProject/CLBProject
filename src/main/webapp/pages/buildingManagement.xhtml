@@ -9,22 +9,46 @@
 	template="template/ui.xhtml">
 	<ui:define name="body">
 		<ui:include src="./general/menutab.xhtml" />
-		<h:form>
-			<div class="mainDivClass">
-			   <p:dataTable id="paginatorSelector" widgetVar="paginatorSelector"
-					styleClass="buildingSelectionCSS" paginator="true"
-					paginatorPosition="bottom"
-					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-					value="#{buildingManagementBean.buildingsToShow}"
-					rows="10" rowKey="#{building.buildingid}" var="building">
-					<p:column styleClass="dataTableColumn">
-						<p:panel>
-							<h:outputText value="#{building.name}"></h:outputText>
-						</p:panel>
-					</p:column>
-				</p:dataTable>
-			</div>
-		</h:form>
+		<div class="buildingManagementDiv">
+			<h:form>
+				<table width="100%" class="appDivClass">
+					<tr>
+						<td>
+							<div align="center" class="titleDivClass">
+								<p:outputLabel value="Building Management"></p:outputLabel>
+							</div>
+							<hr />
+						</td>
+					</tr>
+					<tr>
+						<td width="100%">
+							<div align="center" class="mainDivClass">
+								<p:dataTable id="paginatorSelector"
+									widgetVar="paginatorSelector" paginator="true"
+									paginatorPosition="bottom"
+									paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+									value="#{buildingManagementBean.buildingsToShow}" rows="10"
+									rowKey="#{building.buildingid}" var="building"
+									styleClass="buildingManagementTable">
+									<p:column styleClass="dataTableColumn">
+										<p:panel>
+											<div align="left" class="buildingDivClass">
+												<h:outputText value="#{building.buildingName}" style="font-size:16px"></h:outputText>
+												<div class="buildingDivClass" style="padding: 5px">
+													
+												</div>
+											</div>
+										</p:panel>
+									</p:column>
+								</p:dataTable>
+							</div>
+						</td>
+					</tr>
+				</table>
+				<br/>
+				<br/>
+			</h:form>
+		</div>
 		<ui:include src="./general/footer.xhtml" />
 	</ui:define>
 </ui:composition>

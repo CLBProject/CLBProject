@@ -20,10 +20,13 @@ public class AnalyzerEntity implements Serializable {
     
     private String codeName;
 
-    private List<String> analyzerRegistriesIds;
+    @DBRef
+    private List<AnalyzerEntity> analyzers;
     
 	@DBRef
 	private List<AnalyzerMeterEntity> analyzerMeters;
+	
+	private List<String> analyzerRegistriesIds;
 
     public AnalyzerEntity() {
     }
@@ -43,14 +46,16 @@ public class AnalyzerEntity implements Serializable {
 	public void setCodeName(String codeName) {
 		this.codeName = codeName;
 	}
+	
+	
+	
+	public List<AnalyzerEntity> getAnalyzers() {
+		return analyzers;
+	}
 
-	public List<String> getAnalyzerRegistriesIds() {
-        return analyzerRegistriesIds;
-    }
-
-    public void setAnalyzerRegistriesIds( List<String> analyzerRegistriesIds ) {
-        this.analyzerRegistriesIds = analyzerRegistriesIds;
-    }
+	public void setAnalyzers(List<AnalyzerEntity> analyzers) {
+		this.analyzers = analyzers;
+	}
 
 	public List<AnalyzerMeterEntity> getAnalyzerMeters() {
 		return analyzerMeters;
@@ -58,6 +63,14 @@ public class AnalyzerEntity implements Serializable {
 
 	public void setAnalyzerMeters(List<AnalyzerMeterEntity> analyzerMeters) {
 		this.analyzerMeters = analyzerMeters;
+	}
+
+	public List<String> getAnalyzerRegistriesIds() {
+		return analyzerRegistriesIds;
+	}
+
+	public void setAnalyzerRegistriesIds(List<String> analyzerRegistriesIds) {
+		this.analyzerRegistriesIds = analyzerRegistriesIds;
 	}
 
     

@@ -23,6 +23,15 @@ public class AnalyzerGui {
 				analyzerObj.getAnalyzerMeters().stream().map(AnalyzerMeterGui::new).collect(Collectors.toList()) : null;
 	}
 	
+	public AnalyzerObject toObject() {
+		AnalyzerObject analyzer = new AnalyzerObject();
+		analyzer.setId(this.analyzerId);
+		analyzer.setCodeName(this.codeName);
+		analyzer.setAnalyzerMeters(this.analyzerMeters != null ? this.analyzerMeters.stream().map(AnalyzerMeterGui::toObject).collect(Collectors.toList()) : null);
+		
+		return analyzer;
+	}
+	
 	public void addAnalyzerMeter(AnalyzerMeterGui analyzerMeter) {
 		if(this.analyzerMeters == null) {
 			this.analyzerMeters = new ArrayList<AnalyzerMeterGui>();

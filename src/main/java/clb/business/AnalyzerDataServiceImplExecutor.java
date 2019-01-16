@@ -19,6 +19,7 @@ import clb.business.objects.AnalyzerMeterObject;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.BuildingObject;
+import clb.business.objects.DivisionObject;
 import clb.business.objects.UsersystemObject;
 import clb.business.utils.JsonUtils;
 import clb.database.ClbDao;
@@ -98,7 +99,12 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 									
 									buildingObject = new BuildingObject();
 									buildingObject.setName(buildingName);
-									buildingObject.addAnalyzer(analyzerObject);
+									
+									DivisionObject div = new DivisionObject();
+									div.setName("Main Division");
+									div.addAnalyzer(analyzerObject);
+									
+									buildingObject.setMainDivision(div);
 
 									clbDao.saveBuilding(buildingObject);
 								}
@@ -108,7 +114,7 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 
 							AnalyzerRegistryObject analyzerRegistry = JsonUtils.getInstance().toAnalyzerRegistryObject(jsonObj);
 							clbDao.saveAnalyzerRegistry( analyzerRegistry);
-							analyzerObject.addAnalyzerRegistry(analyzerRegistry.getAnalyzerId());
+							analyzerObject.addAnalyzerRegistryId(analyzerRegistry.getId());
 
 							clientSocket.getOutputStream().write(AnalyzerCommand.ACKNOWLEDGE.getValue().getBytes());
 							clientSocket.getOutputStream().flush();

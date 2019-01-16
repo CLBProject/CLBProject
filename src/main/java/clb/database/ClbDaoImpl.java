@@ -129,7 +129,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	public void saveAnalyzerMeter(AnalyzerMeterObject buildingMeterObject) {
 		AnalyzerMeterEntity buildingMeterEntity = buildingMeterObject.toEntity();
 		buildingsMetersMongoRepository.save(buildingMeterEntity);
-		buildingMeterObject.setBuildingMeterId( buildingMeterEntity.getBuildingMeterId() );
+		buildingMeterObject.setMeterId( buildingMeterEntity.getBuildingMeterId() );
 	}
 
 	@Override

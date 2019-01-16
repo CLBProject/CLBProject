@@ -12,6 +12,7 @@ import org.junit.Test;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.BuildingObject;
+import clb.business.objects.DivisionObject;
 import clb.database.entities.AnalyzerEntity;
 import clb.database.entities.AnalyzerRegistryEntity;
 import clb.database.entities.BuildingEntity;
@@ -347,6 +348,9 @@ public class EntitiesMappingTest {
 		bobj.setBuildingid("b01");
 		bobj.setName("dl1");
 		
+		DivisionObject mainDivision = new DivisionObject();
+		mainDivision.setName("Main Division");
+		
 		List<AnalyzerObject> analyzers = new ArrayList<AnalyzerObject>();
 		
 		AnalyzerObject aobj1 = new AnalyzerObject();
@@ -357,14 +361,16 @@ public class EntitiesMappingTest {
 		
 		analyzers.add(aobj1);
 		analyzers.add(aobj2);
-		bobj.setAnalyzers(analyzers);
+		mainDivision.setAnalyzers(analyzers);
+		
+		bobj.setMainDivision(mainDivision);
 		
 		BuildingEntity bEnt = bobj.toEntity();
 		
 		assertEquals(bobj.getBuildingid(),bEnt.getBuildingid());
 		assertEquals(bobj.getName(),bEnt.getName());
 		
-		List<AnalyzerEntity> analyzersMapped = bEnt.getAnalyzers();
+		List<AnalyzerEntity> analyzersMapped = bEnt.getMainDivision().getAnalyzers();
 		
 		assertEquals(analyzers.size(), analyzersMapped.size());
 		assertEquals(analyzersMapped.get(0).getId(),"1");
