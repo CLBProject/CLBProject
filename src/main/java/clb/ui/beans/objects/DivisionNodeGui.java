@@ -21,7 +21,7 @@ public class DivisionNodeGui implements Serializable, Comparable<DivisionNodeGui
 	
 	@Override
 	public int compareTo(DivisionNodeGui document) {
-        return this.getName().compareTo((document).getName());
+        return this.getDivisionId().compareTo((document).getDivisionId());
     }
 
 	public String getDivisionId() {

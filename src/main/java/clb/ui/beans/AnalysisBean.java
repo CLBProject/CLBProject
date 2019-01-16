@@ -13,6 +13,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
+import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
@@ -163,9 +164,10 @@ public class AnalysisBean implements Serializable{
 		
 		if(division != null && division.hasAnalyzers()) {
 			
+			//Root
 			mainDivision = new DefaultTreeNode(new DivisionNodeGui(division),null);
 			
-			buildTreeSelection(mainDivision,division);
+			buildTreeSelection(new DefaultTreeNode(new DivisionNodeGui(division),mainDivision),division);
 			
 			analyzersSelected = division.getAnalyzers();
 			analyzerSelected = analyzersSelected.get(0);
@@ -184,12 +186,20 @@ public class AnalysisBean implements Serializable{
 		if(division.hasSubDivisions()) {
 			division.getChildrenDivisions().stream()
 				.forEach(childDivision -> 
-						buildTreeSelection(
-								new DefaultTreeNode(
-										new DivisionNodeGui(division),head),childDivision));
+						buildTreeSelection( new DefaultTreeNode(new DivisionNodeGui(childDivision),head),childDivision));
 		}
 	}
 
+	 public void onNodeSelect(NodeSelectEvent event)
+	    {
+	        TreeNode currentTreeNode = event.getTreeNode();
+//	        currentTreeNode.setSelected(true);
+
+	        TreeNode parent = currentTreeNode;
+	        
+	        System.out.println("Arrived!");
+	    }
+	
 	public void selectBuilding() {
 		buildingSelected = tempBuildingSelected;
 		initChartForBuilding(buildingSelected); 

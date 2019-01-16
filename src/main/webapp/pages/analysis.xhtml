@@ -203,21 +203,15 @@
 													<p:outputLabel value="No Divisions to Select"></p:outputLabel>
 												</c:when>
 												<c:otherwise>
-													  <p:tree value="#{analysisBean.mainDivision}" var="division"
-												                        selectionMode="checkbox"
+													   <p:outputLabel value="Division" />
+													   <hr/>
+													   <p:tree value="#{analysisBean.mainDivision}" var="division" styleClass="divisionAnalysis"
+												                        id="divisionTreeAnalisys" selectionMode="checkbox" dynamic="true"
 												                        selection="#{analysisBean.mainDivisionSelected}">
 												        <p:treeNode>
 												            <h:outputText value="#{division.name}"/>
 												        </p:treeNode>
-												        <p:treeNode type="document">
-												            <h:outputText value="#{division.name}" />
-												        </p:treeNode>
-												        <p:treeNode type="document">
-												            <h:outputText value="#{division.name}" />
-												        </p:treeNode>
-												        <p:treeNode type="document">
-												            <h:outputText value="#{division.name}" />
-												        </p:treeNode>
+												        <p:ajax event="select"  listener="#{analysisBean.onNodeSelect}" update="@form"></p:ajax>
 												    </p:tree>
 												</c:otherwise>
 											</c:choose>
