@@ -99,13 +99,28 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 									
 									buildingObject = new BuildingObject();
 									buildingObject.setName(buildingName);
+
+									DivisionObject subDiv1 = new DivisionObject();
+									subDiv1.setName("Sub Division 1");
+									
+									DivisionObject subDiv2 = new DivisionObject();
+									subDiv2.setName("Sub Division 2");
+
+									clbDao.saveDivision(subDiv1);
+									clbDao.saveDivision(subDiv2);
 									
 									DivisionObject div = new DivisionObject();
 									div.setName("Main Division");
 									div.addAnalyzer(analyzerObject);
 									
+									
+									div.addSubDivision(subDiv1);
+									div.addSubDivision(subDiv2);
+									
+									clbDao.saveDivision(div);
+									
 									buildingObject.setMainDivision(div);
-
+									
 									clbDao.saveBuilding(buildingObject);
 								}
 							}

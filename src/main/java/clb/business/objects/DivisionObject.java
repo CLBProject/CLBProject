@@ -50,6 +50,15 @@ public class DivisionObject
 
         analyzers.add(dataLoggerObject);
     }
+    
+	public void addSubDivision(DivisionObject subDiv) {
+		if(childrenDivisions == null) {
+			childrenDivisions = new ArrayList<DivisionObject>();
+        }
+
+        childrenDivisions.add(subDiv);
+	}
+
 
     public String getName() {
         return name;
@@ -82,6 +91,7 @@ public class DivisionObject
 	public void setChildrenDivisions(List<DivisionObject> childrenDivisions) {
 		this.childrenDivisions = childrenDivisions;
 	}
+
 
 	
 }

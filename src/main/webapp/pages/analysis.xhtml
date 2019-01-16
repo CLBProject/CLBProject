@@ -44,7 +44,7 @@
 									</p:selectBooleanCheckbox>
 								</div>
 								<div class="analysisMenuEntry">
-									<p:panel>
+									<p:panel rendered="#{not empty analysisBean.analyzerSelected}">
 										<div class="analysisMenuEntry">
 											<p:outputLabel value="View:" for="scaleListWeek"></p:outputLabel>
 											<p:spacer width="5" />
@@ -195,11 +195,62 @@
 									</p:panel>
 								</div>
 								<div align="left" class="analysisMenuEntry">
+									<p:panel>
+										<div align="center">
+											<c:choose>
+												<c:when
+													test="#{empty analysisBean.analyzerSelected}">
+													<p:outputLabel value="No Divisions to Select"></p:outputLabel>
+												</c:when>
+												<c:otherwise>
+													  <p:tree value="#{analysisBean.mainDivision}" var="division"
+												                        selectionMode="checkbox"
+												                        selection="#{analysisBean.mainDivisionSelected}">
+												        <p:treeNode>
+												            <h:outputText value="#{division.name}"/>
+												        </p:treeNode>
+												        <p:treeNode type="document">
+												            <h:outputText value="#{division.name}" />
+												        </p:treeNode>
+												        <p:treeNode type="document">
+												            <h:outputText value="#{division.name}" />
+												        </p:treeNode>
+												        <p:treeNode type="document">
+												            <h:outputText value="#{division.name}" />
+												        </p:treeNode>
+												    </p:tree>
+												</c:otherwise>
+											</c:choose>
+										</div>
+									</p:panel>
+								</div>
+								<div align="left" class="analysisMenuEntry">
+									<p:panel>
+										<div align="center">
+											<c:choose>
+												<c:when
+													test="#{empty analysisBean.analyzerSelected}">
+													<p:outputLabel value="No Analyzers to Select"></p:outputLabel>
+												</c:when>
+												<c:otherwise>
+													<p:outputLabel value="Analyzer: " />
+													<p:outputLabel styleClass="analysisPanelTitle"
+														value="#{analysisBean.analyzerSelected.codeName}" />
+													<hr />
+													<p:commandButton value="Change"
+														oncomplete="PF('selectionPopupAnalyzer').show()"
+														ajax="true" styleClass="simpleButton" />
+												</c:otherwise>
+											</c:choose>
+										</div>
+									</p:panel>
+								</div>
+								<div align="left" class="analysisMenuEntry">
 									<p:panel style="width:200px !important">
 										<div align="center">
 											<c:choose>
 												<c:when
-													test="#{empty analysisBean.analyzerSelected.analyzerMeters}">
+													test="#{empty analysisBean.analyzerSelected}">
 													<p:outputLabel value="No Meters to Select"></p:outputLabel>
 												</c:when>
 												<c:otherwise>
@@ -223,27 +274,7 @@
 										</div>
 									</p:panel>
 								</div>
-								<div align="left" class="analysisMenuEntry">
-									<p:panel>
-										<div align="center">
-											<c:choose>
-												<c:when
-													test="#{empty analysisBean.analyzerSelected.analyzerMeters}}">
-													<p:outputLabel value="No Analyzers to Select"></p:outputLabel>
-												</c:when>
-												<c:otherwise>
-													<p:outputLabel value="Analyzer: " />
-													<p:outputLabel styleClass="analysisPanelTitle"
-														value="#{analysisBean.analyzerSelected.codeName}" />
-													<hr />
-													<p:commandButton value="Change"
-														oncomplete="PF('selectionPopupAnalyzer').show()"
-														ajax="true" styleClass="simpleButton" />
-												</c:otherwise>
-											</c:choose>
-										</div>
-									</p:panel>
-								</div></td>
+								</td>
 							<td valign="top">
 								<div align="center" class="analaysisDateCss">
 									<p:outputPanel
@@ -253,7 +284,7 @@
 											model="#{analysisBean.analysisDayPojo.lineModel}" type="line" />
 									</p:outputPanel>
 									<p:outputPanel
-										rendered="#{analysisBean.analysisDayPojo.lineModel.series[0].data.size() lt 1}">
+										rendered="#{analysisBean.analysisDayPojo.lineModel.series[0].data.size() lt 1 or empty analysisBean.analyzerSelected}">
 										<p:panel>
 											<div class="ext-box">
 												<div class="int-box">

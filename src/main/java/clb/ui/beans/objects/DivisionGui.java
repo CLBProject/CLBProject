@@ -82,6 +82,10 @@ public class DivisionGui {
 		this.analyzers.add(analObj);
 	}
 
+	public boolean hasSubDivisions() {
+		return childrenDivisions != null && childrenDivisions.size() > 0;
+	}
+
 
 	
 }

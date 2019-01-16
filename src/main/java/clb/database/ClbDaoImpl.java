@@ -23,15 +23,18 @@ import clb.business.objects.AnalyzerMeterObject;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.BuildingObject;
+import clb.business.objects.DivisionObject;
 import clb.business.objects.UsersystemObject;
 import clb.database.entities.AnalyzerEntity;
 import clb.database.entities.AnalyzerMeterEntity;
 import clb.database.entities.AnalyzerRegistryEntity;
 import clb.database.entities.BuildingEntity;
+import clb.database.entities.DivisionEntity;
 import clb.database.entities.UsersystemEntity;
 import clb.database.repository.AnalyzerMetersMongoRepository;
 import clb.database.repository.AnalyzerMongoRepository;
 import clb.database.repository.BuildingsMongoRepository;
+import clb.database.repository.DivisionRepository;
 import clb.database.repository.UsersystemMongoRepository;
 import clb.global.DateUtils;
 
@@ -55,6 +58,9 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
 	@Autowired
 	private UsersystemMongoRepository userSystemMongoRepository;
+	
+	@Autowired
+	private DivisionRepository divisionRepository;
 
 	private static final String ANALYZER_REGISTIES_COLL_NAME = "AnalyzerRegistries";
 
@@ -138,6 +144,14 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 		userSystemMongoRepository.save(userSystemEntity);
 		userSystemObject.setUserid(userSystemEntity.getUserid());
 	}
+	
+	@Override
+	public void saveDivision(DivisionObject divisionObject) {
+		DivisionEntity divisionEntity = divisionObject.toEntity();
+		divisionRepository.save(divisionEntity);
+		divisionObject.setDivisionid(divisionEntity.getDivisionid());
+	}
+
 
 	@Override
 	public List<UsersystemObject> getAllUsers(){
@@ -379,6 +393,6 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 		return null;
 	}
 
-
+	
 
 }

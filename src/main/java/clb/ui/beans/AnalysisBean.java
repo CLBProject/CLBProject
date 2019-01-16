@@ -14,6 +14,8 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
 import org.primefaces.event.SelectEvent;
+import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.TreeNode;
 
 import clb.business.AnalyzerDataService;
 import clb.business.objects.AnalyzerRegistryObject;
@@ -21,6 +23,7 @@ import clb.global.DateUtils;
 import clb.ui.beans.objects.AnalyzerGui;
 import clb.ui.beans.objects.BuildingGui;
 import clb.ui.beans.objects.DivisionGui;
+import clb.ui.beans.objects.DivisionNodeGui;
 import clb.ui.beans.utils.AnalysisBeanCache;
 import clb.ui.beans.utils.AnalysisBeanChart;
 import clb.ui.enums.AnalysisTypes;
@@ -53,6 +56,9 @@ public class AnalysisBean implements Serializable{
 	private List<BuildingGui> buildingsToSelect;
 	private BuildingGui tempBuildingSelected;
 	private BuildingGui buildingSelected;
+	
+	private TreeNode mainDivision;
+	private TreeNode mainDivisionSelected;
 
 	private List<AnalyzerGui> analyzersSelected;
 	private AnalyzerGui tempAnalyzerSelected;
@@ -156,6 +162,11 @@ public class AnalysisBean implements Serializable{
 		DivisionGui division = bObj.getMainDivision();
 		
 		if(division != null && division.hasAnalyzers()) {
+			
+			mainDivision = new DefaultTreeNode(new DivisionNodeGui(division),null);
+			
+			buildTreeSelection(mainDivision,division);
+			
 			analyzersSelected = division.getAnalyzers();
 			analyzerSelected = analyzersSelected.get(0);
 			tempAnalyzerSelected = analyzerSelected;
@@ -166,6 +177,17 @@ public class AnalysisBean implements Serializable{
 		}
 		
 		
+	}
+	
+	private void buildTreeSelection(TreeNode head, DivisionGui division) {
+		
+		if(division.hasSubDivisions()) {
+			division.getChildrenDivisions().stream()
+				.forEach(childDivision -> 
+						buildTreeSelection(
+								new DefaultTreeNode(
+										new DivisionNodeGui(division),head),childDivision));
+		}
 	}
 
 	public void selectBuilding() {
@@ -531,6 +553,22 @@ public class AnalysisBean implements Serializable{
 
 	public void setAnalyzerSelected(AnalyzerGui analyzerSelected) {
 		this.analyzerSelected = analyzerSelected;
+	}
+
+	public TreeNode getMainDivision() {
+		return mainDivision;
+	}
+
+	public void setMainDivision(TreeNode mainDivision) {
+		this.mainDivision = mainDivision;
+	}
+
+	public TreeNode getMainDivisionSelected() {
+		return mainDivisionSelected;
+	}
+
+	public void setMainDivisionSelected(TreeNode mainDivisionSelected) {
+		this.mainDivisionSelected = mainDivisionSelected;
 	}
 
 	

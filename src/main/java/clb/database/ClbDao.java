@@ -7,6 +7,7 @@ import clb.business.objects.AnalyzerMeterObject;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.BuildingObject;
+import clb.business.objects.DivisionObject;
 import clb.business.objects.UsersystemObject;
 
 public interface ClbDao{
@@ -22,6 +23,8 @@ public interface ClbDao{
 	void saveBuilding(BuildingObject buildingObject);
 	
 	void saveUsersystem(UsersystemObject userSystemObject);
+	
+	void saveDivision(DivisionObject divisionObject);
 	
 	void saveUsers(List<UsersystemObject> users);
 	
