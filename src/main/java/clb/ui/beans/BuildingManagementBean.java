@@ -10,6 +10,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
 import clb.business.AnalyzerDataService;
+import clb.business.objects.BuildingObject;
 import clb.ui.beans.objects.BuildingGui;
 import clb.ui.beans.objects.BuildingManagementGui;
 
@@ -21,22 +22,34 @@ public class BuildingManagementBean implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	
-    @ManagedProperty("#{analyzerDataService}")
-    private AnalyzerDataService analyzerDataService;
-    
-    @ManagedProperty("#{clbHomeLoginBean}")
-    private ClbHomeLoginBean clbHomeLoginBean;
-    
-    private List<BuildingManagementGui> buildingsToShow;
-	
+
+
+	@ManagedProperty("#{analyzerDataService}")
+	private AnalyzerDataService analyzerDataService;
+
+	@ManagedProperty("#{clbHomeLoginBean}")
+	private ClbHomeLoginBean clbHomeLoginBean;
+
+	private List<BuildingManagementGui> buildingsToShow;
+
+	private BuildingGui newBuilding;
+
 	@PostConstruct
 	public void initBuildingManagement() {
-		
+
+		newBuilding = new BuildingGui();
+
 		buildingsToShow = clbHomeLoginBean.getUserBuildings().stream()
 				.map(BuildingManagementGui::new)
 				.collect(Collectors.toList());
+	}
+
+	public void createBuilding() {
+		if(newBuilding != null ) {
+			BuildingGui buildingCreated = new BuildingGui(analyzerDataService.saveBuilding(newBuilding.toObject()));	
+			buildingsToShow.add(new BuildingManagementGui(buildingCreated));
+			clbHomeLoginBean.saveUserWithBuilding(buildingCreated);
+		}
 	}
 
 	public AnalyzerDataService getAnalyzerDataService() {
@@ -62,6 +75,14 @@ public class BuildingManagementBean implements Serializable{
 	public void setBuildingsToShow(List<BuildingManagementGui> buildingsToShow) {
 		this.buildingsToShow = buildingsToShow;
 	}
-	
-	
+
+	public BuildingGui getNewBuilding() {
+		return newBuilding;
+	}
+
+	public void setNewBuilding(BuildingGui newBuilding) {
+		this.newBuilding = newBuilding;
+	}
+
+
 }

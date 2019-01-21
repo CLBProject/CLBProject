@@ -10,7 +10,7 @@
 	<ui:define name="body">
 		<ui:include src="./general/menutab.xhtml" />
 		<div class="buildingManagementDiv">
-			<h:form>
+			<h:form id="buildingManagementForm">
 				<table width="100%" class="appDivClass">
 					<tr>
 						<td>
@@ -22,7 +22,10 @@
 					</tr>
 					<tr>
 						<td width="100%">
-							<div align="center" class="mainDivClass">
+							<div align="left" class="mainDivClass">
+								<p:commandLink value="Add New Building" styleClass="commonLink" onclick="PF('newBuildingPopup').show()"></p:commandLink>
+								<br/>
+								<br/>
 								<p:dataTable id="paginatorSelector"
 									widgetVar="paginatorSelector" paginator="true"
 									paginatorPosition="bottom"
@@ -50,5 +53,6 @@
 			</h:form>
 		</div>
 		<ui:include src="./general/footer.xhtml" />
+		<ui:include src="./popups/newBuildingPopup.xhtml" />
 	</ui:define>
 </ui:composition>

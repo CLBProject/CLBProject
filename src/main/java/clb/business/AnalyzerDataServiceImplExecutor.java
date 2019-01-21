@@ -99,6 +99,7 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 									
 									buildingObject = new BuildingObject();
 									buildingObject.setName(buildingName);
+									buildingObject.setLocation("Location Empty");
 
 									DivisionObject subDiv1 = new DivisionObject();
 									subDiv1.setName("Sub Division 1");

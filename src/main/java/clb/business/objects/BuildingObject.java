@@ -10,6 +10,8 @@ public class BuildingObject
 
     private String buildingusername;
 
+    private String location;
+    
     private String imgPath;
 
     private DivisionObject mainDivision;
@@ -22,6 +24,7 @@ public class BuildingObject
         this.buildingid = building.getBuildingid();
         this.name = building.getName();
         this.buildingusername = building.getBuildingusername();
+        this.location = building.getLocation();
         this.imgPath = building.getImgPath();
         this.mainDivision = building.getMainDivision() != null ? new DivisionObject(building.getMainDivision()) : null;     
     }
@@ -30,6 +33,7 @@ public class BuildingObject
         BuildingEntity buildingEntity = new BuildingEntity();
         buildingEntity.setBuildingid( this.buildingid );
         buildingEntity.setName( this.name );
+        buildingEntity.setLocation(this.location);
         buildingEntity.setImgPath( this.imgPath );
         buildingEntity.setMainDivision(this.mainDivision != null ? this.mainDivision.toEntity() : null);
 
@@ -74,6 +78,14 @@ public class BuildingObject
 
 	public void setMainDivision(DivisionObject mainDivision) {
 		this.mainDivision = mainDivision;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
     
     

@@ -465,7 +465,7 @@ form {
 }
 
 .buildingManagementTable{
-	width:80%; 
+	width:100%; 
 }
 
 .buildingManagementAnalyzers{
@@ -482,3 +482,6 @@ form {
 	border: none !important;
 }
 
+.commonLink{
+	color: #CED8F6;
+}

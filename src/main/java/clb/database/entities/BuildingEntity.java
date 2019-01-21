@@ -22,6 +22,8 @@ public class BuildingEntity implements  Serializable {
 	
 	private String buildingusername;
 	
+	private String location;
+	
 	private String imgPath;
 
 	@DBRef
@@ -69,6 +71,14 @@ public class BuildingEntity implements  Serializable {
 
 	public void setMainDivision(DivisionEntity mainDivision) {
 		this.mainDivision = mainDivision;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
     
     

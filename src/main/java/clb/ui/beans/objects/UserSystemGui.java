@@ -1,6 +1,7 @@
 package clb.ui.beans.objects;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,6 +59,23 @@ public class UserSystemGui implements Serializable
     	this.password = null;
     }
 
+	public UsersystemObject toObject() {
+		UsersystemObject userObj = new UsersystemObject();
+		userObj.setAddress(this.address);
+		userObj.setName(this.name);
+		userObj.setPassword(this.password);
+		userObj.setBuildings(buildings != null ? buildings.stream().map(BuildingGui::toObject).collect(Collectors.toList()) : null);
+		
+		return userObj;
+	}
+    
+    public void addBuilding(BuildingGui building) {
+    	if(buildings == null) {
+    		buildings = new ArrayList<BuildingGui>();
+    	}
+    	
+    	buildings.add(building);
+    }
     
     public String getAddress() {
         return address;
@@ -99,7 +117,7 @@ public class UserSystemGui implements Serializable
 	public boolean hasBuildings() {
 		return buildings != null && buildings.size() > 0;
 	}
-    
+
     
 }
 

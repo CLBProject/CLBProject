@@ -12,6 +12,7 @@ import javax.faces.context.FacesContext;
 
 import org.primefaces.context.RequestContext;
 
+import clb.business.AnalyzerDataService;
 import clb.business.UserRegistryService;
 import clb.global.exceptions.UserDoesNotExistException;
 import clb.global.exceptions.UserDoesNotMatchPasswordLoginException;
@@ -27,6 +28,9 @@ public class ClbHomeLoginBean implements Serializable {
 
 	@ManagedProperty("#{userRegistryService}")
 	private UserRegistryService userRegistryService;
+	
+    @ManagedProperty("#{analyzerDataService}")
+    private AnalyzerDataService analyzerDataService;
 
 	private String loginUsername;
 	private String loginPassword;
@@ -96,6 +100,10 @@ public class ClbHomeLoginBean implements Serializable {
 		return userUiPojo != null && userUiPojo.getBuildings() != null && userUiPojo.getBuildings().size() > 0;
 	}
 
+	public void saveUserWithBuilding(BuildingGui building) {
+		userUiPojo.addBuilding(building);
+		analyzerDataService.saveUsersystem(userUiPojo.toObject());
+	}
 	
 	public UserRegistryService getUserRegistryService() {
 		return userRegistryService;
@@ -128,6 +136,14 @@ public class ClbHomeLoginBean implements Serializable {
 		}
 		
 		return new ArrayList<BuildingGui>();
+	}
+
+	public AnalyzerDataService getAnalyzerDataService() {
+		return analyzerDataService;
+	}
+
+	public void setAnalyzerDataService(AnalyzerDataService analyzerDataService) {
+		this.analyzerDataService = analyzerDataService;
 	}
 	
 	

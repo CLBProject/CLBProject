@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import clb.business.objects.AnalyzerRegistryObject;
+import clb.business.objects.BuildingObject;
 import clb.business.objects.UsersystemObject;
 import clb.database.ClbDao;
 import clb.global.DateUtils;
@@ -189,6 +190,19 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		final UsersystemObject user = clbDao.findUserByUserName(username);
 		clbDao.getAllBuildings().stream().forEach(building -> user.addBuilding(building));;
 		clbDao.saveUsersystem(user);
+	}
+
+	@Override
+	public BuildingObject saveBuilding(BuildingObject building) {
+		clbDao.saveDivision(building.getMainDivision());
+		clbDao.saveBuilding(building);
+		return building;
+	}
+	
+	@Override
+	public UsersystemObject saveUsersystem(UsersystemObject userUiPojo) {
+		clbDao.saveUsersystem(userUiPojo);
+		return userUiPojo;
 	}
 
 }

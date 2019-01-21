@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import clb.business.objects.AnalyzerRegistryObject;
+import clb.business.objects.BuildingObject;
 import clb.business.objects.UsersystemObject;
+import clb.ui.beans.objects.UserSystemGui;
 
 public interface AnalyzerDataService {
     
@@ -30,4 +32,8 @@ public interface AnalyzerDataService {
 	public Map<String,List<String>> getYearsAndMonthsAvailable();
 
 	public void fillUserWithAllBuildings(String username);
+
+	public UsersystemObject saveUsersystem(UsersystemObject userUiPojo);
+	
+	public BuildingObject saveBuilding(BuildingObject building);
 }

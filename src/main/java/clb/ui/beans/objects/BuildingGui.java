@@ -15,11 +15,15 @@ public class BuildingGui {
     @NotEmpty
 	private String name;
     
+    private String location;
+    
     private String imgPath;
     
     private DivisionGui mainDivision;
 
 	public BuildingGui() {
+		mainDivision = new DivisionGui();
+		mainDivision.setName("Main Division");
 	}
 
 	public BuildingGui(BuildingObject bObject) {
@@ -27,6 +31,7 @@ public class BuildingGui {
 		this.buildingid = bObject.getBuildingid();
 		this.name = bObject.getName();
 		this.imgPath = bObject.getImgPath();
+		this.location = bObject.getLocation();
 		this.mainDivision = bObject.getMainDivision() != null ? new DivisionGui(bObject.getMainDivision()) : null;
 	}
 	
@@ -35,6 +40,8 @@ public class BuildingGui {
 		
 		bobj.setBuildingid(this.buildingid);
 		bobj.setName(this.name);
+		bobj.setLocation(this.location);
+		bobj.setImgPath(this.imgPath);
 		bobj.setMainDivision(this.mainDivision != null ? this.mainDivision.toObject() : null);
 		
 		return bobj;
@@ -72,6 +79,14 @@ public class BuildingGui {
 
 	public void setImgPath(String imgPath) {
 		this.imgPath = imgPath;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
 	
 	
