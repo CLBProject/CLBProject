@@ -64,6 +64,7 @@ public class UserSystemGui implements Serializable
 		userObj.setAddress(this.address);
 		userObj.setName(this.name);
 		userObj.setPassword(this.password);
+		userObj.setUsername(this.username);
 		userObj.setBuildings(buildings != null ? buildings.stream().map(BuildingGui::toObject).collect(Collectors.toList()) : null);
 		
 		return userObj;

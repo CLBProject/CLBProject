@@ -41,6 +41,10 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		taskExecutor.execute(new AnalyzerDataServiceImplExecutor(this.clbDao));
 	}
 
+	public void destroy() {
+		
+	}
+	
 	@Override
 	public List<AnalyzerRegistryObject> getHourRegistriesFromAnalyzer( String analyzerId , Date timeFrame) {
 
@@ -129,37 +133,9 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		return user;
 	}
 
-
-	public void destroy(){
-	}
-
 	@Override
 	public Date getLowestAnalyzerRegistryDate() {
 		return clbDao.getLowestAnalyzerRegistryDate();
-	}
-
-	public TaskExecutor getTaskExecutor() {
-		return taskExecutor;
-	}
-
-	public void setTaskExecutor(TaskExecutor taskExecutor) {
-		this.taskExecutor = taskExecutor;
-	}
-
-	public ClbDao getClbDao() {
-		return clbDao;
-	}
-
-	public void setClbDao(ClbDao clbDao) {
-		this.clbDao = clbDao;
-	}
-
-	public ApplicationEventPublisher getEventPublisher() {
-		return eventPublisher;
-	}
-
-	public void setEventPublisher( ApplicationEventPublisher eventPublisher ) {
-		this.eventPublisher = eventPublisher;
 	}
 
 	@Override
@@ -193,6 +169,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	}
 
 	@Override
+	@Transactional
 	public BuildingObject saveBuilding(BuildingObject building) {
 		clbDao.saveDivision(building.getMainDivision());
 		clbDao.saveBuilding(building);
@@ -200,9 +177,35 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	}
 	
 	@Override
+	@Transactional
 	public UsersystemObject saveUsersystem(UsersystemObject userUiPojo) {
 		clbDao.saveUsersystem(userUiPojo);
 		return userUiPojo;
+	}
+
+
+	public TaskExecutor getTaskExecutor() {
+		return taskExecutor;
+	}
+
+	public void setTaskExecutor(TaskExecutor taskExecutor) {
+		this.taskExecutor = taskExecutor;
+	}
+
+	public ClbDao getClbDao() {
+		return clbDao;
+	}
+
+	public void setClbDao(ClbDao clbDao) {
+		this.clbDao = clbDao;
+	}
+
+	public ApplicationEventPublisher getEventPublisher() {
+		return eventPublisher;
+	}
+
+	public void setEventPublisher( ApplicationEventPublisher eventPublisher ) {
+		this.eventPublisher = eventPublisher;
 	}
 
 }

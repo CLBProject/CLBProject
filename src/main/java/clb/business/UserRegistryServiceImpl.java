@@ -104,7 +104,7 @@ public class UserRegistryServiceImpl implements UserRegistryService, Application
         
         clbDao.saveUsersystem( user );
 
-        if(user.getUserid() == null)
+        if(user.getUsername() == null)
             throw new UserNotPersistedException();
 
         String subject = "Registration Complete";

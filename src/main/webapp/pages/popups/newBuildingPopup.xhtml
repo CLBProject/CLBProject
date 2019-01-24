@@ -36,10 +36,19 @@
 					</p:panelGrid>
 					<br/>
 					<div align="center">
-						<p:commandButton action="#{buildingManagementBean.createBuilding}" update=":buildingManagementForm" styleClass="signButton" value="Create"></p:commandButton>
+						<p:commandButton action="#{buildingManagementBean.createBuilding}" ajax="true" update=":buildingManagementForm" 
+									styleClass="signButton" value="Create"
+									onstart="document.body.style.cursor='wait'"
+									oncomplete="document.body.style.cursor='default'; PF('successPanelnewBuildingPopup').show();"></p:commandButton>
 					</div>
 				</div>
 			</h:form>
 		</p:dialog>
+		<ui:include src="successDialog.xhtml">
+			<ui:param name="id" value="newBuildingPopup" />
+			<ui:param name="successMessage"
+				value="A new Building was created successfully!" />
+			<ui:param name="path" value="buildingManagement.xhtml?faces-redirect=true" />
+		</ui:include>
 	</ui:define>
 </ui:composition>

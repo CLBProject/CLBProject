@@ -17,17 +17,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection="UsersSystem")
 public class UsersystemEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
-	@Id
-	private String userid;
 
+	@Id
+	private String username;
+	
 	private String address;
 
 	private String name;
 
 	private String password;
-
-	private String username;
 	
 	private String token;
 	
@@ -43,14 +41,6 @@ public class UsersystemEntity implements Serializable {
 	private List<BuildingEntity> buildings;
 
 	public UsersystemEntity() {
-	}
-
-	public String getUserid() {
-		return this.userid;
-	}
-
-	public void setUserid(String userid) {
-		this.userid = userid;
 	}
 
 	public String getAddress() {

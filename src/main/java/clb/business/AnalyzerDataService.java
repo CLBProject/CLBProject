@@ -7,7 +7,6 @@ import java.util.Map;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.BuildingObject;
 import clb.business.objects.UsersystemObject;
-import clb.ui.beans.objects.UserSystemGui;
 
 public interface AnalyzerDataService {
     

@@ -17,7 +17,6 @@ public class UsersystemObject implements ClbObject, Serializable
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private String userid;
     private String address;
     private String name;
     private String password;
@@ -55,7 +54,6 @@ public class UsersystemObject implements ClbObject, Serializable
     }
     
     public UsersystemObject( UsersystemEntity usersystem ) {
-        this.userid = usersystem.getUserid();
         this.username = usersystem.getUsername();
         this.address = usersystem.getAddress();
         this.name = usersystem.getName();
@@ -71,7 +69,6 @@ public class UsersystemObject implements ClbObject, Serializable
 
     public UsersystemEntity toEntity() {
         UsersystemEntity userSystemEntity = new UsersystemEntity();
-        userSystemEntity.setUserid( this.userid );
         userSystemEntity.setAddress( this.address );
         userSystemEntity.setName( this.name );
         userSystemEntity.setPassword( this.password );
@@ -100,14 +97,6 @@ public class UsersystemObject implements ClbObject, Serializable
     	}
     	
     	buildings.add(buildingObject);
-    }
-
-    public String getUserid() {
-        return userid;
-    }
-
-    public void setUserid( String userid ) {
-        this.userid = userid;
     }
 
     public String getAddress() {
