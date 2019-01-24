@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.BuildingObject;
+import clb.business.objects.DivisionObject;
 import clb.business.objects.UsersystemObject;
 import clb.database.ClbDao;
 import clb.global.DateUtils;
@@ -182,6 +183,18 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		clbDao.saveUsersystem(userUiPojo);
 		return userUiPojo;
 	}
+	
+	@Override
+	@Transactional
+	public void deleteBuilding(BuildingObject object) {
+		
+		DivisionObject mainDivision = object.getMainDivision();
+		
+		if(mainDivision != null)
+			clbDao.deleteDivisionCascade(mainDivision);
+		
+		clbDao.deleteBuilding(object);
+	}
 
 
 	public TaskExecutor getTaskExecutor() {
@@ -207,5 +220,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	public void setEventPublisher( ApplicationEventPublisher eventPublisher ) {
 		this.eventPublisher = eventPublisher;
 	}
+
+
 
 }

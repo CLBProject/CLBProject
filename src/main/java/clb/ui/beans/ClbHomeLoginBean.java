@@ -18,7 +18,7 @@ import clb.global.exceptions.UserDoesNotExistException;
 import clb.global.exceptions.UserDoesNotMatchPasswordLoginException;
 import clb.global.exceptions.UserIsNotEnabledYet;
 import clb.ui.beans.objects.BuildingGui;
-import clb.ui.beans.objects.UserSystemGui;
+import clb.ui.beans.objects.UsersystemGui;
 
 @SessionScoped
 @ManagedBean
@@ -35,7 +35,7 @@ public class ClbHomeLoginBean implements Serializable {
 	private String loginUsername;
 	private String loginPassword;
 	
-	private UserSystemGui userUiPojo;
+	private UsersystemGui authenticatedUser;
 
 	private final static String CANT_LOGIN_USER_NOT_FOUND_PARAM = "cantLoginUserNotFound";
 	private final static String CANT_LOGIN_PASSWORD_DOESNT_MATCH_PARAM = "cantLoginPasswordDoesntMatch";
@@ -43,7 +43,7 @@ public class ClbHomeLoginBean implements Serializable {
 
 	@PostConstruct
 	public void init() {
-		userUiPojo = new UserSystemGui();
+		authenticatedUser = new UsersystemGui();
 	}
 
 	public String loginUser() {
@@ -52,30 +52,30 @@ public class ClbHomeLoginBean implements Serializable {
 
 		try {
 
-			userUiPojo = new UserSystemGui(userRegistryService.validateUserLogin(loginUsername, loginPassword));
+			authenticatedUser = new UsersystemGui(userRegistryService.validateUserLogin(loginUsername, loginPassword));
 
 			return "clb";
 		} catch (UserDoesNotExistException e) {
 
-			userUiPojo.setUsername(null);
-			userUiPojo.setPassword(null);
-			userUiPojo.clear();
+			authenticatedUser.setUsername(null);
+			authenticatedUser.setPassword(null);
+			authenticatedUser.clear();
 
 			context.addCallbackParam(CANT_LOGIN_USER_NOT_FOUND_PARAM, true);
 			return "index";
 		} catch (UserDoesNotMatchPasswordLoginException e) {
 
-			userUiPojo.setUsername(null);
-			userUiPojo.setPassword(null);
-			userUiPojo.clear();
+			authenticatedUser.setUsername(null);
+			authenticatedUser.setPassword(null);
+			authenticatedUser.clear();
 
 			context.addCallbackParam(CANT_LOGIN_PASSWORD_DOESNT_MATCH_PARAM, true);
 			return "index";
 		} catch (UserIsNotEnabledYet e) {
 
-			userUiPojo.setUsername(null);
-			userUiPojo.setPassword(null);
-			userUiPojo.clear();
+			authenticatedUser.setUsername(null);
+			authenticatedUser.setPassword(null);
+			authenticatedUser.clear();
 
 			context.addCallbackParam(USER_NOT_ENABLED_YET, true);
 			return "index";
@@ -84,25 +84,25 @@ public class ClbHomeLoginBean implements Serializable {
 
 	public String logout() {
 
-		userUiPojo.setUsername(null);
-		userUiPojo.setPassword(null);
-		userUiPojo.clear();
+		authenticatedUser.setUsername(null);
+		authenticatedUser.setPassword(null);
+		authenticatedUser.clear();
 
 		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 		return "index.xhtml?faces-redirect=true";
 	}
 
 	public boolean hasUserLoggedIn() {
-		return userUiPojo != null && userUiPojo.getUsername() != null && !userUiPojo.getUsername().equals( "" );
+		return authenticatedUser != null && authenticatedUser.getUsername() != null && !authenticatedUser.getUsername().equals( "" );
 	}
 
 	public boolean userHasBuildings() {
-		return userUiPojo != null && userUiPojo.getBuildings() != null && userUiPojo.getBuildings().size() > 0;
+		return authenticatedUser != null && authenticatedUser.getBuildings() != null && authenticatedUser.getBuildings().size() > 0;
 	}
 
 	public void saveUserWithBuilding(BuildingGui building) {
-		userUiPojo.addBuilding(building);
-		analyzerDataService.saveUsersystem(userUiPojo.toObject());
+		authenticatedUser.addBuilding(building);
+		analyzerDataService.saveUsersystem(authenticatedUser.toObject());
 	}
 	
 	public UserRegistryService getUserRegistryService() {
@@ -131,8 +131,8 @@ public class ClbHomeLoginBean implements Serializable {
 
 	public List<BuildingGui> getUserBuildings() {
 		
-		if(userUiPojo.hasBuildings()) {
-			return userUiPojo.getBuildings();
+		if(authenticatedUser.hasBuildings()) {
+			return authenticatedUser.getBuildings();
 		}
 		
 		return new ArrayList<BuildingGui>();
@@ -144,6 +144,14 @@ public class ClbHomeLoginBean implements Serializable {
 
 	public void setAnalyzerDataService(AnalyzerDataService analyzerDataService) {
 		this.analyzerDataService = analyzerDataService;
+	}
+
+	public UsersystemGui getAuthenticatedUser() {
+		return authenticatedUser;
+	}
+
+	public void setAuthenticatedUser(UsersystemGui authenticatedUser) {
+		this.authenticatedUser = authenticatedUser;
 	}
 	
 	

@@ -485,3 +485,16 @@ form {
 .commonLink{
 	color: #CED8F6;
 }
+
+.buildingManagDelete{
+	font-size: 12px;
+}
+
+.buildingManagIconClass{
+	vertical-align: bottom;
+}
+
+.buildingLocation{
+	font-size:12px;
+	color:grey;
+}

@@ -25,7 +25,7 @@
 							<p:outputLabel for="newBuildingLocation" value="Location"></p:outputLabel>
 						</p:column>
 						<p:column>
-							<p:inputText id="newBuildingLocation" value="#{buildingManagementBean.newBuilding.location}"></p:inputText>
+							<p:inputText id="newBuildingLocation" value="#{buildingManagementBean.newBuilding.location}" required="true"></p:inputText>
 						</p:column>
 						<p:column>
 							<p:outputLabel for="newBuildingMainDivision" value="Main Division"></p:outputLabel>
@@ -39,7 +39,9 @@
 						<p:commandButton action="#{buildingManagementBean.createBuilding}" ajax="true" update=":buildingManagementForm" 
 									styleClass="signButton" value="Create"
 									onstart="document.body.style.cursor='wait'"
-									oncomplete="document.body.style.cursor='default'; PF('successPanelnewBuildingPopup').show();"></p:commandButton>
+									oncomplete="document.body.style.cursor='default'; 
+												PF('newBuildingPopup').hide();
+												PF('successPanelnewBuildingPopup').show();"></p:commandButton>
 					</div>
 				</div>
 			</h:form>

@@ -20,7 +20,7 @@ import clb.global.exceptions.UserExistsOnRegistryException;
 import clb.global.exceptions.UserNotPersistedException;
 import clb.global.exceptions.UserTokenHasExpiredOnCompleteRegistration;
 import clb.global.exceptions.UserTokenIsNullOnCompleteRegistrationException;
-import clb.ui.beans.objects.UserSystemGui;
+import clb.ui.beans.objects.UsersystemGui;
 
 @ViewScoped
 @ManagedBean
@@ -29,7 +29,7 @@ public class ClbHomeRegisterBean implements Serializable{
 	private final Logger logger = LoggerFactory.getLogger(ClbHomeRegisterBean.class);
 	
     private static final long serialVersionUID = 1L;
-    private UserSystemGui user;
+    private UsersystemGui user;
 
     @ManagedProperty("#{userRegistryService}")
     private UserRegistryService userRegistryService;
@@ -53,7 +53,7 @@ public class ClbHomeRegisterBean implements Serializable{
     
     @PostConstruct
     public void init() {
-       user = new UserSystemGui();
+       user = new UsersystemGui();
        registerResult = null;
     }
 
@@ -109,11 +109,11 @@ public class ClbHomeRegisterBean implements Serializable{
         }
     }
     
-    public UserSystemGui getUser() {
+    public UsersystemGui getUser() {
         return user;
     }
 
-    public void setUser( UserSystemGui user ) {
+    public void setUser( UsersystemGui user ) {
         this.user = user;
     }
 

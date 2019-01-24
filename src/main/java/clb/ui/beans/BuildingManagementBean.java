@@ -10,7 +10,6 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
 import clb.business.AnalyzerDataService;
-import clb.business.objects.BuildingObject;
 import clb.ui.beans.objects.BuildingGui;
 import clb.ui.beans.objects.BuildingManagementGui;
 
@@ -31,7 +30,6 @@ public class BuildingManagementBean implements Serializable{
 	private ClbHomeLoginBean clbHomeLoginBean;
 
 	private List<BuildingManagementGui> buildingsToShow;
-
 	private BuildingGui newBuilding;
 
 	@PostConstruct
@@ -43,12 +41,18 @@ public class BuildingManagementBean implements Serializable{
 				.map(BuildingManagementGui::new)
 				.collect(Collectors.toList());
 	}
-
 	public void createBuilding() {
 		if(newBuilding != null ) {
 			BuildingGui buildingCreated = new BuildingGui(analyzerDataService.saveBuilding(newBuilding.toObject()));	
 			buildingsToShow.add(new BuildingManagementGui(buildingCreated));
 			clbHomeLoginBean.saveUserWithBuilding(buildingCreated);
+		}
+	}
+	
+	public void deleteBuilding(BuildingManagementGui buildingToDelete) {
+		if(buildingToDelete != null) {
+			analyzerDataService.deleteBuilding(buildingToDelete.toBuildingGui().toObject());
+			buildingsToShow.remove(buildingToDelete);
 		}
 	}
 

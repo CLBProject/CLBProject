@@ -58,7 +58,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
 	@Autowired
 	private UsersystemMongoRepository userSystemMongoRepository;
-	
+
 	@Autowired
 	private DivisionRepository divisionRepository;
 
@@ -143,7 +143,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 		UsersystemEntity userSystemEntity = userSystemObject.toEntity();
 		userSystemMongoRepository.save(userSystemEntity);
 	}
-	
+
 	@Override
 	public void saveDivision(DivisionObject divisionObject) {
 		DivisionEntity divisionEntity = divisionObject.toEntity();
@@ -392,6 +392,21 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 		return null;
 	}
 
-	
+	@Override
+	public void deleteBuilding(BuildingObject object) {
+		buildingsMongoRepository.delete(object.toEntity());
+	}
+
+	@Override
+	public void deleteDivisionCascade(DivisionObject currentDivision) {
+
+		if(currentDivision.getChildrenDivisions() != null) {
+			for(DivisionObject divisionChild: currentDivision.getChildrenDivisions()) {
+				deleteDivisionCascade(divisionChild);
+			}
+		}
+
+		divisionRepository.delete(currentDivision.toEntity());
+	}
 
 }

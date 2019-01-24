@@ -56,6 +56,10 @@ public interface ClbDao{
 
 	AnalyzerObject getAnalyzerByCodeName(String analyzerCodeName);
 
+	void deleteBuilding(BuildingObject object);
+
+	void deleteDivisionCascade(DivisionObject mainDivision);
+
 	
 
 }

@@ -2,6 +2,7 @@ package clb.ui.beans.objects;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,7 +13,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import clb.business.objects.UsersystemObject;
 
-public class UserSystemGui implements Serializable
+public class UsersystemGui implements Serializable
 {
     /**
      * 
@@ -34,18 +35,27 @@ public class UserSystemGui implements Serializable
     @Pattern(regexp = "[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z0-9]+", message = "Email format is invalid.")
     private String username;
   
+    private String token;
+    private Date expiryDate;
+    private Date lastSentEmail;
+    private boolean enabled;
     
     private List<BuildingGui> buildings;
     
-    public UserSystemGui() {
+    public UsersystemGui() {
     	
     }
     
-    public UserSystemGui(UsersystemObject userObject) {
+    public UsersystemGui(UsersystemObject userObject) {
     	this.address = userObject.getAddress();
     	this.name = userObject.getName();
     	this.password = userObject.getPassword();
     	this.username = userObject.getUsername();
+    	
+    	this.token = userObject.getToken();
+    	this.expiryDate = userObject.getExpiryDate();
+    	this.lastSentEmail = userObject.getLastSentEmail();
+    	this.enabled = userObject.isEnabled();
     	
     	this.buildings = userObject.getBuildings() != null ? 
     							userObject.getBuildings().stream().map(BuildingGui::new).collect(Collectors.toList()) : 
@@ -57,20 +67,59 @@ public class UserSystemGui implements Serializable
     	this.address = null;
     	this.name = null;
     	this.password = null;
+    	this.token = null;
+    	this.expiryDate = null;
+    	this.lastSentEmail = null;
+    	this.enabled = false;
     }
 
-	public UsersystemObject toObject() {
-		UsersystemObject userObj = new UsersystemObject();
-		userObj.setAddress(this.address);
-		userObj.setName(this.name);
-		userObj.setPassword(this.password);
-		userObj.setUsername(this.username);
-		userObj.setBuildings(buildings != null ? buildings.stream().map(BuildingGui::toObject).collect(Collectors.toList()) : null);
-		
-		return userObj;
-	}
+    public UsersystemObject toObject() {
+    	UsersystemObject userObj = new UsersystemObject();
+    	userObj.setUsername(this.username);
+    	userObj.setAddress(this.address);
+    	userObj.setName(this.name);
+    	userObj.setPassword(this.password);
+    	userObj.setToken(this.token);
+    	userObj.setExpiryDate(this.expiryDate);
+    	userObj.setLastSentEmail(this.lastSentEmail);
+    	userObj.setEnabled(this.enabled);
+    	userObj.setBuildings(this.buildings != null ? this.buildings.stream().map(BuildingGui::toObject).collect(Collectors.toList()) : null);
+    	return userObj;
+    }
     
-    public void addBuilding(BuildingGui building) {
+    public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public Date getExpiryDate() {
+		return expiryDate;
+	}
+
+	public void setExpiryDate(Date expiryDate) {
+		this.expiryDate = expiryDate;
+	}
+
+	public Date getLastSentEmail() {
+		return lastSentEmail;
+	}
+
+	public void setLastSentEmail(Date lastSentEmail) {
+		this.lastSentEmail = lastSentEmail;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	public void addBuilding(BuildingGui building) {
     	if(buildings == null) {
     		buildings = new ArrayList<BuildingGui>();
     	}

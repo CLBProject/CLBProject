@@ -187,6 +187,8 @@ public class UserRegistryServiceImpl implements UserRegistryService, Application
             throw new UserCantResendEmailException();
         }
         
+        String newToken = generateUserToken();
+        user.setToken( newToken );
         user.setLastSentEmail( new Date() );
         clbDao.saveUsersystem( user );
         

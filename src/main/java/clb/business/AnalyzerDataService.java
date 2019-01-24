@@ -35,4 +35,7 @@ public interface AnalyzerDataService {
 	public UsersystemObject saveUsersystem(UsersystemObject userUiPojo);
 	
 	public BuildingObject saveBuilding(BuildingObject building);
+
+	public void deleteBuilding(BuildingObject object);
+
 }

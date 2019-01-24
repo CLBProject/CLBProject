@@ -209,7 +209,7 @@
 												                        id="divisionTreeAnalisys" selectionMode="checkbox" dynamic="true"
 												                        selection="#{analysisBean.mainDivisionSelected}">
 												        <p:treeNode>
-												            <h:outputText value="#{division.name}"/>
+												            <h:outputText value="#{division.data.name}"/>
 												        </p:treeNode>
 												        <p:ajax event="select"  listener="#{analysisBean.onNodeSelect}" update="@form"></p:ajax>
 												    </p:tree>

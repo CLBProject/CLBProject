@@ -31,15 +31,29 @@
 									paginatorPosition="bottom"
 									paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 									value="#{buildingManagementBean.buildingsToShow}" rows="10"
-									rowKey="#{building.buildingid}" var="building"
+									rowKey="#{building.buildingId}" var="building"
 									styleClass="buildingManagementTable">
 									<p:column styleClass="dataTableColumn">
 										<p:panel>
 											<div align="left" class="buildingDivClass">
 												<h:outputText value="#{building.buildingName}" style="font-size:16px"></h:outputText>
+												<br/>
+												<h:outputText value="#{building.location}" styleClass="buildingLocation"></h:outputText>
+												
 												<div class="buildingDivClass" style="padding: 5px">
-													
+													 <p:tree value="#{building.division}" var="division" styleClass="divisionAnalysis"
+												                        id="divisionTreeAnalisys" selectionMode="checkbox" dynamic="true">
+												        <p:treeNode>
+												        	<h:outputText value="#{division.data.name}"/>
+												        </p:treeNode>
+												        <p:ajax event="select"  listener="#{analysisBean.onNodeSelect}" update="@form"></p:ajax>
+												    </p:tree>
 												</div>
+											</div>
+											<div align="right" class="buildingManagDelete">
+												<p:graphicImage width="15" styleClass="buildingManagIconClass" value="#{request.contextPath}/../resources/images/error.png"></p:graphicImage>
+												<p:spacer width="5"/>
+												<p:commandLink value="Delete" ajax="false" action="#{buildingManagementBean.deleteBuilding(building)}"></p:commandLink>
 											</div>
 										</p:panel>
 									</p:column>
