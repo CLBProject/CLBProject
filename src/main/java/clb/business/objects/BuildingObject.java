@@ -40,7 +40,62 @@ public class BuildingObject
         return buildingEntity;
     }
 
-    public String getBuildingid() {
+    @Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((buildingid == null) ? 0 : buildingid.hashCode());
+		result = prime * result + ((buildingusername == null) ? 0 : buildingusername.hashCode());
+		result = prime * result + ((imgPath == null) ? 0 : imgPath.hashCode());
+		result = prime * result + ((location == null) ? 0 : location.hashCode());
+		result = prime * result + ((mainDivision == null) ? 0 : mainDivision.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		BuildingObject other = (BuildingObject) obj;
+		if (buildingid == null) {
+			if (other.buildingid != null)
+				return false;
+		} else if (!buildingid.equals(other.buildingid))
+			return false;
+		if (buildingusername == null) {
+			if (other.buildingusername != null)
+				return false;
+		} else if (!buildingusername.equals(other.buildingusername))
+			return false;
+		if (imgPath == null) {
+			if (other.imgPath != null)
+				return false;
+		} else if (!imgPath.equals(other.imgPath))
+			return false;
+		if (location == null) {
+			if (other.location != null)
+				return false;
+		} else if (!location.equals(other.location))
+			return false;
+		if (mainDivision == null) {
+			if (other.mainDivision != null)
+				return false;
+		} else if (!mainDivision.equals(other.mainDivision))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
+	}
+
+	public String getBuildingid() {
         return buildingid;
     }
 

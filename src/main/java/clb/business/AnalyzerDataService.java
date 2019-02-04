@@ -32,10 +32,8 @@ public interface AnalyzerDataService {
 
 	public void fillUserWithAllBuildings(String username);
 
-	public UsersystemObject saveUsersystem(UsersystemObject userUiPojo);
-	
-	public BuildingObject saveBuilding(BuildingObject building);
+	public void deleteBuildingForUser(UsersystemObject object, BuildingObject building);
 
-	public void deleteBuilding(BuildingObject object);
+	public void saveBuildingForUser(UsersystemObject object, BuildingObject building);
 
 }

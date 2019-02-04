@@ -2,7 +2,6 @@ package clb.ui.beans;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -10,18 +9,18 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
 import clb.business.AnalyzerDataService;
-import clb.ui.beans.objects.BuildingGui;
+import clb.business.objects.BuildingObject;
+import clb.ui.beans.objects.BuildingAnalysisGui;
 import clb.ui.beans.objects.BuildingManagementGui;
 
 @ViewScoped
 @ManagedBean
-public class BuildingManagementBean implements Serializable{
+public class BuildingManagementBean implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
 
 	@ManagedProperty("#{analyzerDataService}")
 	private AnalyzerDataService analyzerDataService;
@@ -29,29 +28,27 @@ public class BuildingManagementBean implements Serializable{
 	@ManagedProperty("#{clbHomeLoginBean}")
 	private ClbHomeLoginBean clbHomeLoginBean;
 
-	private List<BuildingManagementGui> buildingsToShow;
-	private BuildingGui newBuilding;
+	private List<BuildingAnalysisGui> buildingsToShow;
+	private BuildingManagementGui newBuilding;
 
 	@PostConstruct
 	public void initBuildingManagement() {
 
-		newBuilding = new BuildingGui();
-
-		buildingsToShow = clbHomeLoginBean.getUserBuildings().stream()
-				.map(BuildingManagementGui::new)
-				.collect(Collectors.toList());
+		newBuilding = new BuildingManagementGui();
+		buildingsToShow = clbHomeLoginBean.getUserBuildings();
 	}
+
 	public void createBuilding() {
-		if(newBuilding != null ) {
-			BuildingGui buildingCreated = new BuildingGui(analyzerDataService.saveBuilding(newBuilding.toObject()));	
-			buildingsToShow.add(new BuildingManagementGui(buildingCreated));
-			clbHomeLoginBean.saveUserWithBuilding(buildingCreated);
+		if (newBuilding != null) {
+
+			BuildingObject newBuildingObj = newBuilding.toObject();
+			clbHomeLoginBean.addBuildingToUser(newBuildingObj);
 		}
 	}
-	
-	public void deleteBuilding(BuildingManagementGui buildingToDelete) {
-		if(buildingToDelete != null) {
-			analyzerDataService.deleteBuilding(buildingToDelete.toBuildingGui().toObject());
+
+	public void deleteBuilding(BuildingAnalysisGui buildingToDelete) {
+		if (buildingToDelete != null) {
+			clbHomeLoginBean.deleteBuildingFromUser(buildingToDelete);
 			buildingsToShow.remove(buildingToDelete);
 		}
 	}
@@ -72,21 +69,20 @@ public class BuildingManagementBean implements Serializable{
 		this.clbHomeLoginBean = clbHomeLoginBean;
 	}
 
-	public List<BuildingManagementGui> getBuildingsToShow() {
+	public List<BuildingAnalysisGui> getBuildingsToShow() {
 		return buildingsToShow;
 	}
 
-	public void setBuildingsToShow(List<BuildingManagementGui> buildingsToShow) {
+	public void setBuildingsToShow(List<BuildingAnalysisGui> buildingsToShow) {
 		this.buildingsToShow = buildingsToShow;
 	}
 
-	public BuildingGui getNewBuilding() {
+	public BuildingManagementGui getNewBuilding() {
 		return newBuilding;
 	}
 
-	public void setNewBuilding(BuildingGui newBuilding) {
+	public void setNewBuilding(BuildingManagementGui newBuilding) {
 		this.newBuilding = newBuilding;
 	}
-
 
 }

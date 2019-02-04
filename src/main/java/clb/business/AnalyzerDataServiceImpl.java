@@ -168,32 +168,33 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		clbDao.getAllBuildings().stream().forEach(building -> user.addBuilding(building));;
 		clbDao.saveUsersystem(user);
 	}
-
-	@Override
+	
 	@Transactional
-	public BuildingObject saveBuilding(BuildingObject building) {
+	@Override
+	public void saveBuildingForUser(UsersystemObject user, BuildingObject building) {
 		clbDao.saveDivision(building.getMainDivision());
 		clbDao.saveBuilding(building);
-		return building;
-	}
-	
-	@Override
-	@Transactional
-	public UsersystemObject saveUsersystem(UsersystemObject userUiPojo) {
-		clbDao.saveUsersystem(userUiPojo);
-		return userUiPojo;
-	}
-	
-	@Override
-	@Transactional
-	public void deleteBuilding(BuildingObject object) {
 		
-		DivisionObject mainDivision = object.getMainDivision();
+		user.addBuilding(building);
+		
+		clbDao.saveUsersystem(user);
+	}
+
+	
+	@Override
+	@Transactional
+	public void deleteBuildingForUser(UsersystemObject user, BuildingObject building) {
+		
+		DivisionObject mainDivision = building.getMainDivision();
 		
 		if(mainDivision != null)
 			clbDao.deleteDivisionCascade(mainDivision);
 		
-		clbDao.deleteBuilding(object);
+		clbDao.deleteBuilding(building);
+		
+		user.removeBuilding(building);
+		
+		clbDao.saveUsersystem(user);
 	}
 
 
@@ -220,6 +221,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	public void setEventPublisher( ApplicationEventPublisher eventPublisher ) {
 		this.eventPublisher = eventPublisher;
 	}
+
 
 
 

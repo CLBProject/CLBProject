@@ -22,7 +22,7 @@ import clb.business.AnalyzerDataService;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.global.DateUtils;
 import clb.ui.beans.objects.AnalyzerGui;
-import clb.ui.beans.objects.BuildingGui;
+import clb.ui.beans.objects.BuildingAnalysisGui;
 import clb.ui.beans.objects.DivisionGui;
 import clb.ui.beans.objects.DivisionNodeGui;
 import clb.ui.beans.utils.AnalysisBeanCache;
@@ -54,9 +54,9 @@ public class AnalysisBean implements Serializable{
 	private AnalysisBeanChart analysisDayPojo;
 	private AnalysisBeanCache analysisBeanCache;
 
-	private List<BuildingGui> buildingsToSelect;
-	private BuildingGui tempBuildingSelected;
-	private BuildingGui buildingSelected;
+	private List<BuildingAnalysisGui> buildingsToSelect;
+	private BuildingAnalysisGui tempBuildingSelected;
+	private BuildingAnalysisGui buildingSelected;
 	
 	private TreeNode mainDivision;
 	private TreeNode mainDivisionSelected;
@@ -145,7 +145,7 @@ public class AnalysisBean implements Serializable{
 		this.yearAndMonths = yearAndMonths;
 	}
 
-	private List<BuildingGui> initBuildingObjects() {
+	private List<BuildingAnalysisGui> initBuildingObjects() {
 		return clbHomeLoginBean.getUserBuildings().stream().filter(building -> {
 			
 			List<AnalyzerGui> buildingAnalyzers = building.getMainDivision() != null ? building.getMainDivision().getAnalyzers() : null;
@@ -156,11 +156,11 @@ public class AnalysisBean implements Serializable{
 		}).collect(Collectors.toList());
 	}
 
-	private void initChartForBuilding(BuildingGui bObj) {
-		buildingSelected = bObj;
+	private void initChartForBuilding(BuildingAnalysisGui bGui) {
+		buildingSelected = bGui;
 		tempBuildingSelected = buildingSelected;
 
-		DivisionGui division = bObj.getMainDivision();
+		DivisionGui division = bGui.getMainDivision();
 		
 		if(division != null && division.hasAnalyzers()) {
 			
@@ -404,11 +404,11 @@ public class AnalysisBean implements Serializable{
 	}
 
 
-	public List<BuildingGui> getBuildingsToSelect() {
+	public List<BuildingAnalysisGui> getBuildingsToSelect() {
 		return buildingsToSelect;
 	}
 
-	public void setBuildingsToSelect( List<BuildingGui> buildingsToSelect ) {
+	public void setBuildingsToSelect( List<BuildingAnalysisGui> buildingsToSelect ) {
 		this.buildingsToSelect = buildingsToSelect;
 	}
 
@@ -525,19 +525,19 @@ public class AnalysisBean implements Serializable{
 		this.analysisBeanCache = analysisBeanCache;
 	}
 
-	public BuildingGui getTempBuildingSelected() {
+	public BuildingAnalysisGui getTempBuildingSelected() {
 		return tempBuildingSelected;
 	}
 
-	public void setTempBuildingSelected(BuildingGui tempBuildingSelected) {
+	public void setTempBuildingSelected(BuildingAnalysisGui tempBuildingSelected) {
 		this.tempBuildingSelected = tempBuildingSelected;
 	}
 
-	public BuildingGui getBuildingSelected() {
+	public BuildingAnalysisGui getBuildingSelected() {
 		return buildingSelected;
 	}
 
-	public void setBuildingSelected(BuildingGui buildingSelected) {
+	public void setBuildingSelected(BuildingAnalysisGui buildingSelected) {
 		this.buildingSelected = buildingSelected;
 	}
 

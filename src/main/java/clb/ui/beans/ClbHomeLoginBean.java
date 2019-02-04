@@ -14,10 +14,11 @@ import org.primefaces.context.RequestContext;
 
 import clb.business.AnalyzerDataService;
 import clb.business.UserRegistryService;
+import clb.business.objects.BuildingObject;
 import clb.global.exceptions.UserDoesNotExistException;
 import clb.global.exceptions.UserDoesNotMatchPasswordLoginException;
 import clb.global.exceptions.UserIsNotEnabledYet;
-import clb.ui.beans.objects.BuildingGui;
+import clb.ui.beans.objects.BuildingAnalysisGui;
 import clb.ui.beans.objects.UsersystemGui;
 
 @SessionScoped
@@ -100,9 +101,13 @@ public class ClbHomeLoginBean implements Serializable {
 		return authenticatedUser != null && authenticatedUser.getBuildings() != null && authenticatedUser.getBuildings().size() > 0;
 	}
 
-	public void saveUserWithBuilding(BuildingGui building) {
-		authenticatedUser.addBuilding(building);
-		analyzerDataService.saveUsersystem(authenticatedUser.toObject());
+	public void addBuildingToUser(BuildingObject building) {
+		analyzerDataService.saveBuildingForUser(authenticatedUser.toObject(), building);
+		authenticatedUser.addBuilding(new BuildingAnalysisGui(building));
+	}
+
+	public void deleteBuildingFromUser(BuildingAnalysisGui building) {
+		analyzerDataService.deleteBuildingForUser(authenticatedUser.toObject(), building.toObject());
 	}
 	
 	public UserRegistryService getUserRegistryService() {
@@ -129,13 +134,13 @@ public class ClbHomeLoginBean implements Serializable {
 		this.loginPassword = loginPassword;
 	}
 
-	public List<BuildingGui> getUserBuildings() {
+	public List<BuildingAnalysisGui> getUserBuildings() {
 		
 		if(authenticatedUser.hasBuildings()) {
 			return authenticatedUser.getBuildings();
 		}
 		
-		return new ArrayList<BuildingGui>();
+		return new ArrayList<BuildingAnalysisGui>();
 	}
 
 	public AnalyzerDataService getAnalyzerDataService() {
@@ -153,6 +158,6 @@ public class ClbHomeLoginBean implements Serializable {
 	public void setAuthenticatedUser(UsersystemGui authenticatedUser) {
 		this.authenticatedUser = authenticatedUser;
 	}
-	
+
 	
 }

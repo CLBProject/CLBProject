@@ -23,7 +23,7 @@
 					</p:panelGrid>
 					<br />
 					<div align="center">
-						<p:commandButton styleClass="signButton" action="#{redirectBean.redirectTo(path)}" value="OK"></p:commandButton>
+						<p:commandButton styleClass="signButton" ajax="false" type="submit" action="#{redirectBean.redirectTo(path)}" value="OK"></p:commandButton>
 					</div>
 				</div>
 			</h:form>

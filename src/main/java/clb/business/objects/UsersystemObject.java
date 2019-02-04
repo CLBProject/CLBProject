@@ -99,7 +99,87 @@ public class UsersystemObject implements ClbObject, Serializable
     	buildings.add(buildingObject);
     }
 
-    public String getAddress() {
+	public void removeBuilding(BuildingObject building) {
+		buildings.remove(building);
+	}
+	
+    @Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((address == null) ? 0 : address.hashCode());
+		result = prime * result + ((buildings == null) ? 0 : buildings.hashCode());
+		result = prime * result + (enabled ? 1231 : 1237);
+		result = prime * result + ((expiryDate == null) ? 0 : expiryDate.hashCode());
+		result = prime * result + ((ftpPassword == null) ? 0 : ftpPassword.hashCode());
+		result = prime * result + ((lastSentEmail == null) ? 0 : lastSentEmail.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((password == null) ? 0 : password.hashCode());
+		result = prime * result + ((token == null) ? 0 : token.hashCode());
+		result = prime * result + ((username == null) ? 0 : username.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		UsersystemObject other = (UsersystemObject) obj;
+		if (address == null) {
+			if (other.address != null)
+				return false;
+		} else if (!address.equals(other.address))
+			return false;
+		if (buildings == null) {
+			if (other.buildings != null)
+				return false;
+		} else if (!buildings.equals(other.buildings))
+			return false;
+		if (enabled != other.enabled)
+			return false;
+		if (expiryDate == null) {
+			if (other.expiryDate != null)
+				return false;
+		} else if (!expiryDate.equals(other.expiryDate))
+			return false;
+		if (ftpPassword == null) {
+			if (other.ftpPassword != null)
+				return false;
+		} else if (!ftpPassword.equals(other.ftpPassword))
+			return false;
+		if (lastSentEmail == null) {
+			if (other.lastSentEmail != null)
+				return false;
+		} else if (!lastSentEmail.equals(other.lastSentEmail))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (password == null) {
+			if (other.password != null)
+				return false;
+		} else if (!password.equals(other.password))
+			return false;
+		if (token == null) {
+			if (other.token != null)
+				return false;
+		} else if (!token.equals(other.token))
+			return false;
+		if (username == null) {
+			if (other.username != null)
+				return false;
+		} else if (!username.equals(other.username))
+			return false;
+		return true;
+	}
+
+	public String getAddress() {
         return address;
     }
 
@@ -178,5 +258,6 @@ public class UsersystemObject implements ClbObject, Serializable
 	public void setFtpPassword(String ftpPassword) {
 		this.ftpPassword = ftpPassword;
 	}
+
     
 }

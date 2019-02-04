@@ -36,18 +36,10 @@
 									<p:column styleClass="dataTableColumn">
 										<p:panel>
 											<div align="left" class="buildingDivClass">
-												<h:outputText value="#{building.buildingName}" style="font-size:16px"></h:outputText>
+												<h:outputText value="#{building.name}" style="font-size:16px"></h:outputText>
 												<br/>
-												<h:outputText value="#{building.location}" styleClass="buildingLocation"></h:outputText>
-												
+												<h:outputText value="#{building.location}" styleClass="buildingLocation"></h:outputText>				
 												<div class="buildingDivClass" style="padding: 5px">
-													 <p:tree value="#{building.division}" var="division" styleClass="divisionAnalysis"
-												                        id="divisionTreeAnalisys" selectionMode="checkbox" dynamic="true">
-												        <p:treeNode>
-												        	<h:outputText value="#{division.data.name}"/>
-												        </p:treeNode>
-												        <p:ajax event="select"  listener="#{analysisBean.onNodeSelect}" update="@form"></p:ajax>
-												    </p:tree>
 												</div>
 											</div>
 											<div align="right" class="buildingManagDelete">

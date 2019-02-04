@@ -12,11 +12,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import clb.business.AnalyzerDataService;
+import clb.business.objects.BuildingObject;
 import clb.ui.beans.AnalysisBean;
 import clb.ui.beans.ClbHomeLoginBean;
 import clb.ui.beans.objects.AnalyzerGui;
 import clb.ui.beans.objects.AnalyzerMeterGui;
-import clb.ui.beans.objects.BuildingGui;
+import clb.ui.beans.objects.BuildingAnalysisGui;
 import clb.ui.beans.objects.DivisionGui;
 
 public class AnalysisBeanTest extends AbstractBeanTest{
@@ -34,9 +35,9 @@ public class AnalysisBeanTest extends AbstractBeanTest{
 	@Override
 	public void initBean() {
 		
-		List<BuildingGui> buildings = new ArrayList<BuildingGui>();
-		BuildingGui bGui = new BuildingGui();
-		BuildingGui bGui2 = new BuildingGui();
+		List<BuildingAnalysisGui> buildings = new ArrayList<BuildingAnalysisGui>();
+		BuildingAnalysisGui bGui = new BuildingAnalysisGui(new BuildingObject());
+		BuildingAnalysisGui bGui2 = new BuildingAnalysisGui(new BuildingObject());
 		AnalyzerGui analObj = new AnalyzerGui();
 		AnalyzerGui analObj2 = new AnalyzerGui();
 		

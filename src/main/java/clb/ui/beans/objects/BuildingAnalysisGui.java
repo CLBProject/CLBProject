@@ -3,10 +3,9 @@ package clb.ui.beans.objects;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
-
 import clb.business.objects.BuildingObject;
 
-public class BuildingGui {
+public class BuildingAnalysisGui {
 
 	@NotNull
 	private String buildingid;
@@ -21,18 +20,13 @@ public class BuildingGui {
     
     private DivisionGui mainDivision;
 
-	public BuildingGui() {
-		mainDivision = new DivisionGui();
-		mainDivision.setName("Main Division");
-	}
-
-	public BuildingGui(BuildingObject bObject) {
+	public BuildingAnalysisGui(BuildingObject bObject) {
 		super();
 		this.buildingid = bObject.getBuildingid();
 		this.name = bObject.getName();
 		this.imgPath = bObject.getImgPath();
 		this.location = bObject.getLocation();
-		this.mainDivision = bObject.getMainDivision() != null ? new DivisionGui(bObject.getMainDivision()) : null;
+		this.mainDivision = new DivisionGui(bObject.getMainDivision());
 	}
 	
 	public BuildingObject toObject() {
@@ -42,7 +36,6 @@ public class BuildingGui {
 		bobj.setName(this.name);
 		bobj.setLocation(this.location);
 		bobj.setImgPath(this.imgPath);
-		bobj.setMainDivision(this.mainDivision != null ? this.mainDivision.toObject() : null);
 		
 		return bobj;
 	}
