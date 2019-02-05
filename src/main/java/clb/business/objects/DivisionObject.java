@@ -58,6 +58,13 @@ public class DivisionObject
 
         childrenDivisions.add(subDiv);
 	}
+	
+
+	public boolean hasChildren() {
+		return childrenDivisions != null && childrenDivisions.size() > 0;
+	}
+
+
 
 
     public String getName() {
@@ -91,7 +98,6 @@ public class DivisionObject
 	public void setChildrenDivisions(List<DivisionObject> childrenDivisions) {
 		this.childrenDivisions = childrenDivisions;
 	}
-
 
 	
 }

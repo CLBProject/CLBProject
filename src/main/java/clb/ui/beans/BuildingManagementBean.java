@@ -11,7 +11,7 @@ import javax.faces.bean.ViewScoped;
 import clb.business.AnalyzerDataService;
 import clb.business.objects.BuildingObject;
 import clb.ui.beans.objects.BuildingAnalysisGui;
-import clb.ui.beans.objects.BuildingManagementGui;
+import clb.ui.beans.objects.BuildingNewManagementGui;
 
 @ViewScoped
 @ManagedBean
@@ -29,12 +29,12 @@ public class BuildingManagementBean implements Serializable {
 	private ClbHomeLoginBean clbHomeLoginBean;
 
 	private List<BuildingAnalysisGui> buildingsToShow;
-	private BuildingManagementGui newBuilding;
+	private BuildingNewManagementGui newBuilding;
 
 	@PostConstruct
 	public void initBuildingManagement() {
 
-		newBuilding = new BuildingManagementGui();
+		newBuilding = new BuildingNewManagementGui();
 		buildingsToShow = clbHomeLoginBean.getUserBuildings();
 	}
 
@@ -77,11 +77,11 @@ public class BuildingManagementBean implements Serializable {
 		this.buildingsToShow = buildingsToShow;
 	}
 
-	public BuildingManagementGui getNewBuilding() {
+	public BuildingNewManagementGui getNewBuilding() {
 		return newBuilding;
 	}
 
-	public void setNewBuilding(BuildingManagementGui newBuilding) {
+	public void setNewBuilding(BuildingNewManagementGui newBuilding) {
 		this.newBuilding = newBuilding;
 	}
 

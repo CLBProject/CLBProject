@@ -120,12 +120,14 @@ public class AnalysisBean implements Serializable{
 				
 				if(monthsValues != null && monthsValues.size() > 0) {
 					month = monthsValues.iterator().next();
+					
+					week = Weeks.getWeekByValue(DateUtils.getInstance().getWeekFromDate(analysisDate));
+					weeks = Weeks.getWeeksLimited(DateUtils.getInstance().getNumberOfMonthWeeks(month.getValue(),Integer.parseInt(year)));
 				}
 			}
 		}
 		
-		week = Weeks.getWeekByValue(DateUtils.getInstance().getWeekFromDate(analysisDate));
-		weeks = Weeks.getWeeksLimited(DateUtils.getInstance().getNumberOfMonthWeeks(month.getValue(),Integer.parseInt(year)));
+
 
 		//Set Initial Selected Building, DataLogger and Analyzer
 		if(clbHomeLoginBean.userHasBuildings() ) {
