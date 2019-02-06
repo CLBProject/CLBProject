@@ -3,6 +3,7 @@ package clb.ui.beans.objects;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
+
 import clb.business.objects.BuildingObject;
 
 public class BuildingAnalysisGui {

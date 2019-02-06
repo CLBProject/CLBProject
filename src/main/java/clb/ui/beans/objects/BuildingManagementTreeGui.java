@@ -24,15 +24,18 @@ public class BuildingManagementTreeGui {
     
     private TreeNode mainDivision;
 
-	public BuildingManagementTreeGui(BuildingObject bObject) {
+	public BuildingManagementTreeGui(BuildingAnalysisGui bObject) {
 		super();
 		this.buildingid = bObject.getBuildingid();
 		this.name = bObject.getName();
 		this.imgPath = bObject.getImgPath();
 		this.location = bObject.getLocation();
-		this.mainDivision = new DefaultTreeNode(new DivisionNodeGui(bObject.getMainDivision()),null);
 		
-		buildTreeDivisions(this.mainDivision, bObject.getMainDivision());
+		DivisionObject divisionObj = bObject.getMainDivision().toObject();
+		
+		this.mainDivision = new DefaultTreeNode(new DivisionNodeGui(divisionObj),null);
+		
+		buildTreeDivisions(this.mainDivision,divisionObj);
 	}
 	
 	private void buildTreeDivisions(TreeNode treeDivision, DivisionObject division) {

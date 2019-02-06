@@ -20,6 +20,7 @@ import org.primefaces.model.TreeNode;
 
 import clb.business.AnalyzerDataService;
 import clb.business.objects.AnalyzerRegistryObject;
+import clb.business.objects.DivisionObject;
 import clb.global.DateUtils;
 import clb.ui.beans.objects.AnalyzerGui;
 import clb.ui.beans.objects.BuildingAnalysisGui;
@@ -166,10 +167,12 @@ public class AnalysisBean implements Serializable{
 		
 		if(division != null && division.hasAnalyzers()) {
 			
-			//Root
-			mainDivision = new DefaultTreeNode(new DivisionNodeGui(division),null);
+			DivisionObject divisionObj = division.toObject();
 			
-			buildTreeSelection(new DefaultTreeNode(new DivisionNodeGui(division),mainDivision),division);
+			//Root
+			mainDivision = new DefaultTreeNode(new DivisionNodeGui(divisionObj),null);
+			
+			buildTreeSelection(new DefaultTreeNode(new DivisionNodeGui(divisionObj),mainDivision),division);
 			
 			analyzersSelected = division.getAnalyzers();
 			analyzerSelected = analyzersSelected.get(0);
@@ -188,7 +191,7 @@ public class AnalysisBean implements Serializable{
 		if(division.hasSubDivisions()) {
 			division.getChildrenDivisions().stream()
 				.forEach(childDivision -> 
-						buildTreeSelection( new DefaultTreeNode(new DivisionNodeGui(childDivision),head),childDivision));
+						buildTreeSelection( new DefaultTreeNode(new DivisionNodeGui(childDivision.toObject()),head),childDivision));
 		}
 	}
 

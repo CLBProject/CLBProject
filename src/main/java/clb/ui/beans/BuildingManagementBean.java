@@ -2,6 +2,7 @@ package clb.ui.beans;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -11,6 +12,7 @@ import javax.faces.bean.ViewScoped;
 import clb.business.AnalyzerDataService;
 import clb.business.objects.BuildingObject;
 import clb.ui.beans.objects.BuildingAnalysisGui;
+import clb.ui.beans.objects.BuildingManagementTreeGui;
 import clb.ui.beans.objects.BuildingNewManagementGui;
 
 @ViewScoped
@@ -28,14 +30,15 @@ public class BuildingManagementBean implements Serializable {
 	@ManagedProperty("#{clbHomeLoginBean}")
 	private ClbHomeLoginBean clbHomeLoginBean;
 
-	private List<BuildingAnalysisGui> buildingsToShow;
+	private List<BuildingManagementTreeGui> buildingsToShow;
 	private BuildingNewManagementGui newBuilding;
 
 	@PostConstruct
 	public void initBuildingManagement() {
 
 		newBuilding = new BuildingNewManagementGui();
-		buildingsToShow = clbHomeLoginBean.getUserBuildings();
+		buildingsToShow = clbHomeLoginBean.userHasBuildings() ? 
+						clbHomeLoginBean.getUserBuildings().stream().map(BuildingManagementTreeGui::new).collect(Collectors.toList()) : null;
 	}
 
 	public void createBuilding() {
@@ -49,7 +52,6 @@ public class BuildingManagementBean implements Serializable {
 	public void deleteBuilding(BuildingAnalysisGui buildingToDelete) {
 		if (buildingToDelete != null) {
 			clbHomeLoginBean.deleteBuildingFromUser(buildingToDelete);
-			buildingsToShow.remove(buildingToDelete);
 		}
 	}
 
@@ -69,11 +71,11 @@ public class BuildingManagementBean implements Serializable {
 		this.clbHomeLoginBean = clbHomeLoginBean;
 	}
 
-	public List<BuildingAnalysisGui> getBuildingsToShow() {
+	public List<BuildingManagementTreeGui> getBuildingsToShow() {
 		return buildingsToShow;
 	}
 
-	public void setBuildingsToShow(List<BuildingAnalysisGui> buildingsToShow) {
+	public void setBuildingsToShow(List<BuildingManagementTreeGui> buildingsToShow) {
 		this.buildingsToShow = buildingsToShow;
 	}
 
