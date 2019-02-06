@@ -17,7 +17,6 @@ public class DivisionObject
     private List<AnalyzerObject> analyzers;
 
     public DivisionObject(){
-
     }
 
     public DivisionObject( DivisionEntity division ) {

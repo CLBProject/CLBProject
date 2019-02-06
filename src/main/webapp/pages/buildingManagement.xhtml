@@ -40,6 +40,13 @@
 												<br/>
 												<h:outputText value="#{building.location}" styleClass="buildingLocation"></h:outputText>				
 												<div class="buildingDivClass" style="padding: 5px">
+													 <p:tree value="#{building.mainDivision}" var="division" styleClass="divisionAnalysis"
+												                        id="divisionTreeAnalisys" selectionMode="checkbox" dynamic="true">
+												        <p:treeNode>
+												            <h:outputText value="#{division.name}"/>
+												        </p:treeNode>
+												        <p:ajax event="select"  listener="#{buildingManagementBean.showDivisionOptions}" update="@form"></p:ajax>
+												    </p:tree>
 												</div>
 											</div>
 											<div align="right" class="buildingManagDelete">

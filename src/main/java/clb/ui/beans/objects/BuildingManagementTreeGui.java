@@ -35,10 +35,19 @@ public class BuildingManagementTreeGui {
 		
 		this.mainDivision = new DefaultTreeNode(new DivisionNodeGui(divisionObj),null);
 		
-		buildTreeDivisions(this.mainDivision,divisionObj);
+		buildTreeDivisions(new DefaultTreeNode(new DivisionNodeGui(divisionObj),this.mainDivision),divisionObj);
 	}
 	
 	private void buildTreeDivisions(TreeNode treeDivision, DivisionObject division) {
+		if(division.hasChildren()) {
+			for(DivisionObject child: division.getChildrenDivisions()) {
+				buildTreeDivisions(new DefaultTreeNode(new DivisionNodeGui(child),treeDivision), child);
+			}
+		}
+		
+	}
+	
+	private void buildReverseTreeDivisions(TreeNode treeDivision, DivisionObject division) {
 		if(division.hasChildren()) {
 			for(DivisionObject child: division.getChildrenDivisions()) {
 				buildTreeDivisions(new DefaultTreeNode(new DivisionNodeGui(child),treeDivision), child);
@@ -54,6 +63,7 @@ public class BuildingManagementTreeGui {
 		bobj.setName(this.name);
 		bobj.setLocation(this.location);
 		bobj.setImgPath(this.imgPath);
+		//bobj.setMainDivision(((DivisionNodeGui)mainDivision.getData()).to);
 		
 		return bobj;
 	}

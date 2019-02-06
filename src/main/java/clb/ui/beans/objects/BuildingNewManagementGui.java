@@ -29,7 +29,10 @@ public class BuildingNewManagementGui {
 		bobj.setName(this.name);
 		bobj.setLocation(this.location);
 		bobj.setImgPath(this.imgPath);
-		bobj.setMainDivision(new DivisionObject());
+		
+		DivisionObject newDiv = new DivisionObject();
+		newDiv.setName("Main Division");
+		bobj.setMainDivision(newDiv);
 		
 		return bobj;
 	}

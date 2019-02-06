@@ -9,6 +9,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
+import org.primefaces.event.NodeSelectEvent;
+import org.primefaces.model.TreeNode;
+
 import clb.business.AnalyzerDataService;
 import clb.business.objects.BuildingObject;
 import clb.ui.beans.objects.BuildingAnalysisGui;
@@ -49,10 +52,18 @@ public class BuildingManagementBean implements Serializable {
 		}
 	}
 
-	public void deleteBuilding(BuildingAnalysisGui buildingToDelete) {
+	public void deleteBuilding(BuildingManagementTreeGui buildingToDelete) {
 		if (buildingToDelete != null) {
-			clbHomeLoginBean.deleteBuildingFromUser(buildingToDelete);
+			clbHomeLoginBean.deleteBuildingFromUser(buildingToDelete.toObject());
+			buildingsToShow.remove(buildingToDelete);
 		}
+	}
+	
+	public void showDivisionOptions(NodeSelectEvent event) {
+		TreeNode currentTreeNode = event.getTreeNode();
+        currentTreeNode.setSelected(true);
+
+        TreeNode parent = currentTreeNode;
 	}
 
 	public AnalyzerDataService getAnalyzerDataService() {
