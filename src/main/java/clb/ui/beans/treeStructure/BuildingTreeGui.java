@@ -1,4 +1,4 @@
-package clb.ui.beans.objects;
+package clb.ui.beans.treeStructure;
 
 import javax.validation.constraints.NotNull;
 
@@ -9,7 +9,7 @@ import org.primefaces.model.TreeNode;
 import clb.business.objects.BuildingObject;
 import clb.business.objects.DivisionObject;
 
-public class BuildingManagementTreeGui {
+public class BuildingTreeGui {
 
 	@NotNull
 	private String buildingid;
@@ -23,34 +23,27 @@ public class BuildingManagementTreeGui {
     private String imgPath;
     
     private TreeNode mainDivision;
+    
+    private Boolean mainDivisionIsSelected;
 
-	public BuildingManagementTreeGui(BuildingAnalysisGui bObject) {
+	public BuildingTreeGui(BuildingObject bObject) {
 		super();
 		this.buildingid = bObject.getBuildingid();
 		this.name = bObject.getName();
 		this.imgPath = bObject.getImgPath();
 		this.location = bObject.getLocation();
 		
-		DivisionObject divisionObj = bObject.getMainDivision().toObject();
+		this.mainDivisionIsSelected = false;
 		
-		this.mainDivision = new DefaultTreeNode(new DivisionNodeGui(divisionObj),null);
-		
-		buildTreeDivisions(new DefaultTreeNode(new DivisionNodeGui(divisionObj),this.mainDivision),divisionObj);
+		DivisionObject divisionObj = bObject.getMainDivision();
+		this.mainDivision = new DefaultTreeNode(new DivisionNodeTreeGui(divisionObj),null);
+		buildTreeDivisions(new DefaultTreeNode(new DivisionNodeTreeGui(divisionObj),this.mainDivision),divisionObj);
 	}
 	
 	private void buildTreeDivisions(TreeNode treeDivision, DivisionObject division) {
 		if(division.hasChildren()) {
 			for(DivisionObject child: division.getChildrenDivisions()) {
-				buildTreeDivisions(new DefaultTreeNode(new DivisionNodeGui(child),treeDivision), child);
-			}
-		}
-		
-	}
-	
-	private void buildReverseTreeDivisions(TreeNode treeDivision, DivisionObject division) {
-		if(division.hasChildren()) {
-			for(DivisionObject child: division.getChildrenDivisions()) {
-				buildTreeDivisions(new DefaultTreeNode(new DivisionNodeGui(child),treeDivision), child);
+				buildTreeDivisions(new DefaultTreeNode(new DivisionNodeTreeGui(child),treeDivision), child);
 			}
 		}
 		
@@ -67,7 +60,13 @@ public class BuildingManagementTreeGui {
 		
 		return bobj;
 	}
+	public Boolean getMainDivisionIsSelected() {
+		return mainDivisionIsSelected;
+	}
 
+	public void setMainDivisionIsSelected(Boolean mainDivisionIsSelected) {
+		this.mainDivisionIsSelected = mainDivisionIsSelected;
+	}
 
 	public String getBuildingid() {
 		return buildingid;
@@ -84,9 +83,6 @@ public class BuildingManagementTreeGui {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	
-
 	public TreeNode getMainDivision() {
 		return mainDivision;
 	}
@@ -110,6 +106,4 @@ public class BuildingManagementTreeGui {
 	public void setLocation(String location) {
 		this.location = location;
 	}
-	
-	
 }

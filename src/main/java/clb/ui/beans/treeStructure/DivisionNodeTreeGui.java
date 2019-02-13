@@ -1,4 +1,4 @@
-package clb.ui.beans.objects;
+package clb.ui.beans.treeStructure;
 
 import java.io.Serializable;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.DivisionObject;
 
-public class DivisionNodeGui implements Serializable, Comparable<DivisionNodeGui> {
+public class DivisionNodeTreeGui implements Serializable, Comparable<DivisionNodeTreeGui> {
 
 	/**
 	 * 
@@ -16,14 +16,14 @@ public class DivisionNodeGui implements Serializable, Comparable<DivisionNodeGui
 	private String name;
 	private List<AnalyzerObject> analyzers;
 	
-	public DivisionNodeGui(DivisionObject division) {
+	public DivisionNodeTreeGui(DivisionObject division) {
 		this.divisionId = division.getDivisionid();
 		this.name = division.getName();
 		this.analyzers = division.getAnalyzers();
 	}
 	
 	@Override
-	public int compareTo(DivisionNodeGui document) {
+	public int compareTo(DivisionNodeTreeGui document) {
         return this.getDivisionId().compareTo((document).getDivisionId());
     }
 
@@ -50,6 +50,4 @@ public class DivisionNodeGui implements Serializable, Comparable<DivisionNodeGui
 	public void setAnalyzers(List<AnalyzerObject> analyzers) {
 		this.analyzers = analyzers;
 	}
-
-	
 }

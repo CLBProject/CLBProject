@@ -37,6 +37,7 @@ public class BuildingAnalysisGui {
 		bobj.setName(this.name);
 		bobj.setLocation(this.location);
 		bobj.setImgPath(this.imgPath);
+		bobj.setMainDivision(mainDivision.toObject());
 		
 		return bobj;
 	}

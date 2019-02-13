@@ -10,7 +10,6 @@
 	<ui:define name="body">
 		<ui:include src="./general/menutab.xhtml" />
 		<div class="buildingManagementDiv">
-			<h:form id="buildingManagementForm">
 				<table width="100%" class="appDivClass">
 					<tr>
 						<td>
@@ -23,10 +22,12 @@
 					<tr>
 						<td width="100%">
 							<div align="left" class="mainDivClass">
-								<p:commandLink value="Create New Building" styleClass="commonLink" onclick="PF('newBuildingPopup').show()"></p:commandLink>
-								<p:commandLink value="Add Existing Building" styleClass="commonLink" onclick="PF('newBuildingPopup').show()"></p:commandLink>
+								<p:commandLink value="Create Building" styleClass="commonLink" onclick="PF('newBuildingPopup').show()"></p:commandLink>
+								<p:spacer width="10"/>
+								<p:commandLink value="Add Building" styleClass="commonLink" onclick="PF('newBuildingPopup').show()"></p:commandLink>
 								<br/>
 								<br/>
+								<h:form id="buildingManagementForm">
 								<p:dataTable id="paginatorSelector"
 									widgetVar="paginatorSelector" paginator="true"
 									paginatorPosition="bottom"
@@ -35,21 +36,35 @@
 									rowKey="#{building.buildingId}" var="building"
 									styleClass="buildingManagementTable">
 									<p:column styleClass="dataTableColumn">
-										<p:panel>
+										<p:panel widgetVar="buildingPanelDivision" styleClass="buildingPanelClass">
 											<div align="left" class="buildingDivClass">
 												<h:outputText value="#{building.name}" style="font-size:16px"></h:outputText>
 												<br/>
-												<h:outputText value="#{building.location}" styleClass="buildingLocation"></h:outputText>				
+												<h:outputText value="#{building.location}" styleClass="buildingLocation"></h:outputText>	
+												<br/>		
 												<div class="buildingDivClass" style="padding: 5px">
-													 <p:tree value="#{building.mainDivision}" var="division" styleClass="divisionAnalysis"
-												                        id="divisionTreeAnalisys" selectionMode="checkbox" dynamic="true">
-												        <p:treeNode>
-												            <h:outputText value="#{division.name}"/>
-												        </p:treeNode>
-												        <p:ajax event="select"  listener="#{buildingManagementBean.showDivisionOptions}" update="@form"></p:ajax>
-												    </p:tree>
+													<p:panel>
+														 <p:tree value="#{building.mainDivision}" var="division" styleClass="divisionAnalysis"
+													                        id="divisionTreeAnalisys" selectionMode="checkbox" dynamic="true">
+													        <p:treeNode>
+													            <h:outputText value="#{division.name}"/>
+													        </p:treeNode>
+													        <f:attribute name="building" value="#{building}" />
+													        <p:ajax event="select" listener="#{buildingManagementBean.showDivisionOptions}" update="@form" ></p:ajax>
+													        <p:ajax event="unselect" listener="#{buildingManagementBean.hideDivisionOptions}" update="@form" ></p:ajax>
+													    </p:tree>
+													    <p:spacer height="10"></p:spacer>
+													    <p:outputPanel rendered="#{building.mainDivisionIsSelected}"  styleClass="divisionOptions">
+													    	<div align="center">
+														    	<p:graphicImage value="#{request.contextPath}/../resources/images/plus.png"/>
+														    	<p:spacer width="5"/>
+														    	<p:graphicImage value="#{request.contextPath}/../resources/images/negative.png"/>
+													    	</div>
+													    </p:outputPanel>
+												    </p:panel>
 												</div>
 											</div>
+											<br/>
 											<div align="right" class="buildingManagDelete">
 												<p:graphicImage width="15" styleClass="buildingManagIconClass" value="#{request.contextPath}/../resources/images/error.png"></p:graphicImage>
 												<p:spacer width="5"/>
@@ -58,13 +73,13 @@
 										</p:panel>
 									</p:column>
 								</p:dataTable>
+								</h:form>
 							</div>
 						</td>
 					</tr>
 				</table>
 				<br/>
 				<br/>
-			</h:form>
 		</div>
 		<ui:include src="./general/footer.xhtml" />
 		<ui:include src="./popups/newBuildingPopup.xhtml" />
