@@ -50,4 +50,5 @@ public class DivisionNodeTreeGui implements Serializable, Comparable<DivisionNod
 	public void setAnalyzers(List<AnalyzerObject> analyzers) {
 		this.analyzers = analyzers;
 	}
+	
 }

@@ -56,7 +56,9 @@
 													    <p:spacer height="10"></p:spacer>
 													    <p:outputPanel rendered="#{building.mainDivisionIsSelected}"  styleClass="divisionOptions">
 													    	<div align="center">
-														    	<p:graphicImage value="#{request.contextPath}/../resources/images/plus.png"/>
+													    		<p:commandLink id="idNormandie" oncomplete="PF('newDivisionPopup').show()" ajax="true" update=":newDivisionFormId">
+																	<p:graphicImage value="#{request.contextPath}/../resources/images/plus.png"/>
+																</p:commandLink>
 														    	<p:spacer width="5"/>
 														    	<p:graphicImage value="#{request.contextPath}/../resources/images/negative.png"/>
 													    	</div>
@@ -83,5 +85,8 @@
 		</div>
 		<ui:include src="./general/footer.xhtml" />
 		<ui:include src="./popups/newBuildingPopup.xhtml" />
+		<ui:include src="./popups/newDivisionPopup.xhtml" >
+			<ui:param name="parentDivision" value="#{buildingManagementBean.parentDivisionSelected.data.name}" />
+		</ui:include>
 	</ui:define>
 </ui:composition>

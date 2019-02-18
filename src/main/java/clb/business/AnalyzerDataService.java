@@ -6,6 +6,7 @@ import java.util.Map;
 
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.BuildingObject;
+import clb.business.objects.DivisionObject;
 import clb.business.objects.UsersystemObject;
 
 public interface AnalyzerDataService {
@@ -35,5 +36,7 @@ public interface AnalyzerDataService {
 	public void deleteBuildingForUser(UsersystemObject object, BuildingObject building);
 
 	public void saveBuildingForUser(UsersystemObject object, BuildingObject building);
+
+	public void saveDivisionParentAndChild(String parentId, DivisionObject divisionObj);
 
 }

@@ -60,6 +60,8 @@ public interface ClbDao{
 
 	void deleteDivisionCascade(DivisionObject mainDivision);
 
+	DivisionObject findDivisionById(String parentId);
+
 	
 
 }

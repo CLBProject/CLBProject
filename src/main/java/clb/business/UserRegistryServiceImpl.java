@@ -3,6 +3,7 @@ package clb.business;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import javax.faces.context.FacesContext;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import clb.business.objects.BuildingObject;
 import clb.business.objects.UserEvent;
 import clb.business.objects.UsersystemObject;
 import clb.business.utils.PasswordGenerator;
@@ -255,6 +257,5 @@ public class UserRegistryServiceImpl implements UserRegistryService, Application
 	public void setPasswordGenerator(PasswordGenerator passwordGenerator) {
 		this.passwordGenerator = passwordGenerator;
 	}
-
 	
 }

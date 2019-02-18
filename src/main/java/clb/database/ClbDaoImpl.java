@@ -409,4 +409,9 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 		divisionRepository.delete(currentDivision.toEntity());
 	}
 
+	@Override
+	public DivisionObject findDivisionById(String parentId) {
+		return new DivisionObject(divisionRepository.findOne(parentId));
+	}
+
 }

@@ -180,6 +180,15 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		clbDao.saveUsersystem(user);
 	}
 
+	@Override
+	@Transactional
+	public void saveDivisionParentAndChild(String parentId, DivisionObject divisionObj) {
+		DivisionObject parentDivision = clbDao.findDivisionById(parentId);
+		clbDao.saveDivision(divisionObj);
+		
+		parentDivision.addSubDivision(divisionObj);
+		clbDao.saveDivision(parentDivision);
+	}
 	
 	@Override
 	@Transactional
@@ -221,8 +230,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	public void setEventPublisher( ApplicationEventPublisher eventPublisher ) {
 		this.eventPublisher = eventPublisher;
 	}
-
-
 
 
 }

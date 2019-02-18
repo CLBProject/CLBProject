@@ -1,5 +1,8 @@
 package clb.business;
 
+import java.util.List;
+
+import clb.business.objects.BuildingObject;
 import clb.business.objects.UsersystemObject;
 import clb.global.exceptions.UserCantResendEmailException;
 import clb.global.exceptions.UserDoesNotExistException;
@@ -13,7 +16,7 @@ import clb.global.exceptions.UserTokenIsNullOnCompleteRegistrationException;
 public interface UserRegistryService {
     
     UsersystemObject validateUserLogin( String userName , String password ) throws UserDoesNotExistException,UserDoesNotMatchPasswordLoginException, UserIsNotEnabledYet;
-
+    
     void registerUser( String name, String userName, String address , String password, int timeOfSession ) 
             throws UserExistsOnRegistryException, UserNotPersistedException;
 

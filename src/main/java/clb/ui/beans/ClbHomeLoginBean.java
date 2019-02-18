@@ -159,5 +159,7 @@ public class ClbHomeLoginBean implements Serializable {
 		this.authenticatedUser = authenticatedUser;
 	}
 
+
+
 	
 }

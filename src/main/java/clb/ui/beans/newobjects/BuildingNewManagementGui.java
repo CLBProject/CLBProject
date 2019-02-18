@@ -1,4 +1,4 @@
-package clb.ui.beans.objects;
+package clb.ui.beans.newobjects;
 
 import javax.validation.constraints.NotNull;
 

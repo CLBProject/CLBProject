@@ -41,6 +41,7 @@ public class BuildingTreeGui {
 	}
 	
 	private void buildTreeDivisions(TreeNode treeDivision, DivisionObject division) {
+		
 		if(division.hasChildren()) {
 			for(DivisionObject child: division.getChildrenDivisions()) {
 				buildTreeDivisions(new DefaultTreeNode(new DivisionNodeTreeGui(child),treeDivision), child);
