@@ -9,6 +9,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.NodeUnselectEvent;
 import org.primefaces.model.DefaultTreeNode;
@@ -43,6 +44,9 @@ public class BuildingManagementBean implements Serializable {
 	
 	private BuildingNewManagementGui newBuilding;
 	private DivisionNewManagementGui newDivision;
+	
+	private static final String CANT_DELETE_DIVISION = "cantDeleteDivision";
+	private static final String NODE_SELECTED_NULL = "nodeSelectedNull";
 
 	@PostConstruct
 	public void initBuildingManagement() {
@@ -82,6 +86,28 @@ public class BuildingManagementBean implements Serializable {
 			clbHomeLoginBean.deleteBuildingFromUser(buildingToDelete.toObject());
 			buildingsToShow.remove(buildingToDelete);
 		}
+	}
+	
+	public void deleteDivision() {
+		
+		RequestContext context = RequestContext.getCurrentInstance();
+		
+		if(parentDivisionSelected == null) {
+			context.addCallbackParam(NODE_SELECTED_NULL, true);
+			return;
+		}
+		
+		TreeNode parent = parentDivisionSelected.getParent();
+		
+		if(parent == null) {
+			context.addCallbackParam(CANT_DELETE_DIVISION, true);
+			return;
+		}
+		
+		DivisionNodeTreeGui parentNode = (DivisionNodeTreeGui) parent.getData();
+		DivisionNodeTreeGui divisionToDeleteNode = (DivisionNodeTreeGui) parentDivisionSelected.getData();
+		
+		analyzerDataService.deleteChildDivisionFromParent(parentNode.getDivisionId(),divisionToDeleteNode.getDivisionId());
 	}
 	
 	public void showDivisionOptions(NodeSelectEvent event) {

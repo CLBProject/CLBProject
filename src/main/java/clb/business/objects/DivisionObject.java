@@ -58,15 +58,61 @@ public class DivisionObject
         childrenDivisions.add(subDiv);
 	}
 	
+	public void deleteSubDivision(DivisionObject divisionChildObj) {
+		if(childrenDivisions != null)
+			childrenDivisions.remove(divisionChildObj);
+	}
+
+	
 
 	public boolean hasChildren() {
 		return childrenDivisions != null && childrenDivisions.size() > 0;
 	}
 
+    @Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((analyzers == null) ? 0 : analyzers.hashCode());
+		result = prime * result + ((childrenDivisions == null) ? 0 : childrenDivisions.hashCode());
+		result = prime * result + ((divisionid == null) ? 0 : divisionid.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DivisionObject other = (DivisionObject) obj;
+		if (analyzers == null) {
+			if (other.analyzers != null)
+				return false;
+		} else if (!analyzers.equals(other.analyzers))
+			return false;
+		if (childrenDivisions == null) {
+			if (other.childrenDivisions != null)
+				return false;
+		} else if (!childrenDivisions.equals(other.childrenDivisions))
+			return false;
+		if (divisionid == null) {
+			if (other.divisionid != null)
+				return false;
+		} else if (!divisionid.equals(other.divisionid))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
+	}
 
-
-    public String getName() {
+	public String getName() {
         return name;
     }
 
@@ -97,6 +143,7 @@ public class DivisionObject
 	public void setChildrenDivisions(List<DivisionObject> childrenDivisions) {
 		this.childrenDivisions = childrenDivisions;
 	}
+
 
 	
 }

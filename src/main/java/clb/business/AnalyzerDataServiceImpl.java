@@ -231,5 +231,16 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		this.eventPublisher = eventPublisher;
 	}
 
+	@Override
+	public void deleteChildDivisionFromParent(String parentDivision, String childDivision) {
+		DivisionObject divisionParentObj = clbDao.findDivisionById(parentDivision);
+		DivisionObject divisionChildObj = clbDao.findDivisionById(childDivision);
+		
+		divisionParentObj.deleteSubDivision(divisionChildObj);
+		
+		clbDao.saveDivision(divisionParentObj);
+		clbDao.deleteDivisionCascade(divisionChildObj);
+	}
+
 
 }

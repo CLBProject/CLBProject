@@ -39,4 +39,6 @@ public interface AnalyzerDataService {
 
 	public void saveDivisionParentAndChild(String parentId, DivisionObject divisionObj);
 
+	public void deleteChildDivisionFromParent(String parentDivision, String childDivision);
+
 }
