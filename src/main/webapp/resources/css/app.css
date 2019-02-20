@@ -482,6 +482,15 @@ form {
 	border: none !important;
 }
 
+
+.divisionAnalysisNode .ui-treenode-leaf-icon{
+	display: none !important;
+}
+
+.ui-treenode-children{
+	padding-left: 40px !important;
+}
+
 .commonLink{
 	color: #CED8F6;
 }
@@ -499,10 +508,20 @@ form {
 	color:grey;
 }
 
+.buildingName{
+	font-size:18px;
+}
+
 .divisionOptions{
 	font-size: 10px !important;
+	padding-left: 5px;
 }
 
 .buildingPanelClass{
 	border: none !important;
+}
+
+.treeDivisionText{
+	font-size: 14px;
+	color: #B40404 !important
 }

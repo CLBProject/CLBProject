@@ -108,6 +108,8 @@ public class BuildingManagementBean implements Serializable {
 		DivisionNodeTreeGui divisionToDeleteNode = (DivisionNodeTreeGui) parentDivisionSelected.getData();
 		
 		analyzerDataService.deleteChildDivisionFromParent(parentNode.getDivisionId(),divisionToDeleteNode.getDivisionId());
+		
+		clbHomeLoginBean.loginUser();
 	}
 	
 	public void showDivisionOptions(NodeSelectEvent event) {

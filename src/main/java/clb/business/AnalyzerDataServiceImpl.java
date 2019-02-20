@@ -232,6 +232,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	}
 
 	@Override
+	@Transactional
 	public void deleteChildDivisionFromParent(String parentDivision, String childDivision) {
 		DivisionObject divisionParentObj = clbDao.findDivisionById(parentDivision);
 		DivisionObject divisionChildObj = clbDao.findDivisionById(childDivision);

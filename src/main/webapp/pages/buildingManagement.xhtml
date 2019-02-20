@@ -22,8 +22,6 @@
 					<tr>
 						<td width="100%">
 							<div align="left" class="mainDivClass">
-								<p:commandLink value="Create Building" styleClass="commonLink" onclick="PF('newBuildingPopup').show()"></p:commandLink>
-								<p:spacer width="10"/>
 								<p:commandLink value="Add Building" styleClass="commonLink" onclick="PF('newBuildingPopup').show()"></p:commandLink>
 								<br/>
 								<br/>
@@ -38,43 +36,42 @@
 									<p:column styleClass="dataTableColumn">
 										<p:panel widgetVar="buildingPanelDivision" styleClass="buildingPanelClass">
 											<div align="left" class="buildingDivClass">
-												<h:outputText value="#{building.name}" style="font-size:16px"></h:outputText>
+												<h:outputText value="#{building.name}" styleClass="buildingName"></h:outputText>
 												<br/>
 												<h:outputText value="#{building.location}" styleClass="buildingLocation"></h:outputText>	
-												<br/>		
-												<div class="buildingDivClass" style="padding: 5px" align="left">
-													<p:panel>
-														 <p:tree value="#{building.mainDivision}" var="division" styleClass="divisionAnalysis"
-													                        id="divisionTreeAnalisys" selectionMode="checkbox" dynamic="true">
-													        <p:treeNode>
-													            <h:outputText style="font-size: 12px" value="#{division.name}"/>
-													        </p:treeNode>
-													        <f:attribute name="building" value="#{building}" />
-													        <p:ajax event="select" listener="#{buildingManagementBean.showDivisionOptions}" update="@form" ></p:ajax>
-													        <p:ajax event="unselect" listener="#{buildingManagementBean.hideDivisionOptions}" update="@form" ></p:ajax>
-													    </p:tree>
-													    <p:spacer height="10"></p:spacer>
-													    <p:outputPanel rendered="#{building.mainDivisionIsSelected}"  styleClass="divisionOptions">
-													    	<div align="center">
-													    		<p:commandLink oncomplete="PF('newDivisionPopup').show()" ajax="true" update=":newDivisionFormId">
-																	<p:graphicImage value="#{request.contextPath}/../resources/images/plus.png"/>
-																</p:commandLink>
-														    	<p:spacer width="5"/>
-														    	<p:commandLink action="#{buildingManagementBean.deleteDivision}" 
-														    		ajax="true" update=":newDivisionFormId"
-														    		oncomplete="	if (args.cantDeleteDivision=== true )
-																					{ 
-																						PF('unSuccessPanelcantDeleteDivision').show();
-																					}
-																					if (args.nodeSelectedNull === true)
-																					{
-																						PF('unSuccessPanelnodeSelectedNull').show();
-																					}">
-														    		<p:graphicImage value="#{request.contextPath}/../resources/images/negative.png"/>
-																</p:commandLink>
-													    	</div>
-													    </p:outputPanel>
-												    </p:panel>
+												<br/>	
+												<div class="buildingDivClass" align="left">
+													<hr/>
+													<p:tree value="#{building.mainDivision}" var="division" styleClass="divisionAnalysis"
+												                        id="divisionTreeAnalisys" selectionMode="checkbox" dynamic="true">
+												        <p:treeNode styleClass="divisionAnalysisNode">
+												            <h:outputText styleClass="treeDivisionText" value="#{division.name}"/>
+												        </p:treeNode>
+												        <f:attribute name="building" value="#{building}" />
+												        <p:ajax event="select" listener="#{buildingManagementBean.showDivisionOptions}" update="@form" ></p:ajax>
+												        <p:ajax event="unselect" listener="#{buildingManagementBean.hideDivisionOptions}" update="@form" ></p:ajax>
+												    </p:tree>
+												    <p:spacer height="15"></p:spacer>
+												    <p:outputPanel rendered="#{building.mainDivisionIsSelected}" >
+												    	<div align="center" class="divisionOptions">
+												    		<p:commandLink oncomplete="PF('newDivisionPopup').show()" ajax="true" update=":newDivisionFormId">
+																<p:graphicImage value="#{request.contextPath}/../resources/images/plus.png"/>
+															</p:commandLink>
+													    	<p:spacer width="5"/>
+													    	<p:commandLink action="#{buildingManagementBean.deleteDivision}"
+													    		oncomplete="	if (args.cantDeleteDivision=== true )
+																				{ 
+																					PF('unSuccessPanelcantDeleteDivision').show();
+																				}
+																				else if (args.nodeSelectedNull === true)
+																				{
+																					PF('unSuccessPanelnodeSelectedNull').show();
+																				}
+																				else PF('successPaneldeleteDivisionPopup').show()">
+													    		<p:graphicImage value="#{request.contextPath}/../resources/images/negative.png"/>
+															</p:commandLink>
+												    	</div>
+												    </p:outputPanel>
 												</div>
 											</div>
 											<br/>
@@ -106,6 +103,12 @@
 		<ui:include src="./popups/unSuccessDialog.xhtml">
 			<ui:param name="idUnsuccess" value="nodeSelectedNull" />
 			<ui:param name="unSuccessMessage" value="Please select a node first, before deleting!" />
+		</ui:include>
+		<ui:include src="./popups/successDialog.xhtml">
+			<ui:param name="id" value="deleteDivisionPopup" />
+			<ui:param name="successMessage"
+				value="The division was deleted successfully!" />
+			<ui:param name="path" value="buildingManagement.xhtml?faces-redirect=true" />
 		</ui:include>
 	</ui:define>
 </ui:composition>
