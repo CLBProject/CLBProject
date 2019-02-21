@@ -495,8 +495,10 @@ form {
 	color: #CED8F6;
 }
 
-.buildingManagDelete{
+.ui-datatable tbody td{
+	border: none !important;
 	font-size: 12px;
+	font-weight: bold;
 }
 
 .buildingManagIconClass{
@@ -522,6 +524,6 @@ form {
 }
 
 .treeDivisionText{
-	font-size: 14px;
-	color: #B40404 !important
+	font-size: 12px;
+	color: #8A0868 !important
 }

@@ -3,7 +3,9 @@ package clb.business;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -41,8 +43,7 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 			while(true) {
 				try(Socket clientSocket = s.accept(); Scanner in = new Scanner(clientSocket.getInputStream())){
 
-					AnalyzerObject analyzerObject = null;
-					BuildingObject buildingObject = null;
+					Map<String,AnalyzerObject> analyzers = new HashMap<String,AnalyzerObject>();
 
 					boolean exit = false;
 					while(clientSocket.isConnected() && !exit) {
@@ -71,59 +72,27 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 						case PERSIST_DATA_OBJECT:
 							JSONObject jsonObj = new JSONObject(in.nextLine());
 
-							String buildingName = jsonObj.getString("buildingName");
+							String analyzerCodeName = jsonObj.getString("buildingName");
+							
+							AnalyzerObject analyzerObject = analyzers.get(analyzerCodeName);
 
-							if(buildingObject == null || !buildingObject.getName().equals(buildingName)) {
+							if(analyzerObject == null) {
+								analyzerObject = new AnalyzerObject();
+								analyzerObject.setCodeName(analyzerCodeName);
 								
-								String analyzerCodeName = "Analyzer For Building " + buildingName;
-								
-								buildingObject = clbDao.getBuildingByName(buildingName);
-								analyzerObject = clbDao.getAnalyzerByCodeName(analyzerCodeName);
+								for(AnalyzerMeterValues mterValue: AnalyzerMeterValues.values()) {
+									AnalyzerMeterObject analyzerMeterObject = new AnalyzerMeterObject();
+									analyzerMeterObject.setName( mterValue.getLabel() );
+									analyzerMeterObject.setLabelKey( mterValue.name() );
+									analyzerMeterObject.setUnit(mterValue.getUnit());
 
-								if(buildingObject == null) {
-									analyzerObject = new AnalyzerObject();
-									analyzerObject.setCodeName(analyzerCodeName);
-									
-									for(AnalyzerMeterValues mterValue: AnalyzerMeterValues.values()) {
-										AnalyzerMeterObject analyzerMeterObject = new AnalyzerMeterObject();
-										analyzerMeterObject.setName( mterValue.getLabel() );
-										analyzerMeterObject.setLabelKey( mterValue.name() );
-										analyzerMeterObject.setUnit(mterValue.getUnit());
+									clbDao.saveAnalyzerMeter( analyzerMeterObject );
 
-										clbDao.saveAnalyzerMeter( analyzerMeterObject );
-
-										analyzerObject.addAnalyzerMeter(analyzerMeterObject);
-									}
-									
-									clbDao.saveAnalyzer(analyzerObject);
-									
-									buildingObject = new BuildingObject();
-									buildingObject.setName(buildingName);
-									buildingObject.setLocation("Location Empty");
-
-									DivisionObject subDiv1 = new DivisionObject();
-									subDiv1.setName("Sub Division 1");
-									
-									DivisionObject subDiv2 = new DivisionObject();
-									subDiv2.setName("Sub Division 2");
-
-									clbDao.saveDivision(subDiv1);
-									clbDao.saveDivision(subDiv2);
-									
-									DivisionObject div = new DivisionObject();
-									div.setName("Main Division");
-									div.addAnalyzer(analyzerObject);
-									
-									
-									div.addSubDivision(subDiv1);
-									div.addSubDivision(subDiv2);
-									
-									clbDao.saveDivision(div);
-									
-									buildingObject.setMainDivision(div);
-									
-									clbDao.saveBuilding(buildingObject);
+									analyzerObject.addAnalyzerMeter(analyzerMeterObject);
 								}
+								
+								clbDao.saveAnalyzer(analyzerObject);
+								analyzers.put(analyzerCodeName, analyzerObject);
 							}
 
 							jsonObj.put("analyzerId", analyzerObject.getId());
@@ -138,8 +107,7 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 
 						case GET_LATEST_PERSISTED_DATE:
 
-							String analyzerCodeName = in.nextLine();
-							Long latestDateForAnalyzer = clbDao.getLatestDateForAnalyzer(analyzerCodeName);
+							Long latestDateForAnalyzer = clbDao.getLatestDateForAnalyzer(in.nextLine());
 							
 							clientSocket.getOutputStream().write(latestDateForAnalyzer != null ? 
 									(latestDateForAnalyzer.toString()+"\n").getBytes() : "\n".getBytes());
@@ -148,11 +116,10 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 							break;
 
 						case EXIT_PERSIST_DATA_OBJECT:
+							
+							analyzers.entrySet().stream().forEach(entry -> clbDao.saveAnalyzer(entry.getValue()));
 
-							clbDao.saveAnalyzer(analyzerObject);
-
-							analyzerObject = null;
-							buildingObject = null;
+							analyzers = new HashMap<String,AnalyzerObject>();
 
 							exit = true;
 							break;
