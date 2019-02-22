@@ -1,5 +1,9 @@
 package clb.ui.beans.treeStructure;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.faces.model.SelectItem;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -22,7 +26,7 @@ public class BuildingTreeGui {
     
     private String imgPath;
     
-    private TreeNode mainDivision;
+    private List<SelectItem> divisions;
     
     private Boolean mainDivisionIsSelected;
 
@@ -33,11 +37,20 @@ public class BuildingTreeGui {
 		this.imgPath = bObject.getImgPath();
 		this.location = bObject.getLocation();
 		
-		this.mainDivisionIsSelected = false;
+		this.mainDivisionIsSelected = false; 
 		
-		DivisionObject divisionObj = bObject.getMainDivision();
-		this.mainDivision = new DefaultTreeNode(new DivisionNodeTreeGui(divisionObj),null);
-		buildTreeDivisions(new DefaultTreeNode(new DivisionNodeTreeGui(divisionObj),this.mainDivision),divisionObj);
+		this.divisions = bObject.getDivisions() != null ?
+								bObject.getDivisions().stream().map(division ->{
+									if(division.hasChildren()) {
+										return new SelectItem("Option 3.1", "Option 3.1");
+									}
+									else return new SelectItem("Option 3.1", "Option 3.1"); 
+								}).collect(Collectors.toList()) : 
+										null;
+		
+//		DivisionObject divisionObj = bObject.getMainDivision();
+//		this.mainDivision = new DefaultTreeNode(new DivisionNodeTreeGui(divisionObj),null);
+//		buildTreeDivisions(new DefaultTreeNode(new DivisionNodeTreeGui(divisionObj),this.mainDivision),divisionObj);
 	}
 	
 	private void buildTreeDivisions(TreeNode treeDivision, DivisionObject division) {
@@ -84,12 +97,13 @@ public class BuildingTreeGui {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public TreeNode getMainDivision() {
-		return mainDivision;
+
+	public List<SelectItem> getDivisions() {
+		return divisions;
 	}
 
-	public void setMainDivision(TreeNode mainDivision) {
-		this.mainDivision = mainDivision;
+	public void setDivisions(List<SelectItem> divisions) {
+		this.divisions = divisions;
 	}
 
 	public String getImgPath() {

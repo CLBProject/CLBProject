@@ -3,7 +3,7 @@ package clb.ui.beans.newobjects;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
-import clb.business.objects.BuildingObject;
+
 import clb.business.objects.DivisionObject;
 
 public class DivisionNewManagementGui {

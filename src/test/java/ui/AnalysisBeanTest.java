@@ -47,8 +47,8 @@ public class AnalysisBeanTest extends AbstractBeanTest{
 		AnalyzerMeterGui anaMeterObj = new AnalyzerMeterGui();
 		AnalyzerMeterGui anaMeterObj2 = new AnalyzerMeterGui();
 
-		bGui.setMainDivision(divisionG);
-		bGui2.setMainDivision(divisionG2);
+		bGui.addDivision(divisionG);
+		bGui2.addDivision(divisionG2);
 		
 		divisionG.addAnalyzer(analObj);
 		divisionG2.addAnalyzer(analObj2);

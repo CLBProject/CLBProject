@@ -54,18 +54,9 @@
 												<div class="buildingDivClass" align="left">
 													<h:panelGrid columns="2">
 														<p:column>
-<!-- 															 <p:multiSelectListbox value="#{multiSelectView.selection}" effect="slide" header="Categories" showHeaders="true"> -->
-<!-- 														        <f:selectItems value="#{multiSelectView.categories}" /> -->
-<!-- 														    </p:multiSelectListbox> -->
-															<p:tree value="#{building.mainDivision}" var="division" styleClass="divisionAnalysis"
-														                        id="divisionTreeAnalisys" selectionMode="checkbox" dynamic="true">
-														        <p:treeNode styleClass="divisionAnalysisNode">
-														            <h:outputText styleClass="treeDivisionText" value="#{division.name}"/>
-														        </p:treeNode>
-														        <f:attribute name="building" value="#{building}" />
-														        <p:ajax event="select" listener="#{buildingManagementBean.showDivisionOptions}" update="@form" ></p:ajax>
-														        <p:ajax event="unselect" listener="#{buildingManagementBean.hideDivisionOptions}" update="@form" ></p:ajax>
-														    </p:tree>
+ 															 <p:multiSelectListbox value="#{buildingManagementBean.selectedDivision}" effect="slide" header="Divisions" showHeaders="true">
+ 														        <f:selectItems value="#{building.divisions}" />
+ 														    </p:multiSelectListbox>
 														    <p:spacer height="15"></p:spacer>
 														    <p:outputPanel rendered="#{building.mainDivisionIsSelected}" >
 														    	<div align="center" class="divisionOptions">
@@ -120,7 +111,7 @@
 		<ui:include src="./general/footer.xhtml" />
 		<ui:include src="./popups/newBuildingPopup.xhtml" />
 		<ui:include src="./popups/newDivisionPopup.xhtml" >
-			<ui:param name="parentDivision" value="#{buildingManagementBean.parentDivisionSelected.data.name}" />
+			<ui:param name="parentDivision" value="parentName" />
 		</ui:include>
 		<ui:include src="./popups/unSuccessDialog.xhtml">
 			<ui:param name="idUnsuccess" value="cantDeleteDivision" />

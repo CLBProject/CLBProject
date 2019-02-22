@@ -363,14 +363,14 @@ public class EntitiesMappingTest {
 		analyzers.add(aobj2);
 		mainDivision.setAnalyzers(analyzers);
 		
-		bobj.setMainDivision(mainDivision);
+		bobj.addDivision(mainDivision);
 		
 		BuildingEntity bEnt = bobj.toEntity();
 		
 		assertEquals(bobj.getBuildingid(),bEnt.getBuildingid());
 		assertEquals(bobj.getName(),bEnt.getName());
 		
-		List<AnalyzerEntity> analyzersMapped = bEnt.getMainDivision().getAnalyzers();
+		List<AnalyzerEntity> analyzersMapped = bEnt.getDivisions().get(0).getAnalyzers();
 		
 		assertEquals(analyzers.size(), analyzersMapped.size());
 		assertEquals(analyzersMapped.get(0).getId(),"1");

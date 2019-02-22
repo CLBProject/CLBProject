@@ -1,5 +1,7 @@
 package clb.ui.beans.newobjects;
 
+import java.util.ArrayList;
+
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -29,10 +31,7 @@ public class BuildingNewManagementGui {
 		bobj.setName(this.name);
 		bobj.setLocation(this.location);
 		bobj.setImgPath(this.imgPath);
-		
-		DivisionObject newDiv = new DivisionObject();
-		newDiv.setName("Main Division");
-		bobj.setMainDivision(newDiv);
+		bobj.setDivisions(new ArrayList<DivisionObject>());
 		
 		return bobj;
 	}

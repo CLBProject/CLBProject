@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.primefaces.model.TreeNode;
+import javax.faces.model.SelectItem;
 
 import clb.business.objects.DivisionObject;
 
@@ -14,7 +14,7 @@ public class DivisionGui {
 	private String name;
 	private List<AnalyzerGui> analyzers;
 	private List<DivisionGui> childrenDivisions;
-	private TreeNode treeNode;
+	private SelectItem parentDivision;
 
 	public DivisionGui() {
 		
@@ -89,14 +89,14 @@ public class DivisionGui {
 		return childrenDivisions != null && childrenDivisions.size() > 0;
 	}
 
-	public TreeNode getTreeNode() {
-		return treeNode;
+	public SelectItem getParentDivision() {
+		return parentDivision;
 	}
 
-	public void setTreeNode(TreeNode treeNode) {
-		this.treeNode = treeNode;
+	public void setParentDivision(SelectItem parentDivision) {
+		this.parentDivision = parentDivision;
 	}
-
-
+	
+	
 	
 }

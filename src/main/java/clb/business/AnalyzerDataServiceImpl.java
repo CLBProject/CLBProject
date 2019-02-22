@@ -172,7 +172,13 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	@Transactional
 	@Override
 	public void saveBuildingForUser(UsersystemObject user, BuildingObject building) {
-		clbDao.saveDivision(building.getMainDivision());
+		
+		List<DivisionObject> divisions = building.getDivisions();
+		
+		if(divisions != null) {
+			divisions.stream().forEach( division -> clbDao.saveDivision(division));
+		}
+		
 		clbDao.saveBuilding(building);
 		
 		user.addBuilding(building);
@@ -194,10 +200,10 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	@Transactional
 	public void deleteBuildingForUser(UsersystemObject user, BuildingObject building) {
 		
-		DivisionObject mainDivision = building.getMainDivision();
+		List<DivisionObject> divisions = building.getDivisions();
 		
-		if(mainDivision != null)
-			clbDao.deleteDivisionCascade(mainDivision);
+		if(divisions != null)
+			divisions.stream().forEach(division -> clbDao.deleteDivisionCascade(division));
 		
 		clbDao.deleteBuilding(building);
 		

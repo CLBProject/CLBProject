@@ -151,7 +151,7 @@ public class AnalysisBean implements Serializable{
 	private List<BuildingAnalysisGui> initBuildingObjects() {
 		return clbHomeLoginBean.getUserBuildings().stream().filter(building -> {
 			
-			List<AnalyzerGui> buildingAnalyzers = building.getMainDivision() != null ? building.getMainDivision().getAnalyzers() : null;
+			List<AnalyzerGui> buildingAnalyzers = building.hasDivisions() ? building.getDivisions().get(0).getAnalyzers() : null;
 			
 			return buildingAnalyzers != null && buildingAnalyzers.stream()
 					.filter(buildingAnalyzer -> buildingAnalyzer.getAnalyzerMeters().size() > 0)
@@ -163,7 +163,7 @@ public class AnalysisBean implements Serializable{
 		buildingSelected = bGui;
 		tempBuildingSelected = buildingSelected;
 
-		DivisionGui division = bGui.getMainDivision();
+		DivisionGui division = bGui.hasDivisions() ? bGui.getDivisions().get(0) : null;
 		
 		if(division != null && division.hasAnalyzers()) {
 			

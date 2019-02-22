@@ -1,5 +1,9 @@
 package clb.ui.beans.objects;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -19,7 +23,7 @@ public class BuildingAnalysisGui {
     
     private String imgPath;
     
-    private DivisionGui mainDivision;
+    private List<DivisionGui> divisions;
 
 	public BuildingAnalysisGui(BuildingObject bObject) {
 		super();
@@ -27,7 +31,9 @@ public class BuildingAnalysisGui {
 		this.name = bObject.getName();
 		this.imgPath = bObject.getImgPath();
 		this.location = bObject.getLocation();
-		this.mainDivision = new DivisionGui(bObject.getMainDivision());
+		this.divisions = bObject.getDivisions() != null ?
+									bObject.getDivisions().stream().map(DivisionGui::new).collect(Collectors.toList()) :
+										null;
 	}
 	
 	public BuildingObject toObject() {
@@ -37,11 +43,27 @@ public class BuildingAnalysisGui {
 		bobj.setName(this.name);
 		bobj.setLocation(this.location);
 		bobj.setImgPath(this.imgPath);
-		bobj.setMainDivision(mainDivision.toObject());
+		bobj.setDivisions(this.divisions != null ? 
+									this.divisions.stream().map(DivisionGui::toObject).collect(Collectors.toList()) : 
+										null);
 		
 		return bobj;
 	}
 
+	public boolean hasDivisions() {
+		return divisions != null && divisions.size() > 0;
+	}
+	
+	public void addDivision(DivisionGui divisionG) {
+		if(divisions == null) {
+			divisions = new ArrayList<DivisionGui>();
+		}
+		
+		divisions.add(divisionG);
+	}
+
+
+	
 
 	public String getBuildingid() {
 		return buildingid;
@@ -59,13 +81,12 @@ public class BuildingAnalysisGui {
 		this.name = name;
 	}
 	
-
-	public DivisionGui getMainDivision() {
-		return mainDivision;
+	public List<DivisionGui> getDivisions() {
+		return divisions;
 	}
 
-	public void setMainDivision(DivisionGui mainDivision) {
-		this.mainDivision = mainDivision;
+	public void setDivisions(List<DivisionGui> divisions) {
+		this.divisions = divisions;
 	}
 
 	public String getImgPath() {
@@ -83,6 +104,6 @@ public class BuildingAnalysisGui {
 	public void setLocation(String location) {
 		this.location = location;
 	}
-	
-	
+
+
 }

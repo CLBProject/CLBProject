@@ -77,7 +77,7 @@ public class AnalyzerDataServiceDeprecatedImpl implements AnalyzerDataServiceDep
 			DivisionObject divObj = new DivisionObject();
 			AnalyzerObject ana = new AnalyzerObject();
 			
-			building.setMainDivision(divObj);
+			building.addDivision(divObj);
 			divObj.addAnalyzer(ana);
 			
 			ana.setCodeName( "Analyzer " + (j+1));

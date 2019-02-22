@@ -1,5 +1,9 @@
 package clb.business.objects;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import clb.database.entities.BuildingEntity;
 
 public class BuildingObject
@@ -14,7 +18,7 @@ public class BuildingObject
     
     private String imgPath;
 
-    private DivisionObject mainDivision;
+    private List<DivisionObject> divisions;
 
     public BuildingObject(){
 
@@ -26,7 +30,9 @@ public class BuildingObject
         this.buildingusername = building.getBuildingusername();
         this.location = building.getLocation();
         this.imgPath = building.getImgPath();
-        this.mainDivision = building.getMainDivision() != null ? new DivisionObject(building.getMainDivision()) : null;     
+        this.divisions = building.getDivisions() != null ? 
+        					building.getDivisions().stream().map(DivisionObject::new).collect(Collectors.toList()) : 
+        						null;     
     }
 
     public BuildingEntity toEntity() {
@@ -35,20 +41,22 @@ public class BuildingObject
         buildingEntity.setName( this.name );
         buildingEntity.setLocation(this.location);
         buildingEntity.setImgPath( this.imgPath );
-        buildingEntity.setMainDivision(this.mainDivision != null ? this.mainDivision.toEntity() : null);
+        buildingEntity.setDivisions(this.divisions != null ? 
+        								this.divisions.stream().map(DivisionObject::toEntity).collect(Collectors.toList()): 
+        									null);
 
         return buildingEntity;
     }
-
-    @Override
+    
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((buildingid == null) ? 0 : buildingid.hashCode());
 		result = prime * result + ((buildingusername == null) ? 0 : buildingusername.hashCode());
+		result = prime * result + ((divisions == null) ? 0 : divisions.hashCode());
 		result = prime * result + ((imgPath == null) ? 0 : imgPath.hashCode());
 		result = prime * result + ((location == null) ? 0 : location.hashCode());
-		result = prime * result + ((mainDivision == null) ? 0 : mainDivision.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
@@ -72,6 +80,11 @@ public class BuildingObject
 				return false;
 		} else if (!buildingusername.equals(other.buildingusername))
 			return false;
+		if (divisions == null) {
+			if (other.divisions != null)
+				return false;
+		} else if (!divisions.equals(other.divisions))
+			return false;
 		if (imgPath == null) {
 			if (other.imgPath != null)
 				return false;
@@ -82,11 +95,6 @@ public class BuildingObject
 				return false;
 		} else if (!location.equals(other.location))
 			return false;
-		if (mainDivision == null) {
-			if (other.mainDivision != null)
-				return false;
-		} else if (!mainDivision.equals(other.mainDivision))
-			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
@@ -94,6 +102,16 @@ public class BuildingObject
 			return false;
 		return true;
 	}
+	
+	public void addDivision(DivisionObject divObj) {
+		if(this.divisions == null) {
+			this.divisions = new ArrayList<DivisionObject>();
+		}
+		
+		this.divisions.add(divObj);
+	}
+    
+    
 
 	public String getBuildingid() {
         return buildingid;
@@ -127,12 +145,13 @@ public class BuildingObject
         this.imgPath = imgPath;
     }
 
-	public DivisionObject getMainDivision() {
-		return mainDivision;
+    
+	public List<DivisionObject> getDivisions() {
+		return divisions;
 	}
 
-	public void setMainDivision(DivisionObject mainDivision) {
-		this.mainDivision = mainDivision;
+	public void setDivisions(List<DivisionObject> divisions) {
+		this.divisions = divisions;
 	}
 
 	public String getLocation() {
@@ -142,8 +161,8 @@ public class BuildingObject
 	public void setLocation(String location) {
 		this.location = location;
 	}
-    
-    
+
+
 }
 
 
