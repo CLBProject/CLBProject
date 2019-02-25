@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.primefaces.json.JSONObject;
 
+import clb.database.entities.ClbEntity;
 import clb.database.entities.UsersystemEntity;
 
 public class UsersystemObject implements ClbObject, Serializable
@@ -20,7 +21,7 @@ public class UsersystemObject implements ClbObject, Serializable
     private String address;
     private String name;
     private String password;
-    private String username;
+    private String id;
     private String token;
     private Date expiryDate;
     private Date lastSentEmail;
@@ -54,7 +55,7 @@ public class UsersystemObject implements ClbObject, Serializable
     }
     
     public UsersystemObject( UsersystemEntity usersystem ) {
-        this.username = usersystem.getUsername();
+        this.id = usersystem.getId();
         this.address = usersystem.getAddress();
         this.name = usersystem.getName();
         this.password = usersystem.getPassword();
@@ -72,7 +73,7 @@ public class UsersystemObject implements ClbObject, Serializable
         userSystemEntity.setAddress( this.address );
         userSystemEntity.setName( this.name );
         userSystemEntity.setPassword( this.password );
-        userSystemEntity.setUsername( this.username );
+        userSystemEntity.setId( this.id );
         userSystemEntity.setToken( this.token );
         userSystemEntity.setExpiryDate( this.expiryDate );
         userSystemEntity.setEnabled( this.enabled );
@@ -86,7 +87,7 @@ public class UsersystemObject implements ClbObject, Serializable
     
     public JSONObject toJson() {
     	JSONObject json = new JSONObject();
-    	json.append("username", this.username);
+    	json.append("username", this.id);
     	json.append("ftpPassword", this.ftpPassword);
     	return json;
     }
@@ -116,7 +117,7 @@ public class UsersystemObject implements ClbObject, Serializable
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((token == null) ? 0 : token.hashCode());
-		result = prime * result + ((username == null) ? 0 : username.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 
@@ -171,10 +172,10 @@ public class UsersystemObject implements ClbObject, Serializable
 				return false;
 		} else if (!token.equals(other.token))
 			return false;
-		if (username == null) {
-			if (other.username != null)
+		if (id == null) {
+			if (other.id != null)
 				return false;
-		} else if (!username.equals(other.username))
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}
@@ -202,14 +203,14 @@ public class UsersystemObject implements ClbObject, Serializable
     public void setPassword( String password ) {
         this.password = password;
     }
+    
+	public String getId() {
+		return id;
+	}
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername( String username ) {
-        this.username = username;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public List<BuildingObject> getBuildings() {
 		return buildings;

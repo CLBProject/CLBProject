@@ -14,7 +14,7 @@ public class AnalyzerMeterGui {
 	}
 	
 	public AnalyzerMeterGui(AnalyzerMeterObject analyzerMeterObject) {
-		this.meterId = analyzerMeterObject.getMeterId();
+		this.meterId = analyzerMeterObject.getId();
 		this.labelKey = analyzerMeterObject.getLabelKey();
 		this.name = analyzerMeterObject.getName();
 		this.unit = analyzerMeterObject.getUnit();
@@ -23,7 +23,7 @@ public class AnalyzerMeterGui {
 	public AnalyzerMeterObject toObject() {
 		AnalyzerMeterObject anMetObj = new AnalyzerMeterObject();
 		anMetObj.setLabelKey(this.labelKey);
-		anMetObj.setMeterId(this.meterId);
+		anMetObj.setId(this.meterId);
 	    anMetObj.setName(this.name);
 	    anMetObj.setUnit(this.unit);
 		

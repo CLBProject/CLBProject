@@ -13,11 +13,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 
 @Document(collection="Buildings")
-public class BuildingEntity implements  Serializable {
+public class BuildingEntity implements ClbEntity, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private String buildingid;
+	private String id;
 
 	private String name;
 	
@@ -32,13 +32,13 @@ public class BuildingEntity implements  Serializable {
 
 	public BuildingEntity() {
 	}
-
-	public String getBuildingid() {
-		return this.buildingid;
+	
+	public String getId() {
+		return id;
 	}
 
-	public void setBuildingid(String buildingid) {
-		this.buildingid = buildingid;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getName() {

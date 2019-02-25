@@ -21,7 +21,7 @@ public class DivisionGui {
 	}
 	
 	public DivisionGui(DivisionObject divisionObj) {
-		this.divisionId = divisionObj.getDivisionid();
+		this.divisionId = divisionObj.getId();
 		this.name = divisionObj.getName();
 		this.childrenDivisions =  divisionObj.getChildrenDivisions() != null ? 
 									divisionObj.getChildrenDivisions().stream().map(DivisionGui::new).collect(Collectors.toList()): null;
@@ -32,7 +32,7 @@ public class DivisionGui {
 	public DivisionObject toObject() {
 		DivisionObject divObj = new DivisionObject();
 		divObj.setName(this.name);
-		divObj.setDivisionid(this.divisionId);
+		divObj.setId(this.divisionId);
 		divObj.setAnalyzers(this.analyzers != null ? 
 				this.analyzers.stream().map(AnalyzerGui::toObject).collect(Collectors.toList()) : null);
 		divObj.setChildrenDivisions(this.childrenDivisions != null ? 

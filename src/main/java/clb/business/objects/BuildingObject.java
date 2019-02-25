@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 
 import clb.database.entities.BuildingEntity;
 
-public class BuildingObject
+public class BuildingObject implements ClbObject
 {
-    private String buildingid;
+    private String id;
 
     private String name;
 
@@ -25,7 +25,7 @@ public class BuildingObject
     }
 
     public BuildingObject( BuildingEntity building ) {
-        this.buildingid = building.getBuildingid();
+        this.id = building.getId();
         this.name = building.getName();
         this.buildingusername = building.getBuildingusername();
         this.location = building.getLocation();
@@ -37,7 +37,7 @@ public class BuildingObject
 
     public BuildingEntity toEntity() {
         BuildingEntity buildingEntity = new BuildingEntity();
-        buildingEntity.setBuildingid( this.buildingid );
+        buildingEntity.setId( this.id );
         buildingEntity.setName( this.name );
         buildingEntity.setLocation(this.location);
         buildingEntity.setImgPath( this.imgPath );
@@ -52,7 +52,7 @@ public class BuildingObject
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((buildingid == null) ? 0 : buildingid.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((buildingusername == null) ? 0 : buildingusername.hashCode());
 		result = prime * result + ((divisions == null) ? 0 : divisions.hashCode());
 		result = prime * result + ((imgPath == null) ? 0 : imgPath.hashCode());
@@ -70,10 +70,10 @@ public class BuildingObject
 		if (getClass() != obj.getClass())
 			return false;
 		BuildingObject other = (BuildingObject) obj;
-		if (buildingid == null) {
-			if (other.buildingid != null)
+		if (id == null) {
+			if (other.id != null)
 				return false;
-		} else if (!buildingid.equals(other.buildingid))
+		} else if (!id.equals(other.id))
 			return false;
 		if (buildingusername == null) {
 			if (other.buildingusername != null)
@@ -110,18 +110,17 @@ public class BuildingObject
 		
 		this.divisions.add(divObj);
 	}
-    
-    
+   
+	
+    public String getId() {
+		return id;
+	}
 
-	public String getBuildingid() {
-        return buildingid;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public void setBuildingid( String buildingid ) {
-        this.buildingid = buildingid;
-    }
-
-    public String getName() {
+	public String getName() {
         return name;
     }
 

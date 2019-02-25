@@ -345,7 +345,7 @@ public class EntitiesMappingTest {
 	public void testDataLoggerObjectToEntity() {
 		
 		BuildingObject bobj = new BuildingObject();
-		bobj.setBuildingid("b01");
+		bobj.setId("b01");
 		bobj.setName("dl1");
 		
 		DivisionObject mainDivision = new DivisionObject();
@@ -367,7 +367,7 @@ public class EntitiesMappingTest {
 		
 		BuildingEntity bEnt = bobj.toEntity();
 		
-		assertEquals(bobj.getBuildingid(),bEnt.getBuildingid());
+		assertEquals(bobj.getId(),bEnt.getId());
 		assertEquals(bobj.getName(),bEnt.getName());
 		
 		List<AnalyzerEntity> analyzersMapped = bEnt.getDivisions().get(0).getAnalyzers();

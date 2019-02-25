@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 
 import clb.database.entities.DivisionEntity;
 
-public class DivisionObject
+public class DivisionObject implements ClbObject
 {
-    private String divisionid;
+    private String id;
 
     private String name;
 
@@ -20,7 +20,7 @@ public class DivisionObject
     }
 
     public DivisionObject( DivisionEntity division ) {
-    	this.divisionid = division.getDivisionid();
+    	this.id = division.getId();
         this.name = division.getName();
         this.childrenDivisions = division.getChildrenDivision() != null ? 
         		division.getChildrenDivision().stream().map(DivisionObject::new).collect(Collectors.toList()) : null;
@@ -30,7 +30,7 @@ public class DivisionObject
 
     public DivisionEntity toEntity() {
     	DivisionEntity divisionEntity = new DivisionEntity();
-    	divisionEntity.setDivisionid( this.divisionid );
+    	divisionEntity.setId(this.id);
         divisionEntity.setName( this.name );
         divisionEntity.setChildrenDivision(childrenDivisions != null ? 
         		childrenDivisions.stream().map(DivisionObject::toEntity).collect(Collectors.toList()) : 
@@ -75,7 +75,7 @@ public class DivisionObject
 		int result = 1;
 		result = prime * result + ((analyzers == null) ? 0 : analyzers.hashCode());
 		result = prime * result + ((childrenDivisions == null) ? 0 : childrenDivisions.hashCode());
-		result = prime * result + ((divisionid == null) ? 0 : divisionid.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
@@ -99,10 +99,10 @@ public class DivisionObject
 				return false;
 		} else if (!childrenDivisions.equals(other.childrenDivisions))
 			return false;
-		if (divisionid == null) {
-			if (other.divisionid != null)
+		if (id == null) {
+			if (other.id != null)
 				return false;
-		} else if (!divisionid.equals(other.divisionid))
+		} else if (!id.equals(other.id))
 			return false;
 		if (name == null) {
 			if (other.name != null)
@@ -128,12 +128,12 @@ public class DivisionObject
 		this.analyzers = analyzers;
 	}
 
-	public String getDivisionid() {
-		return divisionid;
+	public String getId() {
+		return id;
 	}
 
-	public void setDivisionid(String divisionid) {
-		this.divisionid = divisionid;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public List<DivisionObject> getChildrenDivisions() {

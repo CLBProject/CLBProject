@@ -27,7 +27,7 @@ public class BuildingNewManagementGui {
 	public BuildingObject toObject() {
 		BuildingObject bobj = new BuildingObject();
 		
-		bobj.setBuildingid(this.buildingid);
+		bobj.setId(this.buildingid);
 		bobj.setName(this.name);
 		bobj.setLocation(this.location);
 		bobj.setImgPath(this.imgPath);

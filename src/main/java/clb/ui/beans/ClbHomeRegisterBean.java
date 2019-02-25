@@ -88,7 +88,7 @@ public class ClbHomeRegisterBean implements Serializable{
             
             UsersystemObject userRegistered = userRegistryService.completeUserRegistration( token);
             
-            clbHomeLoginBean.setLoginUsername( userRegistered.getUsername() );       
+            clbHomeLoginBean.setLoginUsername( userRegistered.getId() );       
             
         } catch( UserTokenIsNullOnCompleteRegistrationException e ) {
             registerResult = USER_TOKEN_NOT_FOUND_RESULT;

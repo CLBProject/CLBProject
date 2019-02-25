@@ -2,62 +2,59 @@ package clb.business.objects;
 
 import clb.database.entities.AnalyzerMeterEntity;
 
-public class AnalyzerMeterObject
-{
-    private String meterId;
+public class AnalyzerMeterObject implements ClbObject {
+	private String id;
 
-    private String name;
-    
-    private String labelKey;
-    
-    private String unit;
-    
-    public AnalyzerMeterObject(){
-        
-    }
-    
-    public AnalyzerMeterObject( AnalyzerMeterEntity analyzerMeterEntity ) {
-        this.meterId = analyzerMeterEntity.getBuildingMeterId();
-        this.name = analyzerMeterEntity.getName();
-        this.unit = analyzerMeterEntity.getUnit();
-        this.labelKey = analyzerMeterEntity.getLabelKey();
-    }
+	private String name;
 
-    public AnalyzerMeterEntity toEntity() {
-        AnalyzerMeterEntity analyzerMeterEntity = new AnalyzerMeterEntity();
-        analyzerMeterEntity.setBuildingMeterId( this.meterId );
-        analyzerMeterEntity.setName( this.name );
-        analyzerMeterEntity.setLabelKey( this.labelKey );
-        analyzerMeterEntity.setUnit( this.unit );
-        
-        return analyzerMeterEntity;
-    }
-    
-    
+	private String labelKey;
 
-    public String getMeterId() {
-		return meterId;
+	private String unit;
+
+	public AnalyzerMeterObject() {
+
 	}
 
-	public void setMeterId(String meterId) {
-		this.meterId = meterId;
+	public AnalyzerMeterObject(AnalyzerMeterEntity analyzerMeterEntity) {
+		this.id = analyzerMeterEntity.getId();
+		this.name = analyzerMeterEntity.getName();
+		this.unit = analyzerMeterEntity.getUnit();
+		this.labelKey = analyzerMeterEntity.getLabelKey();
+	}
+
+	public AnalyzerMeterEntity toEntity() {
+		AnalyzerMeterEntity analyzerMeterEntity = new AnalyzerMeterEntity();
+		analyzerMeterEntity.setId(this.id);
+		analyzerMeterEntity.setName(this.name);
+		analyzerMeterEntity.setLabelKey(this.labelKey);
+		analyzerMeterEntity.setUnit(this.unit);
+
+		return analyzerMeterEntity;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getName() {
-        return name;
-    }
+		return name;
+	}
 
-    public void setName( String name ) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getLabelKey() {
-        return labelKey;
-    }
+	public String getLabelKey() {
+		return labelKey;
+	}
 
-    public void setLabelKey( String labelKey ) {
-        this.labelKey = labelKey;
-    }
+	public void setLabelKey(String labelKey) {
+		this.labelKey = labelKey;
+	}
 
 	public String getUnit() {
 		return unit;
@@ -66,7 +63,5 @@ public class AnalyzerMeterObject
 	public void setUnit(String unit) {
 		this.unit = unit;
 	}
-    
-    
-    
+
 }

@@ -27,7 +27,7 @@ public class BuildingAnalysisGui {
 
 	public BuildingAnalysisGui(BuildingObject bObject) {
 		super();
-		this.buildingid = bObject.getBuildingid();
+		this.buildingid = bObject.getId();
 		this.name = bObject.getName();
 		this.imgPath = bObject.getImgPath();
 		this.location = bObject.getLocation();
@@ -39,7 +39,7 @@ public class BuildingAnalysisGui {
 	public BuildingObject toObject() {
 		BuildingObject bobj = new BuildingObject();
 		
-		bobj.setBuildingid(this.buildingid);
+		bobj.setId(this.buildingid);
 		bobj.setName(this.name);
 		bobj.setLocation(this.location);
 		bobj.setImgPath(this.imgPath);

@@ -11,8 +11,6 @@ import clb.business.objects.UsersystemObject;
 
 public interface AnalyzerDataService {
     
-    public UsersystemObject getUserData(String username);
-    
     public List<AnalyzerRegistryObject> getHourRegistriesFromAnalyzer( String analyzerId , Date timeFrame);
     
     public List<AnalyzerRegistryObject> getDayRegistriesFromAnalyzer( String analyzerId, Date timeFrame );
@@ -37,7 +35,7 @@ public interface AnalyzerDataService {
 
 	public void saveBuildingForUser(UsersystemObject object, BuildingObject building);
 
-	public void saveDivisionParentAndChild(String parentId, DivisionObject divisionObj);
+	public void saveDivisionForBuildingOrParent(String buildingId, String parentId, DivisionObject divisionObj);
 
 	public void deleteChildDivisionFromParent(String parentDivision, String childDivision);
 

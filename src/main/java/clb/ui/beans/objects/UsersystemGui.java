@@ -50,7 +50,7 @@ public class UsersystemGui implements Serializable
     	this.address = userObject.getAddress();
     	this.name = userObject.getName();
     	this.password = userObject.getPassword();
-    	this.username = userObject.getUsername();
+    	this.username = userObject.getId();
     	
     	this.token = userObject.getToken();
     	this.expiryDate = userObject.getExpiryDate();
@@ -75,7 +75,7 @@ public class UsersystemGui implements Serializable
 
     public UsersystemObject toObject() {
     	UsersystemObject userObj = new UsersystemObject();
-    	userObj.setUsername(this.username);
+    	userObj.setId(this.username);
     	userObj.setAddress(this.address);
     	userObj.setName(this.name);
     	userObj.setPassword(this.password);

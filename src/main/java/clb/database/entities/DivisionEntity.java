@@ -7,10 +7,10 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="Divisions")
-public class DivisionEntity {
+public class DivisionEntity implements ClbEntity{
 
 	@Id
-	private String divisionid;
+	private String id;
 
 	private String name;
 	
@@ -19,13 +19,14 @@ public class DivisionEntity {
 	
 	@DBRef
 	private List<AnalyzerEntity> analyzers;
-
-	public String getDivisionid() {
-		return divisionid;
+	
+	
+	public String getId() {
+		return id;
 	}
 
-	public void setDivisionid(String divisionid) {
-		this.divisionid = divisionid;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getName() {

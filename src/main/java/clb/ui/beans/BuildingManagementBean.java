@@ -9,11 +9,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
-import org.primefaces.context.RequestContext;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.NodeUnselectEvent;
-import org.primefaces.model.DefaultTreeNode;
-import org.primefaces.model.TreeNode;
 
 import clb.business.AnalyzerDataService;
 import clb.business.objects.BuildingObject;
@@ -22,7 +19,6 @@ import clb.ui.beans.newobjects.BuildingNewManagementGui;
 import clb.ui.beans.newobjects.DivisionNewManagementGui;
 import clb.ui.beans.objects.BuildingAnalysisGui;
 import clb.ui.beans.treeStructure.BuildingTreeGui;
-import clb.ui.beans.treeStructure.DivisionNodeTreeGui;
 
 @ViewScoped
 @ManagedBean
@@ -41,13 +37,11 @@ public class BuildingManagementBean implements Serializable {
 
 	private List<BuildingTreeGui> buildingsToShow;
 	
-	private String selectedDivision;
+	private DivisionObject selectedDivision;
+	private String selectedBuildingIdNewDivision;
 	
 	private BuildingNewManagementGui newBuilding;
 	private DivisionNewManagementGui newDivision;
-	
-	private static final String CANT_DELETE_DIVISION = "cantDeleteDivision";
-	private static final String NODE_SELECTED_NULL = "nodeSelectedNull";
 
 	@PostConstruct
 	public void initBuildingManagement() {
@@ -62,6 +56,11 @@ public class BuildingManagementBean implements Serializable {
 							.collect(Collectors.toList()) : null;
 	}
 
+	public void setNewDivisionBuilding(String buildingId) {
+		this.selectedBuildingIdNewDivision = buildingId;
+		System.out.println(buildingId);
+	}
+	
 	public void createBuilding() {
 		if (newBuilding != null) {
 
@@ -75,8 +74,7 @@ public class BuildingManagementBean implements Serializable {
 			DivisionObject divisionObj = new DivisionObject();
 			divisionObj.setName(newDivision.getName());
 			
-			//String parentId = ((DivisionNodeTreeGui)parentDivisionSelected.getData()).getDivisionId();
-			//analyzerDataService.saveDivisionParentAndChild(parentId,divisionObj);
+			analyzerDataService.saveDivisionForBuildingOrParent(selectedBuildingIdNewDivision, selectedDivision != null ? selectedDivision.getId() : null, divisionObj);
 			
 			clbHomeLoginBean.loginUser();
 		}
@@ -167,12 +165,20 @@ public class BuildingManagementBean implements Serializable {
 		this.newDivision = newDivision;
 	}
 
-	public String getSelectedDivision() {
+	public DivisionObject getSelectedDivision() {
 		return selectedDivision;
 	}
 
-	public void setSelectedDivision(String selectedDivision) {
+	public void setSelectedDivision(DivisionObject selectedDivision) {
 		this.selectedDivision = selectedDivision;
+	}
+
+	public String getSelectedBuildingIdNewDivision() {
+		return selectedBuildingIdNewDivision;
+	}
+
+	public void setSelectedBuildingIdNewDivision(String selectedBuildingIdNewDivision) {
+		this.selectedBuildingIdNewDivision = selectedBuildingIdNewDivision;
 	}
 	
 	

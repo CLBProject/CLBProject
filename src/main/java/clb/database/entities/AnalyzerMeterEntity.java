@@ -11,11 +11,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 
 @Document(collection="AnalyzerMeters")
-public class AnalyzerMeterEntity implements Serializable {
+public class AnalyzerMeterEntity implements ClbEntity, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private String buildingMeterId;
+	private String id;
 
 	private String name;
 	
@@ -26,18 +26,15 @@ public class AnalyzerMeterEntity implements Serializable {
 	public AnalyzerMeterEntity() {
 	}
 
+    public String getId() {
+		return id;
+	}
 
-    public String getBuildingMeterId() {
-        return buildingMeterId;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-
-    public void setBuildingMeterId( String buildingMeterId ) {
-        this.buildingMeterId = buildingMeterId;
-    }
-
-
-    public String getName() {
+	public String getName() {
         return name;
     }
 

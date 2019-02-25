@@ -3,7 +3,6 @@ package clb.business;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import javax.faces.context.FacesContext;
@@ -17,7 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import clb.business.objects.BuildingObject;
 import clb.business.objects.UserEvent;
 import clb.business.objects.UsersystemObject;
 import clb.business.utils.PasswordGenerator;
@@ -99,14 +97,14 @@ public class UserRegistryServiceImpl implements UserRegistryService, Application
         user.setExpiryDate(cal.getTime());
         
         user.setName( name );
-        user.setUsername( userName );
+        user.setId( userName );
         user.setAddress( address );
         user.setPassword( passwordEncoder.encode( password ) );
         user.setToken( generateUserToken() );
         
-        clbDao.saveUsersystem( user );
+        clbDao.saveClbObject( user );
 
-        if(user.getUsername() == null)
+        if(user.getId() == null)
             throw new UserNotPersistedException();
 
         String subject = "Registration Complete";
@@ -114,7 +112,7 @@ public class UserRegistryServiceImpl implements UserRegistryService, Application
         String textMsg = "Access Link @ http://localhost:8080" + FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() +
                 "/pages/registerComplete.xhtml?token=" + user.getToken();
         
-        eventPublisher.publishEvent(new UserEvent(user.getUsername(), subject, textMsg));
+        eventPublisher.publishEvent(new UserEvent(user.getId(), subject, textMsg));
         
         
     }
@@ -136,7 +134,7 @@ public class UserRegistryServiceImpl implements UserRegistryService, Application
 
         //Persist enabled user
         userObject.setEnabled(true);
-        clbDao.saveUsersystem( userObject );
+        clbDao.saveClbObject( userObject );
 
         return userObject;
     }
@@ -163,7 +161,7 @@ public class UserRegistryServiceImpl implements UserRegistryService, Application
         user.setToken( newToken );
         user.setLastSentEmail( new Date() );
         
-        clbDao.saveUsersystem( user );
+        clbDao.saveClbObject( user );
 
         String subject = "Recover Password";
 
@@ -192,7 +190,7 @@ public class UserRegistryServiceImpl implements UserRegistryService, Application
         String newToken = generateUserToken();
         user.setToken( newToken );
         user.setLastSentEmail( new Date() );
-        clbDao.saveUsersystem( user );
+        clbDao.saveClbObject( user );
         
         
         String subject = "Registration Complete";
@@ -200,7 +198,7 @@ public class UserRegistryServiceImpl implements UserRegistryService, Application
         String textMsg = "Access Link @ http://localhost:8080" + FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() +
                 "/pages/registerComplete.xhtml?token=" + user.getToken();
         
-        eventPublisher.publishEvent(new UserEvent(user.getUsername(), subject, textMsg));
+        eventPublisher.publishEvent(new UserEvent(user.getId(), subject, textMsg));
     }
 
 	@Override

@@ -19,22 +19,18 @@ import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 
-import clb.business.objects.AnalyzerMeterObject;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.BuildingObject;
+import clb.business.objects.ClbObject;
 import clb.business.objects.DivisionObject;
 import clb.business.objects.UsersystemObject;
 import clb.database.entities.AnalyzerEntity;
-import clb.database.entities.AnalyzerMeterEntity;
 import clb.database.entities.AnalyzerRegistryEntity;
 import clb.database.entities.BuildingEntity;
+import clb.database.entities.ClbEntity;
 import clb.database.entities.DivisionEntity;
 import clb.database.entities.UsersystemEntity;
-import clb.database.repository.AnalyzerMetersMongoRepository;
-import clb.database.repository.AnalyzerMongoRepository;
-import clb.database.repository.BuildingsMongoRepository;
-import clb.database.repository.DivisionRepository;
 import clb.database.repository.UsersystemMongoRepository;
 import clb.global.DateUtils;
 
@@ -48,19 +44,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
 
 	@Autowired
-	private AnalyzerMongoRepository analyzerMongoRepository;
-
-	@Autowired
-	private BuildingsMongoRepository buildingsMongoRepository;
-
-	@Autowired
-	private AnalyzerMetersMongoRepository buildingsMetersMongoRepository;
-
-	@Autowired
 	private UsersystemMongoRepository userSystemMongoRepository;
-
-	@Autowired
-	private DivisionRepository divisionRepository;
 
 	private static final String ANALYZER_REGISTIES_COLL_NAME = "AnalyzerRegistries";
 
@@ -68,15 +52,24 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	private MongoTemplate mongoTemplate;
 
 	public ClbDaoImpl() {
-
+	}
+	
+	private Object findById(String id, Class<?> classToSearch) {
+		return mongoTemplate.findById(id, classToSearch);
 	}
 
 	@Override
-	public void saveAnalyzer(AnalyzerObject analyzerObject) {
-		AnalyzerEntity analyzerEntity = analyzerObject.toEntity(); 
-		analyzerMongoRepository.save(analyzerEntity);
-		analyzerObject.setId(analyzerEntity.getId());
+	public void deleteClbObject(ClbObject object) {
+		mongoTemplate.remove(object.toEntity());
 	}
+	
+	@Override
+	public void saveClbObject(ClbObject clbObj) {
+		ClbEntity clbEntity = clbObj.toEntity(); 
+		mongoTemplate.save(clbEntity);
+		clbObj.setId(clbEntity.getId());
+	}
+	
 
 	@Override
 	public void saveAnalyzerRegistry(AnalyzerRegistryObject analyzerRegistryObject) {
@@ -90,7 +83,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 		}
 		else analyzerRegCol = mongoTemplate.createCollection(collectionName );
 
-		AnalyzerRegistryEntity analyzerRegistryEntity = analyzerRegistryObject.toEntity();
+		AnalyzerRegistryEntity analyzerRegistryEntity = (AnalyzerRegistryEntity) analyzerRegistryObject.toEntity();
 
 		analyzerRegCol.insert( analyzerRegistryEntity.toDbObject() );
 		analyzerRegistryObject.setId(analyzerRegistryEntity.getId());
@@ -117,7 +110,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 				}
 			}
 
-			AnalyzerRegistryEntity analyzerRegistryEntity = analyzerRegistryObject.toEntity();
+			AnalyzerRegistryEntity analyzerRegistryEntity = (AnalyzerRegistryEntity) analyzerRegistryObject.toEntity();
 
 			analyzerRegCol.insert( analyzerRegistryEntity.toDbObject() );
 			analyzerRegistryObject.setId(analyzerRegistryEntity.getId());
@@ -125,47 +118,33 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	}
 
 	@Override
-	public void saveBuilding(BuildingObject buildingObject) {
-		BuildingEntity buildingEntity = buildingObject.toEntity();
-		buildingsMongoRepository.save(buildingEntity);
-		buildingObject.setBuildingid(buildingEntity.getBuildingid());
-	}
-
-	@Override
-	public void saveAnalyzerMeter(AnalyzerMeterObject buildingMeterObject) {
-		AnalyzerMeterEntity buildingMeterEntity = buildingMeterObject.toEntity();
-		buildingsMetersMongoRepository.save(buildingMeterEntity);
-		buildingMeterObject.setMeterId( buildingMeterEntity.getBuildingMeterId() );
-	}
-
-	@Override
-	public void saveUsersystem(UsersystemObject userSystemObject) {
-		UsersystemEntity userSystemEntity = userSystemObject.toEntity();
-		userSystemMongoRepository.save(userSystemEntity);
-	}
-
-	@Override
-	public void saveDivision(DivisionObject divisionObject) {
-		DivisionEntity divisionEntity = divisionObject.toEntity();
-		divisionRepository.save(divisionEntity);
-		divisionObject.setDivisionid(divisionEntity.getDivisionid());
-	}
-
-
-	@Override
 	public List<UsersystemObject> getAllUsers(){
-		return userSystemMongoRepository.findAll().stream().map(UsersystemObject::new).collect(Collectors.toList());
+		return mongoTemplate.findAll(UsersystemEntity.class).stream().map(UsersystemObject::new).collect(Collectors.toList());
 	}
 
 	@Override
 	public List<BuildingObject> getAllBuildings(){
-		return buildingsMongoRepository.findAll().stream().map(BuildingObject::new).collect(Collectors.toList());
+		return mongoTemplate.findAll(BuildingEntity.class).stream().map(BuildingObject::new).collect(Collectors.toList());
 	}
 
 	@Override
 	public List<AnalyzerObject> getAllAnalyzers() {
-		return analyzerMongoRepository.findAll().stream().map(AnalyzerObject::new).collect(Collectors.toList());
+		return mongoTemplate.findAll(AnalyzerEntity.class).stream().map(AnalyzerObject::new).collect(Collectors.toList());
 	}
+	
+
+	@Override
+	public DivisionObject findDivisionById(String parentId) {
+		DivisionEntity division = (DivisionEntity) findById(parentId, DivisionEntity.class);
+		return division != null ? new DivisionObject(division) : null;
+	}
+
+	@Override
+	public BuildingObject findBuildingById(String buildingId) {
+		BuildingEntity building = (BuildingEntity) mongoTemplate.findById(buildingId, BuildingEntity.class);
+		return building != null ? new BuildingObject(building) : null;
+	}
+
 
 	@Override
 	public UsersystemObject findUserByToken( String token) {
@@ -175,29 +154,13 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
 	@Override
 	public UsersystemObject findUserByUserName( String userName ) {
-		UsersystemEntity userEntity = userSystemMongoRepository.findUserbyUsername( userName ); 
+		UsersystemEntity userEntity = (UsersystemEntity) findById(userName, UsersystemEntity.class); 
 		return userEntity != null ? new UsersystemObject(userEntity) : null;
 	}
 
 	@Override
-	public void saveUsers(List<UsersystemObject> userSystemObjectList) {
-		userSystemObjectList.stream().forEach(userSObj -> userSystemMongoRepository.save(userSObj.toEntity()));
-	}
-
-	public AnalyzerMongoRepository getAnalyzerMongoRepository() {
-		return analyzerMongoRepository;
-	}
-
-	public void setAnalyzerMongoRepository(AnalyzerMongoRepository analyzerMongoRepository) {
-		this.analyzerMongoRepository = analyzerMongoRepository;
-	}
-
-	public BuildingsMongoRepository getBuildingsMongoRepository() {
-		return buildingsMongoRepository;
-	}
-
-	public void setBuildingsMongoRepository(BuildingsMongoRepository buildingsMongoRepository) {
-		this.buildingsMongoRepository = buildingsMongoRepository;
+	public void saveClbObjects(List<ClbObject> clbObjects) {
+		clbObjects.stream().forEach(userSObj -> saveClbObject(userSObj));
 	}
 
 	public UsersystemMongoRepository getUserSystemMongoRepository() {
@@ -206,19 +169,6 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
 	public void setUserSystemMongoRepository(UsersystemMongoRepository userSystemMongoRepository) {
 		this.userSystemMongoRepository = userSystemMongoRepository;
-	}
-
-	@Override
-	public List<BuildingObject> findUserBuildings( String userName ) {
-		return buildingsMongoRepository.findBuildingsByUsername( userName ).stream().map(BuildingObject::new).collect(Collectors.toList());
-	}
-
-	public AnalyzerMetersMongoRepository getBuildingsMetersMongoRepository() {
-		return buildingsMetersMongoRepository;
-	}
-
-	public void setBuildingsMetersMongoRepository( AnalyzerMetersMongoRepository buildingsMetersMongoRepository ) {
-		this.buildingsMetersMongoRepository = buildingsMetersMongoRepository;
 	}
 
 	@Override
@@ -343,9 +293,9 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	}
 
 	@Override
-	public Long getLatestDateForAnalyzer(String analyzerCodeName) {
+	public Long getLatestDateForAnalyzer(String analyzerId) {
 
-		AnalyzerEntity analyzer = analyzerMongoRepository.findAnalyzerByCodename(analyzerCodeName);
+		AnalyzerEntity analyzer = (AnalyzerEntity) findById(analyzerId, AnalyzerEntity.class);
 
 		if(analyzer != null) {
 
@@ -371,33 +321,6 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	}
 
 	@Override
-	public BuildingObject getBuildingByName(String buildingName) {
-		BuildingEntity bEntity = buildingsMongoRepository.getBuildingByName(buildingName);
-
-		if(bEntity != null) {
-			return new BuildingObject(bEntity);
-		}
-
-		return null;
-	}
-
-	@Override
-	public AnalyzerObject getAnalyzerByCodeName(String analyzerCodeName) {
-		AnalyzerEntity aEntity = analyzerMongoRepository.findAnalyzerByCodename(analyzerCodeName);
-
-		if(aEntity != null) {
-			return new AnalyzerObject(aEntity);
-		}
-
-		return null;
-	}
-
-	@Override
-	public void deleteBuilding(BuildingObject object) {
-		buildingsMongoRepository.delete(object.toEntity());
-	}
-
-	@Override
 	public void deleteDivisionCascade(DivisionObject currentDivision) {
 
 		if(currentDivision.getChildrenDivisions() != null) {
@@ -406,12 +329,8 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 			}
 		}
 
-		divisionRepository.delete(currentDivision.toEntity());
+		mongoTemplate.remove(currentDivision.toEntity());
 	}
 
-	@Override
-	public DivisionObject findDivisionById(String parentId) {
-		return new DivisionObject(divisionRepository.findOne(parentId));
-	}
 
 }

@@ -125,15 +125,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		return clbDao.getMonthRegistriesFromAnalyzer( analyzerId,firstDay,lastDay);
 	}
 
-
-	@Override
-	public UsersystemObject getUserData( String username ) {
-		UsersystemObject user = clbDao.findUserByUserName( username );
-		user.setBuildings( clbDao.findUserBuildings(username));
-
-		return user;
-	}
-
 	@Override
 	public Date getLowestAnalyzerRegistryDate() {
 		return clbDao.getLowestAnalyzerRegistryDate();
@@ -166,7 +157,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	public void fillUserWithAllBuildings(String username) {
 		final UsersystemObject user = clbDao.findUserByUserName(username);
 		clbDao.getAllBuildings().stream().forEach(building -> user.addBuilding(building));;
-		clbDao.saveUsersystem(user);
+		clbDao.saveClbObject(user);
 	}
 	
 	@Transactional
@@ -176,24 +167,33 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		List<DivisionObject> divisions = building.getDivisions();
 		
 		if(divisions != null) {
-			divisions.stream().forEach( division -> clbDao.saveDivision(division));
+			divisions.stream().forEach( division -> clbDao.saveClbObject(division));
 		}
 		
-		clbDao.saveBuilding(building);
+		clbDao.saveClbObject(building);
 		
 		user.addBuilding(building);
 		
-		clbDao.saveUsersystem(user);
+		clbDao.saveClbObject(user);
 	}
 
 	@Override
 	@Transactional
-	public void saveDivisionParentAndChild(String parentId, DivisionObject divisionObj) {
-		DivisionObject parentDivision = clbDao.findDivisionById(parentId);
-		clbDao.saveDivision(divisionObj);
+	public void saveDivisionForBuildingOrParent(String buildingId, String parentId, DivisionObject divisionObj) {
+		clbDao.saveClbObject(divisionObj);
 		
-		parentDivision.addSubDivision(divisionObj);
-		clbDao.saveDivision(parentDivision);
+		//If there is parent
+		if(parentId != null) {
+			DivisionObject parentDivision = clbDao.findDivisionById(parentId);
+			parentDivision.addSubDivision(divisionObj);
+			clbDao.saveClbObject(parentDivision);
+		}
+		//Save For Building
+		else {
+			BuildingObject building = clbDao.findBuildingById(buildingId);
+			building.addDivision(divisionObj);
+			clbDao.saveClbObject(building);
+		}
 	}
 	
 	@Override
@@ -205,13 +205,27 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		if(divisions != null)
 			divisions.stream().forEach(division -> clbDao.deleteDivisionCascade(division));
 		
-		clbDao.deleteBuilding(building);
+		clbDao.deleteClbObject(building);
 		
 		user.removeBuilding(building);
 		
-		clbDao.saveUsersystem(user);
+		clbDao.saveClbObject(user);
 	}
 
+
+	@Override
+	@Transactional
+	public void deleteChildDivisionFromParent(String parentDivision, String childDivision) {
+		DivisionObject divisionParentObj = clbDao.findDivisionById(parentDivision);
+		DivisionObject divisionChildObj = clbDao.findDivisionById(childDivision);
+		
+		divisionParentObj.deleteSubDivision(divisionChildObj);
+		
+		clbDao.saveClbObject(divisionParentObj);
+		clbDao.deleteDivisionCascade(divisionChildObj);
+	}
+
+	
 
 	public TaskExecutor getTaskExecutor() {
 		return taskExecutor;
@@ -235,18 +249,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
 	public void setEventPublisher( ApplicationEventPublisher eventPublisher ) {
 		this.eventPublisher = eventPublisher;
-	}
-
-	@Override
-	@Transactional
-	public void deleteChildDivisionFromParent(String parentDivision, String childDivision) {
-		DivisionObject divisionParentObj = clbDao.findDivisionById(parentDivision);
-		DivisionObject divisionChildObj = clbDao.findDivisionById(childDivision);
-		
-		divisionParentObj.deleteSubDivision(divisionChildObj);
-		
-		clbDao.saveDivision(divisionParentObj);
-		clbDao.deleteDivisionCascade(divisionChildObj);
 	}
 
 

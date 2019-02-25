@@ -4,8 +4,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 import clb.database.entities.AnalyzerRegistryEntity;
+import clb.database.entities.ClbEntity;
 
-public class AnalyzerRegistryObject implements Serializable {
+public class AnalyzerRegistryObject implements ClbEntity, Serializable {
 
 	private static final long serialVersionUID = 1L;
 

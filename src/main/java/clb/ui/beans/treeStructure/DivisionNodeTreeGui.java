@@ -17,7 +17,7 @@ public class DivisionNodeTreeGui implements Serializable, Comparable<DivisionNod
 	private List<AnalyzerObject> analyzers;
 	
 	public DivisionNodeTreeGui(DivisionObject division) {
-		this.divisionId = division.getDivisionid();
+		this.divisionId = division.getId();
 		this.name = division.getName();
 		this.analyzers = division.getAnalyzers();
 	}

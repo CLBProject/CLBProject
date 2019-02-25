@@ -20,8 +20,6 @@ import clb.business.exceptions.IlegalCommandAppException;
 import clb.business.objects.AnalyzerMeterObject;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
-import clb.business.objects.BuildingObject;
-import clb.business.objects.DivisionObject;
 import clb.business.objects.UsersystemObject;
 import clb.business.utils.JsonUtils;
 import clb.database.ClbDao;
@@ -86,12 +84,12 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 									analyzerMeterObject.setLabelKey( mterValue.name() );
 									analyzerMeterObject.setUnit(mterValue.getUnit());
 
-									clbDao.saveAnalyzerMeter( analyzerMeterObject );
+									clbDao.saveClbObject( analyzerMeterObject );
 
 									analyzerObject.addAnalyzerMeter(analyzerMeterObject);
 								}
 								
-								clbDao.saveAnalyzer(analyzerObject);
+								clbDao.saveClbObject(analyzerObject);
 								analyzers.put(analyzerCodeName, analyzerObject);
 							}
 
@@ -117,7 +115,7 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 
 						case EXIT_PERSIST_DATA_OBJECT:
 							
-							analyzers.entrySet().stream().forEach(entry -> clbDao.saveAnalyzer(entry.getValue()));
+							analyzers.entrySet().stream().forEach(entry -> clbDao.saveClbObject(entry.getValue()));
 
 							analyzers = new HashMap<String,AnalyzerObject>();
 

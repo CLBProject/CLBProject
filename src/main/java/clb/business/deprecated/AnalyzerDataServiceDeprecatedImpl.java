@@ -89,7 +89,7 @@ public class AnalyzerDataServiceDeprecatedImpl implements AnalyzerDataServiceDep
 
 			Set<Long> dataToExclueOnDummy = new HashSet<Long>();
 
-			clbDao.saveAnalyzer(ana);
+			clbDao.saveClbObject(ana);
 
 			List<AnalyzerRegistryObject> analyzerRegistries = new ArrayList<AnalyzerRegistryObject>();
 
@@ -159,17 +159,17 @@ public class AnalyzerDataServiceDeprecatedImpl implements AnalyzerDataServiceDep
 				analyzerMeterObject.setLabelKey( analyzerMeter.name() );
 				analyzerMeterObject.setUnit(analyzerMeter.getUnit());
 
-				clbDao.saveAnalyzerMeter( analyzerMeterObject );
+				clbDao.saveClbObject( analyzerMeterObject );
 				
 				ana.addAnalyzerMeter(analyzerMeterObject);
 			}
 			
-			clbDao.saveAnalyzer(ana);
+			clbDao.saveClbObject(ana);
 		}
 
-		clbDao.saveBuilding(building);
-		clbDao.saveBuilding(building2);
-		clbDao.saveUsersystem( userObject );
+		clbDao.saveClbObject(building);
+		clbDao.saveClbObject(building2);
+		clbDao.saveClbObject( userObject );
 	}
 
 	private void persistDummyAnalyzerRegistries(AnalyzerObject analyzer, Set<Long> dataToExclude){
