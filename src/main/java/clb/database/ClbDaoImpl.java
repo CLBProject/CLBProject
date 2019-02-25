@@ -31,20 +31,16 @@ import clb.database.entities.BuildingEntity;
 import clb.database.entities.ClbEntity;
 import clb.database.entities.DivisionEntity;
 import clb.database.entities.UsersystemEntity;
-import clb.database.repository.UsersystemMongoRepository;
+import clb.database.repository.ClbMongoRepository;
 import clb.global.DateUtils;
 
 @Service
 public class ClbDaoImpl implements ClbDao, Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
-
 	@Autowired
-	private UsersystemMongoRepository userSystemMongoRepository;
+	private ClbMongoRepository clbRepository;
 
 	private static final String ANALYZER_REGISTIES_COLL_NAME = "AnalyzerRegistries";
 
@@ -56,7 +52,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	
 	private Object findById(String id, Class<?> classToSearch) {
 		return mongoTemplate.findById(id, classToSearch);
-	}
+	} 
 
 	@Override
 	public void deleteClbObject(ClbObject object) {
@@ -148,7 +144,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
 	@Override
 	public UsersystemObject findUserByToken( String token) {
-		UsersystemEntity userEntity = userSystemMongoRepository.findUserbyToken( token );
+		UsersystemEntity userEntity = clbRepository.findUserbyToken( token );
 		return userEntity != null ? new UsersystemObject(userEntity) : null;
 	}
 
@@ -161,14 +157,6 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	@Override
 	public void saveClbObjects(List<ClbObject> clbObjects) {
 		clbObjects.stream().forEach(userSObj -> saveClbObject(userSObj));
-	}
-
-	public UsersystemMongoRepository getUserSystemMongoRepository() {
-		return userSystemMongoRepository;
-	}
-
-	public void setUserSystemMongoRepository(UsersystemMongoRepository userSystemMongoRepository) {
-		this.userSystemMongoRepository = userSystemMongoRepository;
 	}
 
 	@Override
@@ -330,6 +318,14 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 		}
 
 		mongoTemplate.remove(currentDivision.toEntity());
+	}
+
+	public ClbMongoRepository getClbRepository() {
+		return clbRepository;
+	}
+
+	public void setClbRepository(ClbMongoRepository clbRepository) {
+		this.clbRepository = clbRepository;
 	}
 
 

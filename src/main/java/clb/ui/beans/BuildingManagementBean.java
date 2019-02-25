@@ -11,6 +11,7 @@ import javax.faces.bean.ViewScoped;
 
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.NodeUnselectEvent;
+import org.primefaces.model.TreeNode;
 
 import clb.business.AnalyzerDataService;
 import clb.business.objects.BuildingObject;
@@ -19,6 +20,7 @@ import clb.ui.beans.newobjects.BuildingNewManagementGui;
 import clb.ui.beans.newobjects.DivisionNewManagementGui;
 import clb.ui.beans.objects.BuildingAnalysisGui;
 import clb.ui.beans.treeStructure.BuildingTreeGui;
+import clb.ui.beans.treeStructure.DivisionNodeTreeGui;
 
 @ViewScoped
 @ManagedBean
@@ -38,6 +40,7 @@ public class BuildingManagementBean implements Serializable {
 	private List<BuildingTreeGui> buildingsToShow;
 	
 	private DivisionObject selectedDivision;
+	private TreeNode parentDivisionSelected;
 	private String selectedBuildingIdNewDivision;
 	
 	private BuildingNewManagementGui newBuilding;
@@ -58,12 +61,10 @@ public class BuildingManagementBean implements Serializable {
 
 	public void setNewDivisionBuilding(String buildingId) {
 		this.selectedBuildingIdNewDivision = buildingId;
-		System.out.println(buildingId);
 	}
 	
 	public void createBuilding() {
 		if (newBuilding != null) {
-
 			BuildingObject newBuildingObj = newBuilding.toObject();
 			clbHomeLoginBean.addBuildingToUser(newBuildingObj);
 		}
@@ -74,7 +75,12 @@ public class BuildingManagementBean implements Serializable {
 			DivisionObject divisionObj = new DivisionObject();
 			divisionObj.setName(newDivision.getName());
 			
-			analyzerDataService.saveDivisionForBuildingOrParent(selectedBuildingIdNewDivision, selectedDivision != null ? selectedDivision.getId() : null, divisionObj);
+			if(parentDivisionSelected == null) {
+				analyzerDataService.saveDivisionForBuilding(selectedBuildingIdNewDivision, divisionObj);
+			}
+			else {
+				analyzerDataService.saveDivisionForParent(((DivisionNodeTreeGui)parentDivisionSelected.getData()).getDivisionId(), divisionObj);
+			}
 			
 			clbHomeLoginBean.loginUser();
 		}
@@ -87,42 +93,37 @@ public class BuildingManagementBean implements Serializable {
 		}
 	}
 	
-	public void deleteDivision() {
+	public void deleteDivision(String buildId) {
 		
-//		RequestContext context = RequestContext.getCurrentInstance();
-//		
-//		if(parentDivisionSelected == null) {
-//			context.addCallbackParam(NODE_SELECTED_NULL, true);
-//			return;
-//		}
-//		
-//		TreeNode parent = parentDivisionSelected.getParent();
-//		
-//		if(parent == null) {
-//			context.addCallbackParam(CANT_DELETE_DIVISION, true);
-//			return;
-//		}
-//		
-//		DivisionNodeTreeGui parentNode = (DivisionNodeTreeGui) parent.getData();
-//		DivisionNodeTreeGui divisionToDeleteNode = (DivisionNodeTreeGui) parentDivisionSelected.getData();
-//		
-//		analyzerDataService.deleteChildDivisionFromParent(parentNode.getDivisionId(),divisionToDeleteNode.getDivisionId());
-//		
-//		clbHomeLoginBean.loginUser();
+		DivisionNodeTreeGui divisionToDeleteNode = (DivisionNodeTreeGui) parentDivisionSelected.getData();
+		
+		TreeNode parent = parentDivisionSelected.getParent();
+		DivisionNodeTreeGui parentNode = (DivisionNodeTreeGui) parent.getData();
+		
+		if(parentNode != null) {
+			analyzerDataService.deleteChildDivisionFromParent(parentNode.getDivisionId(),divisionToDeleteNode.getDivisionId());
+		}
+		else {
+			analyzerDataService.deleteChildDivisionFromBuilding(buildId,divisionToDeleteNode.getDivisionId());
+		}
+		
+		clbHomeLoginBean.loginUser();
 	}
 	
 	public void showDivisionOptions(NodeSelectEvent event) {
-		/*this.parentDivisionSelected = event.getTreeNode();
+		this.parentDivisionSelected = event.getTreeNode();
 		this.parentDivisionSelected.setSelected(true);
-		BuildingTreeGui buildingGui = (BuildingTreeGui)event.getComponent().getAttributes().get("building");
-		buildingGui.setMainDivisionIsSelected(true);*/
+		
+		BuildingTreeGui buildingGui = (BuildingTreeGui) event.getComponent().getAttributes().get("building");
+		buildingGui.setDivisionIsSelected(true);
 	}
 	
 	public void hideDivisionOptions(NodeUnselectEvent event) {
-		/*this.parentDivisionSelected = event.getTreeNode();
-		this.parentDivisionSelected.setSelected(false);
-		BuildingTreeGui buildingGui = (BuildingTreeGui)event.getComponent().getAttributes().get("building");
-		buildingGui.setMainDivisionIsSelected(false);*/
+		event.getTreeNode().setSelected(false);
+		this.parentDivisionSelected = null;
+		
+		BuildingTreeGui buildingGui = (BuildingTreeGui) event.getComponent().getAttributes().get("building");
+		buildingGui.setDivisionIsSelected(false);
 	}
 
 	public AnalyzerDataService getAnalyzerDataService() {
@@ -173,6 +174,14 @@ public class BuildingManagementBean implements Serializable {
 		this.selectedDivision = selectedDivision;
 	}
 
+	public TreeNode getParentDivisionSelected() {
+		return parentDivisionSelected;
+	}
+
+	public void setParentDivisionSelected(TreeNode parentDivisionSelected) {
+		this.parentDivisionSelected = parentDivisionSelected;
+	}
+
 	public String getSelectedBuildingIdNewDivision() {
 		return selectedBuildingIdNewDivision;
 	}
@@ -180,6 +189,6 @@ public class BuildingManagementBean implements Serializable {
 	public void setSelectedBuildingIdNewDivision(String selectedBuildingIdNewDivision) {
 		this.selectedBuildingIdNewDivision = selectedBuildingIdNewDivision;
 	}
-	
+
 	
 }

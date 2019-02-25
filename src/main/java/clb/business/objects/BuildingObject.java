@@ -111,6 +111,9 @@ public class BuildingObject implements ClbObject
 		this.divisions.add(divObj);
 	}
    
+	public void deleteDivision(DivisionObject divisionChildObj) {
+		divisions.remove(divisionChildObj);
+	}
 	
     public String getId() {
 		return id;
@@ -160,7 +163,6 @@ public class BuildingObject implements ClbObject
 	public void setLocation(String location) {
 		this.location = location;
 	}
-
 
 }
 

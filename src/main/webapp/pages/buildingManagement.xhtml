@@ -10,22 +10,22 @@
 	<ui:define name="body">
 		<ui:include src="./general/menutab.xhtml" />
 		<div class="buildingManagementDiv">
-				<table width="100%" class="appDivClass">
-					<tr>
-						<td>
-							<div align="center" class="titleDivClass">
-								<p:outputLabel value="Building Management"></p:outputLabel>
-							</div>
-							<hr />
-						</td>
-					</tr>
-					<tr>
-						<td width="100%">
-							<div align="left" class="mainDivClass">
-								<p:commandLink value="Add Building" styleClass="commonLink" onclick="PF('newBuildingPopup').show()"></p:commandLink>
-								<br/>
-								<br/>
-								<h:form id="buildingManagementForm">
+			<table width="100%" class="appDivClass">
+				<tr>
+					<td>
+						<div align="center" class="titleDivClass">
+							<p:outputLabel value="Building Management"></p:outputLabel>
+						</div>
+						<hr />
+					</td>
+				</tr>
+				<tr>
+					<td width="100%">
+						<div align="left" class="mainDivClass">
+							<p:commandLink value="Add Building" styleClass="commonLink" onclick="PF('newBuildingPopup').show()"></p:commandLink>
+							<br/>
+							<br/>
+							<h:form id="buildingManagementForm">
 								<p:dataTable id="paginatorSelector"
 									widgetVar="paginatorSelector" paginator="true"
 									paginatorPosition="bottom"
@@ -34,7 +34,7 @@
 									rowKey="#{building.buildingId}" var="building"
 									styleClass="buildingManagementTable">
 									<p:column styleClass="dataTableColumn">
-										<p:panel widgetVar="buildingPanelDivision" styleClass="buildingPanelClass">
+										<p:panel widgetVar="buildingPanelDivision" id="buildingPanelDivision" styleClass="buildingPanelClass">
 											<div align="left" class="buildingDivClass">
 												<table border="0" class="buildingManagDelete">
 													<tr>
@@ -54,31 +54,18 @@
 												<div class="buildingDivClass" align="left">
 													<h:panelGrid columns="2">
 														<p:column style="vertical-align:top">
-															<p:outputPanel rendered="#{not empty building.divisions}">
-	 															 <p:multiSelectListbox value="#{buildingManagementBean.selectedDivision}" effect="slide" header="Divisions" showHeaders="true">
-	 														        <f:selectItems value="#{building.divisions}" />
-	 														    </p:multiSelectListbox>
+															<p:outputPanel rendered="#{not empty building.rootDivision.children}">
+		 														<p:tree value="#{building.rootDivision}" var="division" styleClass="divisionAnalysis"
+															                        id="divisionTreeAnalisys" selectionMode="single" dynamic="true">
+															        <p:treeNode styleClass="divisionAnalysisNode">
+															            <h:outputText styleClass="treeDivisionText" value="#{division.name}"/>
+															        </p:treeNode>
+															        <f:attribute name="building" value="#{building}" />
+															        <p:ajax event="select" listener="#{buildingManagementBean.showDivisionOptions}" update=":newDivisionFormId :buildingManagementForm:paginatorSelector:divOptionsPanel" ></p:ajax>
+															        <p:ajax event="unselect" listener="#{buildingManagementBean.hideDivisionOptions}" update=":newDivisionFormId :buildingManagementForm:paginatorSelector:divOptionsPanel" ></p:ajax>
+															    </p:tree>
+															    <br/>
 															</p:outputPanel>	
-															<p:outputPanel rendered="#{empty building.divisions or building.divisions.size() eq 0}">
-																<p:graphicImage value="#{request.contextPath}/../resources/images/plus.png" update=":newDivisionFormId"/>
-																<p:spacer width="5"/>
-																<p:commandLink oncomplete="PF('newDivisionPopup').show()" 
-																			   action="#{buildingManagementBean.setNewDivisionBuilding(building.buildingid)}" ajax="true" value="Add Division">
-																</p:commandLink>
-															</p:outputPanel>
-														    <p:spacer height="15"></p:spacer>
-														    <p:outputPanel rendered="not empty buildingManagementBean.selectedDivision">
-														    	<div align="left" class="divisionOptions">
-														    		<p:commandLink oncomplete="PF('newDivisionPopup').show()" ajax="true" update=":newDivisionFormId">
-																		<p:graphicImage value="#{request.contextPath}/../resources/images/plus.png"/>
-																	</p:commandLink>
-															    	<p:spacer width="5"/>
-															    	<p:commandLink action="#{buildingManagementBean.deleteDivision}"
-															    		oncomplete="PF('successPaneldeleteDivisionPopup').show()">
-															    		<p:graphicImage value="#{request.contextPath}/../resources/images/negative.png"/>
-																	</p:commandLink>
-														    	</div>
-														    </p:outputPanel>
 														</p:column>
 														<p:column>
 <!-- 															 <p:selectManyMenu id="advanced" value="#{selectManyView.selectedThemes}" converter="themeConverter" -->
@@ -95,18 +82,42 @@
 <!-- 													        </p:selectManyMenu> -->
 														</p:column>
 												    </h:panelGrid>
+												    <p:outputPanel id="divOptionsPanel" widgetVar="divOptionsPanel">
+												    	<br/>
+														<table class="addDivisionClass">
+															<tr>
+																<td width="15px" valign="middle">
+																	<p:graphicImage width="12px" value="#{request.contextPath}/../resources/images/plus.png"/>
+																</td>
+																<td align="left" width="90px">
+																	<p:commandLink oncomplete="PF('newDivisionPopup').show()" 
+																	   action="#{buildingManagementBean.setNewDivisionBuilding(building.buildingid)}" 
+																	   ajax="true" value="Add Division" update=":newDivisionFormId"></p:commandLink>
+																</td>
+																<td width="15px" valign="middle" align="left">
+																	<p:graphicImage width="12px" rendered="#{not empty buildingManagementBean.parentDivisionSelected}" value="#{request.contextPath}/../resources/images/negative.png"/>
+																</td>
+																<td align="left"> 
+																	<p:commandLink rendered="#{not empty buildingManagementBean.parentDivisionSelected}" action="#{buildingManagementBean.deleteDivision(building.buildingid)}"
+															    		oncomplete="PF('successPaneldeleteDivisionPopup').show()" value="Remove Division">
+																	</p:commandLink>
+																</td>
+															</tr>
+														</table>
+														<br/>
+													</p:outputPanel>
 												</div>
 											</div>
 										</p:panel>
 									</p:column>
 								</p:dataTable>
-								</h:form>
-							</div>
-						</td>
-					</tr>
-				</table>
-				<br/>
-				<br/>
+							</h:form>
+						</div>
+					</td>
+				</tr>
+			</table>
+			<br/>
+			<br/>
 		</div>
 		<ui:include src="./general/footer.xhtml" />
 		<ui:include src="./popups/newBuildingPopup.xhtml" />

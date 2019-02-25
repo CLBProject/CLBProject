@@ -179,22 +179,26 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
 	@Override
 	@Transactional
-	public void saveDivisionForBuildingOrParent(String buildingId, String parentId, DivisionObject divisionObj) {
+	public void saveDivisionForParent(String parentId, DivisionObject divisionObj) {
+		clbDao.saveClbObject(divisionObj);
+
+		DivisionObject parentDivision = clbDao.findDivisionById(parentId);
+		parentDivision.addSubDivision(divisionObj);
+		clbDao.saveClbObject(parentDivision);
+	}
+	
+
+	@Override
+	@Transactional
+	public void saveDivisionForBuilding(String buildingId, DivisionObject divisionObj) {
+		
 		clbDao.saveClbObject(divisionObj);
 		
-		//If there is parent
-		if(parentId != null) {
-			DivisionObject parentDivision = clbDao.findDivisionById(parentId);
-			parentDivision.addSubDivision(divisionObj);
-			clbDao.saveClbObject(parentDivision);
-		}
-		//Save For Building
-		else {
-			BuildingObject building = clbDao.findBuildingById(buildingId);
-			building.addDivision(divisionObj);
-			clbDao.saveClbObject(building);
-		}
+		BuildingObject building = clbDao.findBuildingById(buildingId);
+		building.addDivision(divisionObj);
+		clbDao.saveClbObject(building);
 	}
+
 	
 	@Override
 	@Transactional
@@ -225,7 +229,19 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		clbDao.deleteDivisionCascade(divisionChildObj);
 	}
 
-	
+
+	@Override
+	@Transactional
+	public void deleteChildDivisionFromBuilding(String buildingId, String divisionId) {
+		DivisionObject divisionChildObj = clbDao.findDivisionById(divisionId);
+		BuildingObject buildingObj = clbDao.findBuildingById(buildingId);
+		
+		buildingObj.deleteDivision(divisionChildObj);
+		
+		clbDao.saveClbObject(buildingObj);
+		clbDao.deleteDivisionCascade(divisionChildObj);
+	}
+
 
 	public TaskExecutor getTaskExecutor() {
 		return taskExecutor;
@@ -250,6 +266,5 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	public void setEventPublisher( ApplicationEventPublisher eventPublisher ) {
 		this.eventPublisher = eventPublisher;
 	}
-
 
 }

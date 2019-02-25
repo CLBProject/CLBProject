@@ -482,11 +482,6 @@ form {
 	border: none !important;
 }
 
-
-.divisionAnalysisNode .ui-treenode-leaf-icon{
-	display: none !important;
-}
-
 .ui-treenode-children{
 	padding-left: 40px !important;
 }
@@ -526,4 +521,8 @@ form {
 .treeDivisionText{
 	font-size: 12px;
 	color: #8A0868 !important
+}
+
+.addDivisionClass td{
+	padding: 0px !important;
 }

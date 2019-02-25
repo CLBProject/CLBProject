@@ -31,12 +31,16 @@ public interface AnalyzerDataService {
 
 	public void fillUserWithAllBuildings(String username);
 
-	public void deleteBuildingForUser(UsersystemObject object, BuildingObject building);
-
 	public void saveBuildingForUser(UsersystemObject object, BuildingObject building);
 
-	public void saveDivisionForBuildingOrParent(String buildingId, String parentId, DivisionObject divisionObj);
+	public void saveDivisionForBuilding(String selectedBuildingIdNewDivision, DivisionObject divisionObj);
+	
+	public void saveDivisionForParent(String parentId, DivisionObject divisionObj);
 
 	public void deleteChildDivisionFromParent(String parentDivision, String childDivision);
+
+	public void deleteBuildingForUser(UsersystemObject object, BuildingObject building);
+
+	public void deleteChildDivisionFromBuilding(String selectedBuildingIdNewDivision, String divisionId);
 
 }

@@ -1,13 +1,12 @@
 package clb.ui.beans.treeStructure;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import javax.faces.model.SelectItem;
-import javax.faces.model.SelectItemGroup;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.TreeNode;
 
 import clb.business.objects.BuildingObject;
 import clb.business.objects.DivisionObject;
@@ -25,7 +24,9 @@ public class BuildingTreeGui {
 
 	private String imgPath;
 
-	private List<SelectItem> divisions;
+    private TreeNode rootDivision;
+    
+    private boolean divisionIsSelected;
 
 	public BuildingTreeGui(BuildingObject bObject) {
 		super();
@@ -33,26 +34,23 @@ public class BuildingTreeGui {
 		this.name = bObject.getName();
 		this.imgPath = bObject.getImgPath();
 		this.location = bObject.getLocation();
-		this.divisions = bObject.getDivisions() != null ? buildTreeDivisions(bObject.getDivisions()) : null;
+		this.divisionIsSelected = false;
+		
+		this.rootDivision = new DefaultTreeNode(null,null);
+		buildTreeDivisions(this.rootDivision,bObject.getDivisions());
 	}
 
-	private List<SelectItem> buildTreeDivisions(List<DivisionObject> divisions) {
-
-		return divisions.stream().map(division -> {
-
-			if(division.hasChildren()) {
-				SelectItemGroup group = new SelectItemGroup(division.getName());
-				List<SelectItem> itemsProcessed = buildTreeDivisions(division.getChildrenDivisions());
-				group.setSelectItems(itemsProcessed.toArray(new SelectItem[itemsProcessed.size()]));
-				return group;
-			}
-
-			else return new SelectItem(division, division.getName());
-		}).collect(Collectors.toList());
+	private void buildTreeDivisions(TreeNode treeDivision, List<DivisionObject> divisions) {
+		
+		if(divisions != null && divisions.size() > 0) {
+			divisions.stream().forEach(division -> 
+						buildTreeDivisions(new DefaultTreeNode(new DivisionNodeTreeGui(division),treeDivision), division.getChildrenDivisions()));
+		}
+		
 	}
 
 	public boolean hasDivisions() {
-		return this.divisions != null && this.divisions.size() > 0;
+		return this.rootDivision != null && this.rootDivision.getChildren() != null && rootDivision.getChildren().size() > 0;
 	}
 	
 	public BuildingObject toObject() {
@@ -82,12 +80,12 @@ public class BuildingTreeGui {
 		this.name = name;
 	}
 
-	public List<SelectItem> getDivisions() {
-		return divisions;
+	public TreeNode getRootDivision() {
+		return rootDivision;
 	}
 
-	public void setDivisions(List<SelectItem> divisions) {
-		this.divisions = divisions;
+	public void setRootDivision(TreeNode rootDivision) {
+		this.rootDivision = rootDivision;
 	}
 
 	public String getImgPath() {
@@ -105,4 +103,14 @@ public class BuildingTreeGui {
 	public void setLocation(String location) {
 		this.location = location;
 	}
+
+	public boolean isDivisionIsSelected() {
+		return divisionIsSelected;
+	}
+
+	public void setDivisionIsSelected(boolean divisionIsSelected) {
+		this.divisionIsSelected = divisionIsSelected;
+	}
+	
+	
 }

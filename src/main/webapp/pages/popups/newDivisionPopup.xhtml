@@ -19,7 +19,8 @@
 							<p:outputLabel value="Parent: "/>
 						</p:column>
 						<p:column>
-							<p:outputLabel value="#{parentDivision}"/>
+							<p:outputLabel rendered="#{not empty buildingManagementBean.parentDivisionSelected}" value="#{buildingManagementBean.parentDivisionSelected.data.name}"/>
+							<p:outputLabel rendered="#{empty buildingManagementBean.parentDivisionSelected}" value=""/>
 						</p:column>
 						<p:column>
 							<p:outputLabel for="newDivisionName" value="Name:"></p:outputLabel>
