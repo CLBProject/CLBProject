@@ -65,7 +65,7 @@ form {
 .homeMainDivClass {
 	background-color: #0A122A;
 	color: white !important;
-	width: 100%;
+	width: 80%;
 	height: 100vh;
 }
 
@@ -465,7 +465,7 @@ form {
 }
 
 .buildingManagementTable{
-	width:100%; 
+	width:80%; 
 }
 
 .buildingManagementAnalyzers{
@@ -488,6 +488,7 @@ form {
 
 .commonLink{
 	color: #CED8F6;
+	font-size: 12px !important;
 }
 
 .ui-datatable tbody td{

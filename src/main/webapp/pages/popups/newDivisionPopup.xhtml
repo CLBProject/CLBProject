@@ -16,11 +16,10 @@
 				<div class="newBuildingClass">
 					<p:panelGrid columns="2" styleClass="successGrid">
 						<p:column>
-							<p:outputLabel value="Parent: "/>
+							<p:outputLabel rendered="#{not empty buildingManagementBean.parentDivisionSelected}" />
 						</p:column>
 						<p:column>
 							<p:outputLabel rendered="#{not empty buildingManagementBean.parentDivisionSelected}" value="#{buildingManagementBean.parentDivisionSelected.data.name}"/>
-							<p:outputLabel rendered="#{empty buildingManagementBean.parentDivisionSelected}" value=""/>
 						</p:column>
 						<p:column>
 							<p:outputLabel for="newDivisionName" value="Name:"></p:outputLabel>
