@@ -69,19 +69,10 @@
 													<br />
 												</p:outputPanel>
 											</p:column>
-											<p:column>
-												<!-- 															 <p:selectManyMenu id="advanced" value="#{selectManyView.selectedThemes}" converter="themeConverter" -->
-												<!-- 													                          var="t" filter="true" filterMatchMode="contains" showCheckbox="true"> -->
-												<!-- 													            <f:selectItems value="#{selectManyView.themes}" var="theme" itemLabel="#{theme.displayName}" itemValue="#{theme}" /> -->
-
-												<!-- 													            <p:column> -->
-												<!-- 													                <h:graphicImage name="showcase/images/themeswitcher/themeswitcher-#{t.name}.png" alt="#{t.name}" styleClass="ui-theme" /> -->
-												<!-- 													            </p:column> -->
-
-												<!-- 													            <p:column> -->
-												<!-- 													                <h:outputText value="#{t.displayName}" /> -->
-												<!-- 													            </p:column> -->
-												<!-- 													        </p:selectManyMenu> -->
+											<p:column style="vertical-align: top">
+												<p:selectManyMenu id="advanced" value="#{buildingManagementBean.selectedAnalyzers}" filter="true" filterMatchMode="contains" showCheckbox="true">
+										           <f:selectItems value="#{buildingManagementBean.analyzersDivisionSelection}" var="analyzer" itemLabel="#{analyzer.label}" itemValue="#{analyzer.value}" />
+										        </p:selectManyMenu>
 											</p:column>
 										</h:panelGrid>
 										<p:outputPanel id="divOptionsPanel" widgetVar="divOptionsPanel">
@@ -102,11 +93,21 @@
 															rendered="#{not empty buildingManagementBean.parentDivisionSelected}"
 															value="#{request.contextPath}/../resources/images/negative.png" />
 													</td>
-													<td align="left"><p:commandLink
+													<td align="left" width="115px"><p:commandLink
 															rendered="#{not empty buildingManagementBean.parentDivisionSelected}"
 															action="#{buildingManagementBean.deleteDivision(building.buildingid)}"
 															oncomplete="PF('successPaneldeleteDivisionPopup').show()"
 															value="Remove Division">
+														</p:commandLink></td>
+													<td width="15px" valign="middle" align="left"><p:graphicImage
+															width="12px"
+															rendered="#{not empty buildingManagementBean.parentDivisionSelected}"
+															value="#{request.contextPath}/../resources/images/search.png" />
+													</td>
+													<td align="left"><p:commandLink rendered="#{not empty buildingManagementBean.parentDivisionSelected}"
+															oncomplete="PF('selectionPopupAnalyzer').show()"
+															ajax="true" value="Select Analyzer"
+															update=":selectionAnalyzerForm">
 														</p:commandLink></td>
 												</tr>
 											</table>
@@ -122,6 +123,7 @@
 		</div>
 		<ui:include src="./general/footer.xhtml" />
 		<ui:include src="./popups/newBuildingPopup.xhtml" />
+		<ui:include src="./popups/selectionPopupAnalyzer.xhtml" />
 		<ui:include src="./popups/newDivisionPopup.xhtml">
 			<ui:param name="parentDivision" value="parentName" />
 		</ui:include>

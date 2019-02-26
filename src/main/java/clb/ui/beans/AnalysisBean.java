@@ -25,7 +25,7 @@ import clb.global.DateUtils;
 import clb.ui.beans.objects.AnalyzerGui;
 import clb.ui.beans.objects.BuildingAnalysisGui;
 import clb.ui.beans.objects.DivisionGui;
-import clb.ui.beans.treeStructure.DivisionNodeTreeGui;
+import clb.ui.beans.treeStructure.DivisionTreeGui;
 import clb.ui.beans.utils.AnalysisBeanCache;
 import clb.ui.beans.utils.AnalysisBeanChart;
 import clb.ui.enums.AnalysisTypes;
@@ -170,9 +170,9 @@ public class AnalysisBean implements Serializable{
 			DivisionObject divisionObj = division.toObject();
 			
 			//Root
-			mainDivision = new DefaultTreeNode(new DivisionNodeTreeGui(divisionObj),null);
+			mainDivision = new DefaultTreeNode(new DivisionTreeGui(divisionObj),null);
 			
-			buildTreeSelection(new DefaultTreeNode(new DivisionNodeTreeGui(divisionObj),mainDivision),division);
+			buildTreeSelection(new DefaultTreeNode(new DivisionTreeGui(divisionObj),mainDivision),division);
 			
 			analyzersSelected = division.getAnalyzers();
 			analyzerSelected = analyzersSelected.get(0);
@@ -191,7 +191,7 @@ public class AnalysisBean implements Serializable{
 		if(division.hasSubDivisions()) {
 			division.getChildrenDivisions().stream()
 				.forEach(childDivision -> 
-						buildTreeSelection( new DefaultTreeNode(new DivisionNodeTreeGui(childDivision.toObject()),head),childDivision));
+						buildTreeSelection( new DefaultTreeNode(new DivisionTreeGui(childDivision.toObject()),head),childDivision));
 		}
 	}
 

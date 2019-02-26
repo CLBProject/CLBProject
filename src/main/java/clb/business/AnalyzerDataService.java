@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.BuildingObject;
 import clb.business.objects.DivisionObject;
@@ -42,5 +43,7 @@ public interface AnalyzerDataService {
 	public void deleteBuildingForUser(UsersystemObject object, BuildingObject building);
 
 	public void deleteChildDivisionFromBuilding(String selectedBuildingIdNewDivision, String divisionId);
+
+	public List<AnalyzerObject> getAllAvailableAnalyzers();
 
 }

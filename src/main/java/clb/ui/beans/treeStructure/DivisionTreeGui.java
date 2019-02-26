@@ -2,11 +2,13 @@ package clb.ui.beans.treeStructure;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import clb.business.objects.AnalyzerObject;
+import javax.faces.model.SelectItem;
+
 import clb.business.objects.DivisionObject;
 
-public class DivisionNodeTreeGui implements Serializable, Comparable<DivisionNodeTreeGui> {
+public class DivisionTreeGui implements Serializable, Comparable<DivisionTreeGui> {
 
 	/**
 	 * 
@@ -14,16 +16,20 @@ public class DivisionNodeTreeGui implements Serializable, Comparable<DivisionNod
 	private static final long serialVersionUID = 1L;
 	private String divisionId;
 	private String name;
-	private List<AnalyzerObject> analyzers;
+	private List<SelectItem> analyzers;
 	
-	public DivisionNodeTreeGui(DivisionObject division) {
+	public DivisionTreeGui(DivisionObject division) {
 		this.divisionId = division.getId();
 		this.name = division.getName();
-		this.analyzers = division.getAnalyzers();
+		this.analyzers = division.getAnalyzers() != null ? 
+									division.getAnalyzers().stream()
+										.map( analyzer -> new SelectItem(analyzer,analyzer.getCodeName()))
+										.collect(Collectors.toList()) : 
+									null;
 	}
 	
 	@Override
-	public int compareTo(DivisionNodeTreeGui document) {
+	public int compareTo(DivisionTreeGui document) {
         return this.getDivisionId().compareTo((document).getDivisionId());
     }
 
@@ -43,11 +49,11 @@ public class DivisionNodeTreeGui implements Serializable, Comparable<DivisionNod
 		this.name = name;
 	}
 
-	public List<AnalyzerObject> getAnalyzers() {
+	public List<SelectItem> getAnalyzers() {
 		return analyzers;
 	}
 
-	public void setAnalyzers(List<AnalyzerObject> analyzers) {
+	public void setAnalyzers(List<SelectItem> analyzers) {
 		this.analyzers = analyzers;
 	}
 	

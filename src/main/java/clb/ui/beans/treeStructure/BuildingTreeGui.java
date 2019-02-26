@@ -44,7 +44,7 @@ public class BuildingTreeGui {
 		
 		if(divisions != null && divisions.size() > 0) {
 			divisions.stream().forEach(division -> 
-						buildTreeDivisions(new DefaultTreeNode(new DivisionNodeTreeGui(division),treeDivision), division.getChildrenDivisions()));
+						buildTreeDivisions(new DefaultTreeNode(new DivisionTreeGui(division),treeDivision), division.getChildrenDivisions()));
 		}
 		
 	}

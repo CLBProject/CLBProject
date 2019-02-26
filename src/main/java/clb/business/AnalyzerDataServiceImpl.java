@@ -13,12 +13,14 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.BuildingObject;
 import clb.business.objects.DivisionObject;
 import clb.business.objects.UsersystemObject;
 import clb.database.ClbDao;
 import clb.global.DateUtils;
+import clb.ui.beans.objects.AnalyzerGui;
 
 @Service
 public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializable{
@@ -153,6 +155,11 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	}
 
 	@Override
+	public List<AnalyzerObject> getAllAvailableAnalyzers() {
+		return clbDao.getAllAnalyzers();
+	}
+	
+	@Override
 	@Transactional
 	public void fillUserWithAllBuildings(String username) {
 		final UsersystemObject user = clbDao.findUserByUserName(username);
@@ -241,6 +248,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		clbDao.saveClbObject(buildingObj);
 		clbDao.deleteDivisionCascade(divisionChildObj);
 	}
+
 
 
 	public TaskExecutor getTaskExecutor() {

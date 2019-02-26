@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.model.SelectItem;
 
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.NodeUnselectEvent;
@@ -18,9 +19,10 @@ import clb.business.objects.BuildingObject;
 import clb.business.objects.DivisionObject;
 import clb.ui.beans.newobjects.BuildingNewManagementGui;
 import clb.ui.beans.newobjects.DivisionNewManagementGui;
+import clb.ui.beans.objects.AnalyzerGui;
 import clb.ui.beans.objects.BuildingAnalysisGui;
 import clb.ui.beans.treeStructure.BuildingTreeGui;
-import clb.ui.beans.treeStructure.DivisionNodeTreeGui;
+import clb.ui.beans.treeStructure.DivisionTreeGui;
 
 @ViewScoped
 @ManagedBean
@@ -43,6 +45,11 @@ public class BuildingManagementBean implements Serializable {
 	private TreeNode parentDivisionSelected;
 	private String selectedBuildingIdNewDivision;
 	
+	private List<SelectItem> analyzersDivisionSelection;
+	private List<AnalyzerGui> selectedAnalyzers;
+	
+	private List<AnalyzerGui> availableAnalyzers;
+	
 	private BuildingNewManagementGui newBuilding;
 	private DivisionNewManagementGui newDivision;
 
@@ -57,6 +64,10 @@ public class BuildingManagementBean implements Serializable {
 							.map(BuildingAnalysisGui::toObject)
 							.map(BuildingTreeGui::new)
 							.collect(Collectors.toList()) : null;
+		
+		availableAnalyzers = analyzerDataService.getAllAvailableAnalyzers().stream()
+								.map(AnalyzerGui::new)
+								.collect(Collectors.toList());
 	}
 
 	public void setNewDivisionBuilding(String buildingId) {
@@ -79,9 +90,8 @@ public class BuildingManagementBean implements Serializable {
 				analyzerDataService.saveDivisionForBuilding(selectedBuildingIdNewDivision, divisionObj);
 			}
 			else {
-				analyzerDataService.saveDivisionForParent(((DivisionNodeTreeGui)parentDivisionSelected.getData()).getDivisionId(), divisionObj);
-			}
-			
+				analyzerDataService.saveDivisionForParent(((DivisionTreeGui)parentDivisionSelected.getData()).getDivisionId(), divisionObj);
+			}			
 			clbHomeLoginBean.loginUser();
 		}
 	}
@@ -95,10 +105,10 @@ public class BuildingManagementBean implements Serializable {
 	
 	public void deleteDivision(String buildId) {
 		
-		DivisionNodeTreeGui divisionToDeleteNode = (DivisionNodeTreeGui) parentDivisionSelected.getData();
+		DivisionTreeGui divisionToDeleteNode = (DivisionTreeGui) parentDivisionSelected.getData();
 		
 		TreeNode parent = parentDivisionSelected.getParent();
-		DivisionNodeTreeGui parentNode = (DivisionNodeTreeGui) parent.getData();
+		DivisionTreeGui parentNode = (DivisionTreeGui) parent.getData();
 		
 		if(parentNode != null) {
 			analyzerDataService.deleteChildDivisionFromParent(parentNode.getDivisionId(),divisionToDeleteNode.getDivisionId());
@@ -114,6 +124,8 @@ public class BuildingManagementBean implements Serializable {
 		this.parentDivisionSelected = event.getTreeNode();
 		this.parentDivisionSelected.setSelected(true);
 		
+		this.analyzersDivisionSelection = ( (DivisionTreeGui) this.parentDivisionSelected.getData() ).getAnalyzers();
+		
 		BuildingTreeGui buildingGui = (BuildingTreeGui) event.getComponent().getAttributes().get("building");
 		buildingGui.setDivisionIsSelected(true);
 	}
@@ -121,6 +133,8 @@ public class BuildingManagementBean implements Serializable {
 	public void hideDivisionOptions(NodeUnselectEvent event) {
 		event.getTreeNode().setSelected(false);
 		this.parentDivisionSelected = null;
+		
+		this.analyzersDivisionSelection = null;
 		
 		BuildingTreeGui buildingGui = (BuildingTreeGui) event.getComponent().getAttributes().get("building");
 		buildingGui.setDivisionIsSelected(false);
@@ -188,6 +202,30 @@ public class BuildingManagementBean implements Serializable {
 
 	public void setSelectedBuildingIdNewDivision(String selectedBuildingIdNewDivision) {
 		this.selectedBuildingIdNewDivision = selectedBuildingIdNewDivision;
+	}
+
+	public List<SelectItem> getAnalyzersDivisionSelection() {
+		return analyzersDivisionSelection;
+	}
+
+	public void setAnalyzersDivisionSelection(List<SelectItem> analyzersDivisionSelection) {
+		this.analyzersDivisionSelection = analyzersDivisionSelection;
+	}
+
+	public List<AnalyzerGui> getSelectedAnalyzers() {
+		return selectedAnalyzers;
+	}
+
+	public void setSelectedAnalyzers(List<AnalyzerGui> selectedAnalyzers) {
+		this.selectedAnalyzers = selectedAnalyzers;
+	}
+
+	public List<AnalyzerGui> getAvailableAnalyzers() {
+		return availableAnalyzers;
+	}
+
+	public void setAvailableAnalyzers(List<AnalyzerGui> availableAnalyzers) {
+		this.availableAnalyzers = availableAnalyzers;
 	}
 
 	
