@@ -46,9 +46,11 @@ public class BuildingManagementBean implements Serializable {
 	private String selectedBuildingIdNewDivision;
 	
 	private List<SelectItem> analyzersDivisionSelection;
-	private List<AnalyzerGui> selectedAnalyzers;
+	private List<AnalyzerGui> analyzersToRemove;
 	
-	private List<AnalyzerGui> availableAnalyzers;
+	private List<AnalyzerGui> analyzersSelected;
+	
+	private AnalyzerGui tempAnalyzerSelected;
 	
 	private BuildingNewManagementGui newBuilding;
 	private DivisionNewManagementGui newDivision;
@@ -65,7 +67,7 @@ public class BuildingManagementBean implements Serializable {
 							.map(BuildingTreeGui::new)
 							.collect(Collectors.toList()) : null;
 		
-		availableAnalyzers = analyzerDataService.getAllAvailableAnalyzers().stream()
+		analyzersSelected = analyzerDataService.getAllAvailableAnalyzers().stream()
 								.map(AnalyzerGui::new)
 								.collect(Collectors.toList());
 	}
@@ -140,6 +142,10 @@ public class BuildingManagementBean implements Serializable {
 		buildingGui.setDivisionIsSelected(false);
 	}
 
+	public void selectAnalyzer() {
+		System.out.println("Analyzer Selected!");
+	}
+	
 	public AnalyzerDataService getAnalyzerDataService() {
 		return analyzerDataService;
 	}
@@ -211,22 +217,32 @@ public class BuildingManagementBean implements Serializable {
 	public void setAnalyzersDivisionSelection(List<SelectItem> analyzersDivisionSelection) {
 		this.analyzersDivisionSelection = analyzersDivisionSelection;
 	}
-
-	public List<AnalyzerGui> getSelectedAnalyzers() {
-		return selectedAnalyzers;
+	
+	
+	public List<AnalyzerGui> getAnalyzersSelected() {
+		return analyzersSelected;
 	}
 
-	public void setSelectedAnalyzers(List<AnalyzerGui> selectedAnalyzers) {
-		this.selectedAnalyzers = selectedAnalyzers;
+	public void setAnalyzersSelected(List<AnalyzerGui> analyzersSelected) {
+		this.analyzersSelected = analyzersSelected;
 	}
 
-	public List<AnalyzerGui> getAvailableAnalyzers() {
-		return availableAnalyzers;
+	public AnalyzerGui getTempAnalyzerSelected() {
+		return tempAnalyzerSelected;
 	}
 
-	public void setAvailableAnalyzers(List<AnalyzerGui> availableAnalyzers) {
-		this.availableAnalyzers = availableAnalyzers;
+	public void setTempAnalyzerSelected(AnalyzerGui tempAnalyzerSelected) {
+		this.tempAnalyzerSelected = tempAnalyzerSelected;
 	}
 
+	public List<AnalyzerGui> getAnalyzersToRemove() {
+		return analyzersToRemove;
+	}
+
+	public void setAnalyzersToRemove(List<AnalyzerGui> analyzersToRemove) {
+		this.analyzersToRemove = analyzersToRemove;
+	}
+	
+	
 	
 }

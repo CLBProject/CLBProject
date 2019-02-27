@@ -299,6 +299,9 @@
 			<div class="lastAnalysisDiv"></div>
 		</div>
 		<ui:include src="./popups/selectionPopupBuilding.xhtml" />
-		<ui:include src="./popups/selectionPopupAnalyzer.xhtml" />
+		<ui:include src="./popups/selectionPopupAnalyzer.xhtml" >
+			<ui:param name="bean" value="#{analysisBean}" />
+			<ui:param name="operation" value="Select"/>
+		</ui:include>
 	</ui:define>
 </ui:composition>
