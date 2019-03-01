@@ -50,7 +50,7 @@ public class BuildingManagementBean implements Serializable {
 	
 	private List<AnalyzerGui> analyzersSelected;
 	
-	private AnalyzerGui tempAnalyzerSelected;
+	private List<AnalyzerGui> tempAnalyzerSelected;
 	
 	private BuildingNewManagementGui newBuilding;
 	private DivisionNewManagementGui newDivision;
@@ -143,7 +143,11 @@ public class BuildingManagementBean implements Serializable {
 	}
 
 	public void selectAnalyzer() {
-		System.out.println("Analyzer Selected!");
+		//Must Have Division and Analyzers
+		if(this.parentDivisionSelected != null && tempAnalyzerSelected != null && tempAnalyzerSelected.size() > 0) {
+			String parentId = ((DivisionTreeGui)this.parentDivisionSelected.getData()).getDivisionId();
+			analyzerDataService.saveAnalyzersForDivision(parentId,tempAnalyzerSelected.stream().map(AnalyzerGui::toObject).collect(Collectors.toList()));
+		}
 	}
 	
 	public AnalyzerDataService getAnalyzerDataService() {
@@ -227,11 +231,11 @@ public class BuildingManagementBean implements Serializable {
 		this.analyzersSelected = analyzersSelected;
 	}
 
-	public AnalyzerGui getTempAnalyzerSelected() {
+	public List<AnalyzerGui> getTempAnalyzerSelected() {
 		return tempAnalyzerSelected;
 	}
 
-	public void setTempAnalyzerSelected(AnalyzerGui tempAnalyzerSelected) {
+	public void setTempAnalyzerSelected(List<AnalyzerGui> tempAnalyzerSelected) {
 		this.tempAnalyzerSelected = tempAnalyzerSelected;
 	}
 

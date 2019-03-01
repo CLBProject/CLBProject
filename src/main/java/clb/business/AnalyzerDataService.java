@@ -46,4 +46,6 @@ public interface AnalyzerDataService {
 
 	public List<AnalyzerObject> getAllAvailableAnalyzers();
 
+	public void saveAnalyzersForDivision(String parentId, List<AnalyzerObject> analyzersToRemove);
+
 }

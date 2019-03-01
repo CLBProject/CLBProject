@@ -19,7 +19,7 @@
 					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 					value="#{bean.analyzersSelected}"
 					rows="10" rowKey="#{analyzer.analyzerId}" var="analyzer"
-					selectionMode="single"
+					selectionMode="#{selectionMode}"
 					selection="#{bean.tempAnalyzerSelected}">
 					<p:column styleClass="dataTableColumn">
 						<h:outputText value="#{analyzer.codeName}"></h:outputText>

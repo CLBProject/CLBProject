@@ -20,7 +20,6 @@ import clb.business.objects.DivisionObject;
 import clb.business.objects.UsersystemObject;
 import clb.database.ClbDao;
 import clb.global.DateUtils;
-import clb.ui.beans.objects.AnalyzerGui;
 
 @Service
 public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializable{
@@ -250,6 +249,16 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	}
 
 
+	@Override
+	@Transactional
+	public void saveAnalyzersForDivision(String parentId, List<AnalyzerObject> analyzersToRemove) {
+		DivisionObject division = clbDao.findDivisionById(parentId);
+		analyzersToRemove.stream().forEach(analyzer -> division.addAnalyzer(analyzer));
+		
+		clbDao.saveClbObject(division);
+	}
+
+	
 
 	public TaskExecutor getTaskExecutor() {
 		return taskExecutor;
