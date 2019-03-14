@@ -23,7 +23,7 @@ public class DivisionTreeGui implements Serializable, Comparable<DivisionTreeGui
 		this.name = division.getName();
 		this.analyzers = division.getAnalyzers() != null ? 
 									division.getAnalyzers().stream()
-										.map( analyzer -> new SelectItem(analyzer,analyzer.getCodeName()))
+										.map( analyzer -> new SelectItem(analyzer.getId(),analyzer.getCodeName()))
 										.collect(Collectors.toList()) : 
 									null;
 	}

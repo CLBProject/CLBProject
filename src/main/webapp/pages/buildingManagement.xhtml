@@ -61,18 +61,28 @@
 														<f:attribute name="building" value="#{building}" />
 														<p:ajax event="select"
 															listener="#{buildingManagementBean.showDivisionOptions}"
-															update=":newDivisionFormId :buildingManagementForm:paginatorSelector:divOptionsPanel"></p:ajax>
+															update=":newDivisionFormId :buildingManagementForm:paginatorSelector:divOptionsPanel :buildingManagementForm:paginatorSelector:divSelectedAnalyzers"></p:ajax>
 														<p:ajax event="unselect"
 															listener="#{buildingManagementBean.hideDivisionOptions}"
-															update=":newDivisionFormId :buildingManagementForm:paginatorSelector:divOptionsPanel"></p:ajax>
+															update=":newDivisionFormId :buildingManagementForm:paginatorSelector:divOptionsPanel :buildingManagementForm:paginatorSelector:divSelectedAnalyzers"></p:ajax>
 													</p:tree>
 													<br />
 												</p:outputPanel>
 											</p:column>
 											<p:column style="vertical-align: top">
-												<p:selectManyMenu id="advanced" value="#{buildingManagementBean.analyzersToRemove}" filter="true" filterMatchMode="contains" showCheckbox="true">
-										           <f:selectItems value="#{buildingManagementBean.analyzersDivisionSelection}" var="analyzer" itemLabel="#{analyzer.label}" itemValue="#{analyzer.value}" />
-										        </p:selectManyMenu>
+												<div align="right">
+													<p:outputPanel id="divSelectedAnalyzers" widgetVar="divSelectedAnalyzers">
+														<p:selectManyMenu rendered="#{not empty buildingManagementBean.analyzersDivisionSelection}"  id="advanced" value="#{buildingManagementBean.analyzersToRemove}" showCheckbox="true">
+												           <f:selectItems value="#{buildingManagementBean.analyzersDivisionSelection}" var="analyzer" itemLabel="#{analyzer.label}" itemValue="#{analyzer.value}" />
+												        </p:selectManyMenu>
+												        <br/>
+												        <p:graphicImage  rendered="#{not empty buildingManagementBean.analyzersDivisionSelection}" 
+															width="12px"
+															value="#{request.contextPath}/../resources/images/negative.png" />
+														<p:spacer width="3"/>
+														<p:commandLink rendered="#{not empty buildingManagementBean.analyzersDivisionSelection}" action="#{buildingManagementBean.removeAnalyzersSelected}" type="submit" value="Remove Analyzers" ajax="false" />
+												    </p:outputPanel>
+											    </div>
 											</p:column>
 										</h:panelGrid>
 										<p:outputPanel id="divOptionsPanel" widgetVar="divOptionsPanel">
@@ -106,7 +116,7 @@
 													</td>
 													<td align="left"><p:commandLink rendered="#{not empty buildingManagementBean.parentDivisionSelected}"
 															oncomplete="PF('selectionPopupAnalyzer').show()"
-															ajax="true" value="Select Analyzer"
+															ajax="true" value="Add Analyzer"
 															update=":selectionAnalyzerForm">
 														</p:commandLink></td>
 												</tr>

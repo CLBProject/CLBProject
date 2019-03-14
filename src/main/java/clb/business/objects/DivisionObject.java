@@ -42,12 +42,10 @@ public class DivisionObject implements ClbObject
         return divisionEntity;
     }
     
-    public void addAnalyzer(AnalyzerObject dataLoggerObject) {
+    public void addAnalyzer(AnalyzerObject analyzerObj) {
         if(analyzers == null) {
             analyzers = new ArrayList<AnalyzerObject>();
         }
-
-        analyzers.add(dataLoggerObject);
     }
     
 	public void addSubDivision(DivisionObject subDiv) {
@@ -63,7 +61,13 @@ public class DivisionObject implements ClbObject
 			childrenDivisions.remove(divisionChildObj);
 	}
 
-	
+
+	public void removeAnalyzers(List<String> analyzersToRemoveObj) {
+		if(analyzersToRemoveObj != null) {
+			//this.analyzers.stream().filter(analyzer -> analyzersToRemoveObj.stream().map(analyzerId -> analyzerId).collect(Collectors.toList()));
+		}
+	}
+
 
 	public boolean hasChildren() {
 		return childrenDivisions != null && childrenDivisions.size() > 0;

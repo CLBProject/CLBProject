@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -258,7 +259,18 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		clbDao.saveClbObject(division);
 	}
 
-	
+	@Override
+	@Transactional
+	public void removeAnalyzersForDivision(String divisionId, List<String> analyzersToRemove) {
+		DivisionObject division = clbDao.findDivisionById(divisionId);
+
+		if(division != null && division.getAnalyzers() != null) {
+			division.setAnalyzers(division.getAnalyzers().stream().filter( analyzer -> !analyzersToRemove.contains(analyzer.getId())).collect(Collectors.toList()));
+		}
+		
+		clbDao.saveClbObject(division);
+	}
+
 
 	public TaskExecutor getTaskExecutor() {
 		return taskExecutor;
@@ -283,5 +295,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	public void setEventPublisher( ApplicationEventPublisher eventPublisher ) {
 		this.eventPublisher = eventPublisher;
 	}
+
 
 }

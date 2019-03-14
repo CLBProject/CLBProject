@@ -26,6 +26,10 @@ body {
 	padding-bottom: 10px !important;
 }
 
+.ui-selectlistbox-list{
+	text-align: left !important;
+}
+
 form {
 	margin-bottom: 0;
 }

@@ -15,6 +15,7 @@ import org.primefaces.event.NodeUnselectEvent;
 import org.primefaces.model.TreeNode;
 
 import clb.business.AnalyzerDataService;
+import clb.business.objects.AnalyzerObject;
 import clb.business.objects.BuildingObject;
 import clb.business.objects.DivisionObject;
 import clb.ui.beans.newobjects.BuildingNewManagementGui;
@@ -41,12 +42,11 @@ public class BuildingManagementBean implements Serializable {
 
 	private List<BuildingTreeGui> buildingsToShow;
 	
-	private DivisionObject selectedDivision;
 	private TreeNode parentDivisionSelected;
 	private String selectedBuildingIdNewDivision;
 	
 	private List<SelectItem> analyzersDivisionSelection;
-	private List<AnalyzerGui> analyzersToRemove;
+	private List<String> analyzersToRemove;
 	
 	private List<AnalyzerGui> analyzersSelected;
 	
@@ -142,12 +142,25 @@ public class BuildingManagementBean implements Serializable {
 		buildingGui.setDivisionIsSelected(false);
 	}
 
-	public void selectAnalyzer() {
+	public String selectAnalyzer() {
 		//Must Have Division and Analyzers
 		if(this.parentDivisionSelected != null && tempAnalyzerSelected != null && tempAnalyzerSelected.size() > 0) {
 			String parentId = ((DivisionTreeGui)this.parentDivisionSelected.getData()).getDivisionId();
 			analyzerDataService.saveAnalyzersForDivision(parentId,tempAnalyzerSelected.stream().map(AnalyzerGui::toObject).collect(Collectors.toList()));
+			clbHomeLoginBean.loginUser();
 		}
+		
+		return "buildingManagement.xhtml?faces-redirect=true";
+	}
+	
+	public String removeAnalyzersSelected() {
+		if(this.parentDivisionSelected != null && this.analyzersToRemove != null) {
+			String divisionId = ((DivisionTreeGui)this.parentDivisionSelected.getData()).getDivisionId();
+			analyzerDataService.removeAnalyzersForDivision(divisionId,analyzersToRemove);
+			clbHomeLoginBean.loginUser();
+		}
+		
+		return "buildingManagement.xhtml?faces-redirect=true";
 	}
 	
 	public AnalyzerDataService getAnalyzerDataService() {
@@ -189,15 +202,7 @@ public class BuildingManagementBean implements Serializable {
 	public void setNewDivision(DivisionNewManagementGui newDivision) {
 		this.newDivision = newDivision;
 	}
-
-	public DivisionObject getSelectedDivision() {
-		return selectedDivision;
-	}
-
-	public void setSelectedDivision(DivisionObject selectedDivision) {
-		this.selectedDivision = selectedDivision;
-	}
-
+	
 	public TreeNode getParentDivisionSelected() {
 		return parentDivisionSelected;
 	}
@@ -239,11 +244,11 @@ public class BuildingManagementBean implements Serializable {
 		this.tempAnalyzerSelected = tempAnalyzerSelected;
 	}
 
-	public List<AnalyzerGui> getAnalyzersToRemove() {
+	public List<String> getAnalyzersToRemove() {
 		return analyzersToRemove;
 	}
 
-	public void setAnalyzersToRemove(List<AnalyzerGui> analyzersToRemove) {
+	public void setAnalyzersToRemove(List<String> analyzersToRemove) {
 		this.analyzersToRemove = analyzersToRemove;
 	}
 	
