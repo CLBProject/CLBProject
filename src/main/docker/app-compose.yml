@@ -23,6 +23,16 @@ services:
           - type: volume
             source: mongodb_data_volume
             target: /data/db
+  ftp:
+     image: stilliard/pure-ftpd:latest
+     deploy:
+       replicas: 1
+       mode: replicated
+       resources:
+         limits:
+           cpus: "0.3"
+     ports:
+       - "22:22"
 networks:
   overlay:
 

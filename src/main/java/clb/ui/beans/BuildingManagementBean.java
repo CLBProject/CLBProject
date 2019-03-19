@@ -139,7 +139,7 @@ public class BuildingManagementBean implements Serializable {
 		this.analyzersSelected = this.allAnalyzers.stream()
 				.filter(analyzer -> this.analyzersDivisionSelection.stream()
 										.filter(item -> item.getValue().equals(analyzer.getAnalyzerId()))
-										.findFirst() != null)
+										.count() == 0)
 				.collect(Collectors.toList());
 		
 		BuildingTreeGui buildingGui = (BuildingTreeGui) event.getComponent().getAttributes().get("building");
