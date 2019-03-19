@@ -1,7 +1,7 @@
 package clb.business.objects;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import clb.database.entities.AnalyzerEntity;
@@ -12,9 +12,9 @@ public class AnalyzerObject implements ClbObject
     
     private String codeName;
 	
-    private List<AnalyzerMeterObject> analyzerMeters;
+    private Set<AnalyzerMeterObject> analyzerMeters;
     
-    private List<String> analyzerRegistriesIds;
+    private Set<String> analyzerRegistriesIds;
 
 	public AnalyzerObject(){
 
@@ -25,7 +25,7 @@ public class AnalyzerObject implements ClbObject
 		this.codeName = analyzerEntity.getCodeName();
 		this.analyzerRegistriesIds = analyzerEntity.getAnalyzerRegistriesIds();
 		this.analyzerMeters = analyzerEntity.getAnalyzerMeters() != null ?
-				analyzerEntity.getAnalyzerMeters().stream().map(AnalyzerMeterObject::new).collect( Collectors.toList()) : null;
+				analyzerEntity.getAnalyzerMeters().stream().map(AnalyzerMeterObject::new).collect( Collectors.toSet()) : null;
 	}
 
 	public AnalyzerEntity toEntity(){
@@ -38,14 +38,14 @@ public class AnalyzerObject implements ClbObject
 		analyzerEntity.setCodeName( this.codeName );
 		analyzerEntity.setAnalyzerRegistriesIds(this.analyzerRegistriesIds);
 		analyzerEntity.setAnalyzerMeters( this.analyzerMeters != null ? 
-                this.analyzerMeters.stream().map( AnalyzerMeterObject::toEntity ).collect( Collectors.toList() ) : null);
+                this.analyzerMeters.stream().map( AnalyzerMeterObject::toEntity ).collect( Collectors.toSet() ) : null);
 		
 		return analyzerEntity;
 	}
 	
     public void addAnalyzerRegistryId(String analyzerObjId) {
         if(analyzerRegistriesIds == null) {
-        	analyzerRegistriesIds = new ArrayList<String>();
+        	analyzerRegistriesIds = new HashSet<String>();
         }
         
         analyzerRegistriesIds.add(analyzerObjId);
@@ -53,7 +53,7 @@ public class AnalyzerObject implements ClbObject
 
 	public void addAnalyzerMeter(AnalyzerMeterObject analyzerMeterObject) {
 		if(this.analyzerMeters == null) {
-			this.analyzerMeters = new ArrayList<AnalyzerMeterObject>();
+			this.analyzerMeters = new HashSet<AnalyzerMeterObject>();
 		}
 		
 		this.analyzerMeters.add(analyzerMeterObject);
@@ -77,19 +77,19 @@ public class AnalyzerObject implements ClbObject
 	}
 	
 	
-	public List<AnalyzerMeterObject> getAnalyzerMeters() {
+	public Set<AnalyzerMeterObject> getAnalyzerMeters() {
 		return analyzerMeters;
 	}
 
-	public void setAnalyzerMeters(List<AnalyzerMeterObject> analyzerMeters) {
+	public void setAnalyzerMeters(Set<AnalyzerMeterObject> analyzerMeters) {
 		this.analyzerMeters = analyzerMeters;
 	}
 
-	public List<String> getAnalyzerRegistriesIds() {
+	public Set<String> getAnalyzerRegistriesIds() {
 		return analyzerRegistriesIds;
 	}
 
-	public void setAnalyzerRegistriesIds(List<String> analyzerRegistriesIds) {
+	public void setAnalyzerRegistriesIds(Set<String> analyzerRegistriesIds) {
 		this.analyzerRegistriesIds = analyzerRegistriesIds;
 	}
 

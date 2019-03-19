@@ -1,7 +1,7 @@
 package clb.database.entities;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -28,7 +28,7 @@ public class BuildingEntity implements ClbEntity, Serializable {
 	private String imgPath;
 
 	@DBRef
-	private List<DivisionEntity> divisions;
+	private Set<DivisionEntity> divisions;
 
 	public BuildingEntity() {
 	}
@@ -67,11 +67,11 @@ public class BuildingEntity implements ClbEntity, Serializable {
     }
     
 
-	public List<DivisionEntity> getDivisions() {
+	public Set<DivisionEntity> getDivisions() {
 		return divisions;
 	}
 
-	public void setDivisions(List<DivisionEntity> divisions) {
+	public void setDivisions(Set<DivisionEntity> divisions) {
 		this.divisions = divisions;
 	}
 

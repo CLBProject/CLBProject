@@ -21,8 +21,7 @@
 				<br />
 				<h:form id="buildingManagementForm">
 					<p:dataTable id="paginatorSelector" widgetVar="paginatorSelector"
-						paginator="true" paginatorPosition="bottom"
-						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						paginatorPosition="bottom"
 						value="#{buildingManagementBean.buildingsToShow}" rows="10"
 						rowKey="#{building.buildingId}" var="building"
 						styleClass="buildingManagementTable">
@@ -30,7 +29,7 @@
 							<p:panel widgetVar="buildingPanelDivision"
 								id="buildingPanelDivision" styleClass="buildingPanelClass">
 								<div align="left" class="buildingDivClass">
-									<table border="0" class="buildingManagDelete">
+									<table style="width:100% !important" border="0">
 										<tr>
 											<td valign="top" align="left"><h:outputText
 													value="#{building.name}" styleClass="buildingName"></h:outputText>
@@ -47,7 +46,7 @@
 									</table>
 									<hr />
 									<div class="buildingDivClass">
-										<h:panelGrid columns="2">
+										<h:panelGrid columns="2" style="width: 100% !important">
 											<p:column style="vertical-align:top">
 												<p:outputPanel
 													rendered="#{not empty building.rootDivision.children}">

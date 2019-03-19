@@ -1,7 +1,7 @@
 package clb.business.objects;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import clb.database.entities.BuildingEntity;
@@ -18,7 +18,7 @@ public class BuildingObject implements ClbObject
     
     private String imgPath;
 
-    private List<DivisionObject> divisions;
+    private Set<DivisionObject> divisions;
 
     public BuildingObject(){
 
@@ -31,7 +31,7 @@ public class BuildingObject implements ClbObject
         this.location = building.getLocation();
         this.imgPath = building.getImgPath();
         this.divisions = building.getDivisions() != null ? 
-        					building.getDivisions().stream().map(DivisionObject::new).collect(Collectors.toList()) : 
+        					building.getDivisions().stream().map(DivisionObject::new).collect(Collectors.toSet()) : 
         						null;     
     }
 
@@ -42,7 +42,7 @@ public class BuildingObject implements ClbObject
         buildingEntity.setLocation(this.location);
         buildingEntity.setImgPath( this.imgPath );
         buildingEntity.setDivisions(this.divisions != null ? 
-        								this.divisions.stream().map(DivisionObject::toEntity).collect(Collectors.toList()): 
+        								this.divisions.stream().map(DivisionObject::toEntity).collect(Collectors.toSet()): 
         									null);
 
         return buildingEntity;
@@ -105,7 +105,7 @@ public class BuildingObject implements ClbObject
 	
 	public void addDivision(DivisionObject divObj) {
 		if(this.divisions == null) {
-			this.divisions = new ArrayList<DivisionObject>();
+			this.divisions = new HashSet<DivisionObject>();
 		}
 		
 		this.divisions.add(divObj);
@@ -148,11 +148,11 @@ public class BuildingObject implements ClbObject
     }
 
     
-	public List<DivisionObject> getDivisions() {
+	public Set<DivisionObject> getDivisions() {
 		return divisions;
 	}
 
-	public void setDivisions(List<DivisionObject> divisions) {
+	public void setDivisions(Set<DivisionObject> divisions) {
 		this.divisions = divisions;
 	}
 

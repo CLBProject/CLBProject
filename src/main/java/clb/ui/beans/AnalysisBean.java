@@ -13,7 +13,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
-import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
@@ -151,7 +150,7 @@ public class AnalysisBean implements Serializable{
 	private List<BuildingAnalysisGui> initBuildingObjects() {
 		return clbHomeLoginBean.getUserBuildings().stream().filter(building -> {
 			
-			List<AnalyzerGui> buildingAnalyzers = building.hasDivisions() ? building.getDivisions().get(0).getAnalyzers() : null;
+			Set<AnalyzerGui> buildingAnalyzers = building.hasDivisions() ? building.getDivisions().iterator().next().getAnalyzers() : null;
 			
 			return buildingAnalyzers != null && buildingAnalyzers.stream()
 					.filter(buildingAnalyzer -> buildingAnalyzer.getAnalyzerMeters().size() > 0)
@@ -163,7 +162,7 @@ public class AnalysisBean implements Serializable{
 		buildingSelected = bGui;
 		tempBuildingSelected = buildingSelected;
 
-		DivisionGui division = bGui.hasDivisions() ? bGui.getDivisions().get(0) : null;
+		DivisionGui division = bGui.hasDivisions() ? bGui.getDivisions().iterator().next() : null;
 		
 		if(division != null && division.hasAnalyzers()) {
 			
@@ -174,7 +173,7 @@ public class AnalysisBean implements Serializable{
 			
 			buildTreeSelection(new DefaultTreeNode(new DivisionTreeGui(divisionObj),mainDivision),division);
 			
-			analyzersSelected = division.getAnalyzers();
+			analyzersSelected = new ArrayList<AnalyzerGui>(division.getAnalyzers());
 			analyzerSelected = analyzersSelected.get(0);
 			tempAnalyzerSelected = analyzerSelected;
 			
@@ -194,16 +193,6 @@ public class AnalysisBean implements Serializable{
 						buildTreeSelection( new DefaultTreeNode(new DivisionTreeGui(childDivision.toObject()),head),childDivision));
 		}
 	}
-
-	 public void onNodeSelect(NodeSelectEvent event)
-	    {
-	        TreeNode currentTreeNode = event.getTreeNode();
-//	        currentTreeNode.setSelected(true);
-
-	        TreeNode parent = currentTreeNode;
-	        
-	        System.out.println("Arrived!");
-	    }
 	
 	public void selectBuilding() {
 		buildingSelected = tempBuildingSelected;

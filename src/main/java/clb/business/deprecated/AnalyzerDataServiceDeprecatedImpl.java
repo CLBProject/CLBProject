@@ -4,12 +4,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -30,6 +28,7 @@ import clb.business.objects.DivisionObject;
 import clb.business.objects.UsersystemObject;
 import clb.database.ClbDao;
 import clb.global.AnalyzerMeterValues;
+import clb.business.deprecated.AnalyzerDataServiceDeprecated;
 
 @Service
 public class AnalyzerDataServiceDeprecatedImpl implements AnalyzerDataServiceDeprecated, Serializable{
@@ -91,7 +90,7 @@ public class AnalyzerDataServiceDeprecatedImpl implements AnalyzerDataServiceDep
 
 			clbDao.saveClbObject(ana);
 
-			List<AnalyzerRegistryObject> analyzerRegistries = new ArrayList<AnalyzerRegistryObject>();
+			Set<AnalyzerRegistryObject> analyzerRegistries = new HashSet<AnalyzerRegistryObject>();
 
 			for(int i = 2;i<worksheet.getLastRowNum();i++){
 
@@ -189,7 +188,7 @@ public class AnalyzerDataServiceDeprecatedImpl implements AnalyzerDataServiceDep
 		for(int a = 0 ;a<numberOfYears; a++){
 			for(int l = 0; l < 12; l++ ){
 
-				List<AnalyzerRegistryObject> analyzersRegistries = new ArrayList<AnalyzerRegistryObject>();
+				Set<AnalyzerRegistryObject> analyzersRegistries = new HashSet<AnalyzerRegistryObject>();
 
 				int monthLength = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 

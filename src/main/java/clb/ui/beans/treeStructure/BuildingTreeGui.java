@@ -1,6 +1,6 @@
 package clb.ui.beans.treeStructure;
 
-import java.util.List;
+import java.util.Set;
 
 import javax.validation.constraints.NotNull;
 
@@ -40,7 +40,7 @@ public class BuildingTreeGui {
 		buildTreeDivisions(this.rootDivision,bObject.getDivisions());
 	}
 
-	private void buildTreeDivisions(TreeNode treeDivision, List<DivisionObject> divisions) {
+	private void buildTreeDivisions(TreeNode treeDivision, Set<DivisionObject> divisions) {
 		
 		if(divisions != null && divisions.size() > 0) {
 			divisions.stream().forEach(division -> 

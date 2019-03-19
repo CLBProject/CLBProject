@@ -1,9 +1,9 @@
 package clb.database.entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -38,7 +38,7 @@ public class UsersystemEntity implements ClbEntity, Serializable {
 	private String ftpPassword;
 	
 	@DBRef
-	private List<BuildingEntity> buildings;
+	private Set<BuildingEntity> buildings;
 
 	public UsersystemEntity() {
 	}
@@ -75,17 +75,17 @@ public class UsersystemEntity implements ClbEntity, Serializable {
 		this.id = id;
 	}
 
-	public List<BuildingEntity> getBuildings() {
+	public Set<BuildingEntity> getBuildings() {
         return buildings;
     }
 
-    public void setBuildings( List<BuildingEntity> buildings ) {
+    public void setBuildings( Set<BuildingEntity> buildings ) {
         this.buildings = buildings;
     }
 	
     public void addBuilding(BuildingEntity building) {
     	if(buildings == null) {
-    		buildings = new ArrayList<BuildingEntity>();
+    		buildings = new HashSet<BuildingEntity>();
     	}
     	
     	buildings.add(building);

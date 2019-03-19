@@ -1,7 +1,8 @@
 package clb.business.objects;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import clb.database.entities.DivisionEntity;
@@ -12,9 +13,9 @@ public class DivisionObject implements ClbObject
 
     private String name;
 
-    private List<DivisionObject> childrenDivisions;
+    private Set<DivisionObject> childrenDivisions;
 
-    private List<AnalyzerObject> analyzers;
+    private Set<AnalyzerObject> analyzers;
 
     public DivisionObject(){
     }
@@ -23,9 +24,9 @@ public class DivisionObject implements ClbObject
     	this.id = division.getId();
         this.name = division.getName();
         this.childrenDivisions = division.getChildrenDivision() != null ? 
-        		division.getChildrenDivision().stream().map(DivisionObject::new).collect(Collectors.toList()) : null;
+        		division.getChildrenDivision().stream().map(DivisionObject::new).collect(Collectors.toSet()) : null;
         this.analyzers = division.getAnalyzers() != null ? 
-        		division.getAnalyzers().stream().map(AnalyzerObject::new).collect(Collectors.toList()) : null;          
+        		division.getAnalyzers().stream().map(AnalyzerObject::new).collect(Collectors.toSet()) : null;          
     }
 
     public DivisionEntity toEntity() {
@@ -33,24 +34,26 @@ public class DivisionObject implements ClbObject
     	divisionEntity.setId(this.id);
         divisionEntity.setName( this.name );
         divisionEntity.setChildrenDivision(childrenDivisions != null ? 
-        		childrenDivisions.stream().map(DivisionObject::toEntity).collect(Collectors.toList()) : 
+        		childrenDivisions.stream().map(DivisionObject::toEntity).collect(Collectors.toSet()) : 
         						null);
         		
         divisionEntity.setAnalyzers(this.analyzers != null ?
-                this.analyzers.stream().map(AnalyzerObject::toEntity).collect(Collectors.toList()) : null);
+                this.analyzers.stream().map(AnalyzerObject::toEntity).collect(Collectors.toSet()) : null);
 
         return divisionEntity;
     }
     
     public void addAnalyzer(AnalyzerObject analyzerObj) {
         if(analyzers == null) {
-            analyzers = new ArrayList<AnalyzerObject>();
+            analyzers = new HashSet<AnalyzerObject>();
         }
+        
+        analyzers.add(analyzerObj);
     }
     
 	public void addSubDivision(DivisionObject subDiv) {
 		if(childrenDivisions == null) {
-			childrenDivisions = new ArrayList<DivisionObject>();
+			childrenDivisions = new HashSet<DivisionObject>();
         }
 
         childrenDivisions.add(subDiv);
@@ -124,11 +127,11 @@ public class DivisionObject implements ClbObject
         this.name = name;
     }
 
-    public List<AnalyzerObject> getAnalyzers() {
+    public Set<AnalyzerObject> getAnalyzers() {
 		return analyzers;
 	}
 
-	public void setAnalyzers(List<AnalyzerObject> analyzers) {
+	public void setAnalyzers(Set<AnalyzerObject> analyzers) {
 		this.analyzers = analyzers;
 	}
 
@@ -140,11 +143,11 @@ public class DivisionObject implements ClbObject
 		this.id = id;
 	}
 
-	public List<DivisionObject> getChildrenDivisions() {
+	public Set<DivisionObject> getChildrenDivisions() {
 		return childrenDivisions;
 	}
 
-	public void setChildrenDivisions(List<DivisionObject> childrenDivisions) {
+	public void setChildrenDivisions(Set<DivisionObject> childrenDivisions) {
 		this.childrenDivisions = childrenDivisions;
 	}
 

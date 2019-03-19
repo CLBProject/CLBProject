@@ -3,6 +3,7 @@ package clb.business;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
@@ -44,10 +45,10 @@ public interface AnalyzerDataService {
 
 	public void deleteChildDivisionFromBuilding(String selectedBuildingIdNewDivision, String divisionId);
 
-	public List<AnalyzerObject> getAllAvailableAnalyzers();
+	public Set<AnalyzerObject> getAllAvailableAnalyzers();
 
-	public void saveAnalyzersForDivision(String parentId, List<AnalyzerObject> analyzersToRemove);
+	public void saveAnalyzersForDivision(String parentId, Set<AnalyzerObject> analyzersToRemove);
 
-	public void removeAnalyzersForDivision(String divisionId, List<String> analyzersToRemove);
+	public void removeAnalyzersForDivision(String divisionId, Set<String> analyzersToRemove);
 
 }

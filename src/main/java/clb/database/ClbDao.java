@@ -2,6 +2,7 @@ package clb.database;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
@@ -14,19 +15,19 @@ public interface ClbDao{
 	
 	void saveClbObject(ClbObject clbObj);
 	
-	void saveClbObjects(List<ClbObject> users);
+	void saveClbObjects(Set<ClbObject> users);
 	
-    void saveAnalyzerRegistries( List<AnalyzerRegistryObject> analyzersRegistries );
+    void saveAnalyzerRegistries( Set<AnalyzerRegistryObject> analyzersRegistries );
 	
 	void saveAnalyzerRegistry(AnalyzerRegistryObject analyzerRegistryObject);
 	
 	void deleteClbObject(ClbObject object);
 
-	List<UsersystemObject> getAllUsers();
+	Set<UsersystemObject> getAllUsers();
 	
-	List<BuildingObject> getAllBuildings();
+	Set<BuildingObject> getAllBuildings();
 	
-	List<AnalyzerObject> getAllAnalyzers();
+	Set<AnalyzerObject> getAllAnalyzers();
 
     UsersystemObject findUserByToken( String token );
 

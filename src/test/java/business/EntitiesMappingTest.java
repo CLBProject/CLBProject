@@ -3,9 +3,10 @@ package business;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 
@@ -296,7 +297,7 @@ public class EntitiesMappingTest {
 	@Test
 	public void testAnalyzerObjectToEntity() {
 		
-		List<String> analyzerRegistriesIds = new ArrayList<String>();
+		Set<String> analyzerRegistriesIds = new HashSet<String>();
 		analyzerRegistriesIds.add("8");
 		analyzerRegistriesIds.add("80");
 
@@ -310,17 +311,17 @@ public class EntitiesMappingTest {
 		assertEquals(analyzerEnt.getId(),analyzerObj.getId());
 		assertEquals(analyzerEnt.getCodeName(),analyzerObj.getCodeName());
 		
-		List<String> analyzerAverageRegistriesIdsMapped = analyzerEnt.getAnalyzerRegistriesIds();
+		Set<String> analyzerAverageRegistriesIdsMapped = analyzerEnt.getAnalyzerRegistriesIds();
 		
 		assertEquals(analyzerAverageRegistriesIdsMapped.size(), analyzerRegistriesIds.size());
-		assertEquals(analyzerAverageRegistriesIdsMapped.get(0),"8");
-		assertEquals(analyzerAverageRegistriesIdsMapped.get(1),"80");
+		assert(analyzerAverageRegistriesIdsMapped.contains("8"));
+		assert(analyzerAverageRegistriesIdsMapped.contains("80"));
 	}
 	
 	@Test
 	public void testAnalyzerEntityToObject() {
 		
-		List<String> analyzerRegistriesIds = new ArrayList<String>();
+		Set<String> analyzerRegistriesIds = new HashSet<String>();
 		analyzerRegistriesIds.add("5");
 		analyzerRegistriesIds.add("6");
 
@@ -334,11 +335,11 @@ public class EntitiesMappingTest {
 		assertEquals(analyzerObj.getId(),analyzerEnt.getId());
 		assertEquals(analyzerObj.getCodeName(),analyzerEnt.getCodeName());
 		
-		List<String> analyzerAverageRegistriesIdsMapped = analyzerObj.getAnalyzerRegistriesIds();
+		Set<String> analyzerAverageRegistriesIdsMapped = analyzerObj.getAnalyzerRegistriesIds();
 		
 		assertEquals(analyzerAverageRegistriesIdsMapped.size(), analyzerRegistriesIds.size());
-		assertEquals(analyzerAverageRegistriesIdsMapped.get(0),"5");
-		assertEquals(analyzerAverageRegistriesIdsMapped.get(1),"6");
+		assert(analyzerAverageRegistriesIdsMapped.contains("5"));
+		assert(analyzerAverageRegistriesIdsMapped.contains("6"));
 	}
 	
 	@Test
@@ -351,7 +352,7 @@ public class EntitiesMappingTest {
 		DivisionObject mainDivision = new DivisionObject();
 		mainDivision.setName("Main Division");
 		
-		List<AnalyzerObject> analyzers = new ArrayList<AnalyzerObject>();
+		Set<AnalyzerObject> analyzers = new HashSet<AnalyzerObject>();
 		
 		AnalyzerObject aobj1 = new AnalyzerObject();
 		aobj1.setId("1");
@@ -370,10 +371,12 @@ public class EntitiesMappingTest {
 		assertEquals(bobj.getId(),bEnt.getId());
 		assertEquals(bobj.getName(),bEnt.getName());
 		
-		List<AnalyzerEntity> analyzersMapped = bEnt.getDivisions().get(0).getAnalyzers();
-		
-		assertEquals(analyzers.size(), analyzersMapped.size());
-		assertEquals(analyzersMapped.get(0).getId(),"1");
-		assertEquals(analyzersMapped.get(1).getId(),"2");
+		Set<String> analyzersMapped = bEnt.getDivisions().iterator().next()
+										  .getAnalyzers().stream().map(analyzer -> analyzer.getId())
+										  .collect(Collectors.toSet());
+
+		assertEquals(analyzers.size(), analyzersMapped.size());		
+		assert(analyzersMapped.contains("1"));
+		assert(analyzersMapped.contains("2"));
 	}
 }

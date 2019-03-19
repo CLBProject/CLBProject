@@ -1,10 +1,11 @@
 package clb.ui.beans.newobjects;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
+
 import clb.business.objects.BuildingObject;
 import clb.business.objects.DivisionObject;
 
@@ -31,7 +32,7 @@ public class BuildingNewManagementGui {
 		bobj.setName(this.name);
 		bobj.setLocation(this.location);
 		bobj.setImgPath(this.imgPath);
-		bobj.setDivisions(new ArrayList<DivisionObject>());
+		bobj.setDivisions(new HashSet<DivisionObject>());
 		
 		return bobj;
 	}

@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 import org.primefaces.json.JSONObject;
 
-import clb.database.entities.ClbEntity;
 import clb.database.entities.UsersystemEntity;
 
 public class UsersystemObject implements ClbObject, Serializable
@@ -80,7 +79,7 @@ public class UsersystemObject implements ClbObject, Serializable
         userSystemEntity.setLastSentEmail( this.lastSentEmail );
         userSystemEntity.setFtpPassword(this.ftpPassword);
         userSystemEntity.setBuildings( this.buildings != null ?
-        		this.buildings.stream().map(BuildingObject::toEntity).collect(Collectors.toList()) : null);
+        		this.buildings.stream().map(BuildingObject::toEntity).collect(Collectors.toSet()) : null);
         
         return userSystemEntity;
     }

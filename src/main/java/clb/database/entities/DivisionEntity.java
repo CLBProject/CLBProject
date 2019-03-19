@@ -1,6 +1,6 @@
 package clb.database.entities;
 
-import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -15,10 +15,10 @@ public class DivisionEntity implements ClbEntity{
 	private String name;
 	
 	@DBRef
-	private List<DivisionEntity> childrenDivision;
+	private Set<DivisionEntity> childrenDivision;
 	
 	@DBRef
-	private List<AnalyzerEntity> analyzers;
+	private Set<AnalyzerEntity> analyzers;
 	
 	
 	public String getId() {
@@ -37,19 +37,19 @@ public class DivisionEntity implements ClbEntity{
 		this.name = name;
 	}
 
-	public List<DivisionEntity> getChildrenDivision() {
+	public Set<DivisionEntity> getChildrenDivision() {
 		return childrenDivision;
 	}
 
-	public void setChildrenDivision(List<DivisionEntity> childrenDivision) {
+	public void setChildrenDivision(Set<DivisionEntity> childrenDivision) {
 		this.childrenDivision = childrenDivision;
 	}
 
-	public List<AnalyzerEntity> getAnalyzers() {
+	public Set<AnalyzerEntity> getAnalyzers() {
 		return analyzers;
 	}
 
-	public void setAnalyzers(List<AnalyzerEntity> analyzers) {
+	public void setAnalyzers(Set<AnalyzerEntity> analyzers) {
 		this.analyzers = analyzers;
 	}
 	

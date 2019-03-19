@@ -1,7 +1,7 @@
 package clb.ui.beans.objects;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotNull;
@@ -23,7 +23,7 @@ public class BuildingAnalysisGui {
     
     private String imgPath;
     
-    private List<DivisionGui> divisions;
+    private Set<DivisionGui> divisions;
 
 	public BuildingAnalysisGui(BuildingObject bObject) {
 		super();
@@ -32,7 +32,7 @@ public class BuildingAnalysisGui {
 		this.imgPath = bObject.getImgPath();
 		this.location = bObject.getLocation();
 		this.divisions = bObject.getDivisions() != null ?
-									bObject.getDivisions().stream().map(DivisionGui::new).collect(Collectors.toList()) :
+									bObject.getDivisions().stream().map(DivisionGui::new).collect(Collectors.toSet()) :
 										null;
 	}
 	
@@ -44,7 +44,7 @@ public class BuildingAnalysisGui {
 		bobj.setLocation(this.location);
 		bobj.setImgPath(this.imgPath);
 		bobj.setDivisions(this.divisions != null ? 
-									this.divisions.stream().map(DivisionGui::toObject).collect(Collectors.toList()) : 
+									this.divisions.stream().map(DivisionGui::toObject).collect(Collectors.toSet()) : 
 										null);
 		
 		return bobj;
@@ -56,14 +56,11 @@ public class BuildingAnalysisGui {
 	
 	public void addDivision(DivisionGui divisionG) {
 		if(divisions == null) {
-			divisions = new ArrayList<DivisionGui>();
+			divisions = new HashSet<DivisionGui>();
 		}
 		
 		divisions.add(divisionG);
 	}
-
-
-	
 
 	public String getBuildingid() {
 		return buildingid;
@@ -81,11 +78,11 @@ public class BuildingAnalysisGui {
 		this.name = name;
 	}
 	
-	public List<DivisionGui> getDivisions() {
+	public Set<DivisionGui> getDivisions() {
 		return divisions;
 	}
 
-	public void setDivisions(List<DivisionGui> divisions) {
+	public void setDivisions(Set<DivisionGui> divisions) {
 		this.divisions = divisions;
 	}
 

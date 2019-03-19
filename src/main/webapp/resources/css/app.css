@@ -468,12 +468,10 @@ form {
 	vertical-align: middle; 
 }
 
-.buildingManagementTable{
-	width:80%; 
-}
-
-.buildingManagementAnalyzers{
-	width: 20%;
+.buildingManagementTable table {
+	width:60% !important; 
+	border-collapse: separate !important; 
+    border-spacing: 10px !important; 
 }
 
 .buildingManagementAnalyzers .ui-panel-content{
@@ -530,4 +528,8 @@ form {
 
 .addDivisionClass td{
 	padding: 0px !important;
+}
+
+.widthComplete{
+	width:100% !important;
 }

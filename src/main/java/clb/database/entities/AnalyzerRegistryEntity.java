@@ -2,10 +2,8 @@ package clb.database.entities;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.mongodb.BasicDBObject;
@@ -228,9 +226,6 @@ public class AnalyzerRegistryEntity implements ClbEntity, Serializable {
     private double wdmd;
 
     private double wdmdmax;
-    
-	@DBRef
-	private List<AnalyzerMeterEntity> buildingMeters;
 
     public AnalyzerRegistryEntity() {
     }

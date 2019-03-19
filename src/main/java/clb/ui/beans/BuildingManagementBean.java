@@ -2,6 +2,7 @@ package clb.ui.beans;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -15,7 +16,6 @@ import org.primefaces.event.NodeUnselectEvent;
 import org.primefaces.model.TreeNode;
 
 import clb.business.AnalyzerDataService;
-import clb.business.objects.AnalyzerObject;
 import clb.business.objects.BuildingObject;
 import clb.business.objects.DivisionObject;
 import clb.ui.beans.newobjects.BuildingNewManagementGui;
@@ -46,14 +46,22 @@ public class BuildingManagementBean implements Serializable {
 	private String selectedBuildingIdNewDivision;
 	
 	private List<SelectItem> analyzersDivisionSelection;
-	private List<String> analyzersToRemove;
+	private Set<String> analyzersToRemove;
 	
+	private List<AnalyzerGui> allAnalyzers;
 	private List<AnalyzerGui> analyzersSelected;
-	
 	private List<AnalyzerGui> tempAnalyzerSelected;
 	
 	private BuildingNewManagementGui newBuilding;
 	private DivisionNewManagementGui newDivision;
+
+	public List<AnalyzerGui> getAllAnalyzers() {
+		return allAnalyzers;
+	}
+
+	public void setAllAnalyzers(List<AnalyzerGui> allAnalyzers) {
+		this.allAnalyzers = allAnalyzers;
+	}
 
 	@PostConstruct
 	public void initBuildingManagement() {
@@ -67,7 +75,7 @@ public class BuildingManagementBean implements Serializable {
 							.map(BuildingTreeGui::new)
 							.collect(Collectors.toList()) : null;
 		
-		analyzersSelected = analyzerDataService.getAllAvailableAnalyzers().stream()
+		allAnalyzers = analyzerDataService.getAllAvailableAnalyzers().stream()
 								.map(AnalyzerGui::new)
 								.collect(Collectors.toList());
 	}
@@ -128,6 +136,12 @@ public class BuildingManagementBean implements Serializable {
 		
 		this.analyzersDivisionSelection = ( (DivisionTreeGui) this.parentDivisionSelected.getData() ).getAnalyzers();
 		
+		this.analyzersSelected = this.allAnalyzers.stream()
+				.filter(analyzer -> this.analyzersDivisionSelection.stream()
+										.filter(item -> item.getValue().equals(analyzer.getAnalyzerId()))
+										.findFirst() != null)
+				.collect(Collectors.toList());
+		
 		BuildingTreeGui buildingGui = (BuildingTreeGui) event.getComponent().getAttributes().get("building");
 		buildingGui.setDivisionIsSelected(true);
 	}
@@ -146,7 +160,7 @@ public class BuildingManagementBean implements Serializable {
 		//Must Have Division and Analyzers
 		if(this.parentDivisionSelected != null && tempAnalyzerSelected != null && tempAnalyzerSelected.size() > 0) {
 			String parentId = ((DivisionTreeGui)this.parentDivisionSelected.getData()).getDivisionId();
-			analyzerDataService.saveAnalyzersForDivision(parentId,tempAnalyzerSelected.stream().map(AnalyzerGui::toObject).collect(Collectors.toList()));
+			analyzerDataService.saveAnalyzersForDivision(parentId,tempAnalyzerSelected.stream().map(AnalyzerGui::toObject).collect(Collectors.toSet()));
 			clbHomeLoginBean.loginUser();
 		}
 		
@@ -244,11 +258,11 @@ public class BuildingManagementBean implements Serializable {
 		this.tempAnalyzerSelected = tempAnalyzerSelected;
 	}
 
-	public List<String> getAnalyzersToRemove() {
+	public Set<String> getAnalyzersToRemove() {
 		return analyzersToRemove;
 	}
 
-	public void setAnalyzersToRemove(List<String> analyzersToRemove) {
+	public void setAnalyzersToRemove(Set<String> analyzersToRemove) {
 		this.analyzersToRemove = analyzersToRemove;
 	}
 	

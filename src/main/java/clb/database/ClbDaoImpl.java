@@ -87,7 +87,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
 
 	@Override
-	public void saveAnalyzerRegistries( List<AnalyzerRegistryObject> analyzersRegistries ) {
+	public void saveAnalyzerRegistries( Set<AnalyzerRegistryObject> analyzersRegistries ) {
 
 		DBCollection analyzerRegCol = null;
 		String currentCollectionName = "";
@@ -114,18 +114,18 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	}
 
 	@Override
-	public List<UsersystemObject> getAllUsers(){
-		return mongoTemplate.findAll(UsersystemEntity.class).stream().map(UsersystemObject::new).collect(Collectors.toList());
+	public Set<UsersystemObject> getAllUsers(){
+		return mongoTemplate.findAll(UsersystemEntity.class).stream().map(UsersystemObject::new).collect(Collectors.toSet());
 	}
 
 	@Override
-	public List<BuildingObject> getAllBuildings(){
-		return mongoTemplate.findAll(BuildingEntity.class).stream().map(BuildingObject::new).collect(Collectors.toList());
+	public Set<BuildingObject> getAllBuildings(){
+		return mongoTemplate.findAll(BuildingEntity.class).stream().map(BuildingObject::new).collect(Collectors.toSet());
 	}
 
 	@Override
-	public List<AnalyzerObject> getAllAnalyzers() {
-		return mongoTemplate.findAll(AnalyzerEntity.class).stream().map(AnalyzerObject::new).collect(Collectors.toList());
+	public Set<AnalyzerObject> getAllAnalyzers() {
+		return mongoTemplate.findAll(AnalyzerEntity.class).stream().map(AnalyzerObject::new).collect(Collectors.toSet());
 	}
 	
 
@@ -155,7 +155,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	}
 
 	@Override
-	public void saveClbObjects(List<ClbObject> clbObjects) {
+	public void saveClbObjects(Set<ClbObject> clbObjects) {
 		clbObjects.stream().forEach(userSObj -> saveClbObject(userSObj));
 	}
 

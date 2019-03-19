@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -155,7 +156,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	}
 
 	@Override
-	public List<AnalyzerObject> getAllAvailableAnalyzers() {
+	public Set<AnalyzerObject> getAllAvailableAnalyzers() {
 		return clbDao.getAllAnalyzers();
 	}
 	
@@ -171,7 +172,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	@Override
 	public void saveBuildingForUser(UsersystemObject user, BuildingObject building) {
 		
-		List<DivisionObject> divisions = building.getDivisions();
+		Set<DivisionObject> divisions = building.getDivisions();
 		
 		if(divisions != null) {
 			divisions.stream().forEach( division -> clbDao.saveClbObject(division));
@@ -211,7 +212,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	@Transactional
 	public void deleteBuildingForUser(UsersystemObject user, BuildingObject building) {
 		
-		List<DivisionObject> divisions = building.getDivisions();
+		Set<DivisionObject> divisions = building.getDivisions();
 		
 		if(divisions != null)
 			divisions.stream().forEach(division -> clbDao.deleteDivisionCascade(division));
@@ -252,7 +253,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
 	@Override
 	@Transactional
-	public void saveAnalyzersForDivision(String parentId, List<AnalyzerObject> analyzersToRemove) {
+	public void saveAnalyzersForDivision(String parentId, Set<AnalyzerObject> analyzersToRemove) {
 		DivisionObject division = clbDao.findDivisionById(parentId);
 		analyzersToRemove.stream().forEach(analyzer -> division.addAnalyzer(analyzer));
 		
@@ -261,11 +262,13 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
 	@Override
 	@Transactional
-	public void removeAnalyzersForDivision(String divisionId, List<String> analyzersToRemove) {
+	public void removeAnalyzersForDivision(String divisionId, Set<String> analyzersToRemove) {
 		DivisionObject division = clbDao.findDivisionById(divisionId);
 
 		if(division != null && division.getAnalyzers() != null) {
-			division.setAnalyzers(division.getAnalyzers().stream().filter( analyzer -> !analyzersToRemove.contains(analyzer.getId())).collect(Collectors.toList()));
+			division.setAnalyzers(division.getAnalyzers().stream()
+										.filter( analyzer -> !analyzersToRemove.contains(analyzer.getId()))
+										.collect(Collectors.toSet()));
 		}
 		
 		clbDao.saveClbObject(division);

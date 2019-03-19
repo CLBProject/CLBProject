@@ -1,7 +1,7 @@
 package clb.ui.beans.objects;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.faces.model.SelectItem;
@@ -12,8 +12,8 @@ public class DivisionGui {
 
 	private String divisionId;
 	private String name;
-	private List<AnalyzerGui> analyzers;
-	private List<DivisionGui> childrenDivisions;
+	private Set<AnalyzerGui> analyzers;
+	private Set<DivisionGui> childrenDivisions;
 	private SelectItem parentDivision;
 
 	public DivisionGui() {
@@ -24,9 +24,9 @@ public class DivisionGui {
 		this.divisionId = divisionObj.getId();
 		this.name = divisionObj.getName();
 		this.childrenDivisions =  divisionObj.getChildrenDivisions() != null ? 
-									divisionObj.getChildrenDivisions().stream().map(DivisionGui::new).collect(Collectors.toList()): null;
+									divisionObj.getChildrenDivisions().stream().map(DivisionGui::new).collect(Collectors.toSet()): null;
 		this.analyzers = divisionObj.getAnalyzers() != null ?
-				divisionObj.getAnalyzers().stream().map(AnalyzerGui::new).collect(Collectors.toList()) : null;
+				divisionObj.getAnalyzers().stream().map(AnalyzerGui::new).collect(Collectors.toSet()) : null;
 	}
 	
 	public DivisionObject toObject() {
@@ -34,9 +34,9 @@ public class DivisionGui {
 		divObj.setName(this.name);
 		divObj.setId(this.divisionId);
 		divObj.setAnalyzers(this.analyzers != null ? 
-				this.analyzers.stream().map(AnalyzerGui::toObject).collect(Collectors.toList()) : null);
+				this.analyzers.stream().map(AnalyzerGui::toObject).collect(Collectors.toSet()) : null);
 		divObj.setChildrenDivisions(this.childrenDivisions != null ? 
-				this.childrenDivisions.stream().map(DivisionGui::toObject).collect(Collectors.toList()) : null);
+				this.childrenDivisions.stream().map(DivisionGui::toObject).collect(Collectors.toSet()) : null);
 		
 		return divObj;
 	}
@@ -57,19 +57,19 @@ public class DivisionGui {
 		this.name = name;
 	}
 
-	public List<AnalyzerGui> getAnalyzers() {
+	public Set<AnalyzerGui> getAnalyzers() {
 		return analyzers;
 	}
 
-	public void setAnalyzers(List<AnalyzerGui> analyzers) {
+	public void setAnalyzers(Set<AnalyzerGui> analyzers) {
 		this.analyzers = analyzers;
 	}
 
-	public List<DivisionGui> getChildrenDivisions() {
+	public Set<DivisionGui> getChildrenDivisions() {
 		return childrenDivisions;
 	}
 
-	public void setChildrenDivisions(List<DivisionGui> childrenDivisions) {
+	public void setChildrenDivisions(Set<DivisionGui> childrenDivisions) {
 		this.childrenDivisions = childrenDivisions;
 	}
 
@@ -79,7 +79,7 @@ public class DivisionGui {
 
 	public void addAnalyzer(AnalyzerGui analObj) {
 		if(this.analyzers == null) {
-			this.analyzers = new ArrayList<AnalyzerGui>();
+			this.analyzers = new HashSet<AnalyzerGui>();
 		}
 		
 		this.analyzers.add(analObj);
