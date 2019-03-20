@@ -2,6 +2,8 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xmlns:ftp="http://www.springframework.org/schema/integration/ftp"
+	xmlns:int-ftp="http://www.springframework.org/schema/integration/ftp"
 	xsi:schemaLocation="
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
@@ -13,7 +15,9 @@
    	 	http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd
    	 	http://www.springframework.org/schema/security
 		http://www.springframework.org/schema/security/spring-security-4.3.xsd
-   	 	">
+		http://www.springframework.org/schema/integration/ftp 
+		http://www.springframework.org/schema/integration/ftp/spring-integration-ftp-2.0.xsd
+	">
 
 	<context:component-scan base-package="clb.business" />
 	<context:component-scan base-package="clb.database" />
@@ -71,5 +75,23 @@
 			</props>
 		</property>
 	</bean>
-
+	
+	<bean id="ftpClientFactory" 
+		class="org.springframework.integration.ftp.session.DefaultFtpSessionFactory">
+			<property name="host" value="localhost"/>
+			<property name="port" value="22"/>
+			<property name="username" value=""/>
+			<property name="password" value=""/>
+			<property name="clientMode" value="0"/>
+			<property name="fileType" value="2"/>
+			<property name="bufferSize" value="100000"/>
+	</bean>
+	
+	<int-ftp:outbound-gateway id="ftpOutboundGateway"
+	    session-factory="ftpClientFactory"
+	    request-channel="inbound1"
+	    command="ls"
+	    command-options="-1"
+	    expression="payload"
+	    reply-channel="toSplitter"/>
 </beans>
