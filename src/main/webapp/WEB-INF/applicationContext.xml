@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:int-ftp="http://www.springframework.org/schema/integration/ftp"
 	xsi:schemaLocation="
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
@@ -73,7 +77,29 @@
 			<property name="bufferSize" value="100000"/>
 	</bean>
 	
-	 <ftp:outbound-channel-adapter channel="ftpOutbound" remote-directory="/news/archive/video/" session-factory="sessionFactory" />
+	<int:channel id="inbound1"/>
+	<int:channel id="outbound"/>
+	
+	<int-ftp:outbound-gateway id="gateway1"
+                          session-factory="ftpClientFactory"
+                          request-channel="inbound1"
+                          reply-channel="outbound"
+                          reply-timeout="777"
+                          auto-create-local-directory="false"
+                          auto-startup="true"
+                          filename-pattern="*"
+                          remote-file-separator="/"
+                          command="ls"
+                          command-options="-1 -f"
+                          expression="payload"
+                          order="1"
+                          mput-regex=".*">
+    	<int:poller fixed-delay="1000"/>
+	</int-ftp:outbound-gateway>
+	
+	<inbound-channel-adapter channel="inbound1" expresssion="'/'">
+    	<poller fixed-delay="10000"/>
+	</inbound-channel-adapter>
 
 
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
