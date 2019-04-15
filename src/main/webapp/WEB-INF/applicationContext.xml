@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
 	xmlns:int="http://www.springframework.org/schema/integration"
 	xmlns:int-ftp="http://www.springframework.org/schema/integration/ftp"
@@ -23,26 +23,32 @@
         http://www.springframework.org/schema/integration/spring-integration-4.3.xsd
 	">
 
-	<context:component-scan base-package="clb.business" />
-	<context:component-scan base-package="clb.database" />
-	<context:component-scan base-package="clb.database.entities" />
+	<context:component-scan
+		base-package="clb.business" />
+	<context:component-scan
+		base-package="clb.database" />
+	<context:component-scan
+		base-package="clb.database.entities" />
 
 	<bean id="bcryptEncoder"
 		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
-		
+
 	<!-- Default bean name is 'mongo' -->
 	<mongo:mongo host="192.168.99.100" port="27017" />
 
-	<bean id="mongoCredentials" class="org.springframework.data.authentication.UserCredentials">
+	<bean id="mongoCredentials"
+		class="org.springframework.data.authentication.UserCredentials">
 		<constructor-arg name="username" value="admin" />
 		<constructor-arg name="password" value="123456" />
 	</bean>
 
 
-	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+	<bean id="mongoTemplate"
+		class="org.springframework.data.mongodb.core.MongoTemplate">
 		<constructor-arg name="mongo" ref="mongo" />
 		<constructor-arg name="databaseName" value="clb" />
-		<constructor-arg name="userCredentials" ref="mongoCredentials" />
+		<constructor-arg name="userCredentials"
+			ref="mongoCredentials" />
 	</bean>
 
 	<bean
@@ -58,51 +64,49 @@
 		<property name="queueCapacity" value="25" />
 	</bean>
 
-	<bean id="analyzerDataService" class="clb.business.AnalyzerDataServiceImpl"
-		init-method="init" destroy-method="destroy">
+	<bean id="analyzerDataService"
+		class="clb.business.AnalyzerDataServiceImpl" init-method="init"
+		destroy-method="destroy">
 	</bean>
 
-	<bean id="userRegistryService" class="clb.business.UserRegistryServiceImpl" />
-	
+	<bean id="userRegistryService"
+		class="clb.business.UserRegistryServiceImpl" />
+
 	<bean id="ftpService" class="clb.business.FtpServiceImpl" />
-		
-	<bean id="sessionFactory" 
+
+	<bean id="ftpClientFactory"
 		class="org.springframework.integration.ftp.session.DefaultFtpSessionFactory">
-			<property name="host" value="localhost"/>
-			<property name="port" value="22"/>
-			<property name="username" value=""/>
-			<property name="password" value=""/>
-			<property name="clientMode" value="0"/>
-			<property name="fileType" value="2"/>
-			<property name="bufferSize" value="100000"/>
+		<property name="host" value="localhost" />
+		<property name="port" value="22" />
+		<property name="username" value="admin" />
+		<property name="password" value="admin" />
+		<property name="clientMode" value="0" />
+		<property name="fileType" value="2" />
+		<property name="bufferSize" value="100000" />
 	</bean>
-	
-	<int:channel id="inbound1"/>
-	<int:channel id="outbound"/>
-	
+
+	<int:channel id="inbound1" />
+	<int:channel id="outbound" />
+
 	<int-ftp:outbound-gateway id="gateway1"
-                          session-factory="ftpClientFactory"
-                          request-channel="inbound1"
-                          reply-channel="outbound"
-                          reply-timeout="777"
-                          auto-create-local-directory="false"
-                          auto-startup="true"
-                          filename-pattern="*"
-                          remote-file-separator="/"
-                          command="ls"
-                          command-options="-1 -f"
-                          expression="payload"
-                          order="1"
-                          mput-regex=".*">
-    	<int:poller fixed-delay="1000"/>
+		session-factory="ftpClientFactory" 
+		request-channel="inbound1"
+		reply-channel="outbound" 
+		reply-timeout="777"
+		auto-create-local-directory="false" 
+		auto-startup="true"
+		filename-pattern="*" 
+		remote-file-separator="/" 
+		command="ls"
+		command-options="-1 -f" 
+		expression="payload" 
+		order="1" mput-regex=".*">
+		<int:poller fixed-delay="1000" />
 	</int-ftp:outbound-gateway>
-	
-	<inbound-channel-adapter channel="inbound1" expresssion="'/'">
-    	<poller fixed-delay="10000"/>
-	</inbound-channel-adapter>
 
 
-	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+	<bean id="mailSender"
+		class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="host" value="smtp.gmail.com" />
 		<property name="port" value="25" />
 		<property name="username" value="clb.projecto@gmail.com" />

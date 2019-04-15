@@ -3,11 +3,15 @@ package clb.business;
 import java.io.Serializable;
 import java.util.List;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.integration.annotation.ServiceActivator;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageHandler;
+import org.springframework.messaging.MessagingException;
 import org.springframework.stereotype.Service;
 
 import clb.business.objects.AnalyzerObject;
-import clb.business.objects.FtpConfiguration;
-
+import clb.business.FtpService;
 @Service
 public class FtpServiceImpl implements FtpService,Serializable{
 
@@ -17,9 +21,9 @@ public class FtpServiceImpl implements FtpService,Serializable{
 	private static final long serialVersionUID = 1L;
 
 	public void destroy() {
-		
+
 	}
-	
+
 	@Override
 	public boolean userHasAccount(String username) {
 		// TODO Auto-generated method stub
@@ -44,13 +48,16 @@ public class FtpServiceImpl implements FtpService,Serializable{
 		return null;
 	}
 
-	public FtpConfiguration getFtpConfiguration() {
-		return ftpConfiguration;
-	}
+	@Bean
+	@ServiceActivator(inputChannel = "ftpChannel")
+	public MessageHandler handler() {
+		return new MessageHandler() {
 
-	public void setFtpConfiguration(FtpConfiguration ftpConfiguration) {
-		this.ftpConfiguration = ftpConfiguration;
-	}
+			@Override
+			public void handleMessage(Message<?> message) throws MessagingException {
+				System.out.println(message.getPayload());
+			}
 
-	
+		};
+	}
 }
