@@ -79,7 +79,7 @@
 		<property name="host" value="localhost" />
 		<property name="port" value="22" />
 		<property name="username" value="admin" />
-		<property name="password" value="admin" />
+		<property name="password" value="" />
 		<property name="clientMode" value="0" />
 		<property name="fileType" value="2" />
 		<property name="bufferSize" value="100000" />
@@ -87,8 +87,16 @@
 
 	<int:channel id="inbound1" />
 	<int:channel id="outbound" />
+	
+	<int-ftp:inbound-channel-adapter id="gatewayIn"
+	    channel="inbound1"
+	    session-factory="ftpClientFactory"
+	    local-directory="file:/my_transfers"
+	    remote-directory="">
+	    <int:poller fixed-rate="1000"/>
+	</int-ftp:inbound-channel-adapter>
 
-	<int-ftp:outbound-gateway id="gateway1"
+	<int-ftp:outbound-gateway id="gatewayOut"
 		session-factory="ftpClientFactory" 
 		request-channel="inbound1"
 		reply-channel="outbound" 
@@ -101,7 +109,6 @@
 		command-options="-1 -f" 
 		expression="payload" 
 		order="1" mput-regex=".*">
-		<int:poller fixed-delay="1000" />
 	</int-ftp:outbound-gateway>
 
 

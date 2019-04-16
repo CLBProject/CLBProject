@@ -49,7 +49,7 @@ public class FtpServiceImpl implements FtpService,Serializable{
 	}
 
 	@Bean
-	@ServiceActivator(inputChannel = "ftpChannel")
+	@ServiceActivator(inputChannel = "gatewayIn")
 	public MessageHandler handler() {
 		return new MessageHandler() {
 
