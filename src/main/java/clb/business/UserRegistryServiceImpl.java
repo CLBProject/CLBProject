@@ -30,7 +30,7 @@ import clb.global.exceptions.UserTokenHasExpiredOnCompleteRegistration;
 import clb.global.exceptions.UserTokenIsNullOnCompleteRegistrationException;
 
 @Service
-public class UserRegistryServiceImpl implements UserRegistryService, ApplicationListener<UserEvent>, Serializable{
+public class UserRegistryServiceImpl implements UserRegistryService, Serializable{
 
     /** 
      * 
@@ -40,14 +40,12 @@ public class UserRegistryServiceImpl implements UserRegistryService, Application
     @Autowired
     private ClbDao clbDao;
 
-    @Autowired 
-    private ApplicationEventPublisher eventPublisher;
 
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    UserRegistryServicePublisherEvent userEventPublisher;
     
     @Autowired
-    private JavaMailSender mailSender;
+    private BCryptPasswordEncoder passwordEncoder;
 
     private PasswordGenerator passwordGenerator = new PasswordGenerator.PasswordGeneratorBuilder()
             .useDigits(true)
@@ -55,6 +53,9 @@ public class UserRegistryServiceImpl implements UserRegistryService, Application
             .useUpper(true)
             .build();
 
+    
+    @Autowired
+    private PrintService printService;
 
     @Override
     @Transactional
@@ -112,7 +113,7 @@ public class UserRegistryServiceImpl implements UserRegistryService, Application
         String textMsg = "Access Link @ http://localhost:8080" + FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() +
                 "/pages/registerComplete.xhtml?token=" + user.getToken();
         
-        eventPublisher.publishEvent(new UserEvent(user.getId(), subject, textMsg));
+        userEventPublisher.publishEvent(new UserEvent(user.getId(), subject, textMsg));
         
         
     }
@@ -168,7 +169,7 @@ public class UserRegistryServiceImpl implements UserRegistryService, Application
         String textMsg = "A request was made in order to get a new Password. The New Password is: '" + newPassword + "'.\n\n Access Link @ http://localhost:8080" + FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() +
                 "/pages/registerComplete.xhtml?token="+newToken;
 
-        eventPublisher.publishEvent(new UserEvent(username, subject, textMsg));
+        userEventPublisher.publishEvent(new UserEvent(username, subject, textMsg));
     }
 
 	@Override
@@ -198,19 +199,8 @@ public class UserRegistryServiceImpl implements UserRegistryService, Application
         String textMsg = "Access Link @ http://localhost:8080" + FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() +
                 "/pages/registerComplete.xhtml?token=" + user.getToken();
         
-        eventPublisher.publishEvent(new UserEvent(user.getId(), subject, textMsg));
+        userEventPublisher.publishEvent(new UserEvent(user.getId(), subject, textMsg));
     }
-
-	@Override
-	public void onApplicationEvent(UserEvent event) {
-        String recipientAddress = event.getUserName();
-
-        SimpleMailMessage email = new SimpleMailMessage();
-        email.setTo(recipientAddress);
-        email.setSubject(event.getSubject());
-        email.setText( event.getTextMsg());
-        mailSender.send( email );
-	}
 	
     private String generateUserToken() {
         return UUID.randomUUID().toString();
@@ -224,28 +214,12 @@ public class UserRegistryServiceImpl implements UserRegistryService, Application
         this.clbDao = clbDao;
     }
 
-    public ApplicationEventPublisher getEventPublisher() {
-        return eventPublisher;
-    }
-
-    public void setEventPublisher( ApplicationEventPublisher eventPublisher ) {
-        this.eventPublisher = eventPublisher;
-    }
-
 	public BCryptPasswordEncoder getPasswordEncoder() {
 		return passwordEncoder;
 	}
 
 	public void setPasswordEncoder(BCryptPasswordEncoder passwordEncoder) {
 		this.passwordEncoder = passwordEncoder;
-	}
-
-	public JavaMailSender getMailSender() {
-		return mailSender;
-	}
-
-	public void setMailSender(JavaMailSender mailSender) {
-		this.mailSender = mailSender;
 	}
 
 	public PasswordGenerator getPasswordGenerator() {
@@ -255,5 +229,23 @@ public class UserRegistryServiceImpl implements UserRegistryService, Application
 	public void setPasswordGenerator(PasswordGenerator passwordGenerator) {
 		this.passwordGenerator = passwordGenerator;
 	}
+
+	public UserRegistryServicePublisherEvent getUserEventPublisher() {
+		return userEventPublisher;
+	}
+
+	public void setUserEventPublisher(UserRegistryServicePublisherEvent userEventPublisher) {
+		this.userEventPublisher = userEventPublisher;
+	}
+
+	public PrintService getPrintService() {
+		return printService;
+	}
+
+	public void setPrintService(PrintService printService) {
+		this.printService = printService;
+	}
+	
+	
 	
 }

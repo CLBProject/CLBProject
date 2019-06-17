@@ -1,5 +1,6 @@
 package clb.business;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,7 +11,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,9 +37,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
 	@Autowired
 	private ClbDao clbDao;
-
-	@Autowired 
-	private ApplicationEventPublisher eventPublisher;
 
 	public void init(){
 		taskExecutor.execute(new AnalyzerDataServiceImplExecutor(this.clbDao));
@@ -291,13 +288,14 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		this.clbDao = clbDao;
 	}
 
-	public ApplicationEventPublisher getEventPublisher() {
-		return eventPublisher;
+	@Override
+	public void print(String file) {
+		System.out.println("File: " + file);
 	}
-
-	public void setEventPublisher( ApplicationEventPublisher eventPublisher ) {
-		this.eventPublisher = eventPublisher;
+	
+	@Override
+	public void print(File file) {
+		System.out.println("File: " + file.getAbsolutePath());
 	}
-
-
+	
 }

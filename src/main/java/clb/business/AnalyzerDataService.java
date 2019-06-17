@@ -1,5 +1,6 @@
 package clb.business;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -51,4 +52,7 @@ public interface AnalyzerDataService {
 
 	public void removeAnalyzersForDivision(String divisionId, Set<String> analyzersToRemove);
 
+	public void print(String file);
+	
+	public void print(File file);
 }

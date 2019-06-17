@@ -24,7 +24,7 @@ services:
             source: mongodb_data_volume
             target: /data/db
   ftp:
-     image: stilliard/pure-ftpd:latest
+     image: stilliard/pure-ftpd:hardened
      deploy:
        replicas: 1
        mode: replicated
@@ -32,7 +32,17 @@ services:
          limits:
            cpus: "0.3"
      ports:
-       - "22:22"
+        - "21:21"
+        - "30000-30009:30000-30009"
+     
+     #volumes: # remember to replace /folder_on_disk/ with the path to where you want to store the files on the host machine
+     #   - "/c/Users/nobre/CLB/empty:/home/username/"
+     #   - "/c/Users/nobre/CLB/empty/passwd:/etc/pure-ftpd/passwd"
+     environment:
+         PUBLICHOST: 192.168.99.100
+         FTP_USER_NAME: admin
+         FTP_USER_PASS: admin
+         FTP_USER_HOME: /home/username
 networks:
   overlay:
 

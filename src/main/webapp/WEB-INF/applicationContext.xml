@@ -8,20 +8,19 @@
 	xmlns:int-ftp="http://www.springframework.org/schema/integration/ftp"
 	xsi:schemaLocation="
         http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+        http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context-4.3.xsd
+        http://www.springframework.org/schema/context/spring-context.xsd
         http://www.springframework.org/schema/tx
         http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
         http://www.springframework.org/schema/data/mongo
-   	 	http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd
+   	 	http://www.springframework.org/schema/data/mongo/spring-mongo.xsd
    	 	http://www.springframework.org/schema/security
-		http://www.springframework.org/schema/security/spring-security-4.3.xsd
+		http://www.springframework.org/schema/security/spring-security.xsd
 		http://www.springframework.org/schema/integration/ftp
         http://www.springframework.org/schema/integration/ftp/spring-integration-ftp.xsd
         http://www.springframework.org/schema/integration
-        http://www.springframework.org/schema/integration/spring-integration-4.3.xsd
-	">
+        http://www.springframework.org/schema/integration/spring-integration.xsd">
 
 	<context:component-scan
 		base-package="clb.business" />
@@ -71,53 +70,41 @@
 
 	<bean id="userRegistryService"
 		class="clb.business.UserRegistryServiceImpl" />
-
-	<bean id="ftpService" class="clb.business.FtpServiceImpl" />
-
-	<bean id="ftpClientFactory"
-		class="org.springframework.integration.ftp.session.DefaultFtpSessionFactory">
-		<property name="host" value="localhost" />
-		<property name="port" value="22" />
-		<property name="username" value="admin" />
-		<property name="password" value="" />
-		<property name="clientMode" value="0" />
-		<property name="fileType" value="2" />
-		<property name="bufferSize" value="100000" />
+		
+	<bean id="userEventPublisher"
+		class="clb.business.UserRegistryServicePublisherEvent" >
+		<property name="mailSender" ref="mailSender" ></property>
 	</bean>
 
-	<int:channel id="inbound1" />
-	<int:channel id="outbound" />
+	<bean id="ftpSessionFactory"
+		class="org.springframework.integration.ftp.session.DefaultFtpSessionFactory">
+		<property name="host" value="localhost" />
+		<property name="port" value="21" />
+		<property name="username" value="nobre1" />
+		<property name="password" value="nobre1" />
+	</bean>	
+		
+	<int:channel id="ftpChannel">
+	</int:channel>
 	
-	<int-ftp:inbound-channel-adapter id="gatewayIn"
-	    channel="inbound1"
-	    session-factory="ftpClientFactory"
-	    local-directory="file:/my_transfers"
-	    remote-directory="">
-	    <int:poller fixed-rate="1000"/>
-	</int-ftp:inbound-channel-adapter>
+	<int-ftp:inbound-channel-adapter session-factory="ftpSessionFactory"
+		local-directory="/"
+		channel="ftpChannel"
+		remote-file-separator="/"
+		remote-directory="/">
+		<int:poller fixed-rate="5000"></int:poller>
+	</int-ftp:inbound-channel-adapter>       
 
-	<int-ftp:outbound-gateway id="gatewayOut"
-		session-factory="ftpClientFactory" 
-		request-channel="inbound1"
-		reply-channel="outbound" 
-		reply-timeout="777"
-		auto-create-local-directory="false" 
-		auto-startup="true"
-		filename-pattern="*" 
-		remote-file-separator="/" 
-		command="ls"
-		command-options="-1 -f" 
-		expression="payload" 
-		order="1" mput-regex=".*">
-	</int-ftp:outbound-gateway>
+	<int:service-activator ref="printService" method="printFile" input-channel="ftpChannel"></int:service-activator>
 
+	<bean class="clb.business.PrintService" id="printService"/> 
 
 	<bean id="mailSender"
 		class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="host" value="smtp.gmail.com" />
 		<property name="port" value="25" />
 		<property name="username" value="clb.projecto@gmail.com" />
-		<property name="password" value="Redentora2017" />
+		<property name="password" value="Redentora2019" />
 		<property name="javaMailProperties">
 			<props>
 				<prop key="mail.transport.protocol">smtp</prop>
@@ -125,7 +112,7 @@
 				<prop key="mail.smtp.ssl.trust">smtp.gmail.com</prop>
 				<prop key="mail.smtp.starttls.enable">true</prop>
 				<prop key="mail.debug">true</prop>
-			</props>
+       	   </props>
 		</property>
 	</bean>
 </beans>
