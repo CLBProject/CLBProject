@@ -1,7 +1,7 @@
 package business;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import business.configuration.ConfigurationBusiness;
 import clb.business.AnalyzerDataService;
+import clb.business.integration.FtpGateway;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.database.ClbDao;
 import clb.global.DateUtils;
@@ -34,6 +35,9 @@ public class AnalyzerDataServiceTest {
 
 	@Autowired
 	private ClbDao clbDao;
+	
+	@Autowired 
+	private FtpGateway ftpGateway;
 
 	@Test
 	public void getAnalyzerRegistriesNowDateValuesTest() {

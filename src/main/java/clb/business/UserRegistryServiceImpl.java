@@ -53,9 +53,6 @@ public class UserRegistryServiceImpl implements UserRegistryService, Serializabl
             .useUpper(true)
             .build();
 
-    
-    @Autowired
-    private PrintService printService;
 
     @Override
     @Transactional
@@ -237,15 +234,5 @@ public class UserRegistryServiceImpl implements UserRegistryService, Serializabl
 	public void setUserEventPublisher(UserRegistryServicePublisherEvent userEventPublisher) {
 		this.userEventPublisher = userEventPublisher;
 	}
-
-	public PrintService getPrintService() {
-		return printService;
-	}
-
-	public void setPrintService(PrintService printService) {
-		this.printService = printService;
-	}
-	
-	
 	
 }

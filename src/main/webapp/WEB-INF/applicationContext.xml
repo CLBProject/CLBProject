@@ -87,18 +87,24 @@
 	<int:channel id="ftpChannel">
 	</int:channel>
 	
-	<int-ftp:inbound-channel-adapter session-factory="ftpSessionFactory"
-		local-directory="/"
-		channel="ftpChannel"
-		remote-file-separator="/"
-		remote-directory="/">
-		<int:poller fixed-rate="5000"></int:poller>
-	</int-ftp:inbound-channel-adapter>       
+	<int:channel id="outboundChannel">
+	</int:channel>
 
-	<int:service-activator ref="printService" method="printFile" input-channel="ftpChannel"></int:service-activator>
-
-	<bean class="clb.business.PrintService" id="printService"/> 
-
+	 
+	<int:gateway service-interface ="clb.business.integration.FtpGateway" default-request-channel="ftpChannel"/>
+	 
+	 <int-ftp:outbound-gateway 
+	 	session-factory="ftpSessionFactory"
+	    request-channel="ftpChannel"
+	    command="ls"
+	    command-options="-1"
+	    expression="payload"
+	    reply-channel="outboundChannel"/>
+	    
+	    
+	 <bean id="mp" class="clb.business.integration.FtpPrinter"/>
+	 <int:service-activator ref="mp" method="print" input-channel="outboundChannel"></int:service-activator>
+	 
 	<bean id="mailSender"
 		class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="host" value="smtp.gmail.com" />
