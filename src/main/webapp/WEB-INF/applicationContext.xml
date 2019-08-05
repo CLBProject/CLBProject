@@ -24,6 +24,8 @@
 
 	<context:component-scan
 		base-package="clb.business" />
+		<context:component-scan
+		base-package="clb.business.integration" />
 	<context:component-scan
 		base-package="clb.database" />
 	<context:component-scan
@@ -64,8 +66,7 @@
 	</bean>
 
 	<bean id="analyzerDataService"
-		class="clb.business.AnalyzerDataServiceImpl" init-method="init"
-		destroy-method="destroy">
+		class="clb.business.AnalyzerDataServiceImpl">
 	</bean>
 
 	<bean id="userRegistryService"
@@ -103,6 +104,7 @@
 	    
 	    
 	 <bean id="mp" class="clb.business.integration.FtpPrinter"/>
+	 
 	 <int:service-activator ref="mp" method="print" input-channel="outboundChannel"></int:service-activator>
 	 
 	<bean id="mailSender"

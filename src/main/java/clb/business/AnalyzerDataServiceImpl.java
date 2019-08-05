@@ -9,13 +9,16 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.messaging.Message;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import clb.business.integration.FtpGateway;
+import clb.business.integration.FtpPrinter;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.BuildingObject;
@@ -25,7 +28,6 @@ import clb.database.ClbDao;
 import clb.global.DateUtils;
 
 @Service
-@Configuration
 public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializable{
 
 	/** 
@@ -33,6 +35,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	private Message<?> messageGet;
 
 	@Autowired
 	private TaskExecutor taskExecutor;
@@ -42,13 +45,13 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	
 	@Autowired
 	FtpGateway ftpGateway;
+	
+	@Autowired
+	FtpPrinter ftpPrinter;
 
+	@PostConstruct
 	public void init(){
 		taskExecutor.execute(new AnalyzerDataServiceImplExecutor(this.clbDao));
-	}
-
-	public void destroy() {
-		
 	}
 	
 	@Override
@@ -159,7 +162,9 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
 	@Override
 	public Set<AnalyzerObject> getAllAvailableAnalyzers() {
+		
 		ftpGateway.read("/");
+		System.out.println(messageGet);
 		return clbDao.getAllAnalyzers();
 	}
 	
@@ -300,6 +305,12 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
 	public void setFtpGateway(FtpGateway ftpGateway) {
 		this.ftpGateway = ftpGateway;
+	}
+
+	@Override
+	public void setMessageArrived(Message<?> messageGet) {
+		this.messageGet = messageGet;
+		
 	}
 	
 	

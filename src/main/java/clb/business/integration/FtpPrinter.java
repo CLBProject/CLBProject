@@ -1,14 +1,21 @@
 package clb.business.integration;
 
-import javax.faces.context.FacesContext;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
+import org.springframework.stereotype.Component;
 
+import clb.business.AnalyzerDataService;
+
+@Component
 public class FtpPrinter {
-
-	public void print(Message<?> message) {
-		Object bean = FacesContext.getCurrentInstance().getViewRoot().getViewMap().get("#{buildingManagementBean}");
-		System.out.println(bean);
-		System.out.println("Message Received:" + message);
+	
+	@Autowired
+	AnalyzerDataService analyzerDataService;
+	
+	
+	public void print(Message<?> messageGet) {
+		analyzerDataService.setMessageArrived(messageGet);
 	}
+
+	
 }

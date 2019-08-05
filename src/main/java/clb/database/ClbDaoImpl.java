@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.BasicDBObjectBuilder;
@@ -34,7 +34,7 @@ import clb.database.entities.UsersystemEntity;
 import clb.database.repository.ClbMongoRepository;
 import clb.global.DateUtils;
 
-@Service
+@Component
 public class ClbDaoImpl implements ClbDao, Serializable{
 
 	private static final long serialVersionUID = 1L;
