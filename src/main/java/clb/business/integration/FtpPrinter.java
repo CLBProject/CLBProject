@@ -1,5 +1,7 @@
 package clb.business.integration;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
@@ -14,7 +16,7 @@ public class FtpPrinter {
 	
 	
 	public void print(Message<?> messageGet) {
-		analyzerDataService.setMessageArrived(messageGet);
+		analyzerDataService.setAnalyzersFtp((List<String>)messageGet.getPayload());
 	}
 
 	

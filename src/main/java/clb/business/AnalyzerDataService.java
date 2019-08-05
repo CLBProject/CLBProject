@@ -52,6 +52,6 @@ public interface AnalyzerDataService {
 	public void saveAnalyzersForDivision(String parentId, Set<AnalyzerObject> analyzersToRemove);
 
 	public void removeAnalyzersForDivision(String divisionId, Set<String> analyzersToRemove);
-
-	public void setMessageArrived(Message<?> messageGet);
+	
+	public void setAnalyzersFtp(List<String> analyzers);
 }

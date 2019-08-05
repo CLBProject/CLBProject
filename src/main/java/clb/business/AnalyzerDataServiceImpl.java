@@ -35,7 +35,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private Message<?> messageGet;
+	private List<String> analyzersFtp;
 
 	@Autowired
 	private TaskExecutor taskExecutor;
@@ -164,7 +164,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	public Set<AnalyzerObject> getAllAvailableAnalyzers() {
 		
 		ftpGateway.read("/");
-		System.out.println(messageGet);
+		System.out.println(analyzersFtp);
 		return clbDao.getAllAnalyzers();
 	}
 	
@@ -307,11 +307,12 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		this.ftpGateway = ftpGateway;
 	}
 
-	@Override
-	public void setMessageArrived(Message<?> messageGet) {
-		this.messageGet = messageGet;
-		
+	public List<String> getAnalyzersFtp() {
+		return analyzersFtp;
 	}
-	
+
+	public void setAnalyzersFtp(List<String> analyzersFtp) {
+		this.analyzersFtp = analyzersFtp;
+	}
 	
 }
