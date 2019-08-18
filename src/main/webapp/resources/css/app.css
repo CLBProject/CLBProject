@@ -1,7 +1,8 @@
-body {
+/* body {
 	width: 100%;
 	padding: 0px !important;
 	margin: 0px !important;
+	height: 100%;
 }
 
 .ui-g-12 {
@@ -85,9 +86,7 @@ form {
 .mainDivClass {
 	background-color: #0A122A;
 	color: white !important;
-	padding-top: 10px;
-	padding-left: 20px;
-	padding-right: 20px;
+	padding: 20px;
 	height: 100vh;
 }
 
@@ -198,12 +197,12 @@ form {
 	font-family: Arial, Helvetica, sans-serif !important;
 }
 
-/* Change The Combos Backbround Color*/
+Change The Combos Backbround Color
 .ui-selectonemenu-list {
 	background-color: white !important;
 }
 
-/* Popups Title Text */
+Popups Title Text
 .ui-dialog-title-dialog {
 	text-align: center;
 }
@@ -278,18 +277,35 @@ form {
 
 .analysisDiv {
 	background-color: #0A122A !important;
+	height: 100vh;
 }
 
-.analysisDivClass {
+.buildingManagementDiv {
+	background-color: #0A122A !important;
+}
+
+.buildingDiv {
+	background-color: #0A122A !important;
+}
+
+.appDivClass {
 	color: white !important;
 	font-size: 12px !important;
 	font-family: Arial, Helvetica, sans-serif !important;
 	font-weight: bold !important;
 	padding: 10px !important;
+	background-color: #0A122A !important;
 }
 
-.analysisDivClassMainCell {
-	font-size: 26px !important;
+.buildingDivClass {
+	color: #0A122A !important;
+	font-size: 12px !important;
+	font-family: Arial, Helvetica, sans-serif !important;
+	font-weight: bold !important;
+}
+
+.titleDivClass {
+	font-size: 22px !important;
 	font-weight: bold;
 	color: #CED8F6;
 	padding-bottom: 5px;
@@ -303,7 +319,7 @@ form {
 }
 
 .lastAnalysisDiv {
-	height: 25vh !important;
+	height: 10vh !important;
 	background-color: #0A122A !important;
 }
 
@@ -356,7 +372,7 @@ form {
 }
 
 .analysisPanelTitle {
-	font-size: 14px !important;
+	font-size: 12px !important;
 	color: #0A122A !important;
 	font-weight: bold;
 }
@@ -430,6 +446,11 @@ form {
 	padding-left: 25px;
 }
 
+<<<<<<< HEAD
+.timeAnalysisPanel{
+	width:150px !important;
+} */
+=======
 .analysisMenuEntry{
 	padding-bottom: 10px !important;
 }
@@ -448,3 +469,26 @@ form {
 	display: table-cell; 
 	vertical-align: middle; 
 }
+
+.buildingManagementTable{
+	width:80%; 
+}
+
+.buildingManagementAnalyzers{
+	width: 20%;
+}
+
+.buildingManagementAnalyzers .ui-panel-content{
+	background-color: #0A122A !important;
+	color: #CED8F6 !important
+}
+
+.divisionAnalysis{
+	width: 100% !important;
+	border: none !important;
+	font-size: 12px !important;
+	color: #0A122A !important;
+	font-weight: bold;
+}
+
+>>>>>>> 9a7eab8f9987bc41052e7763ed74dd6a45f53dc0
