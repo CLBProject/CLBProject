@@ -13,4 +13,7 @@ public interface BuildingsMongoRepository extends MongoRepository<BuildingEntity
 
     @Query(value="{ 'buildingusername' : ?0 }")
     List<BuildingEntity> findBuildingsByUsername(String username);
+
+    @Query(value="{ 'name' : ?0 }")
+	BuildingEntity getBuildingByName(String buildingName);
 }

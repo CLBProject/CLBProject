@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: clbapp-svc
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: clbapp-port
+    protocol: TCP
+  - name: ftpscript
+    port: 6006
+    targetPort: ftps-port
+  selector:
+    app: clbapp
+  type: LoadBalancer

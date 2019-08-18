@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -11,17 +12,18 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * 
  */
 @Document(collection="Analyzers")
-public class AnalyzerEntity implements ClbEntity, Serializable {
+public class AnalyzerEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @Id
     private String id;
-
-    private String name;
+    
+    private String codeName;
 
     private List<String> analyzerRegistriesIds;
-
-    private List<String> analyzerRegistriesAverageIds;
+    
+	@DBRef
+	private List<AnalyzerMeterEntity> analyzerMeters;
 
     public AnalyzerEntity() {
     }
@@ -34,15 +36,15 @@ public class AnalyzerEntity implements ClbEntity, Serializable {
 		this.id = id;
 	}
 
-	public String getName() {
-        return this.name;
-    }
+	public String getCodeName() {
+		return codeName;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setCodeName(String codeName) {
+		this.codeName = codeName;
+	}
 
-    public List<String> getAnalyzerRegistriesIds() {
+	public List<String> getAnalyzerRegistriesIds() {
         return analyzerRegistriesIds;
     }
 
@@ -50,12 +52,14 @@ public class AnalyzerEntity implements ClbEntity, Serializable {
         this.analyzerRegistriesIds = analyzerRegistriesIds;
     }
 
-    public List<String> getAnalyzerRegistriesAverageIds() {
-        return analyzerRegistriesAverageIds;
-    }
+	public List<AnalyzerMeterEntity> getAnalyzerMeters() {
+		return analyzerMeters;
+	}
 
-    public void setAnalyzerRegistriesAverageIds( List<String> analyzerRegistriesAverageIds ) {
-        this.analyzerRegistriesAverageIds = analyzerRegistriesAverageIds;
-    }
+	public void setAnalyzerMeters(List<AnalyzerMeterEntity> analyzerMeters) {
+		this.analyzerMeters = analyzerMeters;
+	}
+
+    
     
 }

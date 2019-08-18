@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.primefaces.json.JSONObject;
+
 import clb.database.entities.UsersystemEntity;
 
 public class UsersystemObject implements ClbObject, Serializable
@@ -24,11 +26,16 @@ public class UsersystemObject implements ClbObject, Serializable
     private Date expiryDate;
     private Date lastSentEmail;
     private boolean enabled;
+    private String ftpPassword;
 
     private List<BuildingObject> buildings;
     
     public UsersystemObject(){
         
+    }
+    
+    public boolean hasBuildings() {
+    	return buildings != null && buildings.size() > 0;
     }
     
     public boolean emailSentItHasntAlreadyPassedEnoughTimeSince(Date currentDateMinusHours) {
@@ -57,6 +64,7 @@ public class UsersystemObject implements ClbObject, Serializable
         this.expiryDate = usersystem.getExpiryDate();
         this.lastSentEmail = usersystem.getLastSentEmail();
         this.enabled = usersystem.isEnabled();
+        this.ftpPassword = usersystem.getFtpPassword();
         this.buildings = usersystem.getBuildings() != null ? 
         		usersystem.getBuildings().stream().map(BuildingObject::new).collect(Collectors.toList()) : null;
     }
@@ -72,10 +80,18 @@ public class UsersystemObject implements ClbObject, Serializable
         userSystemEntity.setExpiryDate( this.expiryDate );
         userSystemEntity.setEnabled( this.enabled );
         userSystemEntity.setLastSentEmail( this.lastSentEmail );
+        userSystemEntity.setFtpPassword(this.ftpPassword);
         userSystemEntity.setBuildings( this.buildings != null ?
         		this.buildings.stream().map(BuildingObject::toEntity).collect(Collectors.toList()) : null);
         
         return userSystemEntity;
+    }
+    
+    public JSONObject toJson() {
+    	JSONObject json = new JSONObject();
+    	json.append("username", this.username);
+    	json.append("ftpPassword", this.ftpPassword);
+    	return json;
     }
     
     public void addBuilding(BuildingObject buildingObject) {
@@ -165,6 +181,13 @@ public class UsersystemObject implements ClbObject, Serializable
     public void setLastSentEmail( Date lastSentEmail ) {
         this.lastSentEmail = lastSentEmail;
     }
-    
+
+	public String getFtpPassword() {
+		return ftpPassword;
+	}
+
+	public void setFtpPassword(String ftpPassword) {
+		this.ftpPassword = ftpPassword;
+	}
     
 }

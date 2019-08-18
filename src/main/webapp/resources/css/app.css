@@ -53,9 +53,7 @@ form {
 
 .noRegClass {
 	color: #0A122A !important;
-	font-size: 22px ! important;
 	font-family: Arial, Helvetica, sans-serif;
-	font-weight: bold;
 }
 
 .ui-message-error-detail {
@@ -201,7 +199,7 @@ form {
 }
 
 /* Change The Combos Backbround Color*/
-.ui-selectonemenu-list{
+.ui-selectonemenu-list {
 	background-color: white !important;
 }
 
@@ -287,26 +285,26 @@ form {
 	font-size: 12px !important;
 	font-family: Arial, Helvetica, sans-serif !important;
 	font-weight: bold !important;
-	padding-right: 30px !important;
-	padding-left: 30px !important;
+	padding: 10px !important;
 }
 
 .analysisDivClassMainCell {
-	font-size: 20px !important;
+	font-size: 26px !important;
 	font-weight: bold;
+	color: #CED8F6;
+	padding-bottom: 5px;
+	padding-top: 5px;
 }
 
 .analysisChartCSS {
 	font-size: 12px;
 	width: 100% !important;
-	height: 60vh !important;
-}
-.lastAnalysisDiv{
-	height:25vh !important;
+	height: 85vh !important;
 }
 
-.selectOneMenuAnalysis.ui-selectonemenu {
-	width: 85% !important;
+.lastAnalysisDiv {
+	height: 25vh !important;
+	background-color: #0A122A !important;
 }
 
 .ui-datepicker {
@@ -314,18 +312,18 @@ form {
 	font-size: 12px !important;
 }
 
-.ui-selectonemenu{
-       vertical-align:top !important;
-       font-size: 12px !important;
+.ui-selectonemenu {
+	vertical-align: top !important;
+	font-size: 12px !important;
 }
 
-.ui-selectonemenu-list-item{
-	   vertical-align:top !important;
-       font-size: 12px  !important;
+.ui-selectonemenu-list-item {
+	vertical-align: top !important;
+	font-size: 12px !important;
 }
 
 .ui-button {
-       font-size: 12px !important;
+	font-size: 12px !important;
 }
 
 .ui-timepicker {
@@ -360,6 +358,7 @@ form {
 .analysisPanelTitle {
 	font-size: 14px !important;
 	color: #0A122A !important;
+	font-weight: bold;
 }
 
 .analysisTitle {
@@ -371,12 +370,6 @@ form {
 .buildingImgAnalysis {
 	padding: 5px !important;
 	border: 1px solid #0A122A;
-}
-
-.chartPanel.ui-widget-content {
-	background-color: #E0ECF8 !important;
-	width: 99.5% !important;
-	padding:5px !important;
 }
 
 .ui-datatable-selectable {
@@ -410,25 +403,48 @@ form {
 	text-align: left;
 }
 
-.analysisLabels{
-	font-size:12px !important;
+.analysisLabels {
+	font-size: 13px !important;
+	color: white !important;
+	vertical-align: middle !important;
+}
+
+.analysisViewDiv {
+	padding-right: 10px !important;
+	color: white !important;
+}
+
+.timeAnalysis {
+	vertical-align: middle !important;
 	color: #0A122A !important;
-	vertical-align: middle !important;
-}
-
-.analysisViewDiv{
-	padding-top:10px !important;
-	padding-right:10px !important;
-}
-
-.timeAnalysis{
-	vertical-align: middle !important;
-	color: #0A122A !important;	
 	font-size: 12px !important;
 }
 
-.chartDateCss{
-	color:blue;
-	font-size:10px !important;
-	font-weight:bold;
+.chartDateCss {
+	color: yellow;
+	font-weight: plain;
+	font-size: 14px !important;
+}
+
+.analaysisDateCss {
+	padding-left: 25px;
+}
+
+.analysisMenuEntry{
+	padding-bottom: 10px !important;
+}
+
+.timeFrame .ui-inputfield{
+	width:100px !important;
+}
+
+.ext-box { 
+	display: table; 
+	width:100%; 
+	height:70vh; 
+	background-color: #CED8F6;
+}
+.int-box { 
+	display: table-cell; 
+	vertical-align: middle; 
 }

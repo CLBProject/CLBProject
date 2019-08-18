@@ -2,18 +2,19 @@ package clb.business.objects;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import clb.database.entities.AnalyzerEntity;
 
 public class AnalyzerObject implements ClbObject
 {
     private String id;
-
-	private String name;
+    
+    private String codeName;
 
 	private List<String> analyzerRegistriesIds;
-
-	private List<String> analyzerAverageRegistriesIds;
+	
+    private List<AnalyzerMeterObject> analyzerMeters;
 
 	public AnalyzerObject(){
 
@@ -21,9 +22,10 @@ public class AnalyzerObject implements ClbObject
 
 	public AnalyzerObject(AnalyzerEntity analyzerEntity){
 		this.id = analyzerEntity.getId();
-		this.name = analyzerEntity.getName();
+		this.codeName = analyzerEntity.getCodeName();
 		this.analyzerRegistriesIds = analyzerEntity.getAnalyzerRegistriesIds();
-		this.analyzerAverageRegistriesIds = analyzerEntity.getAnalyzerRegistriesAverageIds();
+		this.analyzerMeters = analyzerEntity.getAnalyzerMeters() != null ?
+				analyzerEntity.getAnalyzerMeters().stream().map(AnalyzerMeterObject::new).collect( Collectors.toList()) : null;
 	}
 
 	public AnalyzerEntity toEntity(){
@@ -33,10 +35,12 @@ public class AnalyzerObject implements ClbObject
 			analyzerEntity.setId( this.id );
 		}
 		
-		analyzerEntity.setName( this.name );
+		analyzerEntity.setCodeName( this.codeName );
 		analyzerEntity.setAnalyzerRegistriesIds(this.analyzerRegistriesIds);
 		
-		analyzerEntity.setAnalyzerRegistriesAverageIds(this.analyzerAverageRegistriesIds);
+		analyzerEntity.setAnalyzerMeters( this.analyzerMeters != null ? 
+                this.analyzerMeters.stream().map( AnalyzerMeterObject::toEntity ).collect( Collectors.toList() ) : null);
+		
 		return analyzerEntity;
 	}
 	
@@ -47,15 +51,14 @@ public class AnalyzerObject implements ClbObject
         
         analyzerRegistriesIds.add(analyzerRegId);
     }
-    
-    public void addAnalyzerRegistryAverage(String analyzerRegId) {
-        if(analyzerAverageRegistriesIds == null) {
-            analyzerAverageRegistriesIds = new ArrayList<String>();
-        }
-        
-        analyzerAverageRegistriesIds.add(analyzerRegId);
-    }
-	
+
+	public void addAnalyzerMeter(AnalyzerMeterObject analyzerMeterObject) {
+		if(this.analyzerMeters == null) {
+			this.analyzerMeters = new ArrayList<AnalyzerMeterObject>();
+		}
+		
+		this.analyzerMeters.add(analyzerMeterObject);
+	}
 	
 	public String getId() {
 		return id;
@@ -65,15 +68,16 @@ public class AnalyzerObject implements ClbObject
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+
+	public String getCodeName() {
+		return codeName;
 	}
 
-	public void setName( String name ) {
-		this.name = name;
+	public void setCodeName(String codeName) {
+		this.codeName = codeName;
 	}
 
-    public List<String> getAnalyzerRegistriesIds() {
+	public List<String> getAnalyzerRegistriesIds() {
         return analyzerRegistriesIds;
     }
 
@@ -81,13 +85,13 @@ public class AnalyzerObject implements ClbObject
         this.analyzerRegistriesIds = analyzerRegistriesIds;
     }
 
-    public List<String> getAnalyzerAverageRegistriesIds() {
-        return analyzerAverageRegistriesIds;
-    }
+	public List<AnalyzerMeterObject> getAnalyzerMeters() {
+		return analyzerMeters;
+	}
 
-    public void setAnalyzerAverageRegistriesIds( List<String> analyzerAverageRegistriesIds ) {
-        this.analyzerAverageRegistriesIds = analyzerAverageRegistriesIds;
-    }
-	
+	public void setAnalyzerMeters(List<AnalyzerMeterObject> analyzerMeters) {
+		this.analyzerMeters = analyzerMeters;
+	}
+
 	
 }

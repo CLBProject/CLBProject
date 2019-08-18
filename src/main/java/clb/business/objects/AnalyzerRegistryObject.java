@@ -198,8 +198,7 @@ public class AnalyzerRegistryObject implements Serializable {
         this.vlnsys = analyzerRegEntity.getVlnsys();
     }
 
-
-    public AnalyzerRegistryEntity toEntity() {
+	public AnalyzerRegistryEntity toEntity() {
         AnalyzerRegistryEntity anaRegEntity = new AnalyzerRegistryEntity();
         anaRegEntity.setId(id);
         anaRegEntity.setAnalyzerId( this.analyzerId );
@@ -216,6 +215,7 @@ public class AnalyzerRegistryObject implements Serializable {
         anaRegEntity.setHz(hz);
         anaRegEntity.setItemlabel(itemlabel);
         anaRegEntity.setKvahl(kvahl);
+        anaRegEntity.setKvahl1(kvahl1);
         anaRegEntity.setKvahl2(kvahl2);
         anaRegEntity.setKvahl3(kvahl3);
         anaRegEntity.setKval1(kval1);
@@ -257,7 +257,7 @@ public class AnalyzerRegistryObject implements Serializable {
         anaRegEntity.setVl2l3(vl2l3);
         anaRegEntity.setVl2n(vl2n);
         anaRegEntity.setVl3l1(vl3l1);
-        anaRegEntity.setVl3n(thdvl3n);
+        anaRegEntity.setVl3n(vl3n);
         anaRegEntity.setVllsys(vllsys);
         anaRegEntity.setVlnsys(vlnsys);
         

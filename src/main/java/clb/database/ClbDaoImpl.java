@@ -3,6 +3,7 @@ package clb.database;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -18,22 +19,19 @@ import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 
+import clb.business.objects.AnalyzerMeterObject;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
-import clb.business.objects.BuildingMeterObject;
 import clb.business.objects.BuildingObject;
-import clb.business.objects.DataLoggerObject;
 import clb.business.objects.UsersystemObject;
 import clb.database.entities.AnalyzerEntity;
+import clb.database.entities.AnalyzerMeterEntity;
 import clb.database.entities.AnalyzerRegistryEntity;
 import clb.database.entities.BuildingEntity;
-import clb.database.entities.BuildingMeterEntity;
-import clb.database.entities.DataLoggerEntity;
 import clb.database.entities.UsersystemEntity;
+import clb.database.repository.AnalyzerMetersMongoRepository;
 import clb.database.repository.AnalyzerMongoRepository;
-import clb.database.repository.BuildingsMetersMongoRepository;
 import clb.database.repository.BuildingsMongoRepository;
-import clb.database.repository.DataLoggerMongoRepository;
 import clb.database.repository.UsersystemMongoRepository;
 import clb.global.DateUtils;
 
@@ -53,10 +51,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	private BuildingsMongoRepository buildingsMongoRepository;
 
 	@Autowired
-	private BuildingsMetersMongoRepository buildingsMetersMongoRepository;
-
-	@Autowired
-	private DataLoggerMongoRepository dataLoggerMongoRepository;
+	private AnalyzerMetersMongoRepository buildingsMetersMongoRepository;
 
 	@Autowired
 	private UsersystemMongoRepository userSystemMongoRepository;
@@ -124,13 +119,6 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	}
 
 	@Override
-	public void saveDataLogger(DataLoggerObject dataLoggerObject) {
-		DataLoggerEntity dataLoggerEntity = dataLoggerObject.toEntity(); 
-		dataLoggerMongoRepository.save(dataLoggerEntity);
-		dataLoggerObject.setDataloggerid(dataLoggerEntity.getDataloggerid());
-	}
-
-	@Override
 	public void saveBuilding(BuildingObject buildingObject) {
 		BuildingEntity buildingEntity = buildingObject.toEntity();
 		buildingsMongoRepository.save(buildingEntity);
@@ -138,8 +126,8 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	}
 
 	@Override
-	public void saveBuildingMeter(BuildingMeterObject buildingMeterObject) {
-		BuildingMeterEntity buildingMeterEntity = buildingMeterObject.toEntity();
+	public void saveAnalyzerMeter(AnalyzerMeterObject buildingMeterObject) {
+		AnalyzerMeterEntity buildingMeterEntity = buildingMeterObject.toEntity();
 		buildingsMetersMongoRepository.save(buildingMeterEntity);
 		buildingMeterObject.setBuildingMeterId( buildingMeterEntity.getBuildingMeterId() );
 	}
@@ -148,7 +136,22 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	public void saveUsersystem(UsersystemObject userSystemObject) {
 		UsersystemEntity userSystemEntity = userSystemObject.toEntity();
 		userSystemMongoRepository.save(userSystemEntity);
-		userSystemEntity.setUserid(userSystemObject.getUserid());
+		userSystemObject.setUserid(userSystemEntity.getUserid());
+	}
+
+	@Override
+	public List<UsersystemObject> getAllUsers(){
+		return userSystemMongoRepository.findAll().stream().map(UsersystemObject::new).collect(Collectors.toList());
+	}
+
+	@Override
+	public List<BuildingObject> getAllBuildings(){
+		return buildingsMongoRepository.findAll().stream().map(BuildingObject::new).collect(Collectors.toList());
+	}
+
+	@Override
+	public List<AnalyzerObject> getAllAnalyzers() {
+		return analyzerMongoRepository.findAll().stream().map(AnalyzerObject::new).collect(Collectors.toList());
 	}
 
 	@Override
@@ -184,14 +187,6 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 		this.buildingsMongoRepository = buildingsMongoRepository;
 	}
 
-	public DataLoggerMongoRepository getDataLoggerMongoRepository() {
-		return dataLoggerMongoRepository;
-	}
-
-	public void setDataLoggerMongoRepository(DataLoggerMongoRepository dataLoggerMongoRepository) {
-		this.dataLoggerMongoRepository = dataLoggerMongoRepository;
-	}
-
 	public UsersystemMongoRepository getUserSystemMongoRepository() {
 		return userSystemMongoRepository;
 	}
@@ -205,163 +200,60 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 		return buildingsMongoRepository.findBuildingsByUsername( userName ).stream().map(BuildingObject::new).collect(Collectors.toList());
 	}
 
-	public BuildingsMetersMongoRepository getBuildingsMetersMongoRepository() {
+	public AnalyzerMetersMongoRepository getBuildingsMetersMongoRepository() {
 		return buildingsMetersMongoRepository;
 	}
 
-	public void setBuildingsMetersMongoRepository( BuildingsMetersMongoRepository buildingsMetersMongoRepository ) {
+	public void setBuildingsMetersMongoRepository( AnalyzerMetersMongoRepository buildingsMetersMongoRepository ) {
 		this.buildingsMetersMongoRepository = buildingsMetersMongoRepository;
 	}
 
 	@Override
-	public List<AnalyzerRegistryObject> getHourRegistriesFromAnalyzer( String analyzerId, Date timeFrame ) {
-
-		Date previousHourDateLimit = null;
-
-		//If this Hour set to current time
-		if(DateUtils.getInstance().isThisHour(timeFrame)) {
-			timeFrame = new Date();
-			previousHourDateLimit = DateUtils.getInstance().getPreviousHourFromDate(timeFrame);
-
-			//If is not today is necessary to join 2 tables
-			if(DateUtils.getInstance().isToday(previousHourDateLimit)) {
-				return  processRegistries( analyzerId, previousHourDateLimit, timeFrame);
-			}
-			else {
-				List<AnalyzerRegistryObject> firstHourRegistries =  processRegistries(analyzerId, previousHourDateLimit, timeFrame);
-				List<AnalyzerRegistryObject> secondHourRegistries =  processRegistries(analyzerId, 
-						DateUtils.getInstance().getHourReseted(previousHourDateLimit, true), timeFrame);
-
-				firstHourRegistries.addAll(secondHourRegistries);
-
-				return firstHourRegistries;
-			}
-		}
-		else {
-			timeFrame = DateUtils.getInstance().getHourReseted(timeFrame,true);
-			previousHourDateLimit = DateUtils.getInstance().getHourReseted(timeFrame,false);
-
-			return  processRegistries( analyzerId, previousHourDateLimit, timeFrame);
-		}
-
-
-	}
-
-	@Override
-	public List<AnalyzerRegistryObject> getDayRegistriesFromAnalyzer( String analyzerId, Date timeFrameNow ) {
-
-		Date previousDayDateLimit = null;
-
-		if(DateUtils.getInstance().isToday(timeFrameNow)) {
-			timeFrameNow = new Date();
-			previousDayDateLimit = DateUtils.getInstance().getPreviousDayFromDate(timeFrameNow);
-
-			List<AnalyzerRegistryObject> firstDayRegistries =  processRegistries(analyzerId, previousDayDateLimit, timeFrameNow);
-			List<AnalyzerRegistryObject> secondDayRegistries =  processRegistries(analyzerId, DateUtils.getInstance().getDayReseted(previousDayDateLimit, true), timeFrameNow);
-
-			firstDayRegistries.addAll(secondDayRegistries);
-
-			return firstDayRegistries;
-		} 
-		else {
-			timeFrameNow = DateUtils.getInstance().getDayReseted(timeFrameNow,true);
-			previousDayDateLimit = DateUtils.getInstance().getDayReseted(timeFrameNow,false);
-			return  processRegistries(analyzerId, previousDayDateLimit, timeFrameNow);
-		}
-
-
+	public List<AnalyzerRegistryObject> getDayHourRegistriesFromAnalyzer( String analyzerId, Date from, Date to) {
+		return  processRegistries(analyzerId, from, to);
 	}
 
 
 	@Override
-	public List<AnalyzerRegistryObject> getWeekRegistriesFromAnalyzer(String analyzerId, Date timeFrame) {
+	public List<AnalyzerRegistryObject> getWeekRegistriesFromAnalyzer(String analyzerId, Date firstDay, Date lastDay) {
 
 		List<AnalyzerRegistryObject> weekRegistries = new ArrayList<AnalyzerRegistryObject>();
 
-		if(DateUtils.getInstance().isThisWeek(timeFrame)) {
-			Date nextCurrentDay = DateUtils.getInstance().getDayReseted(new Date(), true);
-			Date previousDayDateLimit = DateUtils.getInstance().getWeekFirstDayReseted(timeFrame);
-			previousDayDateLimit = DateUtils.getInstance().getDayReseted(previousDayDateLimit, false);
-
-			//While is not today get from first day until today
-
-			while(!DateUtils.getInstance().isTheSameDay(nextCurrentDay, previousDayDateLimit)) {
-				
-				//Less Registries If is today
-				if(DateUtils.getInstance().isToday(previousDayDateLimit)) {
-					weekRegistries.addAll(processRegistries(analyzerId, previousDayDateLimit, new Date()));
-				}
-				//Full Registries
-				else {
-					weekRegistries.addAll(processRegistries(analyzerId, previousDayDateLimit, 
-							DateUtils.getInstance().getDayReseted(previousDayDateLimit,true)));
-				}
-
-				previousDayDateLimit = DateUtils.getInstance().getDay(previousDayDateLimit, true);
-			}
-
-		} 
-		else {
-			Date lastDay = DateUtils.getInstance().getWeekLastDay(timeFrame);
-			Date firstDay = DateUtils.getInstance().getWeekFirstDayReseted(timeFrame);
-			firstDay = DateUtils.getInstance().getDayReseted(firstDay, false);
-
-			//While is not last day of the week get from first day until last
-
-			while(!DateUtils.getInstance().isTheSameDay(lastDay, firstDay)){
-				weekRegistries.addAll(processRegistries(analyzerId, firstDay, 
-						DateUtils.getInstance().getDayReseted(firstDay,true)));
-
-				firstDay = DateUtils.getInstance().getDayReseted(firstDay, true);
-			} 
+		if(DateUtils.getInstance().isTheSameDay(lastDay, firstDay)) {
+			final Date nextDay = DateUtils.getInstance().getDay(firstDay,true);
+			weekRegistries.addAll(processRegistries(analyzerId, firstDay,nextDay));
 		}
+
+		while(!DateUtils.getInstance().isTheSameDay(lastDay, firstDay)){
+			final Date nextDay = DateUtils.getInstance().getDay(firstDay,true);
+
+			weekRegistries.addAll(processRegistries(analyzerId, firstDay,nextDay));
+
+			firstDay = nextDay;
+		} 
+
 
 		return weekRegistries;
 	}
-	
+
 	@Override
-	public List<AnalyzerRegistryObject> getMonthRegistriesFromAnalyzer(String analyzerId, Date timeFrame) {
+	public List<AnalyzerRegistryObject> getMonthRegistriesFromAnalyzer(String analyzerId, Date firstDay, Date lastDay) {
 
-		List<AnalyzerRegistryObject> weekRegistries = new ArrayList<AnalyzerRegistryObject>();
+		List<AnalyzerRegistryObject> monthRegistries = new ArrayList<AnalyzerRegistryObject>();
 
-		if(DateUtils.getInstance().isThisMonth(timeFrame)) {
-			Date nextCurrentDay = DateUtils.getInstance().getDayReseted(new Date(), true);
-			Date previousDayDateLimit = DateUtils.getInstance().getMonthFirstDayReseted(timeFrame);
-
-			//While is not today get from first day until today
-
-			while(!DateUtils.getInstance().isTheSameDay(nextCurrentDay, previousDayDateLimit)) {
-				
-				//Less Registries If is today
-				if(DateUtils.getInstance().isToday(previousDayDateLimit)) {
-					weekRegistries.addAll(processRegistries(analyzerId, previousDayDateLimit, new Date()));
-				}
-				//Full Registries
-				else {
-					weekRegistries.addAll(processRegistries(analyzerId, previousDayDateLimit, 
-							DateUtils.getInstance().getDayReseted(previousDayDateLimit,true)));
-				}
-
-				previousDayDateLimit = DateUtils.getInstance().getDay(previousDayDateLimit, true);
-			}
-
-		} 
-		else {
-			Date lastDay = DateUtils.getInstance().getMonthLastDay(timeFrame);
-			lastDay = DateUtils.getInstance().getDay(lastDay, true);
-			Date firstDay = DateUtils.getInstance().getMonthFirstDayReseted(timeFrame);
-
-			//While is not last day of the week get from first day until last
-
-			while(!DateUtils.getInstance().isTheSameDay(lastDay, firstDay)){
-				weekRegistries.addAll(processRegistries(analyzerId, firstDay, 
-						DateUtils.getInstance().getDayReseted(firstDay,true)));
-
-				firstDay = DateUtils.getInstance().getDayReseted(firstDay, true);
-			} 
+		if(DateUtils.getInstance().isTheSameDay(lastDay, firstDay)) {
+			final Date nextDay = DateUtils.getInstance().getDay(firstDay,true);
+			monthRegistries.addAll(processRegistries(analyzerId, firstDay,nextDay));
 		}
 
-		return weekRegistries;
+		while(!DateUtils.getInstance().isTheSameDay(lastDay, firstDay)){
+			monthRegistries.addAll(processRegistries(analyzerId, firstDay, 
+					DateUtils.getInstance().getDay(firstDay,true)));
+
+			firstDay = DateUtils.getInstance().getDay(firstDay, true);
+		} 
+
+		return monthRegistries;
 	}
 
 
@@ -418,14 +310,14 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
 		return null;
 	}
-	
+
 	@Override
-	public String[] getYearsAvailable() {
-		 Set<String> yearsValues = this.mongoTemplate.getCollectionNames().stream()
-		 	.filter(collname -> collname.startsWith(ANALYZER_REGISTIES_COLL_NAME))	
-		 	.map( colName -> colName.split("_")[1].substring(0, 4))
-		 	.collect(Collectors.toSet());
-		 
+	public String[] getDatesAvailable() {
+		Set<String> yearsValues = this.mongoTemplate.getCollectionNames().stream()
+				.filter(collname -> collname.startsWith(ANALYZER_REGISTIES_COLL_NAME))	
+				.map(colName -> colName.split("_")[1])
+				.collect(Collectors.toSet());
+
 		return yearsValues.toArray(new String[yearsValues.size()]);
 	}
 
@@ -436,5 +328,57 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	public void setMongoTemplate( MongoTemplate mongoTemplate ) {
 		this.mongoTemplate = mongoTemplate;
 	}
+
+	@Override
+	public Long getLatestDateForAnalyzer(String analyzerCodeName) {
+
+		AnalyzerEntity analyzer = analyzerMongoRepository.findAnalyzerByCodename(analyzerCodeName);
+
+		if(analyzer != null) {
+
+			List<Date> listTimes = new ArrayList<Date>();
+
+			mongoTemplate.getCollectionNames().stream()
+			.filter(collname -> collname.startsWith(ANALYZER_REGISTIES_COLL_NAME))
+			.forEach(collName -> 
+			mongoTemplate.getCollection(collName).find(new BasicDBObject("analyzerId",analyzer.getId()))
+			.forEach(result -> {
+				Object currentTime = result.get( "currenttime" );
+
+				if(currentTime != null) {
+					listTimes.add((Date)currentTime);
+				}}));
+
+			Collections.sort(listTimes);
+
+			return listTimes.size() > 0 ? listTimes.get(listTimes.size()-1).getTime() : null;
+		}
+
+		return null;
+	}
+
+	@Override
+	public BuildingObject getBuildingByName(String buildingName) {
+		BuildingEntity bEntity = buildingsMongoRepository.getBuildingByName(buildingName);
+
+		if(bEntity != null) {
+			return new BuildingObject(bEntity);
+		}
+
+		return null;
+	}
+
+	@Override
+	public AnalyzerObject getAnalyzerByCodeName(String analyzerCodeName) {
+		AnalyzerEntity aEntity = analyzerMongoRepository.findAnalyzerByCodename(analyzerCodeName);
+
+		if(aEntity != null) {
+			return new AnalyzerObject(aEntity);
+		}
+
+		return null;
+	}
+
+
 
 }

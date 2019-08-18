@@ -7,5 +7,4 @@ import clb.database.entities.AnalyzerRegistryEntity;
 
 @Repository
 public interface AnalyzerRegistryMongoRepository extends MongoRepository<AnalyzerRegistryEntity, String>{
-
 }
