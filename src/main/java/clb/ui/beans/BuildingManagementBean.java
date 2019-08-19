@@ -41,67 +41,55 @@ public class BuildingManagementBean implements Serializable {
 	private ClbHomeLoginBean clbHomeLoginBean;
 
 	private List<BuildingTreeGui> buildingsToShow;
-	
+	private BuildingTreeGui buildingSelected;
+
 	private TreeNode parentDivisionSelected;
 	private String selectedBuildingIdNewDivision;
-	
+
 	private List<SelectItem> analyzersDivisionSelection;
 	private Set<String> analyzersToRemove;
-	
-	private List<AnalyzerGui> allAnalyzers;
+
 	private List<AnalyzerGui> analyzersSelected;
 	private List<AnalyzerGui> tempAnalyzerSelected;
-	
+
 	private BuildingNewManagementGui newBuilding;
 	private DivisionNewManagementGui newDivision;
 
-	public List<AnalyzerGui> getAllAnalyzers() {
-		return allAnalyzers;
-	}
 
-	public void setAllAnalyzers(List<AnalyzerGui> allAnalyzers) {
-		this.allAnalyzers = allAnalyzers;
-	}
 
 	@PostConstruct
 	public void initBuildingManagement() {
 
 		newBuilding = new BuildingNewManagementGui();
 		newDivision = new DivisionNewManagementGui();
-		
-		buildingsToShow = clbHomeLoginBean.userHasBuildings() ? 
-						clbHomeLoginBean.getUserBuildings().stream()
-							.map(BuildingAnalysisGui::toObject)
-							.map(BuildingTreeGui::new)
-							.collect(Collectors.toList()) : null;
-		
-		allAnalyzers = analyzerDataService.getAllAvailableAnalyzers().stream()
-								.map(AnalyzerGui::new)
-								.collect(Collectors.toList());
+
+		buildingsToShow = clbHomeLoginBean.userHasBuildings()
+				? clbHomeLoginBean.getUserBuildings().stream().map(BuildingAnalysisGui::toObject)
+						.map(BuildingTreeGui::new).collect(Collectors.toList()) : null;
 	}
 
 	public void setNewDivisionBuilding(String buildingId) {
 		this.selectedBuildingIdNewDivision = buildingId;
 	}
-	
+
 	public void createBuilding() {
 		if (newBuilding != null) {
 			BuildingObject newBuildingObj = newBuilding.toObject();
 			clbHomeLoginBean.addBuildingToUser(newBuildingObj);
 		}
 	}
-	
+
 	public void createDivision() {
 		if (newDivision != null) {
 			DivisionObject divisionObj = new DivisionObject();
 			divisionObj.setName(newDivision.getName());
-			
-			if(parentDivisionSelected == null) {
+
+			if (parentDivisionSelected == null) {
 				analyzerDataService.saveDivisionForBuilding(selectedBuildingIdNewDivision, divisionObj);
+			} else {
+				analyzerDataService.saveDivisionForParent(
+						((DivisionTreeGui) parentDivisionSelected.getData()).getDivisionId(), divisionObj);
 			}
-			else {
-				analyzerDataService.saveDivisionForParent(((DivisionTreeGui)parentDivisionSelected.getData()).getDivisionId(), divisionObj);
-			}			
 			clbHomeLoginBean.loginUser();
 		}
 	}
@@ -112,71 +100,70 @@ public class BuildingManagementBean implements Serializable {
 			buildingsToShow.remove(buildingToDelete);
 		}
 	}
-	
+
 	public void deleteDivision(String buildId) {
-		
+
 		DivisionTreeGui divisionToDeleteNode = (DivisionTreeGui) parentDivisionSelected.getData();
-		
+
 		TreeNode parent = parentDivisionSelected.getParent();
 		DivisionTreeGui parentNode = (DivisionTreeGui) parent.getData();
-		
-		if(parentNode != null) {
-			analyzerDataService.deleteChildDivisionFromParent(parentNode.getDivisionId(),divisionToDeleteNode.getDivisionId());
+
+		if (parentNode != null) {
+			analyzerDataService.deleteChildDivisionFromParent(parentNode.getDivisionId(),
+					divisionToDeleteNode.getDivisionId());
+		} else {
+			analyzerDataService.deleteChildDivisionFromBuilding(buildId, divisionToDeleteNode.getDivisionId());
 		}
-		else {
-			analyzerDataService.deleteChildDivisionFromBuilding(buildId,divisionToDeleteNode.getDivisionId());
-		}
-		
+
 		clbHomeLoginBean.loginUser();
 	}
-	
+
 	public void showDivisionOptions(NodeSelectEvent event) {
 		this.parentDivisionSelected = event.getTreeNode();
 		this.parentDivisionSelected.setSelected(true);
-		
-		this.analyzersDivisionSelection = ( (DivisionTreeGui) this.parentDivisionSelected.getData() ).getAnalyzers();
-		
-		this.analyzersSelected = this.allAnalyzers.stream()
-				.filter(analyzer -> this.analyzersDivisionSelection.stream()
-										.filter(item -> item.getValue().equals(analyzer.getAnalyzerId()))
-										.count() == 0)
-				.collect(Collectors.toList());
-		
-		BuildingTreeGui buildingGui = (BuildingTreeGui) event.getComponent().getAttributes().get("building");
-		buildingGui.setDivisionIsSelected(true);
+
+		this.analyzersDivisionSelection = ((DivisionTreeGui) this.parentDivisionSelected.getData()).getAnalyzers();
+
+		this.buildingSelected = (BuildingTreeGui) event.getComponent().getAttributes().get("building");
+		this.buildingSelected.setDivisionIsSelected(true);
 	}
-	
+
 	public void hideDivisionOptions(NodeUnselectEvent event) {
 		event.getTreeNode().setSelected(false);
 		this.parentDivisionSelected = null;
-		
+
 		this.analyzersDivisionSelection = null;
-		
+
 		BuildingTreeGui buildingGui = (BuildingTreeGui) event.getComponent().getAttributes().get("building");
 		buildingGui.setDivisionIsSelected(false);
 	}
 
 	public String selectAnalyzer() {
-		//Must Have Division and Analyzers
-		if(this.parentDivisionSelected != null && tempAnalyzerSelected != null && tempAnalyzerSelected.size() > 0) {
-			String parentId = ((DivisionTreeGui)this.parentDivisionSelected.getData()).getDivisionId();
-			analyzerDataService.saveAnalyzersForDivision(parentId,tempAnalyzerSelected.stream().map(AnalyzerGui::toObject).collect(Collectors.toSet()));
+		// Must Have Division and Analyzers
+		if (this.parentDivisionSelected != null && tempAnalyzerSelected != null && tempAnalyzerSelected.size() > 0) {
+			String parentId = ((DivisionTreeGui) this.parentDivisionSelected.getData()).getDivisionId();
+			analyzerDataService.saveAnalyzersForDivision(parentId,
+					tempAnalyzerSelected.stream().map(AnalyzerGui::toObject).collect(Collectors.toSet()));
 			clbHomeLoginBean.loginUser();
 		}
-		
+
 		return "buildingManagement.xhtml?faces-redirect=true";
 	}
-	
+
 	public String removeAnalyzersSelected() {
-		if(this.parentDivisionSelected != null && this.analyzersToRemove != null) {
-			String divisionId = ((DivisionTreeGui)this.parentDivisionSelected.getData()).getDivisionId();
-			analyzerDataService.removeAnalyzersForDivision(divisionId,analyzersToRemove);
+		if (this.parentDivisionSelected != null && this.analyzersToRemove != null) {
+			String divisionId = ((DivisionTreeGui) this.parentDivisionSelected.getData()).getDivisionId();
+			analyzerDataService.removeAnalyzersForDivision(divisionId, analyzersToRemove);
 			clbHomeLoginBean.loginUser();
 		}
-		
+
 		return "buildingManagement.xhtml?faces-redirect=true";
 	}
 	
+	public void loadNewAnalyzers() {
+		analyzerDataService.findAnalyzersFromBuilding(clbHomeLoginBean.getAuthenticatedUser().getUsername(), buildingSelected.getBuildingid());
+	}
+
 	public AnalyzerDataService getAnalyzerDataService() {
 		return analyzerDataService;
 	}
@@ -216,7 +203,7 @@ public class BuildingManagementBean implements Serializable {
 	public void setNewDivision(DivisionNewManagementGui newDivision) {
 		this.newDivision = newDivision;
 	}
-	
+
 	public TreeNode getParentDivisionSelected() {
 		return parentDivisionSelected;
 	}
@@ -240,8 +227,7 @@ public class BuildingManagementBean implements Serializable {
 	public void setAnalyzersDivisionSelection(List<SelectItem> analyzersDivisionSelection) {
 		this.analyzersDivisionSelection = analyzersDivisionSelection;
 	}
-	
-	
+
 	public List<AnalyzerGui> getAnalyzersSelected() {
 		return analyzersSelected;
 	}
@@ -265,7 +251,5 @@ public class BuildingManagementBean implements Serializable {
 	public void setAnalyzersToRemove(Set<String> analyzersToRemove) {
 		this.analyzersToRemove = analyzersToRemove;
 	}
-	
-	
-	
+
 }

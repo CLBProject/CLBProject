@@ -117,16 +117,6 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	public Set<UsersystemObject> getAllUsers(){
 		return mongoTemplate.findAll(UsersystemEntity.class).stream().map(UsersystemObject::new).collect(Collectors.toSet());
 	}
-
-	@Override
-	public Set<BuildingObject> getAllBuildings(){
-		return mongoTemplate.findAll(BuildingEntity.class).stream().map(BuildingObject::new).collect(Collectors.toSet());
-	}
-
-	@Override
-	public Set<AnalyzerObject> getAllAnalyzers() {
-		return mongoTemplate.findAll(AnalyzerEntity.class).stream().map(AnalyzerObject::new).collect(Collectors.toSet());
-	}
 	
 
 	@Override
@@ -326,6 +316,12 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
 	public void setClbRepository(ClbMongoRepository clbRepository) {
 		this.clbRepository = clbRepository;
+	}
+
+	@Override
+	public Set<AnalyzerObject> getAnalyzersFromBuilding(BuildingObject building) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

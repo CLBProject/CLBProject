@@ -19,5 +19,8 @@ public class FtpPrinter {
 		analyzerDataService.setAnalyzersFtp((List<String>)messageGet.getPayload());
 	}
 
+	public void printPut(Message<?> messageGet) {
+		System.out.println(messageGet.getPayload());
+	}
 	
 }

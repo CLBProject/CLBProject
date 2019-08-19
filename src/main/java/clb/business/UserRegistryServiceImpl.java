@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import clb.business.integration.FtpGateway;
 import clb.business.objects.UserEvent;
 import clb.business.objects.UsersystemObject;
 import clb.business.utils.PasswordGenerator;
@@ -46,6 +47,9 @@ public class UserRegistryServiceImpl implements UserRegistryService, Serializabl
     
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+	
+	@Autowired
+	FtpGateway ftpGateway;
 
     private PasswordGenerator passwordGenerator = new PasswordGenerator.PasswordGeneratorBuilder()
             .useDigits(true)
@@ -105,12 +109,14 @@ public class UserRegistryServiceImpl implements UserRegistryService, Serializabl
         if(user.getId() == null)
             throw new UserNotPersistedException();
 
+        ftpGateway.write(userName+"/",userName+"/");
+        
         String subject = "Registration Complete";
 
         String textMsg = "Access Link @ http://localhost:8080" + FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() +
                 "/pages/registerComplete.xhtml?token=" + user.getToken();
         
-        userEventPublisher.publishEvent(new UserEvent(user.getId(), subject, textMsg));
+        //userEventPublisher.publishEvent(new UserEvent(user.getId(), subject, textMsg));
         
         
     }

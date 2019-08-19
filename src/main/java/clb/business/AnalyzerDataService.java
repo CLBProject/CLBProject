@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.springframework.messaging.Message;
-
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.BuildingObject;
@@ -33,8 +31,6 @@ public interface AnalyzerDataService {
 
 	public Map<String,List<String>> getYearsAndMonthsAvailable();
 
-	public void fillUserWithAllBuildings(String username);
-
 	public void saveBuildingForUser(UsersystemObject object, BuildingObject building);
 
 	public void saveDivisionForBuilding(String selectedBuildingIdNewDivision, DivisionObject divisionObj);
@@ -47,11 +43,11 @@ public interface AnalyzerDataService {
 
 	public void deleteChildDivisionFromBuilding(String selectedBuildingIdNewDivision, String divisionId);
 
-	public Set<AnalyzerObject> getAllAvailableAnalyzers();
+	public Set<AnalyzerObject> findAnalyzersFromBuilding(String username, String buildingId);
 
 	public void saveAnalyzersForDivision(String parentId, Set<AnalyzerObject> analyzersToRemove);
 
 	public void removeAnalyzersForDivision(String divisionId, Set<String> analyzersToRemove);
-	
-	public void setAnalyzersFtp(List<String> analyzers);
+
+	public void setAnalyzersFtp(List<String> payload);
 }

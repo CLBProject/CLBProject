@@ -7,6 +7,7 @@ import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Component;
 
+import clb.business.integration.FtpGateway;
 import clb.business.objects.UserEvent;
 
 @Component
@@ -19,6 +20,7 @@ public class UserRegistryServicePublisherEvent  implements ApplicationListener<U
     
     @Autowired
     private MailSender mailSender;
+    
 
 	@Override
 	public void onApplicationEvent(UserEvent event) {

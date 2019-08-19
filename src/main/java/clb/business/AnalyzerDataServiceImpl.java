@@ -161,20 +161,14 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	}
 
 	@Override
-	public Set<AnalyzerObject> getAllAvailableAnalyzers() {
+	public Set<AnalyzerObject> findAnalyzersFromBuilding(String username, String buildingId) {
+
+		ftpGateway.read("/"+username+"/"+buildingId);
 		
-		ftpGateway.read("/");
-		System.out.println(analyzersFtp);
-		return clbDao.getAllAnalyzers();
+		List<String> analyzersToFind = analyzersFtp;
+		return null;
 	}
-	
-	@Override
-	@Transactional
-	public void fillUserWithAllBuildings(String username) {
-		final UsersystemObject user = clbDao.findUserByUserName(username);
-		clbDao.getAllBuildings().stream().forEach(building -> user.addBuilding(building));;
-		clbDao.saveClbObject(user);
-	}
+
 	
 	@Transactional
 	@Override
@@ -282,7 +276,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		clbDao.saveClbObject(division);
 	}
 
-
 	public TaskExecutor getTaskExecutor() {
 		return taskExecutor;
 	}
@@ -314,5 +307,4 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	public void setAnalyzersFtp(List<String> analyzersFtp) {
 		this.analyzersFtp = analyzersFtp;
 	}
-	
 }

@@ -40,9 +40,9 @@ services:
      #   - "/c/Users/nobre/CLB/empty/passwd:/etc/pure-ftpd/passwd"
      environment:
          PUBLICHOST: 192.168.99.100
-         FTP_USER_NAME: admin
-         FTP_USER_PASS: admin
-         FTP_USER_HOME: /home/username
+         FTP_USER_NAME: bob
+         FTP_USER_PASS: bob
+         FTP_USER_HOME: /home/bob
 networks:
   overlay:
 

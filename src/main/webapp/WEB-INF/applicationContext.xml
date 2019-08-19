@@ -79,16 +79,20 @@
 
 	<bean id="ftpSessionFactory"
 		class="org.springframework.integration.ftp.session.DefaultFtpSessionFactory">
-		<property name="host" value="localhost" />
+		<property name="host" value="192.168.99.100" />
 		<property name="port" value="21" />
-		<property name="username" value="nobre1" />
-		<property name="password" value="nobre1" />
+		<property name="username" value="bob" />
+		<property name="password" value="bob" />
+		<property name="clientMode" value="2"/>
 	</bean>	
 		
 	<int:channel id="ftpChannel">
 	</int:channel>
 	
 	<int:channel id="outboundChannel">
+	</int:channel>
+		
+	<int:channel id="outboundPutChannel">
 	</int:channel>
 
 	 
@@ -102,6 +106,16 @@
 	    expression="payload"
 	    reply-channel="outboundChannel"/>
 	    
+	     
+	
+	 <int-ftp:outbound-gateway session-factory="ftpSessionFactory"
+		command="put"
+		expression="payload"
+		auto-create-directory="true"
+		request-channel="ftpChannel"
+		reply-channel="outboundChannel">
+	</int-ftp:outbound-gateway>
+	 
 	    
 	 <bean id="mp" class="clb.business.integration.FtpPrinter"/>
 	 

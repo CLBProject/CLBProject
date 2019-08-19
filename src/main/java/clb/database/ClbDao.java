@@ -24,10 +24,8 @@ public interface ClbDao{
 	void deleteClbObject(ClbObject object);
 
 	Set<UsersystemObject> getAllUsers();
-	
-	Set<BuildingObject> getAllBuildings();
-	
-	Set<AnalyzerObject> getAllAnalyzers();
+
+	Set<AnalyzerObject> getAnalyzersFromBuilding(BuildingObject building);
 
     UsersystemObject findUserByToken( String token );
 
@@ -50,5 +48,6 @@ public interface ClbDao{
 	Long getLatestDateForAnalyzer(String analyzerCodeName);
 
 	void deleteDivisionCascade(DivisionObject mainDivision);
+
 
 }
