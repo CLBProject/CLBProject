@@ -111,7 +111,6 @@ public class UserRegistryServiceImpl implements UserRegistryService, Serializabl
         if(user.getId() == null)
             throw new UserNotPersistedException();
 
-        
         ftpGatewayPut.upload(userName, "",  "");
         
         String subject = "Registration Complete";
@@ -119,7 +118,7 @@ public class UserRegistryServiceImpl implements UserRegistryService, Serializabl
         String textMsg = "Access Link @ http://localhost:8080" + FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() +
                 "/pages/registerComplete.xhtml?token=" + user.getToken();
         
-        //userEventPublisher.publishEvent(new UserEvent(user.getId(), subject, textMsg));
+        userEventPublisher.publishEvent(new UserEvent(user.getId(), subject, textMsg));
         
         
     }

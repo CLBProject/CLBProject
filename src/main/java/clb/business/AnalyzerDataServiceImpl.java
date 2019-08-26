@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import clb.business.integration.FtpGateway;
+import clb.business.integration.FtpGatewayPut;
 import clb.business.integration.FtpPrinter;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
@@ -46,7 +47,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	FtpGateway ftpGateway;
 	
 	@Autowired
-	FtpPrinter ftpPrinter;
+	FtpGatewayPut ftpGatewayPut;
 
 	@PostConstruct
 	public void init(){
@@ -158,16 +159,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		
 		return yearsAndMonths;
 	}
-
-	@Override
-	public Set<AnalyzerObject> findAnalyzersFromBuilding(String username, String buildingId) {
-
-		ftpGateway.read("/"+username+"/"+buildingId, "newdir");
-		
-		List<String> analyzersToFind = analyzersFtp;
-		return null;
-	}
-
 	
 	@Transactional
 	@Override
@@ -183,6 +174,8 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		
 		user.addBuilding(building);
 		
+		
+		ftpGatewayPut.upload(user.getId() + "/"+building.getId(), "", "");
 		clbDao.saveClbObject(user);
 	}
 

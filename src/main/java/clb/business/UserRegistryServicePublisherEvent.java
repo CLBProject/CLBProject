@@ -7,7 +7,6 @@ import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Component;
 
-import clb.business.integration.FtpGateway;
 import clb.business.objects.UserEvent;
 
 @Component
@@ -26,11 +25,11 @@ public class UserRegistryServicePublisherEvent  implements ApplicationListener<U
 	public void onApplicationEvent(UserEvent event) {
 		 String recipientAddress = event.getUserName();
 
-	        SimpleMailMessage email = new SimpleMailMessage();
-	        email.setTo(recipientAddress);
-	        email.setSubject(event.getSubject());
-	        email.setText( event.getTextMsg());
-	        mailSender.send( email );
+        SimpleMailMessage email = new SimpleMailMessage();
+        email.setTo(recipientAddress);
+        email.setSubject(event.getSubject());
+        email.setText( event.getTextMsg());
+        mailSender.send( email );
 		
 	}
 

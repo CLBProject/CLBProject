@@ -43,8 +43,6 @@ public interface AnalyzerDataService {
 
 	public void deleteChildDivisionFromBuilding(String selectedBuildingIdNewDivision, String divisionId);
 
-	public Set<AnalyzerObject> findAnalyzersFromBuilding(String username, String buildingId);
-
 	public void saveAnalyzersForDivision(String parentId, Set<AnalyzerObject> analyzersToRemove);
 
 	public void removeAnalyzersForDivision(String divisionId, Set<String> analyzersToRemove);

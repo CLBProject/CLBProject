@@ -161,7 +161,7 @@ public class BuildingManagementBean implements Serializable {
 	}
 	
 	public void loadNewAnalyzers() {
-		analyzerDataService.findAnalyzersFromBuilding(clbHomeLoginBean.getAuthenticatedUser().getUsername(), buildingSelected.getBuildingid());
+		//TODO was supose to be ftp but..
 	}
 
 	public AnalyzerDataService getAnalyzerDataService() {
