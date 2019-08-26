@@ -13,7 +13,6 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.messaging.Message;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -163,7 +162,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	@Override
 	public Set<AnalyzerObject> findAnalyzersFromBuilding(String username, String buildingId) {
 
-		ftpGateway.read("/"+username+"/"+buildingId);
+		ftpGateway.read("/"+username+"/"+buildingId, "newdir");
 		
 		List<String> analyzersToFind = analyzersFtp;
 		return null;

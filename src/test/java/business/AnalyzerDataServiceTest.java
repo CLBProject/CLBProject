@@ -18,7 +18,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import business.configuration.ConfigurationBusiness;
 import clb.business.AnalyzerDataService;
-import clb.business.integration.FtpGateway;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.database.ClbDao;
 import clb.global.DateUtils;
@@ -35,9 +34,6 @@ public class AnalyzerDataServiceTest {
 
 	@Autowired
 	private ClbDao clbDao;
-	
-	@Autowired 
-	private FtpGateway ftpGateway;
 
 	@Test
 	public void getAnalyzerRegistriesNowDateValuesTest() {

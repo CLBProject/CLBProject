@@ -20,7 +20,7 @@ public class FtpPrinter {
 	}
 
 	public void printPut(Message<?> messageGet) {
-		System.out.println(messageGet.getPayload());
+		System.out.println("Put:" + messageGet.getPayload());
 	}
 	
 }

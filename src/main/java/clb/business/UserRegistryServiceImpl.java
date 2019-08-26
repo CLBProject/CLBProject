@@ -1,5 +1,6 @@
 package clb.business;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import clb.business.integration.FtpGateway;
+import clb.business.integration.FtpGatewayPut;
 import clb.business.objects.UserEvent;
 import clb.business.objects.UsersystemObject;
 import clb.business.utils.PasswordGenerator;
@@ -49,7 +51,7 @@ public class UserRegistryServiceImpl implements UserRegistryService, Serializabl
     private BCryptPasswordEncoder passwordEncoder;
 	
 	@Autowired
-	FtpGateway ftpGateway;
+	FtpGatewayPut ftpGatewayPut;
 
     private PasswordGenerator passwordGenerator = new PasswordGenerator.PasswordGeneratorBuilder()
             .useDigits(true)
@@ -109,7 +111,8 @@ public class UserRegistryServiceImpl implements UserRegistryService, Serializabl
         if(user.getId() == null)
             throw new UserNotPersistedException();
 
-        ftpGateway.write(userName+"/",userName+"/");
+        
+        ftpGatewayPut.upload(userName, "",  "");
         
         String subject = "Registration Complete";
 
