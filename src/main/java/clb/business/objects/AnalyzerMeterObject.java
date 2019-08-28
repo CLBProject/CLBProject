@@ -11,8 +11,10 @@ public class AnalyzerMeterObject implements ClbObject {
 
 	private String unit;
 
-	public AnalyzerMeterObject() {
-
+	public AnalyzerMeterObject(String name, String labelKey, String unit) {
+		this.name = name;
+		this.labelKey = labelKey;
+		this.unit = unit;
 	}
 
 	public AnalyzerMeterObject(AnalyzerMeterEntity analyzerMeterEntity) {

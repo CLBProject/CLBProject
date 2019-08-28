@@ -21,11 +21,8 @@ public class AnalyzerMeterGui {
 	}
 	
 	public AnalyzerMeterObject toObject() {
-		AnalyzerMeterObject anMetObj = new AnalyzerMeterObject();
-		anMetObj.setLabelKey(this.labelKey);
+		AnalyzerMeterObject anMetObj = new AnalyzerMeterObject(this.name,this.labelKey, this.unit);
 		anMetObj.setId(this.meterId);
-	    anMetObj.setName(this.name);
-	    anMetObj.setUnit(this.unit);
 		
 	    return anMetObj;
 	}

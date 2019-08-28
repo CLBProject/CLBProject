@@ -79,10 +79,8 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 								analyzerObject.setCodeName(analyzerCodeName);
 								
 								for(AnalyzerMeterValues mterValue: AnalyzerMeterValues.values()) {
-									AnalyzerMeterObject analyzerMeterObject = new AnalyzerMeterObject();
-									analyzerMeterObject.setName( mterValue.getLabel() );
-									analyzerMeterObject.setLabelKey( mterValue.name() );
-									analyzerMeterObject.setUnit(mterValue.getUnit());
+									AnalyzerMeterObject analyzerMeterObject = 
+											new AnalyzerMeterObject(mterValue.name(), mterValue.getLabel(),mterValue.getUnit());
 
 									clbDao.saveClbObject( analyzerMeterObject );
 

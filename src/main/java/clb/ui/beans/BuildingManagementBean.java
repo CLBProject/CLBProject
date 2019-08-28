@@ -18,6 +18,7 @@ import org.primefaces.model.TreeNode;
 import clb.business.AnalyzerDataService;
 import clb.business.objects.BuildingObject;
 import clb.business.objects.DivisionObject;
+import clb.ui.beans.newobjects.AnalyzerNewManagementGui;
 import clb.ui.beans.newobjects.BuildingNewManagementGui;
 import clb.ui.beans.newobjects.DivisionNewManagementGui;
 import clb.ui.beans.objects.AnalyzerGui;
@@ -54,6 +55,7 @@ public class BuildingManagementBean implements Serializable {
 
 	private BuildingNewManagementGui newBuilding;
 	private DivisionNewManagementGui newDivision;
+	private AnalyzerNewManagementGui newAnalyzer;
 
 
 
@@ -252,4 +254,13 @@ public class BuildingManagementBean implements Serializable {
 		this.analyzersToRemove = analyzersToRemove;
 	}
 
+	public AnalyzerNewManagementGui getNewAnalyzer() {
+		return newAnalyzer;
+	}
+
+	public void setNewAnalyzer(AnalyzerNewManagementGui newAnalyzer) {
+		this.newAnalyzer = newAnalyzer;
+	}
+
+	
 }

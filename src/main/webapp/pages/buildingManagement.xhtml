@@ -115,7 +115,7 @@
 													</td>
 													<td align="left"><p:commandLink rendered="#{not empty buildingManagementBean.parentDivisionSelected}"
 														 	action="#{buildingManagementBean.loadNewAnalyzers()}"
-															oncomplete="PF('selectionPopupAnalyzer').show()"
+															oncomplete="PF('newAnalyzerPopup').show()"
 															ajax="true" value="Add Analyzer"
 															update=":selectionAnalyzerForm">
 														</p:commandLink></td>
@@ -133,11 +133,7 @@
 		</div>
 		<ui:include src="./general/footer.xhtml" />
 		<ui:include src="./popups/newBuildingPopup.xhtml" />
-		<ui:include src="./popups/selectionPopupAnalyzer.xhtml" >
-			<ui:param value="#{buildingManagementBean}" name="bean" />
-			<ui:param value="Add" name="operation"/>
-			<ui:param value="multiple" name="selectionMode"/>
-		</ui:include>
+		<ui:include src="./popups/newAnalyzerPopup.xhtml"/>
 		<ui:include src="./popups/newDivisionPopup.xhtml">
 			<ui:param name="parentDivision" value="parentName" />
 		</ui:include>

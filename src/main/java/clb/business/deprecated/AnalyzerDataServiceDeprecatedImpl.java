@@ -153,10 +153,7 @@ public class AnalyzerDataServiceDeprecatedImpl implements AnalyzerDataServiceDep
 			persistDummyAnalyzerRegistries( ana, dataToExclueOnDummy);
 
 			for(AnalyzerMeterValues analyzerMeter: AnalyzerMeterValues.values()) {
-				AnalyzerMeterObject analyzerMeterObject = new AnalyzerMeterObject();
-				analyzerMeterObject.setName( analyzerMeter.getLabel() );
-				analyzerMeterObject.setLabelKey( analyzerMeter.name() );
-				analyzerMeterObject.setUnit(analyzerMeter.getUnit());
+				AnalyzerMeterObject analyzerMeterObject = new AnalyzerMeterObject(analyzerMeter.name() , analyzerMeter.getLabel(), analyzerMeter.getUnit() );
 
 				clbDao.saveClbObject( analyzerMeterObject );
 				
