@@ -114,10 +114,9 @@
 															value="#{request.contextPath}/../resources/images/search.png" />
 													</td>
 													<td align="left"><p:commandLink rendered="#{not empty buildingManagementBean.parentDivisionSelected}"
-														 	action="#{buildingManagementBean.loadNewAnalyzers()}"
 															oncomplete="PF('newAnalyzerPopup').show()"
 															ajax="true" value="Add Analyzer"
-															update=":selectionAnalyzerForm">
+															update=":newAnalyzerFormId">
 														</p:commandLink></td>
 												</tr>
 											</table>

@@ -2,9 +2,9 @@ package clb.business.objects;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import clb.database.entities.AnalyzerEntity;
+import clb.global.AnalyzerMeterValues;
 
 public class AnalyzerObject implements ClbObject
 {
@@ -12,7 +12,7 @@ public class AnalyzerObject implements ClbObject
     
     private String codeName;
 	
-    private Set<AnalyzerMeterObject> analyzerMeters;
+    private Set<AnalyzerMeterValues> analyzerMeters;
     
     private Set<String> analyzerRegistriesIds;
 
@@ -24,8 +24,7 @@ public class AnalyzerObject implements ClbObject
 		this.id = analyzerEntity.getId();
 		this.codeName = analyzerEntity.getCodeName();
 		this.analyzerRegistriesIds = analyzerEntity.getAnalyzerRegistriesIds();
-		this.analyzerMeters = analyzerEntity.getAnalyzerMeters() != null ?
-				analyzerEntity.getAnalyzerMeters().stream().map(AnalyzerMeterObject::new).collect( Collectors.toSet()) : null;
+		this.analyzerMeters = analyzerEntity.getAnalyzerMeters();
 	}
 
 	public AnalyzerEntity toEntity(){
@@ -37,8 +36,7 @@ public class AnalyzerObject implements ClbObject
 		
 		analyzerEntity.setCodeName( this.codeName );
 		analyzerEntity.setAnalyzerRegistriesIds(this.analyzerRegistriesIds);
-		analyzerEntity.setAnalyzerMeters( this.analyzerMeters != null ? 
-                this.analyzerMeters.stream().map( AnalyzerMeterObject::toEntity ).collect( Collectors.toSet() ) : null);
+		analyzerEntity.setAnalyzerMeters( this.analyzerMeters );
 		
 		return analyzerEntity;
 	}
@@ -51,12 +49,12 @@ public class AnalyzerObject implements ClbObject
         analyzerRegistriesIds.add(analyzerObjId);
     }
 
-	public void addAnalyzerMeter(AnalyzerMeterObject analyzerMeterObject) {
+	public void addAnalyzerMeter(AnalyzerMeterValues analyzerMeter) {
 		if(this.analyzerMeters == null) {
-			this.analyzerMeters = new HashSet<AnalyzerMeterObject>();
+			this.analyzerMeters = new HashSet<AnalyzerMeterValues>();
 		}
 		
-		this.analyzerMeters.add(analyzerMeterObject);
+		this.analyzerMeters.add(analyzerMeter);
 	}
 	
 	public String getId() {
@@ -77,11 +75,11 @@ public class AnalyzerObject implements ClbObject
 	}
 	
 	
-	public Set<AnalyzerMeterObject> getAnalyzerMeters() {
+	public Set<AnalyzerMeterValues> getAnalyzerMeters() {
 		return analyzerMeters;
 	}
 
-	public void setAnalyzerMeters(Set<AnalyzerMeterObject> analyzerMeters) {
+	public void setAnalyzerMeters(Set<AnalyzerMeterValues> analyzerMeters) {
 		this.analyzerMeters = analyzerMeters;
 	}
 

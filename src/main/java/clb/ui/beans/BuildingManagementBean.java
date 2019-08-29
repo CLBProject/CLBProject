@@ -1,6 +1,7 @@
 package clb.ui.beans;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -18,6 +19,7 @@ import org.primefaces.model.TreeNode;
 import clb.business.AnalyzerDataService;
 import clb.business.objects.BuildingObject;
 import clb.business.objects.DivisionObject;
+import clb.global.AnalyzerMeterValues;
 import clb.ui.beans.newobjects.AnalyzerNewManagementGui;
 import clb.ui.beans.newobjects.BuildingNewManagementGui;
 import clb.ui.beans.newobjects.DivisionNewManagementGui;
@@ -52,22 +54,26 @@ public class BuildingManagementBean implements Serializable {
 
 	private List<AnalyzerGui> analyzersSelected;
 	private List<AnalyzerGui> tempAnalyzerSelected;
+	private List<AnalyzerMeterValues> analyzerMeterValues;
+	private List<AnalyzerMeterValues> analyzerMeterValuesSelected;
 
 	private BuildingNewManagementGui newBuilding;
 	private DivisionNewManagementGui newDivision;
 	private AnalyzerNewManagementGui newAnalyzer;
-
-
 
 	@PostConstruct
 	public void initBuildingManagement() {
 
 		newBuilding = new BuildingNewManagementGui();
 		newDivision = new DivisionNewManagementGui();
+		newAnalyzer = new AnalyzerNewManagementGui();
+
+		analyzerMeterValues = Arrays.asList(AnalyzerMeterValues.values());
 
 		buildingsToShow = clbHomeLoginBean.userHasBuildings()
 				? clbHomeLoginBean.getUserBuildings().stream().map(BuildingAnalysisGui::toObject)
-						.map(BuildingTreeGui::new).collect(Collectors.toList()) : null;
+						.map(BuildingTreeGui::new).collect(Collectors.toList())
+				: null;
 	}
 
 	public void setNewDivisionBuilding(String buildingId) {
@@ -139,19 +145,7 @@ public class BuildingManagementBean implements Serializable {
 		BuildingTreeGui buildingGui = (BuildingTreeGui) event.getComponent().getAttributes().get("building");
 		buildingGui.setDivisionIsSelected(false);
 	}
-
-	public String selectAnalyzer() {
-		// Must Have Division and Analyzers
-		if (this.parentDivisionSelected != null && tempAnalyzerSelected != null && tempAnalyzerSelected.size() > 0) {
-			String parentId = ((DivisionTreeGui) this.parentDivisionSelected.getData()).getDivisionId();
-			analyzerDataService.saveAnalyzersForDivision(parentId,
-					tempAnalyzerSelected.stream().map(AnalyzerGui::toObject).collect(Collectors.toSet()));
-			clbHomeLoginBean.loginUser();
-		}
-
-		return "buildingManagement.xhtml?faces-redirect=true";
-	}
-
+	
 	public String removeAnalyzersSelected() {
 		if (this.parentDivisionSelected != null && this.analyzersToRemove != null) {
 			String divisionId = ((DivisionTreeGui) this.parentDivisionSelected.getData()).getDivisionId();
@@ -161,9 +155,11 @@ public class BuildingManagementBean implements Serializable {
 
 		return "buildingManagement.xhtml?faces-redirect=true";
 	}
-	
-	public void loadNewAnalyzers() {
-		//TODO was supose to be ftp but..
+
+	public void createAnalyzer() {
+		String divisionId = ((DivisionTreeGui) this.parentDivisionSelected.getData()).getDivisionId();
+
+		analyzerDataService.saveAnalyzersForDivision(clbHomeLoginBean.getLoginUsername(), buildingSelected.getBuildingid(), divisionId, newAnalyzer.toObject());
 	}
 
 	public AnalyzerDataService getAnalyzerDataService() {
@@ -262,5 +258,28 @@ public class BuildingManagementBean implements Serializable {
 		this.newAnalyzer = newAnalyzer;
 	}
 
-	
+	public BuildingTreeGui getBuildingSelected() {
+		return buildingSelected;
+	}
+
+	public void setBuildingSelected(BuildingTreeGui buildingSelected) {
+		this.buildingSelected = buildingSelected;
+	}
+
+	public List<AnalyzerMeterValues> getAnalyzerMeterValues() {
+		return analyzerMeterValues;
+	}
+
+	public void setAnalyzerMeterValues(List<AnalyzerMeterValues> analyzerMeterValues) {
+		this.analyzerMeterValues = analyzerMeterValues;
+	}
+
+	public List<AnalyzerMeterValues> getAnalyzerMeterValuesSelected() {
+		return analyzerMeterValuesSelected;
+	}
+
+	public void setAnalyzerMeterValuesSelected(List<AnalyzerMeterValues> analyzerMeterValuesSelected) {
+		this.analyzerMeterValuesSelected = analyzerMeterValuesSelected;
+	}
+
 }

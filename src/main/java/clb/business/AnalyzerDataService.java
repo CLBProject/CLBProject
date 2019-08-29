@@ -36,14 +36,14 @@ public interface AnalyzerDataService {
 	public void saveDivisionForBuilding(String selectedBuildingIdNewDivision, DivisionObject divisionObj);
 	
 	public void saveDivisionForParent(String parentId, DivisionObject divisionObj);
+	
+	public void saveAnalyzersForDivision(String userId, String buildingId, String parentId, AnalyzerObject analyzersToRemove);
 
 	public void deleteChildDivisionFromParent(String parentDivision, String childDivision);
 
 	public void deleteBuildingForUser(UsersystemObject object, BuildingObject building);
 
 	public void deleteChildDivisionFromBuilding(String selectedBuildingIdNewDivision, String divisionId);
-
-	public void saveAnalyzersForDivision(String parentId, Set<AnalyzerObject> analyzersToRemove);
 
 	public void removeAnalyzersForDivision(String divisionId, Set<String> analyzersToRemove);
 

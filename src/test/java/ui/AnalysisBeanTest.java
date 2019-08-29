@@ -13,10 +13,10 @@ import org.mockito.Mock;
 
 import clb.business.AnalyzerDataService;
 import clb.business.objects.BuildingObject;
+import clb.global.AnalyzerMeterValues;
 import clb.ui.beans.AnalysisBean;
 import clb.ui.beans.ClbHomeLoginBean;
 import clb.ui.beans.objects.AnalyzerGui;
-import clb.ui.beans.objects.AnalyzerMeterGui;
 import clb.ui.beans.objects.BuildingAnalysisGui;
 import clb.ui.beans.objects.DivisionGui;
 
@@ -43,9 +43,6 @@ public class AnalysisBeanTest extends AbstractBeanTest{
 		
 		DivisionGui divisionG = new DivisionGui();
 		DivisionGui divisionG2 = new DivisionGui();
-		
-		AnalyzerMeterGui anaMeterObj = new AnalyzerMeterGui();
-		AnalyzerMeterGui anaMeterObj2 = new AnalyzerMeterGui();
 
 		bGui.addDivision(divisionG);
 		bGui2.addDivision(divisionG2);
@@ -53,8 +50,8 @@ public class AnalysisBeanTest extends AbstractBeanTest{
 		divisionG.addAnalyzer(analObj);
 		divisionG2.addAnalyzer(analObj2);
 		
-		analObj.addAnalyzerMeter(anaMeterObj);
-		analObj2.addAnalyzerMeter(anaMeterObj2);
+		analObj.addAnalyzerMeter(AnalyzerMeterValues.FREQUENCY);
+		analObj2.addAnalyzerMeter(AnalyzerMeterValues.VOLT_AMPERE);
 		
 		buildings.add(bGui);
 		buildings.add(bGui2);

@@ -7,7 +7,6 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import clb.business.objects.AnalyzerMeterObject;
 import clb.business.objects.AnalyzerObject;
 import clb.global.AnalyzerMeterValues;
 
@@ -20,7 +19,7 @@ public class AnalyzerNewManagementGui {
     @NotEmpty
 	private String codeName;
     
-    private Set<AnalyzerMeterValues> analyzerMeters;
+    private Set<String> analyzerMeters;
 
 
 	public AnalyzerNewManagementGui() {
@@ -31,7 +30,7 @@ public class AnalyzerNewManagementGui {
 		
 		analyzer.setCodeName(codeName);
 		analyzer.setAnalyzerMeters(analyzerMeters.stream()
-				.map(analyzerMeter -> new AnalyzerMeterObject(analyzerMeter.getLabel(),analyzerMeter.toString(),  analyzerMeter.getUnit())).collect(Collectors.toSet()));
+				.map(analyzerMeter -> AnalyzerMeterValues.valueOf(analyzerMeter)).collect(Collectors.toSet()));
 		
 		return analyzer;
 	}
@@ -52,11 +51,11 @@ public class AnalyzerNewManagementGui {
 		this.codeName = codeName;
 	}
 
-	public Set<AnalyzerMeterValues> getAnalyzerMeters() {
+	public Set<String> getAnalyzerMeters() {
 		return analyzerMeters;
 	}
 
-	public void setAnalyzerMeters(Set<AnalyzerMeterValues> analyzerMeters) {
+	public void setAnalyzerMeters(Set<String> analyzerMeters) {
 		this.analyzerMeters = analyzerMeters;
 	}
 

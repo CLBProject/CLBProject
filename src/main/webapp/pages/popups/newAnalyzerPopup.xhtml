@@ -26,42 +26,35 @@
 							<p:outputLabel for="newAnalyzerName" value="Meters:"></p:outputLabel>
 						</p:column>
 						<p:column>
-							<p:selectManyMenu id="advanced"
-								value="#{selectManyView.selectedThemes}"
-								converter="themeConverter" var="t" filter="true"
+							<p:selectManyMenu id="analyzersMeters"
+								value="#{buildingManagementBean.newAnalyzer.analyzerMeters}"
+								var="analyzerMeterSel" filter="true"
 								filterMatchMode="contains" showCheckbox="true">
-								<f:selectItems value="#{selectManyView.themes}" var="theme"
-									itemLabel="#{theme.displayName}" itemValue="#{theme}" />
-
+								<f:selectItems value="#{buildingManagementBean.analyzerMeterValues}" var="analyzerMeter"
+									itemLabel="#{analyzerMeter.label}" itemValue="#{analyzerMeter}" />
 								<p:column>
-									<h:graphicImage
-										name="showcase/images/themeswitcher/themeswitcher-#{t.name}.png"
-										alt="#{t.name}" styleClass="ui-theme" />
-								</p:column>
-
-								<p:column>
-									<h:outputText value="#{t.displayName}" />
-								</p:column>
+					                <h:outputText style="font-size: 12px" value="#{analyzerMeterSel.label}" />
+					            </p:column>
 							</p:selectManyMenu>
 						</p:column>
 					</p:panelGrid>
 					<br />
 					<div align="center">
 						<p:commandButton action="#{buildingManagementBean.createAnalyzer}"
-							ajax="true" update=":buildingManagementForm"
+							ajax="true" update=":buildingManagementForm :newAnalyzerFormId"
 							styleClass="signButton" value="Create"
 							onstart="document.body.style.cursor='wait'"
 							oncomplete="document.body.style.cursor='default'; 
 												PF('newAnalyzerPopup').hide();
-												PF('successPanelnewDivisionPopup').show();"></p:commandButton>
+												PF('successPanelnewAnalyzerPopup').show();"></p:commandButton>
 					</div>
 				</div>
 			</h:form>
 		</p:dialog>
 		<ui:include src="successDialog.xhtml">
-			<ui:param name="id" value="newDivisionPopup" />
+			<ui:param name="id" value="newAnalyzerPopup" />
 			<ui:param name="successMessage"
-				value="A new Division was created successfully under '#{parentDivision}' parent!" />
+				value="A new Analyzer was created successfully!" />
 			<ui:param name="path"
 				value="buildingManagement.xhtml?faces-redirect=true" />
 		</ui:include>

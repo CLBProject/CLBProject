@@ -17,7 +17,6 @@ import org.slf4j.LoggerFactory;
 
 import clb.business.enums.AnalyzerCommand;
 import clb.business.exceptions.IlegalCommandAppException;
-import clb.business.objects.AnalyzerMeterObject;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.UsersystemObject;
@@ -79,12 +78,8 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 								analyzerObject.setCodeName(analyzerCodeName);
 								
 								for(AnalyzerMeterValues mterValue: AnalyzerMeterValues.values()) {
-									AnalyzerMeterObject analyzerMeterObject = 
-											new AnalyzerMeterObject(mterValue.name(), mterValue.getLabel(),mterValue.getUnit());
 
-									clbDao.saveClbObject( analyzerMeterObject );
-
-									analyzerObject.addAnalyzerMeter(analyzerMeterObject);
+									analyzerObject.addAnalyzerMeter(mterValue);
 								}
 								
 								clbDao.saveClbObject(analyzerObject);

@@ -2,15 +2,15 @@ package clb.ui.beans.objects;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import clb.business.objects.AnalyzerObject;
+import clb.global.AnalyzerMeterValues;
 
 public class AnalyzerGui {
 
 	private String analyzerId;
 	private String codeName;
-	private Set<AnalyzerMeterGui> analyzerMeters;
+	private Set<AnalyzerMeterValues> analyzerMeters;
 
 	public AnalyzerGui() {
 		
@@ -19,32 +19,31 @@ public class AnalyzerGui {
 	public AnalyzerGui(AnalyzerObject analyzerObj) {
 		this.analyzerId = analyzerObj.getId();
 		this.codeName = analyzerObj.getCodeName();
-		this.analyzerMeters = analyzerObj.getAnalyzerMeters() != null ?
-				analyzerObj.getAnalyzerMeters().stream().map(AnalyzerMeterGui::new).collect(Collectors.toSet()) : null;
+		this.analyzerMeters = analyzerObj.getAnalyzerMeters();
 	}
 	
 	public AnalyzerObject toObject() {
 		AnalyzerObject analyzer = new AnalyzerObject();
 		analyzer.setId(this.analyzerId);
 		analyzer.setCodeName(this.codeName);
-		analyzer.setAnalyzerMeters(this.analyzerMeters != null ? this.analyzerMeters.stream().map(AnalyzerMeterGui::toObject).collect(Collectors.toSet()) : null);
+		analyzer.setAnalyzerMeters(this.analyzerMeters);
 		
 		return analyzer;
 	}
 	
-	public void addAnalyzerMeter(AnalyzerMeterGui analyzerMeter) {
+	public void addAnalyzerMeter(AnalyzerMeterValues analyzerMeter) {
 		if(this.analyzerMeters == null) {
-			this.analyzerMeters = new HashSet<AnalyzerMeterGui>();
+			this.analyzerMeters = new HashSet<AnalyzerMeterValues>();
 		}
 		
 		this.analyzerMeters.add(analyzerMeter);
 	}
 
-	public Set<AnalyzerMeterGui> getAnalyzerMeters() {
+	public Set<AnalyzerMeterValues> getAnalyzerMeters() {
 		return analyzerMeters;
 	}
 
-	public void setAnalyzerMeters(Set<AnalyzerMeterGui> analyzerMeters) {
+	public void setAnalyzerMeters(Set<AnalyzerMeterValues> analyzerMeters) {
 		this.analyzerMeters = analyzerMeters;
 	}
 

@@ -20,7 +20,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import clb.business.objects.AnalyzerMeterObject;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.BuildingObject;
@@ -28,7 +27,6 @@ import clb.business.objects.DivisionObject;
 import clb.business.objects.UsersystemObject;
 import clb.database.ClbDao;
 import clb.global.AnalyzerMeterValues;
-import clb.business.deprecated.AnalyzerDataServiceDeprecated;
 
 @Service
 public class AnalyzerDataServiceDeprecatedImpl implements AnalyzerDataServiceDeprecated, Serializable{
@@ -153,11 +151,8 @@ public class AnalyzerDataServiceDeprecatedImpl implements AnalyzerDataServiceDep
 			persistDummyAnalyzerRegistries( ana, dataToExclueOnDummy);
 
 			for(AnalyzerMeterValues analyzerMeter: AnalyzerMeterValues.values()) {
-				AnalyzerMeterObject analyzerMeterObject = new AnalyzerMeterObject(analyzerMeter.name() , analyzerMeter.getLabel(), analyzerMeter.getUnit() );
-
-				clbDao.saveClbObject( analyzerMeterObject );
 				
-				ana.addAnalyzerMeter(analyzerMeterObject);
+				ana.addAnalyzerMeter(analyzerMeter);
 			}
 			
 			clbDao.saveClbObject(ana);

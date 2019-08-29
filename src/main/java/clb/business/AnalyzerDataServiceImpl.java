@@ -247,11 +247,16 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
 	@Override
 	@Transactional
-	public void saveAnalyzersForDivision(String parentId, Set<AnalyzerObject> analyzersToRemove) {
+	public void saveAnalyzersForDivision(String userId, String buildingId, String parentId, AnalyzerObject analyzerToSave) {
+		
+		clbDao.saveClbObject(analyzerToSave);
+		
 		DivisionObject division = clbDao.findDivisionById(parentId);
-		analyzersToRemove.stream().forEach(analyzer -> division.addAnalyzer(analyzer));
+		division.addAnalyzer(analyzerToSave);
 		
 		clbDao.saveClbObject(division);
+		
+		ftpGatewayPut.upload(userId + "/"+buildingId + "/" + analyzerToSave.getCodeName(), "", "");
 	}
 
 	@Override

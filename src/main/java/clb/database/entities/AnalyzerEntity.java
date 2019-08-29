@@ -7,6 +7,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import clb.global.AnalyzerMeterValues;
+
 /**
  * The persistent class for the ANALYZER database table.
  * 
@@ -22,9 +24,8 @@ public class AnalyzerEntity implements ClbEntity, Serializable {
 
     @DBRef
     private Set<AnalyzerEntity> analyzers;
-    
-	@DBRef
-	private Set<AnalyzerMeterEntity> analyzerMeters;
+
+	private Set<AnalyzerMeterValues> analyzerMeters;
 	
 	private Set<String> analyzerRegistriesIds;
 
@@ -57,11 +58,11 @@ public class AnalyzerEntity implements ClbEntity, Serializable {
 		this.analyzers = analyzers;
 	}
 
-	public Set<AnalyzerMeterEntity> getAnalyzerMeters() {
+	public Set<AnalyzerMeterValues> getAnalyzerMeters() {
 		return analyzerMeters;
 	}
 
-	public void setAnalyzerMeters(Set<AnalyzerMeterEntity> analyzerMeters) {
+	public void setAnalyzerMeters(Set<AnalyzerMeterValues> analyzerMeters) {
 		this.analyzerMeters = analyzerMeters;
 	}
 
