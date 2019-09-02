@@ -16,9 +16,8 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import clb.business.integration.FtpGateway;
 import clb.business.integration.FtpGatewayPut;
-import clb.business.integration.FtpPrinter;
+import clb.business.integration.FtpGatewayRm;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.BuildingObject;
@@ -44,10 +43,10 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	private ClbDao clbDao;
 	
 	@Autowired
-	FtpGateway ftpGateway;
+	FtpGatewayPut ftpGatewayPut;
 	
 	@Autowired
-	FtpGatewayPut ftpGatewayPut;
+	FtpGatewayRm ftpGatewayRm;
 
 	@PostConstruct
 	public void init(){
@@ -261,7 +260,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
 	@Override
 	@Transactional
-	public void removeAnalyzersForDivision(String divisionId, Set<String> analyzersToRemove) {
+	public void removeAnalyzersForDivision(String userId, String buildingId, String divisionId, Set<String> analyzersToRemove) {
 		DivisionObject division = clbDao.findDivisionById(divisionId);
 
 		if(division != null && division.getAnalyzers() != null) {
@@ -287,14 +286,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
 	public void setClbDao(ClbDao clbDao) {
 		this.clbDao = clbDao;
-	}
-
-	public FtpGateway getFtpGateway() {
-		return ftpGateway;
-	}
-
-	public void setFtpGateway(FtpGateway ftpGateway) {
-		this.ftpGateway = ftpGateway;
 	}
 
 	public List<String> getAnalyzersFtp() {

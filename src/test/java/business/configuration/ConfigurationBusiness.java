@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import clb.business.integration.FtpGateway;
 import clb.business.integration.FtpGatewayPut;
+import clb.business.integration.FtpGatewayRm;
 import clb.database.ClbDao;
 
 @Configuration
@@ -42,6 +43,12 @@ public class ConfigurationBusiness {
 	@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 	public FtpGatewayPut ftpGateWayPut() {
 		return mock(FtpGatewayPut.class);
+	}
+	
+	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+	public FtpGatewayRm ftpGateWayRm() {
+		return mock(FtpGatewayRm.class);
 	}
 	
 	@Bean

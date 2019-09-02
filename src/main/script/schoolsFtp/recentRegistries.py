@@ -12,7 +12,7 @@ FTP_HOST = 'ftp.mobinteg.org'
 SERVER_HOST = "localhost"
 PORT = 6006
 filesProcessed = []
-
+registries = []
 
 class AnalyzerRegistry:
     
@@ -65,7 +65,6 @@ class AnalyzerRegistry:
     def toJson(self):
         return self.kwl1
 
-
 def processData(line, filename, latestRegistry):
     
     c = line.split(";")
@@ -114,18 +113,11 @@ def processData(line, filename, latestRegistry):
     phaseSequence = c[37]
     hZ = c[38]
         
-    analyzerReg = AnalyzerRegistry(recortType, productType, itemSn, itemLabel, comPort, modBusId,
+    registries.append(AnalyzerRegistry(recortType, productType, itemSn, itemLabel, comPort, modBusId,
     date, time, kwh, kWhNeg, vlnsys, vl1n, vl2n, vl3n, vllsys, vl1l2, vl2l3, vl3l1,
     al1, al2, al3, kwsys, kwl1, kwl2, kwl3, kvarsys, kvarl1, kvarl2, kvarl3, kvasys,
-    kval1, kval2, kval3, pfsys, pfl1, pfl2, pfl3, phaseSequence, hZ, filename)
-    
-    # only send when date is smaller then latestRegistry
-    if latestRegistry == '' or latestRegistry < date :
-        print('Registry Persisted For: ' + filename + ' , at Date: ' + date + " , with latestRegistry " + latestRegistry)
-        sock.send('*persistDataObject*\n'.encode('utf-8'))
-        sock.send((json.dumps(analyzerReg.__dict__) + "\n").encode('utf-8'))
-
-
+    kval1, kval2, kval3, pfsys, pfl1, pfl2, pfl3, phaseSequence, hZ, filename))
+	
 def processUserFtp(userftp, passwordftp):
 
     ftp = ftplib.FTP(FTP_HOST, timeout=100)
@@ -160,7 +152,6 @@ def processUserFtp(userftp, passwordftp):
                     
                     try:
                         if fileInArray not in filesProcessed:
-                            ftp.sendcmd("NOOP")
                             
                             if index % 10000 == 0:
                             #print('Downloading File: ' + filename)
@@ -212,3 +203,8 @@ config.read('ftp_users.properties')
 for each_section in config.sections():
     for (each_key, each_val) in config.items(each_section):
         processUserFtp(each_key, each_val)
+
+json_string = json.dumps([ob.__dict__ for ob in registries])
+print(json_string)
+#sock.send('*persistDataObject*\n'.encode('utf-8'))
+#sock.send(json_string + "\n").encode('utf-8'))

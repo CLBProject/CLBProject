@@ -149,7 +149,7 @@ public class BuildingManagementBean implements Serializable {
 	public String removeAnalyzersSelected() {
 		if (this.parentDivisionSelected != null && this.analyzersToRemove != null) {
 			String divisionId = ((DivisionTreeGui) this.parentDivisionSelected.getData()).getDivisionId();
-			analyzerDataService.removeAnalyzersForDivision(divisionId, analyzersToRemove);
+			analyzerDataService.removeAnalyzersForDivision(this.clbHomeLoginBean.getLoginUsername(), this.buildingSelected.getBuildingid(), divisionId, analyzersToRemove);
 			clbHomeLoginBean.loginUser();
 		}
 
@@ -160,6 +160,7 @@ public class BuildingManagementBean implements Serializable {
 		String divisionId = ((DivisionTreeGui) this.parentDivisionSelected.getData()).getDivisionId();
 
 		analyzerDataService.saveAnalyzersForDivision(clbHomeLoginBean.getLoginUsername(), buildingSelected.getBuildingid(), divisionId, newAnalyzer.toObject());
+		clbHomeLoginBean.loginUser();
 	}
 
 	public AnalyzerDataService getAnalyzerDataService() {

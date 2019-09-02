@@ -94,15 +94,21 @@
 	<int:channel id="ftpChannelPut">
 	</int:channel>
 	
+	<int:channel id="ftpChannelRm">
+	</int:channel>
+	
 	<int:channel id="outboundChannel">
 	</int:channel>
 		
 	<int:channel id="outboundPutChannel">
 	</int:channel>
 
+	<int:channel id="outboundRmChannel">
+	</int:channel>
 	 
 	<int:gateway service-interface ="clb.business.integration.FtpGateway" default-request-channel="ftpChannel"/>
 	<int:gateway service-interface ="clb.business.integration.FtpGatewayPut" default-request-channel="ftpChannelPut"/>
+	<int:gateway service-interface ="clb.business.integration.FtpGatewayRm" default-request-channel="ftpChannelRm"/>
 	 
 	 <int-ftp:outbound-gateway 
 	 	session-factory="ftpSessionFactory"
@@ -127,12 +133,22 @@
 		mode="APPEND"
 		>
 	</int-ftp:outbound-gateway>
+	
+	<int-ftp:outbound-gateway session-factory="ftpSessionFactory"
+		command="rm"
+		request-channel="ftpChannelRm"
+		remote-directory-expression="headers['file_remoteDirectory']"
+		remote-file-separator="/"
+		reply-channel="outboundRmChannel"
+		>
+	</int-ftp:outbound-gateway>
 	 
 	    
 	 <bean id="mp" class="clb.business.integration.FtpPrinter"/>
 	 
 	 <int:service-activator ref="mp" method="print" input-channel="outboundChannel"></int:service-activator>
 	 <int:service-activator ref="mp" method="printPut" input-channel="outboundPutChannel"></int:service-activator>
+	 <int:service-activator ref="mp" method="printRm" input-channel="outboundRmChannel"></int:service-activator>
 	 
 	<bean id="mailSender"
 		class="org.springframework.mail.javamail.JavaMailSenderImpl">

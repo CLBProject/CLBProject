@@ -45,7 +45,5 @@ public interface AnalyzerDataService {
 
 	public void deleteChildDivisionFromBuilding(String selectedBuildingIdNewDivision, String divisionId);
 
-	public void removeAnalyzersForDivision(String divisionId, Set<String> analyzersToRemove);
-
-	public void setAnalyzersFtp(List<String> payload);
+	public void removeAnalyzersForDivision(String userId, String buildingId, String divisionId, Set<String> analyzersToRemove);
 }
