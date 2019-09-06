@@ -129,42 +129,44 @@ def processUserFtp(userftp, passwordftp):
     
     for dir in dirs[3:]:
         currentDir = dir.split(None, 8)[8]
-        ftp.cwd(currentDir)
-        print('Visiting Dir: ', currentDir)
-        # cria lista com todos o ficheiros da pasta e depois escolher o mais recent
-        data = []
-          
-        ftp.retrlines("LIST", (data.append))
-            
-        index = 0
-        
-        sock.send('*getLatestPersistedDate*\n'.encode('utf-8'))
-        sock.send(('Analyzer For Building ' + currentDir + '\n').encode('utf-8'))
-
-        latestPersistedDate = recv_basic()
-        # print('Latest Date: ' + latestPersistedDate)
-        
-        for file in data:
-            # Ignore the first two files
-            if index > 1:
-                    filename = file.split(None, 8)[-1].lstrip()
-                    fileInArray = filename + "_" + currentDir
-                    
-                    try:
-                        if fileInArray not in filesProcessed:
-                            
-                            if index % 10000 == 0:
-                            #print('Downloading File: ' + filename)
-                            	ftp.retrlines('RETR ' + filename, lambda line: processData(line, currentDir, latestPersistedDate))
-                            
-                            filesProcessed.append(fileInArray)
-                    except ftplib.all_errors as e:
-                        print(e)
-                        processUserFtp(userftp, passwordftp)
-            
-            index = index + 1
-                
-        ftp.cwd("..")
+        if "." not in currentDir:
+	        ftp.cwd(currentDir)
+	        print('Visiting Dir: ', currentDir)
+	        # cria lista com todos o ficheiros da pasta e depois escolher o mais recent
+	        data = []
+	          
+	        ftp.retrlines("LIST", (data.append))
+	            
+	        index = 0
+	        
+	        sock.send('*getLatestPersistedDate*\n'.encode('utf-8'))
+	        sock.send(('Analyzer For Building ' + currentDir + '\n').encode('utf-8'))
+	
+	        latestPersistedDate = recv_basic()
+	        # print('Latest Date: ' + latestPersistedDate)
+	        
+	                                    
+	        for file in data:
+	            # Ignore the first two files
+	            if index > 1:
+	                filename = file.split(None, 8)[-1].lstrip()
+	                fileInArray = filename + "_" + currentDir
+	                
+	                path = "C:/Users/nobre/Desktop/ftpFolder/" + currentDir + "/" + filename
+	                
+	                if not os.path.exists(os.path.dirname(path)):
+	                    try:
+	                        os.makedirs(os.path.dirname(path))
+	                    except OSError as exc: # Guard against race condition
+	                        if exc.errno != errno.EEXIST:
+	                            raise                    
+	                
+	                if not os.path.isfile(path):      
+	                	ftp.retrbinary("RETR " + filename, open(path, 'wb').write )
+	            
+	            index = index + 1
+	                
+	        ftp.cwd("..")
 
     ftp.quit()
 

@@ -96,7 +96,7 @@ public class ClbHomeRegisterBean implements Serializable{
             registerResult = USER_TOKEN_HAS_EXPIRED;
         }
         
-        return "clb.xhtml?faces-redirect=true";
+        return "analysis.xhtml?faces-redirect=true";
     }
     
     public void recoverPassword() {

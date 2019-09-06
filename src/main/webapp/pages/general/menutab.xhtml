@@ -12,12 +12,7 @@
 			<table width="100%" class="homeMainDivBannerClass" cellpadding="5">
 				<tr>
 					<td align="left" valign="middle"></td>
-					<td align="right" valign="top"><p:spacer width="25" /> <p:graphicImage
-							value="#{request.contextPath}/../resources/images/dashboard.png"></p:graphicImage>
-						<p:spacer width="2" /> <p:commandLink value="Dashboard"
-							styleClass="menuLink" ajax="false" type="submit"
-							action="#{redirectBean.redirectTo('clb.xhtml?faces-redirect=true')}"></p:commandLink>
-						<p:spacer width="25" /> <p:graphicImage
+					<td align="right" valign="top"><p:graphicImage
 							value="#{request.contextPath}/../resources/images/graph.png"></p:graphicImage>
 						<p:spacer width="2" /> <p:commandLink value="Analysis"
 							styleClass="menuLink" ajax="false" type="submit"
@@ -27,14 +22,7 @@
 						<p:spacer width="2" /> <p:commandLink value="Building Management"
 							styleClass="menuLink" ajax="false" type="submit"
 							action="#{redirectBean.redirectTo('buildingManagement.xhtml?faces-redirect=true')}"></p:commandLink> 
-						<p:spacer width="25" /> <p:graphicImage
-							value="#{request.contextPath}/../resources/images/forum.png"></p:graphicImage>
-						<p:spacer width="2" /> <p:commandLink value="Forum"
-							styleClass="menuLink"></p:commandLink> <p:spacer width="25" /> <p:graphicImage
-							value="#{request.contextPath}/../resources/images/account.png"></p:graphicImage>
-						<p:spacer width="2" /> <p:commandLink value="Account"
-							styleClass="menuLink"></p:commandLink> <p:spacer width="15" /> <p:spacer
-							width="1" height="23" styleClass="menuSeparator" /></td>
+					</td>
 					<td align="center" valign="top" width="110px"><h:panelGrid
 							columns="1" styleClass="homeMainDivBannerClass">
 							<p:column>

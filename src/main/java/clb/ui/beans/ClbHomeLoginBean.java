@@ -55,7 +55,7 @@ public class ClbHomeLoginBean implements Serializable {
 
 			authenticatedUser = new UsersystemGui(userRegistryService.validateUserLogin(loginUsername, loginPassword));
 
-			return "clb";
+			return "analysis";
 		} catch (UserDoesNotExistException e) {
 
 			authenticatedUser.setUsername(null);
