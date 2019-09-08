@@ -273,6 +273,7 @@
 								<div align="center" class="analaysisDateCss">
 									<p:outputPanel
 										rendered="#{analysisBean.analysisDayPojo.lineModel.series[0].data.size() gt 0}">
+
 										<p:chart styleClass="analysisChartCSS" id="chartDayId"
 											responsive="true" widgetVar="chartDayId"
 											model="#{analysisBean.analysisDayPojo.lineModel}" type="line" />

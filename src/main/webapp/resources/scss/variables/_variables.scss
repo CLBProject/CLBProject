@@ -1,0 +1,32 @@
+//Font Family
+// ---------
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+$textFontFamily: 'Open Sans';
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
+$titleFontFamily: 'Source Sans Pro';
+
+//Font sizes
+// ---------
+$smallFontSize: 12px;
+$regularFontSize: 16px;
+$largeFontSize: 24px;
+$extraLargeFontSize: 48px;
+
+//Font weights
+// -----------
+$fontWeigthLight: 300;
+$fontWeigthRegular: 400;
+$fontWeigthBold: 700;
+
+// Colors
+// ------
+$primaryColor: #151825;
+$secondaryColor: #001A40;
+$black: black;
+$white: white;
+
+//Paths
+// ----
+$assetsBinImgPath: '/assets/bin/img';
+
+
