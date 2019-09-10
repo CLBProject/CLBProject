@@ -1,4 +1,4 @@
-package clb.business;
+package clb.business.deprecated;
 
 import java.io.IOException;
 import java.net.ServerSocket;

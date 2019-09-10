@@ -12,8 +12,8 @@ import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import clb.business.UserRegistryService;
 import clb.business.objects.UsersystemObject;
+import clb.business.services.UserRegistryService;
 import clb.global.exceptions.UserCantResendEmailException;
 import clb.global.exceptions.UserDoesNotExistException;
 import clb.global.exceptions.UserExistsOnRegistryException;

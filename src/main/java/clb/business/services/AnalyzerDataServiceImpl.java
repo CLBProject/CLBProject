@@ -1,4 +1,4 @@
-package clb.business;
+package clb.business.services;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
@@ -47,11 +45,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	
 	@Autowired
 	FtpGatewayRm ftpGatewayRm;
-
-	@PostConstruct
-	public void init(){
-		taskExecutor.execute(new AnalyzerDataServiceImplExecutor(this.clbDao));
-	}
 	
 	@Override
 	public List<AnalyzerRegistryObject> getHourRegistriesFromAnalyzer( String analyzerId , Date timeFrame) {
@@ -271,7 +264,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		
 		clbDao.saveClbObject(division);
 	}
-
+	
 	public TaskExecutor getTaskExecutor() {
 		return taskExecutor;
 	}

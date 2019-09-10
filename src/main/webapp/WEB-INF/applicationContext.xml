@@ -6,6 +6,7 @@
 	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
 	xmlns:int="http://www.springframework.org/schema/integration"
 	xmlns:int-ftp="http://www.springframework.org/schema/integration/ftp"
+	xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -20,32 +21,27 @@
 		http://www.springframework.org/schema/integration/ftp
         http://www.springframework.org/schema/integration/ftp/spring-integration-ftp.xsd
         http://www.springframework.org/schema/integration
-        http://www.springframework.org/schema/integration/spring-integration.xsd">
+        http://www.springframework.org/schema/integration/spring-integration.xsd
+		http://www.springframework.org/schema/task 
+		http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+		
+	<context:component-scan base-package="clb.business.services" />
+	<context:component-scan base-package="clb.business.integration" />
+	<context:component-scan base-package="clb.database" />
+	<context:component-scan base-package="clb.database.entities" />
 
-	<context:component-scan
-		base-package="clb.business" />
-		<context:component-scan
-		base-package="clb.business.integration" />
-	<context:component-scan
-		base-package="clb.database" />
-	<context:component-scan
-		base-package="clb.database.entities" />
-
-	<bean id="bcryptEncoder"
-		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+	<bean id="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
 
 	<!-- Default bean name is 'mongo' -->
 	<mongo:mongo host="192.168.99.100" port="27017" />
 
-	<bean id="mongoCredentials"
-		class="org.springframework.data.authentication.UserCredentials">
+	<bean id="mongoCredentials" class="org.springframework.data.authentication.UserCredentials">
 		<constructor-arg name="username" value="admin" />
 		<constructor-arg name="password" value="123456" />
 	</bean>
 
 
-	<bean id="mongoTemplate"
-		class="org.springframework.data.mongodb.core.MongoTemplate">
+	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
 		<constructor-arg name="mongo" ref="mongo" />
 		<constructor-arg name="databaseName" value="clb" />
 		<constructor-arg name="userCredentials"
@@ -57,25 +53,30 @@
 
 	<mongo:repositories base-package="clb.database" />
 
-
+	<!-- Not used anymore -->
 	<bean id="taskExecutor"
 		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
 		<property name="corePoolSize" value="5" />
 		<property name="maxPoolSize" value="10" />
 		<property name="queueCapacity" value="25" />
 	</bean>
+	
+	<task:scheduled-tasks scheduler="myScheduler">
+	    <task:scheduled ref="externalRoutines" method="fetchAnalyzerRegistries" fixed-delay="5000"/>
+	</task:scheduled-tasks>
 
-	<bean id="analyzerDataService"
-		class="clb.business.AnalyzerDataServiceImpl">
+	<task:scheduler id="myScheduler" pool-size="10"/>
+
+	<bean id="analyzerDataService" class="clb.business.services.AnalyzerDataServiceImpl">
 	</bean>
 
-	<bean id="userRegistryService"
-		class="clb.business.UserRegistryServiceImpl" />
+	<bean id="userRegistryService" class="clb.business.services.UserRegistryServiceImpl" />
 		
-	<bean id="userEventPublisher"
-		class="clb.business.UserRegistryServicePublisherEvent" >
+	<bean id="userEventPublisher" class="clb.business.services.UserRegistryServicePublisherEvent" >
 		<property name="mailSender" ref="mailSender" ></property>
 	</bean>
+	
+	<bean id="externalRoutines" class="clb.business.schedulers.ExternalRoutines" />
 
 	<bean id="ftpSessionFactory"
 		class="org.springframework.integration.ftp.session.DefaultFtpSessionFactory">

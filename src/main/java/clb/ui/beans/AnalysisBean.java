@@ -17,9 +17,9 @@ import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
-import clb.business.AnalyzerDataService;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.DivisionObject;
+import clb.business.services.AnalyzerDataService;
 import clb.global.DateUtils;
 import clb.ui.beans.objects.AnalyzerGui;
 import clb.ui.beans.objects.BuildingAnalysisGui;

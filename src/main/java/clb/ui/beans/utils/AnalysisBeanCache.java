@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import clb.business.AnalyzerDataService;
 import clb.business.objects.AnalyzerRegistryObject;
+import clb.business.services.AnalyzerDataService;
 import clb.global.DateUtils;
 
 public class AnalysisBeanCache {

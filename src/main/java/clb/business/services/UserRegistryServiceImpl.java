@@ -1,6 +1,5 @@
-package clb.business;
+package clb.business.services;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
@@ -9,15 +8,10 @@ import java.util.UUID;
 import javax.faces.context.FacesContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.ApplicationListener;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import clb.business.integration.FtpGateway;
 import clb.business.integration.FtpGatewayPut;
 import clb.business.objects.UserEvent;
 import clb.business.objects.UsersystemObject;

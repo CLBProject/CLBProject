@@ -17,8 +17,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import business.configuration.ConfigurationBusiness;
-import clb.business.AnalyzerDataService;
 import clb.business.objects.AnalyzerRegistryObject;
+import clb.business.services.AnalyzerDataService;
 import clb.database.ClbDao;
 import clb.global.DateUtils;
 

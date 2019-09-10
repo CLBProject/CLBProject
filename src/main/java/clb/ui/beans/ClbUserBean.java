@@ -8,7 +8,7 @@ import javax.faces.bean.ViewScoped;
 
 import org.primefaces.model.map.MapModel;
 
-import clb.business.AnalyzerDataService;
+import clb.business.services.AnalyzerDataService;
 
 @ViewScoped
 @ManagedBean

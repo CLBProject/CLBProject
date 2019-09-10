@@ -11,8 +11,8 @@ import java.util.Set;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import clb.business.AnalyzerDataService;
 import clb.business.objects.BuildingObject;
+import clb.business.services.AnalyzerDataService;
 import clb.global.AnalyzerMeterValues;
 import clb.ui.beans.AnalysisBean;
 import clb.ui.beans.ClbHomeLoginBean;

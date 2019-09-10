@@ -10,8 +10,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import clb.business.AnalyzerDataService;
 import clb.business.objects.AnalyzerRegistryObject;
+import clb.business.services.AnalyzerDataService;
 import clb.ui.beans.utils.AnalysisBeanCache;
 
 

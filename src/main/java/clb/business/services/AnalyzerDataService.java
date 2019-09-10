@@ -1,4 +1,4 @@
-package clb.business;
+package clb.business.services;
 
 import java.util.Date;
 import java.util.List;

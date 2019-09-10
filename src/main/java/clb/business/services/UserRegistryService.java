@@ -1,4 +1,4 @@
-package clb.business;
+package clb.business.services;
 
 import clb.business.objects.UsersystemObject;
 import clb.global.exceptions.UserCantResendEmailException;

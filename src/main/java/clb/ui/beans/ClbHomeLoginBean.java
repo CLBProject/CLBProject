@@ -12,9 +12,9 @@ import javax.faces.context.FacesContext;
 
 import org.primefaces.context.RequestContext;
 
-import clb.business.AnalyzerDataService;
-import clb.business.UserRegistryService;
 import clb.business.objects.BuildingObject;
+import clb.business.services.AnalyzerDataService;
+import clb.business.services.UserRegistryService;
 import clb.global.exceptions.UserDoesNotExistException;
 import clb.global.exceptions.UserDoesNotMatchPasswordLoginException;
 import clb.global.exceptions.UserIsNotEnabledYet;
