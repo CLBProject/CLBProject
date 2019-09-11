@@ -15,6 +15,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import clb.business.integration.FtpGateway;
+import clb.business.integration.FtpGatewayMget;
 import clb.business.integration.FtpGatewayPut;
 import clb.business.integration.FtpGatewayRm;
 import clb.database.ClbDao;
@@ -49,6 +50,12 @@ public class ConfigurationBusiness {
 	@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 	public FtpGatewayRm ftpGateWayRm() {
 		return mock(FtpGatewayRm.class);
+	}
+	
+	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+	public FtpGatewayMget ftpGateWayMget() {
+		return mock(FtpGatewayMget.class);
 	}
 	
 	@Bean

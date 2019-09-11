@@ -62,7 +62,7 @@
 	</bean>
 	
 	<task:scheduled-tasks scheduler="myScheduler">
-	    <task:scheduled ref="externalRoutines" method="fetchAnalyzerRegistries" fixed-delay="5000"/>
+	    <task:scheduled ref="externalRoutines" method="fetchAnalyzerRegistries" fixed-delay="10000"/>
 	</task:scheduled-tasks>
 
 	<task:scheduler id="myScheduler" pool-size="10"/>
@@ -98,6 +98,9 @@
 	<int:channel id="ftpChannelRm">
 	</int:channel>
 	
+	<int:channel id="ftpChannelMget">
+	</int:channel>
+	
 	<int:channel id="outboundChannel">
 	</int:channel>
 		
@@ -106,10 +109,14 @@
 
 	<int:channel id="outboundRmChannel">
 	</int:channel>
+	
+	<int:channel id="outboundMgetChannel">
+	</int:channel>
 	 
 	<int:gateway service-interface ="clb.business.integration.FtpGateway" default-request-channel="ftpChannel"/>
 	<int:gateway service-interface ="clb.business.integration.FtpGatewayPut" default-request-channel="ftpChannelPut"/>
-	<int:gateway service-interface ="clb.business.integration.FtpGatewayRm" default-request-channel="ftpChannelRm"/>
+	<int:gateway service-interface ="clb.business.integration.FtpGatewayRm" default-request-channel="ftpChannelRm"/>	
+	<int:gateway service-interface ="clb.business.integration.FtpGatewayMget" default-request-channel="ftpChannelMget"/>
 	 
 	 <int-ftp:outbound-gateway 
 	 	session-factory="ftpSessionFactory"
@@ -143,13 +150,25 @@
 		reply-channel="outboundRmChannel"
 		>
 	</int-ftp:outbound-gateway>
-	 
-	    
+	
+	<int-ftp:outbound-gateway 
+	 	session-factory="ftpSessionFactory"
+	    request-channel="ftpChannelMget"
+	    command="mget"
+	    command-options="-P -R"
+	    mode="IGNORE"
+	    expression="payload"
+	    remote-file-separator="/"
+	    remote-directory-expression="headers['pathName']"
+	    local-directory="C:/Users/nobre/Desktop/dirToGetFiles"
+	    reply-channel="outboundMgetChannel"/>
+
 	 <bean id="mp" class="clb.business.integration.FtpPrinter"/>
 	 
 	 <int:service-activator ref="mp" method="print" input-channel="outboundChannel"></int:service-activator>
 	 <int:service-activator ref="mp" method="printPut" input-channel="outboundPutChannel"></int:service-activator>
 	 <int:service-activator ref="mp" method="printRm" input-channel="outboundRmChannel"></int:service-activator>
+	 <int:service-activator ref="mp" method="printMget" input-channel="outboundMgetChannel"></int:service-activator>
 	 
 	<bean id="mailSender"
 		class="org.springframework.mail.javamail.JavaMailSenderImpl">
