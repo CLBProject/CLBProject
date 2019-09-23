@@ -138,13 +138,12 @@ public class AnalyzerDataServiceDeprecatedImpl implements AnalyzerDataServiceDep
 				analyzerRegistryObject.setKvarl2(row.getCell(27).getNumericCellValue());
 				analyzerRegistryObject.setKvarl3(row.getCell(28).getNumericCellValue());
 				analyzerRegistryObject.setKvarsys(row.getCell(29).getNumericCellValue());
-				analyzerRegistryObject.setAnalyzerId(ana.getId());
 
 				analyzerRegistries.add( analyzerRegistryObject );
 			}
 
 
-			clbDao.saveAnalyzerRegistries(analyzerRegistries);
+			clbDao.saveAnalyzerRegistries(analyzerRegistries, ana.getId());
 
 			analyzerRegistries.stream().forEach( analyzerRegistry -> ana.addAnalyzerRegistryId( analyzerRegistry.getId() ) );
 
@@ -230,14 +229,13 @@ public class AnalyzerDataServiceDeprecatedImpl implements AnalyzerDataServiceDep
 							//Power Factor
 							anaRegObj.setPfsys( lowAl + (highAl - lowAl) * random.nextDouble() );
 
-							anaRegObj.setAnalyzerId( analyzer.getId() );
 							analyzersRegistries.add( anaRegObj );
 						}
 					}
 					calendar.add(Calendar.DATE, 1);
 				}
 
-				clbDao.saveAnalyzerRegistries(analyzersRegistries);
+				clbDao.saveAnalyzerRegistries(analyzersRegistries, analyzer.getId());
 				analyzersRegistries.stream().forEach( analyzerRegistry -> analyzer.addAnalyzerRegistryId( analyzerRegistry.getId() ) );
 			}
 		}

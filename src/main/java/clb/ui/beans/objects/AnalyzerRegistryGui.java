@@ -78,7 +78,6 @@ public class AnalyzerRegistryGui {
 		this.vllsys = vllsys;
 	}
 
-
 	public Date getCurrentTime() {
 		return currentTime;
 	}

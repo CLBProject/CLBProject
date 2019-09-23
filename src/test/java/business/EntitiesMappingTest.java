@@ -32,7 +32,6 @@ public class EntitiesMappingTest {
 		obj.setAl2(2.0);
 		obj.setAl3(3.0);
 		obj.setAn(4.0);
-		obj.setAnalyzerId("1");
 		obj.setAsys(5.0);
 		obj.setComport(1);
 		obj.setCurrenttime(currentTime);
@@ -95,7 +94,6 @@ public class EntitiesMappingTest {
 		assertEquals(entity.getAl2(),2.0,0.01);
 		assertEquals(entity.getAl3(),3.0,0.01);
 		assertEquals(entity.getAn(),4.0,0.01);
-		assertEquals(entity.getAnalyzerId(),"1");
 		assertEquals(entity.getAsys(),5.0,0.01);
 		assertEquals(entity.getComport(),1);
 		assertEquals(entity.getCurrenttime().toString(),currentTime.toString());
@@ -169,7 +167,6 @@ public class EntitiesMappingTest {
 		ent.setAl2(2.0);
 		ent.setAl3(3.0);
 		ent.setAn(4.0);
-		ent.setAnalyzerId("1");
 		ent.setAsys(5.0);
 		ent.setComport(1);
 		ent.setCurrenttime(currentTime);
@@ -232,8 +229,6 @@ public class EntitiesMappingTest {
 		assertEquals(object.getAl2(),2.0,0.01);
 		assertEquals(object.getAl3(),3.0,0.01);
 		assertEquals(object.getAn(),4.0,0.01);
-		assertEquals(object.getAnalyzerId(),"1");
-		assertEquals(object.getAsys(),5.0,0.01);
 		assertEquals(object.getComport(),1);
 		assertEquals(object.getCurrenttime().toString(),currentTime.toString());
 		assertEquals(object.getEpochformat().toString(),epochFormat.toString());

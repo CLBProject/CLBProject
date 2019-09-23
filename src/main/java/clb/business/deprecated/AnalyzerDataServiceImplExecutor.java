@@ -4,10 +4,12 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.primefaces.json.JSONException;
@@ -89,7 +91,9 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 							jsonObj.put("analyzerId", analyzerObject.getId());
 
 							AnalyzerRegistryObject analyzerRegistry = JsonUtils.getInstance().toAnalyzerRegistryObject(jsonObj);
-							clbDao.saveAnalyzerRegistry( analyzerRegistry);
+							Set<AnalyzerRegistryObject> registries = new HashSet<AnalyzerRegistryObject>();
+							registries.add(analyzerRegistry);
+							clbDao.saveAnalyzerRegistries( registries, analyzerObject.getId());
 							analyzerObject.addAnalyzerRegistryId(analyzerRegistry.getId());
 
 							clientSocket.getOutputStream().write(AnalyzerCommand.ACKNOWLEDGE.getValue().getBytes());

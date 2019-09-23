@@ -167,7 +167,6 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		user.addBuilding(building);
 		
 		
-		ftpGatewayPut.upload(user.getId() + "/"+building.getId(), "", "");
 		clbDao.saveClbObject(user);
 	}
 
@@ -248,7 +247,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		
 		clbDao.saveClbObject(division);
 		
-		ftpGatewayPut.upload(userId + "/"+buildingId + "/" + analyzerToSave.getCodeName(), "", "");
+		ftpGatewayPut.upload(userId + "/"+buildingId + "/" + analyzerToSave.getId(), "", "");
 	}
 
 	@Override

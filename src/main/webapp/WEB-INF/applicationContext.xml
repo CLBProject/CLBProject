@@ -62,7 +62,7 @@
 	</bean>
 	
 	<task:scheduled-tasks scheduler="myScheduler">
-	    <task:scheduled ref="externalRoutines" method="fetchAnalyzerRegistries" fixed-delay="10000"/>
+	    <task:scheduled ref="externalRoutines" method="fetchAnalyzerRegistries" fixed-delay="3600000"/>
 	</task:scheduled-tasks>
 
 	<task:scheduler id="myScheduler" pool-size="10"/>
@@ -159,8 +159,8 @@
 	    mode="IGNORE"
 	    expression="payload"
 	    remote-file-separator="/"
-	    remote-directory-expression="headers['pathName']"
-	    local-directory="C:/Users/nobre/Desktop/dirToGetFiles"
+	    remote-directory-expression="headers['file_remoteDirectory']"
+	    local-directory-expression="'/Users/nobre/dirToGetFiles/' + #remoteDirectory"
 	    reply-channel="outboundMgetChannel"/>
 
 	 <bean id="mp" class="clb.business.integration.FtpPrinter"/>

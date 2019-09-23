@@ -20,7 +20,6 @@ public class JsonUtils
 	public AnalyzerRegistryObject toAnalyzerRegistryObject(JSONObject jsonObj) {
 		AnalyzerRegistryObject registry = new AnalyzerRegistryObject();
 		
-		registry.setAnalyzerId(jsonObj.getString("analyzerId"));
 		registry.setAl1(getDoubleForJson("al1", jsonObj));
 		registry.setAl2(getDoubleForJson("al2", jsonObj));
 		registry.setAl3(getDoubleForJson("al3", jsonObj));

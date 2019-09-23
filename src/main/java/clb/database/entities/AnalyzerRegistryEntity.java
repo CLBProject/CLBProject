@@ -22,8 +22,6 @@ public class AnalyzerRegistryEntity implements ClbEntity, Serializable {
     @Id
     private String id;
 
-    private String analyzerId;
-
     //Current
     private double asys;
 
@@ -231,8 +229,7 @@ public class AnalyzerRegistryEntity implements ClbEntity, Serializable {
     }
 
     public DBObject toDbObject() {
-        DBObject dbObj = new BasicDBObject("id",this.id)
-                .append( "vlnsys", vlnsys )
+        DBObject dbObj = new BasicDBObject("vlnsys", vlnsys )
                 .append( "vllsys", vllsys )
                 .append( "kwsys", kwsys )
                 .append( "kvarsys", kvarsys )
@@ -240,7 +237,6 @@ public class AnalyzerRegistryEntity implements ClbEntity, Serializable {
                 .append( "pfsys", pfsys )
                 .append( "hz", hz )
                 .append( "asys", asys )
-                .append( "analyzerId", analyzerId )
                 .append( "currenttime", currenttime );
         return dbObj;
     }
@@ -868,15 +864,5 @@ public class AnalyzerRegistryEntity implements ClbEntity, Serializable {
     public void setWdmdmax(double wdmdmax) {
         this.wdmdmax = wdmdmax;
     }
-
-    public String getAnalyzerId() {
-        return analyzerId;
-    }
-
-    public void setAnalyzerId( String analyzerId ) {
-        this.analyzerId = analyzerId;
-    }
-
-
 
 }

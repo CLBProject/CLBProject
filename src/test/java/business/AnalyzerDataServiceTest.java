@@ -40,17 +40,14 @@ public class AnalyzerDataServiceTest {
 
 		//Given
 		AnalyzerRegistryObject analyzerReg1 = new AnalyzerRegistryObject();
-		analyzerReg1.setAnalyzerId("1");
 		analyzerReg1.setKwh(10.0);
 		analyzerReg1.setAn(54.4);
 
 		AnalyzerRegistryObject analyzerReg2 = new AnalyzerRegistryObject();
-		analyzerReg2.setAnalyzerId("1");
 		analyzerReg2.setKwh(3.1);
 		analyzerReg2.setAn(12.9);
 
 		AnalyzerRegistryObject analyzerReg3 = new AnalyzerRegistryObject();
-		analyzerReg3.setAnalyzerId("1");
 		analyzerReg3.setKwh(1.5);
 		analyzerReg3.setAn(3.1);
 
@@ -77,17 +74,14 @@ public class AnalyzerDataServiceTest {
 		assertEquals(dayRegistries.size(), todayRegistries.size());
 		assertEquals(finalReg1Obj.getKwh(), 10.0, 0.01);
 		assertEquals(finalReg1Obj.getAn(), 54.4, 0.01);
-		assertEquals(finalReg1Obj.getAnalyzerId(),"1");
 		assertEquals(finalReg2Obj.getKwh(), 3.1, 0.01);
 		assertEquals(finalReg2Obj.getAn(), 12.9, 0.01);
-		assertEquals(finalReg2Obj.getAnalyzerId(),"1");
 
 		AnalyzerRegistryObject finalReg3Obj = hourRegistries.get(0);
 
 		assertEquals(thisHourRegistries.size(), hourRegistries.size());
 		assertEquals(finalReg3Obj.getKwh(), 1.5, 0.01);
 		assertEquals(finalReg3Obj.getAn(), 3.1, 0.01);
-		assertEquals(finalReg3Obj.getAnalyzerId(),"1");
 	}
 
 	@Test
@@ -95,17 +89,14 @@ public class AnalyzerDataServiceTest {
 
 		//Given
 		AnalyzerRegistryObject analyzerReg1 = new AnalyzerRegistryObject();
-		analyzerReg1.setAnalyzerId("3");
 		analyzerReg1.setKwh(9.2);
 		analyzerReg1.setAn(14.5);
 
 		AnalyzerRegistryObject analyzerReg2 = new AnalyzerRegistryObject();
-		analyzerReg2.setAnalyzerId("3");
 		analyzerReg2.setKwh(0.1);
 		analyzerReg2.setAn(99.2);
 
 		AnalyzerRegistryObject analyzerReg3 = new AnalyzerRegistryObject();
-		analyzerReg3.setAnalyzerId("3");
 		analyzerReg3.setKwh(5.3);
 		analyzerReg3.setAn(26.8);
 
@@ -131,17 +122,14 @@ public class AnalyzerDataServiceTest {
 		assertEquals(dayRegistries.size(), notTodayRegistries.size());
 		assertEquals(finalReg1Obj.getKwh(), 9.2, 0.01);
 		assertEquals(finalReg1Obj.getAn(), 14.5, 0.01);
-		assertEquals(finalReg1Obj.getAnalyzerId(),"3");
 		assertEquals(finalReg2Obj.getKwh(), 0.1, 0.01);
 		assertEquals(finalReg2Obj.getAn(), 99.2, 0.01);
-		assertEquals(finalReg2Obj.getAnalyzerId(),"3");
 
 		
 		AnalyzerRegistryObject finalReg3Obj = hourRegistries.get(0);
 		assertEquals(hourRegistries.size(), notThisHourRegistries.size());
 		assertEquals(finalReg3Obj.getKwh(), 5.3, 0.01);
 		assertEquals(finalReg3Obj.getAn(), 26.8, 0.01);
-		assertEquals(finalReg3Obj.getAnalyzerId(),"3");
 	}
 	
 	@Test
@@ -149,12 +137,10 @@ public class AnalyzerDataServiceTest {
 		
 		//Given
 		AnalyzerRegistryObject analyzerReg1 = new AnalyzerRegistryObject();
-		analyzerReg1.setAnalyzerId("2");
 		analyzerReg1.setKwh(1.7);
 		analyzerReg1.setAn(6.3);
 
 		AnalyzerRegistryObject analyzerReg2 = new AnalyzerRegistryObject();
-		analyzerReg2.setAnalyzerId("2");
 		analyzerReg2.setKwh(0.9);
 		analyzerReg2.setAn(31.3);
 
@@ -176,10 +162,8 @@ public class AnalyzerDataServiceTest {
 		assertEquals(dayRegistries.size(), weekRegistries.size());
 		assertEquals(finalReg1Obj.getKwh(), 1.7, 0.01);
 		assertEquals(finalReg1Obj.getAn(), 6.3, 0.01);
-		assertEquals(finalReg1Obj.getAnalyzerId(),"2");
 		assertEquals(finalReg2Obj.getKwh(), 0.9, 0.01);
 		assertEquals(finalReg2Obj.getAn(), 31.3, 0.01);
-		assertEquals(finalReg2Obj.getAnalyzerId(),"2");
 	}
 	
 	@Test
@@ -187,12 +171,10 @@ public class AnalyzerDataServiceTest {
 		
 		//Given
 		AnalyzerRegistryObject analyzerReg1 = new AnalyzerRegistryObject();
-		analyzerReg1.setAnalyzerId("5");
 		analyzerReg1.setKwh(66);
 		analyzerReg1.setAn(12.5);
 
 		AnalyzerRegistryObject analyzerReg2 = new AnalyzerRegistryObject();
-		analyzerReg2.setAnalyzerId("5");
 		analyzerReg2.setKwh(72);
 		analyzerReg2.setAn(18.6);
 
@@ -214,10 +196,8 @@ public class AnalyzerDataServiceTest {
 		assertEquals(weekRegistriesFinal.size(), weekRegistries.size());
 		assertEquals(finalReg1Obj.getKwh(), 66, 0.01);
 		assertEquals(finalReg1Obj.getAn(), 12.5, 0.01);
-		assertEquals(finalReg1Obj.getAnalyzerId(),"5");
 		assertEquals(finalReg2Obj.getKwh(), 72, 0.01);
 		assertEquals(finalReg2Obj.getAn(),18.6, 0.01);
-		assertEquals(finalReg2Obj.getAnalyzerId(),"5");
 	}
 	
 	@Test
@@ -225,12 +205,10 @@ public class AnalyzerDataServiceTest {
 		
 		//Given
 		AnalyzerRegistryObject analyzerReg1 = new AnalyzerRegistryObject();
-		analyzerReg1.setAnalyzerId("8");
 		analyzerReg1.setKwh(3.1);
 		analyzerReg1.setAn(4.8);
 
 		AnalyzerRegistryObject analyzerReg2 = new AnalyzerRegistryObject();
-		analyzerReg2.setAnalyzerId("8");
 		analyzerReg2.setKwh(1.1);
 		analyzerReg2.setAn(900);
 
@@ -249,10 +227,8 @@ public class AnalyzerDataServiceTest {
 		assertEquals(monthRegs.size(), monthRegistries.size());
 		assertEquals(finalReg1Obj.getKwh(), 3.1, 0.01);
 		assertEquals(finalReg1Obj.getAn(), 4.8, 0.01);
-		assertEquals(finalReg1Obj.getAnalyzerId(),"8");
 		assertEquals(finalReg2Obj.getKwh(), 1.1, 0.01);
 		assertEquals(finalReg2Obj.getAn(),900, 0.01);
-		assertEquals(finalReg2Obj.getAnalyzerId(),"8");
 	}
 	
 	@Test
@@ -260,12 +236,10 @@ public class AnalyzerDataServiceTest {
 		
 		//Given
 		AnalyzerRegistryObject analyzerReg1 = new AnalyzerRegistryObject();
-		analyzerReg1.setAnalyzerId("7");
 		analyzerReg1.setKwh(70.1);
 		analyzerReg1.setAn(22.8);
 
 		AnalyzerRegistryObject analyzerReg2 = new AnalyzerRegistryObject();
-		analyzerReg2.setAnalyzerId("7");
 		analyzerReg2.setKwh(16.5);
 		analyzerReg2.setAn(87);
 
@@ -284,10 +258,8 @@ public class AnalyzerDataServiceTest {
 		assertEquals(monthRegs.size(), monthRegistries.size());
 		assertEquals(finalReg1Obj.getKwh(), 70.1, 0.01);
 		assertEquals(finalReg1Obj.getAn(), 22.8, 0.01);
-		assertEquals(finalReg1Obj.getAnalyzerId(),"7");
 		assertEquals(finalReg2Obj.getKwh(), 16.5, 0.01);
 		assertEquals(finalReg2Obj.getAn(),87, 0.01);
-		assertEquals(finalReg2Obj.getAnalyzerId(),"7");
 	}
 
 	@Test

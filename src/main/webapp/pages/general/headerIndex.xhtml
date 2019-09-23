@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	template="../template/ui.xhtml">
+	<ui:define name="body">
+		<h:form id="bannerForm" class="headerForm header p-grid">
+			<div class="p-col logo p-justify-center">
+				<p:graphicImage url="/resources/images/logoL8energy.png" height="50px" width="150px"></p:graphicImage>
+			</div>
+			<div align="right" class="p-col loginForm">
+				<div class="p-col loginButton">
+					<p:commandButton styleClass="loginFormButton" value="Log In" action="#{clbHomeLoginBean.loginUser}" ajax="true"
+						update="@form" oncomplete="if (args.cantLoginUserNotFound === true )
+								{ 
+									PF('unSuccessPaneldoesnexistUnsuccess').show();
+								}
+								if (args.cantLoginPasswordDoesntMatch === true)
+								{
+									PF('unSuccessPanelpasswordnotmatchUnsuccess').show();
+								}
+								"></p:commandButton>
+				</div>
+				<div class="p-col password">
+					<table>
+						<tr>
+							<td>
+								<p:outputLabel for="passwordUser" class="headerLabel">Password:</p:outputLabel>
+							</td>
+							<td>
+								<p:inputText label="passwordUser" id="passwordUser" value="#{clbHomeLoginBean.loginPassword}" type="password" />
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="p-col username">
+					<table>
+						<tr>
+							<td>
+								<p:outputLabel for="username" class="headerLabel">Username:</p:outputLabel>
+							</td>
+							<td>
+								<p:inputText id="username" label="username" value="#{clbHomeLoginBean.loginUsername}" />
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

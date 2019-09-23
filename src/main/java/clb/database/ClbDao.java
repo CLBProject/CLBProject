@@ -17,10 +17,8 @@ public interface ClbDao{
 	
 	void saveClbObjects(Set<ClbObject> users);
 	
-    void saveAnalyzerRegistries( Set<AnalyzerRegistryObject> analyzersRegistries );
-	
-	void saveAnalyzerRegistry(AnalyzerRegistryObject analyzerRegistryObject);
-	
+    void saveAnalyzerRegistries( Set<AnalyzerRegistryObject> analyzersRegistries, String analyzerId );
+    
 	void deleteClbObject(ClbObject object);
 
 	Set<UsersystemObject> getAllUsers();
@@ -30,6 +28,8 @@ public interface ClbDao{
     UsersystemObject findUserByToken( String token );
 
     UsersystemObject findUserByUserName( String userName );
+    
+    AnalyzerObject findAnalyzerById(String analyzerId);
 
 	BuildingObject findBuildingById(String buildingId);
 

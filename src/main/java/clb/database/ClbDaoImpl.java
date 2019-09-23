@@ -65,33 +65,14 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 		mongoTemplate.save(clbEntity);
 		clbObj.setId(clbEntity.getId());
 	}
-	
 
 	@Override
-	public void saveAnalyzerRegistry(AnalyzerRegistryObject analyzerRegistryObject) {
-
-		String collectionName = DateUtils.getInstance().concatTimeWithString(ANALYZER_REGISTIES_COLL_NAME,analyzerRegistryObject.getCurrenttime());
-
-		DBCollection analyzerRegCol = null;
-
-		if(mongoTemplate.collectionExists( collectionName )) {
-			analyzerRegCol = mongoTemplate.getCollection( collectionName);
-		}
-		else analyzerRegCol = mongoTemplate.createCollection(collectionName );
-
-		AnalyzerRegistryEntity analyzerRegistryEntity = (AnalyzerRegistryEntity) analyzerRegistryObject.toEntity();
-
-		analyzerRegCol.insert( analyzerRegistryEntity.toDbObject() );
-		analyzerRegistryObject.setId(analyzerRegistryEntity.getId());
-	}
-
-
-	@Override
-	public void saveAnalyzerRegistries( Set<AnalyzerRegistryObject> analyzersRegistries ) {
+	public void saveAnalyzerRegistries( Set<AnalyzerRegistryObject> analyzersRegistries, String analyzerId ) {
 
 		DBCollection analyzerRegCol = null;
 		String currentCollectionName = "";
-
+		AnalyzerObject analyzer = findAnalyzerById(analyzerId);
+		
 		for(AnalyzerRegistryObject analyzerRegistryObject : analyzersRegistries) {
 			String collectionName =  DateUtils.getInstance().concatTimeWithString(ANALYZER_REGISTIES_COLL_NAME,analyzerRegistryObject.getCurrenttime());
 
@@ -107,15 +88,27 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 			}
 
 			AnalyzerRegistryEntity analyzerRegistryEntity = (AnalyzerRegistryEntity) analyzerRegistryObject.toEntity();
+			
+			DBObject objId = analyzerRegistryEntity.toDbObject();
+			analyzerRegCol.save( objId );
+			String _id = objId.get("_id").toString();
+			analyzerRegistryObject.setId(_id);
 
-			analyzerRegCol.insert( analyzerRegistryEntity.toDbObject() );
-			analyzerRegistryObject.setId(analyzerRegistryEntity.getId());
+			analyzer.addAnalyzerRegistryId(_id);
 		}
+
+		saveClbObject(analyzer);
 	}
 
 	@Override
 	public Set<UsersystemObject> getAllUsers(){
 		return mongoTemplate.findAll(UsersystemEntity.class).stream().map(UsersystemObject::new).collect(Collectors.toSet());
+	}
+	
+	@Override
+	public AnalyzerObject findAnalyzerById(String analyzerId) {
+		AnalyzerEntity analyzer = (AnalyzerEntity) findById(analyzerId, AnalyzerEntity.class);
+		return analyzer != null ? new AnalyzerObject(analyzer) : null;
 	}
 	
 
@@ -212,7 +205,6 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 		collection.find(dbObj).forEach( result -> {
 			AnalyzerRegistryEntity analyzerReg = new AnalyzerRegistryEntity();
 			analyzerReg.setId((String)result.get("id") );
-			analyzerReg.setAnalyzerId((String)result.get("analyzerId")); 
 			analyzerReg.setVlnsys( (Double)result.get("vlnsys") );
 			analyzerReg.setVllsys( (Double)result.get("vllsys") );
 			analyzerReg.setKwsys( (Double)result.get("kwsys")  );

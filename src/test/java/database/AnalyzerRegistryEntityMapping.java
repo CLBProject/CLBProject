@@ -27,7 +27,6 @@ public class AnalyzerRegistryEntityMapping {
 		analyzerEntity.setPfsys(2.8);
 		analyzerEntity.setHz(6.5);
 		analyzerEntity.setAsys(18.7);
-		analyzerEntity.setAnalyzerId("4");
 		analyzerEntity.setCurrenttime(currentTime);
 		
 		//Dont Exist
@@ -43,7 +42,6 @@ public class AnalyzerRegistryEntityMapping {
 		assertEquals(dbObject.get("pfsys"), analyzerEntity.getPfsys());
 		assertEquals(dbObject.get("hz"), analyzerEntity.getHz());
 		assertEquals(dbObject.get("asys"), analyzerEntity.getAsys());
-		assertEquals(dbObject.get("analyzerId"), analyzerEntity.getAnalyzerId());
 		assertEquals(dbObject.get("currenttime").toString(), analyzerEntity.getCurrenttime().toString());
 		assertNotEquals(dbObject.get("comport"),analyzerEntity.getComport());
 	}

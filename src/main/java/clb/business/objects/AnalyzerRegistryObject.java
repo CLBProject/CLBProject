@@ -11,8 +11,6 @@ public class AnalyzerRegistryObject implements ClbEntity, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String id;
-	
-	private String analyzerId;
 
 	private double al1;
 
@@ -138,7 +136,6 @@ public class AnalyzerRegistryObject implements ClbEntity, Serializable {
     public AnalyzerRegistryObject(AnalyzerRegistryEntity analyzerRegEntity) {
         super();
         this.id = analyzerRegEntity.getId();
-        this.analyzerId = analyzerRegEntity.getAnalyzerId();
         this.al1 = analyzerRegEntity.getAl1();
         this.al2 = analyzerRegEntity.getAl2();
         this.al3 = analyzerRegEntity.getAl3();
@@ -202,7 +199,6 @@ public class AnalyzerRegistryObject implements ClbEntity, Serializable {
 	public AnalyzerRegistryEntity toEntity() {
         AnalyzerRegistryEntity anaRegEntity = new AnalyzerRegistryEntity();
         anaRegEntity.setId(id);
-        anaRegEntity.setAnalyzerId( this.analyzerId );
         anaRegEntity.setAl1(al1);
         anaRegEntity.setAl2(al2);
         anaRegEntity.setAl3(al3);
@@ -737,16 +733,6 @@ public class AnalyzerRegistryObject implements ClbEntity, Serializable {
 	public void setVlnsys(double vlnsys) {
 		this.vlnsys = vlnsys;
 	}
-
-
-    public String getAnalyzerId() {
-        return analyzerId;
-    }
-
-
-    public void setAnalyzerId( String analyzerId ) {
-        this.analyzerId = analyzerId;
-    }
 	
 	
     

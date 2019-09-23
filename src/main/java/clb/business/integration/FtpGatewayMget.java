@@ -5,5 +5,5 @@ import org.springframework.messaging.handler.annotation.Payload;
 
 public interface FtpGatewayMget {
 
-	public void mGet(@Header("pathName") String directory, @Payload String exp);
+	public void mGet(@Header("file_remoteDirectory") String directory, @Payload String exp);
 }
