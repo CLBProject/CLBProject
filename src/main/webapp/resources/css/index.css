@@ -910,28 +910,38 @@ body {
 }
 
 .header .loginForm .loginButton{
-	float: right;
+	float: left;
 	padding-right: 10px;
 }
 
 /* line 11, ../scss/homepage/_header.scss */
 .header .loginForm .username {
-	float: right;
+	float: left;
 	padding-right: 30px;
 }
 
 /* line 15, ../scss/homepage/_header.scss */
 .header .loginForm .password {
-	float: right;
+	float: left;
 	padding-right: 20px;
 }
 
 .header .loginForm .headerIcon {
-	float: right;
+	float: left;
 	padding-right: 15px;
-	height:100%;
+	padding-top: 15px;
+	height:30px;
 }
 
+.header .loginForm .userLogged {
+	float: left;
+	padding-right: 20px;
+	padding-top: 20px;
+	height:30px;
+	color: #E0B056;
+	font-weight: bold;
+	font-size: 15px;
+}
 
 
 /* line 23, ../scss/homepage/_header.scss */
@@ -960,6 +970,10 @@ body {
 .footer {
 	background-color: #3A3939;
 	text-align: center;
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
 }
 
 /*# sourceMappingURL=index.css.map */
@@ -1002,4 +1016,18 @@ body {
 .mainTextContentDiv {
 	font-size: 24px;
 	color: black;
+}
+
+.verticalLine{
+  border-left: 1px solid #D7D2D2;
+  height: 35px;
+}
+
+.buindingItemAnalysis{
+	color:black;
+	font-size: 15px;
+}
+
+.buildingPanelClass{
+	margin-bottom: 10px;
 }

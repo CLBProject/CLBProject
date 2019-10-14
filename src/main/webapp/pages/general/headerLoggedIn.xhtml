@@ -10,10 +10,11 @@
 			<div class="p-col logo p-justify-center">
 				<p:graphicImage url="/resources/images/logoL8energy.png" height="50px" width="150px"></p:graphicImage>
 			</div>
-			<div align="right" class="p-col loginForm">
-				<div class="p-col loginButton">
-					<p:commandButton styleClass="loginFormButton" value="Log Out" action="#{clbHomeLoginBean.logout}"></p:commandButton>
+				<div align="right" class="p-col loginForm">
+				<div class="p-col userLogged">
+					<p:outputLabel value="#{clbHomeLoginBean.authenticatedUser.name}"></p:outputLabel>
 				</div>
+				<div class="p-col headerIcon verticalLine"></div>
 				<div class="p-col headerIcon">
 					<table>
 						<tr>
@@ -41,6 +42,9 @@
 							</td>
 						</tr>
 					</table>
+				</div>
+				<div class="p-col loginButton">
+					<p:commandButton styleClass="loginFormButton" value="Log Out" action="#{clbHomeLoginBean.logout}"></p:commandButton>
 				</div>
 			</div>
 		</h:form>

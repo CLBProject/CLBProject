@@ -89,9 +89,7 @@ public class AnalysisBean implements Serializable{
 	public void init() {
 
 		analysisBeanCache = new AnalysisBeanCache(analyzerDataService);
-
 		todayDate = new Date();
-
 		analysisDate = new Date();
 		previousAnalisysDate = DateUtils.getInstance().getDay(analysisDate, false);
 		nextAnalisysDate = DateUtils.getInstance().getDay(analysisDate, true);
