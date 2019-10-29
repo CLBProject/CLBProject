@@ -11,7 +11,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<spring.version>4.3.11.RELEASE</spring.version>
+		<spring.version>5.2.0.RELEASE</spring.version>
 		<springsecurity.version>4.0.1.RELEASE</springsecurity.version>
 		<derby.version>10.13.1.1</derby.version>
 		<jsf.version>2.2.15</jsf.version>
