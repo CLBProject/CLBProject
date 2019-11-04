@@ -48,19 +48,7 @@ public class BuildingObject implements ClbObject
         return buildingEntity;
     }
     
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((buildingusername == null) ? 0 : buildingusername.hashCode());
-		result = prime * result + ((divisions == null) ? 0 : divisions.hashCode());
-		result = prime * result + ((imgPath == null) ? 0 : imgPath.hashCode());
-		result = prime * result + ((location == null) ? 0 : location.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
-	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -75,34 +63,9 @@ public class BuildingObject implements ClbObject
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (buildingusername == null) {
-			if (other.buildingusername != null)
-				return false;
-		} else if (!buildingusername.equals(other.buildingusername))
-			return false;
-		if (divisions == null) {
-			if (other.divisions != null)
-				return false;
-		} else if (!divisions.equals(other.divisions))
-			return false;
-		if (imgPath == null) {
-			if (other.imgPath != null)
-				return false;
-		} else if (!imgPath.equals(other.imgPath))
-			return false;
-		if (location == null) {
-			if (other.location != null)
-				return false;
-		} else if (!location.equals(other.location))
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
 		return true;
 	}
-	
+
 	public void addDivision(DivisionObject divObj) {
 		if(this.divisions == null) {
 			this.divisions = new HashSet<DivisionObject>();

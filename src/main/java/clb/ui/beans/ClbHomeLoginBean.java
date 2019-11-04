@@ -108,6 +108,7 @@ public class ClbHomeLoginBean implements Serializable {
 
 	public void deleteBuildingFromUser(BuildingObject building) {
 		analyzerDataService.deleteBuildingForUser(authenticatedUser.toObject(), building);
+		authenticatedUser.removeBuilding(new BuildingAnalysisGui(building));
 	}
 	
 	public UserRegistryService getUserRegistryService() {

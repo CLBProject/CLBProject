@@ -984,7 +984,7 @@ body {
 
 
 .ui-panel-titlebar {
-	font-size: 12px;
+	font-size: 16px;
 }
 
 .ui-dialog-titlebar{
@@ -1070,10 +1070,10 @@ body {
 }
 
 .ui-treetable tbody td{
-	background-color: #DCDBD9 !important;
-	color: #3A3939;
+	background-color: #3A3939 !important;
+	color: white;
 	font-family: arial;
-	font-size:14px;
+	font-size:12px;
 }
  
 .value {
@@ -1087,7 +1087,7 @@ body {
  
  .buildingLinks{
  	font-size:12px !important;
- 	color: white !important;
+ 	color: #DCDBD9 !important;
  }
  
  .analysisNewBuildingClass{

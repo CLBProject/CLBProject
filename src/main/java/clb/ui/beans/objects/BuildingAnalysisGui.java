@@ -49,6 +49,23 @@ public class BuildingAnalysisGui {
 		
 		return bobj;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		BuildingAnalysisGui other = (BuildingAnalysisGui) obj;
+		if (buildingid == null) {
+			if (other.buildingid != null)
+				return false;
+		} else if (!buildingid.equals(other.buildingid))
+			return false;
+		return true;
+	}
 
 	public boolean hasDivisions() {
 		return divisions != null && divisions.size() > 0;

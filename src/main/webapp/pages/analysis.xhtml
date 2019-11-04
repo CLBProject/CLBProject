@@ -38,7 +38,7 @@
 											    <p:commandLink styleClass="buildingLinks" value="Add Division"></p:commandLink>
 											    <p:spacer width="15"></p:spacer>
 											    <p:graphicImage width="12px" value="#{request.contextPath}/../resources/images/negative.png" style="padding-right:5px"/>
-											    <p:commandLink styleClass="buildingLinks" value="Delete Building" ajax="true" update="analysisForm"
+											    <p:commandLink styleClass="buildingLinks" value="Delete Building" ajax="true" update=":analysisForm"
 											    			   action="#{analysisBean.deleteBuilding(building)}"></p:commandLink>
 										     </p:panel>
 										</ui:repeat>
