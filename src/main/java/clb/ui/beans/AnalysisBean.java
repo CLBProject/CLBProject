@@ -2,36 +2,24 @@ package clb.ui.beans;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.model.SelectItem;
 
-import org.primefaces.event.SelectEvent;
-import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.TreeNode;
 
-import clb.business.objects.AnalyzerRegistryObject;
-import clb.business.objects.DivisionObject;
+import clb.business.objects.BuildingObject;
 import clb.business.services.AnalyzerDataService;
-import clb.global.DateUtils;
-import clb.ui.beans.objects.AnalyzerGui;
+import clb.ui.beans.newobjects.BuildingNewManagementGui;
 import clb.ui.beans.objects.BuildingAnalysisGui;
-import clb.ui.beans.objects.DivisionGui;
+import clb.ui.beans.treeStructure.BuildingTreeGui;
 import clb.ui.beans.treeStructure.DivisionTreeGui;
-import clb.ui.beans.utils.AnalysisBeanCache;
-import clb.ui.beans.utils.AnalysisBeanChart;
-import clb.ui.enums.AnalysisTypes;
-import clb.ui.enums.Hours;
-import clb.ui.enums.Months;
-import clb.ui.enums.ScaleGraphic;
-import clb.ui.enums.Weeks;
 
 @ViewScoped
 @ManagedBean
@@ -44,8 +32,14 @@ public class AnalysisBean implements Serializable{
 
 	@ManagedProperty("#{analyzerDataService}")
 	private AnalyzerDataService analyzerDataService;
+	
+	private List<BuildingTreeGui> buildingsToShow;
+	private TreeNode currentDivisionSelected;
+	private List<SelectItem> currentDivisionAnalyzersSelected;
+	
+	private BuildingNewManagementGui newBuilding;
 
-	private Date todayDate;
+	/*private Date todayDate;
 	private Date minDate;
 	private Date analysisDate;
 	private Date previousAnalisysDate;
@@ -83,12 +77,17 @@ public class AnalysisBean implements Serializable{
 	private Set<String> years;
 
 	private Weeks week;
-	private Weeks[] weeks;
+	private Weeks[] weeks;*/
 
 	@PostConstruct
 	public void init() {
-
-		analysisBeanCache = new AnalysisBeanCache(analyzerDataService);
+		
+		this.newBuilding = new BuildingNewManagementGui();
+		
+		fillBuildingsData();
+		
+		/*analysisBeanCache = new AnalysisBeanCache(analyzerDataService);
+		
 		todayDate = new Date();
 		analysisDate = new Date();
 		previousAnalisysDate = DateUtils.getInstance().getDay(analysisDate, false);
@@ -132,10 +131,91 @@ public class AnalysisBean implements Serializable{
 					}
 				}
 			}
+		}*/
+		
+	}
+	
+	private void fillBuildingsData() {
+		this.buildingsToShow = clbHomeLoginBean.getAuthenticatedUser().hasBuildings() ? 
+								clbHomeLoginBean.getAuthenticatedUser().getBuildings()
+																			.stream()
+																			.map(BuildingAnalysisGui::toObject)
+																			.map(BuildingTreeGui::new).collect(Collectors.toList()) : new ArrayList<BuildingTreeGui>();
+	}
+
+	public void showDivisionOptions(NodeSelectEvent event) {
+		this.currentDivisionSelected = event.getTreeNode();
+		this.currentDivisionAnalyzersSelected = ((DivisionTreeGui) this.currentDivisionSelected.getData()).getAnalyzers();
+	}
+	
+	public void createBuilding() {
+		if (newBuilding != null) {
+			BuildingObject newBuildingObj = newBuilding.toObject();
+			clbHomeLoginBean.addBuildingToUser(newBuildingObj);
+			fillBuildingsData();
 		}
 		
 	}
+	
+	public void deleteBuilding(BuildingTreeGui buildingToDelete) {
+		if (buildingToDelete != null) {
+			clbHomeLoginBean.deleteBuildingFromUser(buildingToDelete.toObject());
+			buildingsToShow.remove(buildingToDelete);
+			fillBuildingsData();
+		}
+	}
 
+	public ClbHomeLoginBean getClbHomeLoginBean() {
+		return clbHomeLoginBean;
+	}
+
+	public void setClbHomeLoginBean(ClbHomeLoginBean clbHomeLoginBean) {
+		this.clbHomeLoginBean = clbHomeLoginBean;
+	}
+
+	public AnalyzerDataService getAnalyzerDataService() {
+		return analyzerDataService;
+	}
+
+	public void setAnalyzerDataService(AnalyzerDataService analyzerDataService) {
+		this.analyzerDataService = analyzerDataService;
+	}
+
+	public List<BuildingTreeGui> getBuildingsToShow() {
+		return buildingsToShow;
+	}
+
+	public void setBuildingsToShow(List<BuildingTreeGui> buildingsToShow) {
+		this.buildingsToShow = buildingsToShow;
+	}
+
+	public TreeNode getCurrentDivisionSelected() {
+		return currentDivisionSelected;
+	}
+
+	public void setCurrentDivisionSelected(TreeNode currentDivisionSelected) {
+		this.currentDivisionSelected = currentDivisionSelected;
+	}
+
+	public List<SelectItem> getCurrentDivisionAnalyzersSelected() {
+		return currentDivisionAnalyzersSelected;
+	}
+
+	public void setCurrentDivisionAnalyzersSelected(List<SelectItem> currentDivisionAnalyzersSelected) {
+		this.currentDivisionAnalyzersSelected = currentDivisionAnalyzersSelected;
+	}
+
+	public BuildingNewManagementGui getNewBuilding() {
+		return newBuilding;
+	}
+
+	public void setNewBuilding(BuildingNewManagementGui newBuilding) {
+		this.newBuilding = newBuilding;
+	}
+	
+	
+
+	/*
 	public Map<String, List<String>> getYearAndMonths() {
 		return yearAndMonths;
 	}
@@ -200,13 +280,11 @@ public class AnalysisBean implements Serializable{
 		analyzerSelected = tempAnalyzerSelected;
 	}
 
-	/** Day View Listeners **/
 
 	public void analysisDayCalendarSelect(SelectEvent event) {
 		changeView();
 	}
 
-	/** Hour View Listeners **/
 
 	public void analysisHourCalendarSelect(SelectEvent event) {
 		hour = Hours.ZERO;
@@ -218,7 +296,6 @@ public class AnalysisBean implements Serializable{
 		fillGraphicData(analysisBeanCache.getHourRegistriesFromAnalyzer( analyzerSelected.getAnalyzerId(), analysisDate));
 	}
 
-	/** Week View Listeners **/
 
 	public void setWeekValue() {
 		analysisDate = DateUtils.getInstance().getWeekFirstDayReseted(week.getCode(),month.getValue(),Integer.parseInt(year));
@@ -255,7 +332,6 @@ public class AnalysisBean implements Serializable{
 		fillGraphicData(analysisBeanCache.getWeekRegistriesFromAnalyzer(analyzerSelected.getAnalyzerId(), week.getCode(), month.getValue(), Integer.parseInt(year)));
 	}
 
-	/** Month View Listeners **/
 
 	public void setMonthValueForMonth() {
 
@@ -570,7 +646,7 @@ public class AnalysisBean implements Serializable{
 
 	public void setMainDivisionSelected(TreeNode mainDivisionSelected) {
 		this.mainDivisionSelected = mainDivisionSelected;
-	}
+	}*/
 
 	
 }

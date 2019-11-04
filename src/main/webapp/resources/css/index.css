@@ -982,8 +982,31 @@ body {
 	width: 100% !important;
 }
 
+
 .ui-panel-titlebar {
-	font-size: 16px;
+	font-size: 12px;
+}
+
+.ui-dialog-titlebar{
+	font-size: 14px;
+}
+
+.ui-dialog-content{
+	background-color: #3A3939 !important;
+}
+
+.ui-panelgrid table tbody tr{
+    border: none;
+}
+
+.ui-panelgrid>*>tr,
+.ui-panelgrid .ui-panelgrid-cell {
+    border: none !important;
+    font-size: 12px !important;
+	font-family: arial !important;
+	background-color: #3A3939 !important;
+	color: #DCDBD9 !important;
+	font-weight:bold !important;
 }
 
 .regFormLink {
@@ -1030,4 +1053,45 @@ body {
 
 .buildingPanelClass{
 	margin-bottom: 10px;
+	background-color: grey !important;
+	font-size:12px;
 }
+
+.ui-treetable{
+    padding-bottom: 15px !important;
+}
+
+.ui-treetable table {
+    table-layout: fixed;
+}
+
+.ui-treetable thead th{
+	display: none;
+}
+
+.ui-treetable tbody td{
+	background-color: #DCDBD9 !important;
+	color: #3A3939;
+	font-family: arial;
+	font-size:14px;
+}
+ 
+.value {
+    font-weight: bold
+}
+ 
+.ui-dialog table {
+	 margin-left:auto; 
+	 margin-right:auto;
+ }
+ 
+ .buildingLinks{
+ 	font-size:12px !important;
+ 	color: white !important;
+ }
+ 
+ .analysisNewBuildingClass{
+ 	font-size: 12px !important;
+ 	color: #ABA9A6;
+ 	padding-bottom: 10px;
+ }

@@ -8,30 +8,35 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	template="../template/ui.xhtml">
 	<ui:define name="body">
+		<ui:include src="successDialog.xhtml">
+			<ui:param name="id" value="newBuildingPopup" />
+			<ui:param name="successMessage"
+				value="A new Building was created successfully!" />
+			<ui:param name="path" value="analysis.xhtml?faces-redirect=true" />
+		</ui:include>
 		<p:dialog widgetVar="newBuildingPopup" id="newBuildingPopup"
 			modal="true" position="center center" draggable="false"
-			closable="true" header="Add New Building" closeOnEscape="true"
-			styleClass="logoClass" resizable="false">
-			<h:form>
-				<div class="newBuildingClass">
-					<p:panelGrid columns="2" styleClass="successGrid">
+			closable="true" header="Add New Building" closeOnEscape="true"  resizable="false">
+			<h:form id="newBuildingForm">
+				<div>
+					<p:panelGrid columns="2" styleClass="newBuildingGrid">
 						<p:column>
 							<p:outputLabel for="newBuildingName" value="Name:"></p:outputLabel>
 						</p:column>
 						<p:column>
-							<p:inputText id="newBuildingName" required="true" value="#{buildingManagementBean.newBuilding.name}"></p:inputText>
+							<p:inputText id="newBuildingName" required="true" value="#{analysisBean.newBuilding.name}"></p:inputText>
 						</p:column>
 						<p:column>
 							<p:outputLabel for="newBuildingLocation" value="Location"></p:outputLabel>
 						</p:column>
 						<p:column>
-							<p:inputText id="newBuildingLocation" value="#{buildingManagementBean.newBuilding.location}" required="true"></p:inputText>
+							<p:inputText id="newBuildingLocation" value="#{analysisBean.newBuilding.location}" required="true"></p:inputText>
 						</p:column>
 					</p:panelGrid>
 					<br/>
 					<div align="center">
-						<p:commandButton action="#{buildingManagementBean.createBuilding}" ajax="true" update=":buildingManagementForm" 
-									styleClass="signButton" value="Create"
+						<p:commandButton action="#{analysisBean.createBuilding}" ajax="true" update="analysisForm" 
+									styleClass="loginFormButton" value="Create"
 									onstart="document.body.style.cursor='wait'"
 									oncomplete="document.body.style.cursor='default'; 
 												PF('newBuildingPopup').hide();
@@ -40,11 +45,5 @@
 				</div>
 			</h:form>
 		</p:dialog>
-		<ui:include src="successDialog.xhtml">
-			<ui:param name="id" value="newBuildingPopup" />
-			<ui:param name="successMessage"
-				value="A new Building was created successfully!" />
-			<ui:param name="path" value="buildingManagement.xhtml?faces-redirect=true" />
-		</ui:include>
 	</ui:define>
 </ui:composition>

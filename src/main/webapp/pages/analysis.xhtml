@@ -16,26 +16,38 @@
 					<table width="100%">
 						<tr>
 							<td valign="top" width="20%">
-								<p:outputPanel>
 								    <p:panel>
-										<div align="center"><h3>User Buildings</h3></div>
-										<ui:repeat value="#{clbHomeLoginBean.authenticatedUser.buildings}" var="building">
+								    	<div class="analysisNewBuildingClass">
+									    	<p:graphicImage width="12px" value="#{request.contextPath}/../resources/images/account.png" style="padding-right:5px"/>
+											<p:commandLink value="Create Building" oncomplete="PF('newBuildingPopup').show()"></p:commandLink>    
+										</div>
+										<ui:repeat value="#{analysisBean.buildingsToShow}" var="building">
 											 <p:panel styleClass="buildingPanelClass" id="toggleable" header="#{building.name}" collapsed="true" toggleable="true" toggleSpeed="500">
-												<ui:repeat value="#{building.divisions}" var="division">
-													<p:outputLabel value="#{division}"/>
-												</ui:repeat>
+											    <p:treeTable id="docs" value="#{building.rootDivision}" var="division" selectionMode="single" >
+											        <p:column>
+											            <h:outputText value="#{division.name}" />
+											        </p:column>
+											        <p:ajax event="select"
+															listener="#{analysisBean.selectDivision}"
+															update="analysisForm"></p:ajax>
+														<p:ajax event="unselect"
+															listener="#{buildingManagementBean.hideDivisionOptions}"
+															update="analysisForm"></p:ajax>
+											    </p:treeTable>
+											    <p:graphicImage width="12px" value="#{request.contextPath}/../resources/images/plus.png" style="padding-right:5px"/>
+											    <p:commandLink styleClass="buildingLinks" value="Add Division"></p:commandLink>
+											    <p:spacer width="15"></p:spacer>
+											    <p:graphicImage width="12px" value="#{request.contextPath}/../resources/images/negative.png" style="padding-right:5px"/>
+											    <p:commandLink styleClass="buildingLinks" value="Delete Building" ajax="true" update="analysisForm"
+											    			   action="#{analysisBean.deleteBuilding(building)}"></p:commandLink>
 										     </p:panel>
 										</ui:repeat>
 									</p:panel>
-								</p:outputPanel>
 							</td>
 							<td valign="top">
 								<div align="center" class="analaysisDateCss">
 									<p:outputPanel>
 										<p:panel>
-										<!--	<p:chart styleClass="analysisChartCSS" id="chartDayId"
-												responsive="true" widgetVar="chartDayId"
-												model="#{analysisBean.analysisDayPojo.lineModel}" type="line" /> -->
 										</p:panel>
 									</p:outputPanel>
 								</div>
@@ -45,9 +57,8 @@
 					</table>
 				</div>
 			</h:form>
+			</div>
 			<ui:include src="./general/footer.xhtml" />
-			<div class="lastAnalysisDiv"></div>
-		</div>
-		<ui:include src="./popups/selectionPopupBuilding.xhtml" />
+			<ui:include src="./popups/newBuildingPopup.xhtml" />
 	</ui:define>
 </ui:composition>

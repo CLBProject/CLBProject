@@ -10,6 +10,7 @@ import clb.business.objects.BuildingObject;
 import clb.business.objects.ClbObject;
 import clb.business.objects.DivisionObject;
 import clb.business.objects.UsersystemObject;
+import clb.database.entities.BuildingEntity;
 
 public interface ClbDao{
 	
@@ -48,6 +49,5 @@ public interface ClbDao{
 	Long getLatestDateForAnalyzer(String analyzerCodeName);
 
 	void deleteDivisionCascade(DivisionObject mainDivision);
-
 
 }
