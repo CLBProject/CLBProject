@@ -15,8 +15,10 @@ import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.TreeNode;
 
 import clb.business.objects.BuildingObject;
+import clb.business.objects.DivisionObject;
 import clb.business.services.AnalyzerDataService;
 import clb.ui.beans.newobjects.BuildingNewManagementGui;
+import clb.ui.beans.newobjects.DivisionNewManagementGui;
 import clb.ui.beans.objects.BuildingAnalysisGui;
 import clb.ui.beans.treeStructure.BuildingTreeGui;
 import clb.ui.beans.treeStructure.DivisionTreeGui;
@@ -38,6 +40,7 @@ public class AnalysisBean implements Serializable{
 	private List<SelectItem> currentDivisionAnalyzersSelected;
 	
 	private BuildingNewManagementGui newBuilding;
+	private DivisionNewManagementGui newDivision;
 
 	/*private Date todayDate;
 	private Date minDate;
@@ -83,6 +86,7 @@ public class AnalysisBean implements Serializable{
 	public void init() {
 		
 		this.newBuilding = new BuildingNewManagementGui();
+		this.newDivision = new DivisionNewManagementGui();
 		
 		fillBuildingsData();
 		
@@ -162,6 +166,21 @@ public class AnalysisBean implements Serializable{
 			clbHomeLoginBean.deleteBuildingFromUser(buildingToDelete.toObject());
 			buildingsToShow.remove(buildingToDelete);
 			fillBuildingsData();
+		}
+	}
+	
+	public void createDivision() {
+		if (newDivision != null) {
+			DivisionObject divisionObj = new DivisionObject();
+			divisionObj.setName(newDivision.getName());
+
+			if (parentDivisionSelected == null) {
+				analyzerDataService.saveDivisionForBuilding(selectedBuildingIdNewDivision, divisionObj);
+			} else {
+				analyzerDataService.saveDivisionForParent(
+						((DivisionTreeGui) parentDivisionSelected.getData()).getDivisionId(), divisionObj);
+			}
+			clbHomeLoginBean.loginUser();
 		}
 	}
 

@@ -8,6 +8,149 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	template="template/ui.xhtml">
 	<ui:define name="body">
-
+		<ui:include src="./general/headerLoggedIn.xhtml" />
+		<div class="buildingManagementDiv">
+			<div align="center" class="titleDivClass">
+				<p:outputLabel value="Building Management"></p:outputLabel>
+			</div>
+			<hr />
+			<div align="center" class="mainDivClass">
+				<p:commandLink value="Add Building" styleClass="commonLink"
+					onclick="PF('newBuildingPopup').show()"></p:commandLink>
+				<br /> 
+				<br />
+				<h:form id="buildingManagementForm">
+					<p:dataTable id="paginatorSelector" widgetVar="paginatorSelector"
+						paginatorPosition="bottom"
+						value="#{buildingManagementBean.buildingsToShow}" rows="10"
+						rowKey="#{building.buildingId}" var="building"
+						styleClass="buildingManagementTable">
+						<p:column styleClass="dataTableColumn">
+							<p:panel widgetVar="buildingPanelDivision"
+								id="buildingPanelDivision" styleClass="buildingPanelClass">
+								<div align="left" class="buildingDivClass">
+									<table style="width:100% !important" border="0">
+										<tr>
+											<td valign="top" align="left"><h:outputText
+													value="#{building.name}" styleClass="buildingName"></h:outputText>
+												<br /> <h:outputText value="#{building.location}"
+													styleClass="buildingLocation"></h:outputText></td>
+											<td valign="top" align="right"><p:graphicImage
+													width="15" styleClass="buildingManagIconClass"
+													value="#{request.contextPath}/../resources/images/error.png"></p:graphicImage>
+												<p:spacer width="5" /> <p:commandLink value="Delete"
+													ajax="false"
+													action="#{buildingManagementBean.deleteBuilding(building)}"></p:commandLink>
+											</td>
+										</tr>
+									</table>
+									<hr />
+									<div class="buildingDivClass">
+										<h:panelGrid columns="2" style="width: 100% !important">
+											<p:column style="vertical-align:top">
+												<p:outputPanel
+													rendered="#{not empty building.rootDivision.children}">
+													<p:tree value="#{building.rootDivision}" var="division"
+														styleClass="divisionAnalysis" id="divisionTreeAnalisys"
+														selectionMode="single" dynamic="true">
+														<p:treeNode styleClass="divisionAnalysisNode">
+															<h:outputText styleClass="treeDivisionText"
+																value="#{division.name}" />
+														</p:treeNode>
+														<f:attribute name="building" value="#{building}" />
+														<p:ajax event="select"
+															listener="#{buildingManagementBean.showDivisionOptions}"
+															update=":newDivisionFormId :buildingManagementForm:paginatorSelector:divOptionsPanel :buildingManagementForm:paginatorSelector:divSelectedAnalyzers"></p:ajax>
+														<p:ajax event="unselect"
+															listener="#{buildingManagementBean.hideDivisionOptions}"
+															update=":newDivisionFormId :buildingManagementForm:paginatorSelector:divOptionsPanel :buildingManagementForm:paginatorSelector:divSelectedAnalyzers"></p:ajax>
+													</p:tree>
+													<br />
+												</p:outputPanel>
+											</p:column>
+											<p:column style="vertical-align: top">
+												<div align="right">
+													<p:outputPanel id="divSelectedAnalyzers" widgetVar="divSelectedAnalyzers">
+														<p:selectManyMenu rendered="#{not empty buildingManagementBean.analyzersDivisionSelection}"  id="advanced" value="#{buildingManagementBean.analyzersToRemove}" showCheckbox="true">
+												           <f:selectItems value="#{buildingManagementBean.analyzersDivisionSelection}" var="analyzer" itemLabel="#{analyzer.label}" itemValue="#{analyzer.value}" />
+												        </p:selectManyMenu>
+												        <br/>
+												        <p:graphicImage  rendered="#{not empty buildingManagementBean.analyzersDivisionSelection}" 
+															width="12px"
+															value="#{request.contextPath}/../resources/images/negative.png" />
+														<p:spacer width="3"/>
+														<p:commandLink rendered="#{not empty buildingManagementBean.analyzersDivisionSelection}" action="#{buildingManagementBean.removeAnalyzersSelected}" type="submit" value="Remove Analyzers" ajax="false" />
+												    </p:outputPanel>
+											    </div>
+											</p:column>
+										</h:panelGrid>
+										<p:outputPanel id="divOptionsPanel" widgetVar="divOptionsPanel">
+											<br />
+											<table class="addDivisionClass">
+												<tr>
+													<td width="15px" valign="middle"><p:graphicImage
+															width="12px"
+															value="#{request.contextPath}/../resources/images/plus.png" />
+													</td>
+													<td align="left" width="90px"><p:commandLink
+															oncomplete="PF('newDivisionPopup').show()"
+															action="#{buildingManagementBean.setNewDivisionBuilding(building.buildingid)}"
+															ajax="true" value="Add Division"
+															update=":newDivisionFormId"></p:commandLink></td>
+													<td width="15px" valign="middle" align="left"><p:graphicImage
+															width="12px"
+															rendered="#{not empty buildingManagementBean.parentDivisionSelected}"
+															value="#{request.contextPath}/../resources/images/negative.png" />
+													</td>
+													<td align="left" width="115px"><p:commandLink
+															rendered="#{not empty buildingManagementBean.parentDivisionSelected}"
+															action="#{buildingManagementBean.deleteDivision(building.buildingid)}"
+															oncomplete="PF('successPaneldeleteDivisionPopup').show()"
+															value="Remove Division">
+														</p:commandLink></td>
+													<td width="15px" valign="middle" align="left"><p:graphicImage
+															width="12px"
+															rendered="#{not empty buildingManagementBean.parentDivisionSelected}"
+															value="#{request.contextPath}/../resources/images/search.png" />
+													</td>
+													<td align="left"><p:commandLink rendered="#{not empty buildingManagementBean.parentDivisionSelected}"
+															oncomplete="PF('newAnalyzerPopup').show()"
+															ajax="true" value="Add Analyzer"
+															update=":newAnalyzerFormId">
+														</p:commandLink></td>
+												</tr>
+											</table>
+											<br />
+										</p:outputPanel>
+									</div>
+								</div>
+							</p:panel>
+						</p:column>
+					</p:dataTable>
+				</h:form>
+			</div>
+		</div>
+		<ui:include src="./general/footer.xhtml" />
+		<ui:include src="./popups/newBuildingPopup.xhtml" />
+		<ui:include src="./popups/newAnalyzerPopup.xhtml"/>
+		<ui:include src="./popups/newDivisionPopup.xhtml">
+			<ui:param name="parentDivision" value="parentName" />
+		</ui:include>
+		<ui:include src="./popups/unSuccessDialog.xhtml">
+			<ui:param name="idUnsuccess" value="cantDeleteDivision" />
+			<ui:param name="unSuccessMessage" value="Cant Delete this Division!" />
+		</ui:include>
+		<ui:include src="./popups/unSuccessDialog.xhtml">
+			<ui:param name="idUnsuccess" value="nodeSelectedNull" />
+			<ui:param name="unSuccessMessage"
+				value="Please select a node first, before deleting!" />
+		</ui:include>
+		<ui:include src="./popups/successDialog.xhtml">
+			<ui:param name="id" value="deleteDivisionPopup" />
+			<ui:param name="successMessage"
+				value="The division was deleted successfully!" />
+			<ui:param name="path"
+				value="buildingManagement.xhtml?faces-redirect=true" />
+		</ui:include>
 	</ui:define>
 </ui:composition>
