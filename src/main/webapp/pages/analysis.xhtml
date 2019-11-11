@@ -12,37 +12,38 @@
 		<ui:include src="./general/headerLoggedIn.xhtml" />
 		<div class="analysisDiv">
 			<h:form id="analysisForm">
-				<div>
-					<table width="100%">
+					<table width="100%" id="tableId">
 						<tr>
 							<td valign="top" width="20%">
-								    <p:panel>
+								    <p:panel id="buildingPanelId" widgetVar="buildingPanel">
 								    	<div class="analysisNewBuildingClass">
 									    	<p:graphicImage width="12px" value="#{request.contextPath}/../resources/images/account.png" style="padding-right:5px"/>
 											<p:commandLink value="Create Building" oncomplete="PF('newBuildingPopup').show()"></p:commandLink>    
 										</div>
-										<ui:repeat value="#{analysisBean.buildingsToShow}" var="building">
-											 <p:panel styleClass="buildingPanelClass" id="toggleable" header="#{building.name}" collapsed="true" toggleable="true" toggleSpeed="500">
-											    <p:treeTable id="docs" value="#{building.rootDivision}" var="division" selectionMode="single" >
+										<ui:repeat value="#{analysisBean.buildingsToShow}" var="building" varStatus="index">
+											 <p:panel styleClass="buildingPanelClass" id="toggleable#{index}" header="#{building.name}" collapsed="true" toggleable="true" toggleSpeed="500">
+											    <f:facet name="actions">
+											     	<p:commandLink styleClass="ui-panel-titlebar-icon ui-corner-all ui-state-default" ajax="true" update="analysisForm" action="#{analysisBean.deleteBuilding(building)}">
+											     		<h:outputText styleClass="ui-icon ui-icon-circle-close" />
+											     	</p:commandLink>
+												</f:facet>
+											    <p:treeTable styleClass="divisionTree" id="docs" value="#{building.rootDivision}" var="division" selectionMode="single" >
 											        <p:column>
 											            <h:outputText value="#{division.name}" />
 											        </p:column>
-											        <p:ajax event="select"
-															listener="#{analysisBean.selectDivision}"
-															update="analysisForm"></p:ajax>
-														<p:ajax event="unselect"
-															listener="#{buildingManagementBean.hideDivisionOptions}"
-															update="analysisForm"></p:ajax>
+											        <p:ajax event="select" listener="#{analysisBean.selectDivision}"></p:ajax>
+													<p:ajax event="unselect" listener="#{analysisBean.unselectDivision}"></p:ajax>
 											    </p:treeTable>
 											    <p:graphicImage width="12px" value="#{request.contextPath}/../resources/images/plus.png" style="padding-right:5px"/>
 											    <p:commandLink styleClass="buildingLinks" value="Add Division"
 											     		    oncomplete="PF('newDivisionPopup').show()"
-															action="#{analysis.setNewDivisionBuilding(building.buildingid)}"
+															action="#{analysisBean.setNewDivisionBuilding(building)}"
 															ajax="true" update=":newDivisionFormId"></p:commandLink>
 											    <p:spacer width="15"></p:spacer>
 											    <p:graphicImage width="12px" value="#{request.contextPath}/../resources/images/negative.png" style="padding-right:5px"/>
-											    <p:commandLink styleClass="buildingLinks" value="Delete Building" ajax="true" update=":analysisForm"
-											    			   action="#{analysisBean.deleteBuilding(building)}"></p:commandLink>
+											    <p:commandLink id="deleteDivisionLink" disabled="#{empty analysisBean.parentDivisionSelected}" styleClass="buildingLinks" value="Delete Division" ajax="true" update="analysisForm"
+															   action="#{analysisBean.deleteDivision(building.buildingid)}"></p:commandLink>
+
 										     </p:panel>
 										</ui:repeat>
 									</p:panel>
@@ -58,13 +59,12 @@
 
 						</tr>
 					</table>
-				</div>
 			</h:form>
 			</div>
 			<ui:include src="./general/footer.xhtml" />
-			<ui:include src="./popups/newBuildingPopup.xhtml" />
 			<ui:include src="./popups/newDivisionPopup.xhtml">
 				<ui:param name="parentDivision" value="parentName" />
 			</ui:include>
+			<ui:include src="./popups/newBuildingPopup.xhtml" />
 	</ui:define>
 </ui:composition>

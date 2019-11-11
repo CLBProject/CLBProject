@@ -8,6 +8,12 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	template="../template/ui.xhtml">
 	<ui:define name="body">
+		<ui:include src="successDialog.xhtml">
+			<ui:param name="id" value="newDivisionPopup" />
+			<ui:param name="successMessage"
+				value="A new Division was created successfully under '#{parentDivision}' parent!" />
+			<ui:param name="path" value="analysis.xhtml?faces-redirect=true" />
+		</ui:include>
 		<p:dialog widgetVar="newDivisionPopup" id="newDivisionPopup"
 			modal="true" position="center center" draggable="false"
 			closable="true" header="Add New Division" closeOnEscape="true"
@@ -16,35 +22,30 @@
 				<div class="newBuildingClass">
 					<p:panelGrid columns="2" styleClass="successGrid">
 						<p:column>
-							<p:outputLabel rendered="#{not empty buildingManagementBean.parentDivisionSelected}" />
+							<p:outputLabel rendered="#{not empty analysisBean.parentDivisionSelected}" />
 						</p:column>
 						<p:column>
-							<p:outputLabel rendered="#{not empty buildingManagementBean.parentDivisionSelected}" value="#{buildingManagementBean.parentDivisionSelected.data.name}"/>
+							<p:outputLabel rendered="#{not empty analysisBean.parentDivisionSelected}" value="#{analysisBean.parentDivisionSelected.data.name}"/>
 						</p:column>
 						<p:column>
 							<p:outputLabel for="newDivisionName" value="Name:"></p:outputLabel>
 						</p:column>
 						<p:column>
-							<p:inputText id="newDivisionName" required="true" value="#{buildingManagementBean.newDivision.name}"></p:inputText>
+							<p:inputText id="newDivisionName" required="true" value="#{analysisBean.newDivision.name}"></p:inputText>
 						</p:column>
 					</p:panelGrid>
 					<br/>
 					<div align="center">
-						<p:commandButton action="#{analysisBean.createDivision}" ajax="true" update=":buildingManagementForm" 
+						<p:commandButton action="#{analysisBean.createDivision}" ajax="true" update="analysisForm" 
 									styleClass="signButton" value="Create"
 									onstart="document.body.style.cursor='wait'"
 									oncomplete="document.body.style.cursor='default'; 
 												PF('newDivisionPopup').hide();
-												PF('successPanelnewDivisionPopup').show();"></p:commandButton>
+											    PF('successPanelnewDivisionPopup').show();"></p:commandButton>
 					</div>
 				</div>
 			</h:form>
 		</p:dialog>
-		<ui:include src="successDialog.xhtml">
-			<ui:param name="id" value="newDivisionPopup" />
-			<ui:param name="successMessage"
-				value="A new Division was created successfully under '#{parentDivision}' parent!" />
-			<ui:param name="path" value="buildingManagement.xhtml?faces-redirect=true" />
-		</ui:include>
+
 	</ui:define>
 </ui:composition>
