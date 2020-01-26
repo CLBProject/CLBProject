@@ -1,10 +1,10 @@
 package clb.database.entities;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import clb.global.AnalyzerMeterValues;
@@ -22,12 +22,9 @@ public class AnalyzerEntity implements ClbEntity, Serializable {
     
     private String codeName;
 
-    @DBRef
-    private Set<AnalyzerEntity> analyzers;
-
 	private Set<AnalyzerMeterValues> analyzerMeters;
 	
-	private Set<String> analyzerRegistriesIds;
+	private Set<String> registriesCollections;
 
     public AnalyzerEntity() {
     }
@@ -48,15 +45,6 @@ public class AnalyzerEntity implements ClbEntity, Serializable {
 		this.codeName = codeName;
 	}
 	
-	
-	
-	public Set<AnalyzerEntity> getAnalyzers() {
-		return analyzers;
-	}
-
-	public void setAnalyzers(Set<AnalyzerEntity> analyzers) {
-		this.analyzers = analyzers;
-	}
 
 	public Set<AnalyzerMeterValues> getAnalyzerMeters() {
 		return analyzerMeters;
@@ -66,14 +54,22 @@ public class AnalyzerEntity implements ClbEntity, Serializable {
 		this.analyzerMeters = analyzerMeters;
 	}
 
-	public Set<String> getAnalyzerRegistriesIds() {
-		return analyzerRegistriesIds;
+	public Set<String> getRegistriesCollections() {
+		return registriesCollections;
 	}
 
-	public void setAnalyzerRegistriesIds(Set<String> analyzerRegistriesIds) {
-		this.analyzerRegistriesIds = analyzerRegistriesIds;
+	public void setRegistriesCollections(Set<String> registriesCollections) {
+		this.registriesCollections = registriesCollections;
 	}
 
-    
+	public void addRegistryCollection(String currentCollectionName) {
+		if (registriesCollections == null) {
+			registriesCollections = new HashSet<String>();
+		}
+		
+		registriesCollections.add(currentCollectionName);
+	}
+	
+	
     
 }

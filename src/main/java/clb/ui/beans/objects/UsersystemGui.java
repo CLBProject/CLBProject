@@ -40,7 +40,7 @@ public class UsersystemGui implements Serializable
     private Date lastSentEmail;
     private boolean enabled;
     
-    private List<BuildingAnalysisGui> buildings;
+    private List<BuildingGui> buildings;
     
     public UsersystemGui() {
     	
@@ -58,7 +58,7 @@ public class UsersystemGui implements Serializable
     	this.enabled = userObject.isEnabled();
     	
     	this.buildings = userObject.getBuildings() != null ? 
-    							userObject.getBuildings().stream().map(BuildingAnalysisGui::new).collect(Collectors.toList()) : 
+    							userObject.getBuildings().stream().map(BuildingGui::new).collect(Collectors.toList()) : 
     								null;
     }
  
@@ -83,20 +83,20 @@ public class UsersystemGui implements Serializable
     	userObj.setExpiryDate(this.expiryDate);
     	userObj.setLastSentEmail(this.lastSentEmail);
     	userObj.setEnabled(this.enabled);
-    	userObj.setBuildings(this.buildings != null ? this.buildings.stream().map(BuildingAnalysisGui::toObject).collect(Collectors.toList()) : null);
+    	userObj.setBuildings(this.buildings != null ? this.buildings.stream().map(BuildingGui::toObject).collect(Collectors.toList()) : null);
     	return userObj;
     }
     
-	public void addBuilding(BuildingAnalysisGui building) {
+	public void addBuilding(BuildingGui building) {
     	if(buildings == null) {
-    		buildings = new ArrayList<BuildingAnalysisGui>();
+    		buildings = new ArrayList<BuildingGui>();
     	}
     	
     	buildings.add(building);
     }
 	
 
-	public void removeBuilding(BuildingAnalysisGui building) {
+	public void removeBuilding(BuildingGui building) {
 		buildings.remove(building);
 	}
 
@@ -160,11 +160,11 @@ public class UsersystemGui implements Serializable
         this.username = username;
     }
 
-	public List<BuildingAnalysisGui> getBuildings() {
+	public List<BuildingGui> getBuildings() {
 		return buildings;
 	}
 
-	public void setBuildings(List<BuildingAnalysisGui> buildings) {
+	public void setBuildings(List<BuildingGui> buildings) {
 		this.buildings = buildings;
 	}
 

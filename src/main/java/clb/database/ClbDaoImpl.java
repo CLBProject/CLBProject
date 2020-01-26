@@ -3,13 +3,12 @@ package clb.database;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
@@ -46,6 +45,9 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
+    
+    @Autowired
+    ModelMapper modelMapper;
 
 	public ClbDaoImpl() {
 	}
@@ -56,12 +58,12 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
 	@Override
 	public void deleteClbObject(ClbObject object) {
-		mongoTemplate.remove(object.toEntity());
+		mongoTemplate.remove(modelMapper.map(object, ClbEntity.class));
 	}
 	
 	@Override
 	public void saveClbObject(ClbObject clbObj) {
-		ClbEntity clbEntity = clbObj.toEntity(); 
+		ClbEntity clbEntity = modelMapper.map(clbObj, ClbEntity.class);
 		mongoTemplate.save(clbEntity);
 		clbObj.setId(clbEntity.getId());
 	}
@@ -71,7 +73,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
 		DBCollection analyzerRegCol = null;
 		String currentCollectionName = "";
-		AnalyzerObject analyzer = findAnalyzerById(analyzerId);
+		AnalyzerEntity analyzer =  mongoTemplate.findById(analyzerId, AnalyzerEntity.class);
 		
 		for(AnalyzerRegistryObject analyzerRegistryObject : analyzersRegistries) {
 			String collectionName =  DateUtils.getInstance().concatTimeWithString(ANALYZER_REGISTIES_COLL_NAME,analyzerRegistryObject.getCurrenttime());
@@ -87,54 +89,57 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 				}
 			}
 
-			AnalyzerRegistryEntity analyzerRegistryEntity = (AnalyzerRegistryEntity) analyzerRegistryObject.toEntity();
+			AnalyzerRegistryEntity analyzerRegistryEntity = modelMapper.map(analyzerRegistryObject, AnalyzerRegistryEntity.class);
 			
 			DBObject objId = analyzerRegistryEntity.toDbObject();
 			analyzerRegCol.save( objId );
 			String _id = objId.get("_id").toString();
 			analyzerRegistryObject.setId(_id);
-
-			analyzer.addAnalyzerRegistryId(_id);
+			
+			
+			analyzer.addRegistryCollection(collectionName);
 		}
-
-		saveClbObject(analyzer);
+		
+		mongoTemplate.save(analyzer);
 	}
 
 	@Override
 	public Set<UsersystemObject> getAllUsers(){
-		return mongoTemplate.findAll(UsersystemEntity.class).stream().map(UsersystemObject::new).collect(Collectors.toSet());
+		return mongoTemplate.findAll(UsersystemEntity.class).stream()
+				.map( userNew -> modelMapper.map(userNew, UsersystemObject.class))
+				.collect(Collectors.toSet());
 	}
 	
 	@Override
 	public AnalyzerObject findAnalyzerById(String analyzerId) {
 		AnalyzerEntity analyzer = (AnalyzerEntity) findById(analyzerId, AnalyzerEntity.class);
-		return analyzer != null ? new AnalyzerObject(analyzer) : null;
+		return modelMapper.map(analyzer, AnalyzerObject.class);
 	}
 	
 
 	@Override
 	public DivisionObject findDivisionById(String parentId) {
 		DivisionEntity division = (DivisionEntity) findById(parentId, DivisionEntity.class);
-		return division != null ? new DivisionObject(division) : null;
+		return modelMapper.map(division, DivisionObject.class);
 	}
 
 	@Override
 	public BuildingObject findBuildingById(String buildingId) {
 		BuildingEntity building = (BuildingEntity) mongoTemplate.findById(buildingId, BuildingEntity.class);
-		return building != null ? new BuildingObject(building) : null;
+		return modelMapper.map(building, BuildingObject.class);
 	}
 
 
 	@Override
 	public UsersystemObject findUserByToken( String token) {
 		UsersystemEntity userEntity = clbRepository.findUserbyToken( token );
-		return userEntity != null ? new UsersystemObject(userEntity) : null;
+		return modelMapper.map(userEntity, UsersystemObject.class);
 	}
 
 	@Override
 	public UsersystemObject findUserByUserName( String userName ) {
 		UsersystemEntity userEntity = (UsersystemEntity) findById(userName, UsersystemEntity.class); 
-		return userEntity != null ? new UsersystemObject(userEntity) : null;
+		return modelMapper.map(userEntity, UsersystemObject.class);
 	}
 
 	@Override
@@ -215,43 +220,11 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 			analyzerReg.setAsys( (Double)result.get("asys")  );
 			analyzerReg.setCurrenttime( (Date)result.get( "currenttime" ) );
 
-			analyzerRegistries.add( new AnalyzerRegistryObject(analyzerReg) );
+			final AnalyzerRegistryObject analyzerRegObj = modelMapper.map(analyzerReg, AnalyzerRegistryObject.class);
+			analyzerRegistries.add( analyzerRegObj );
 		});
 
 		return analyzerRegistries;
-	}
-
-	@Override
-	public Date getLowestAnalyzerRegistryDate() {
-		Optional<Date> hasDate = this.mongoTemplate.getCollectionNames().stream()
-				.filter(collname -> collname.startsWith(ANALYZER_REGISTIES_COLL_NAME))
-				.map(collName -> {
-					String dateRegistry = collName.split(ANALYZER_REGISTIES_COLL_NAME + "_")[1];
-
-					Calendar cal = Calendar.getInstance();
-					cal.set(Calendar.YEAR, Integer.parseInt(dateRegistry.substring(0,4)));
-					cal.set(Calendar.MONTH, Integer.parseInt(dateRegistry.substring(4,6)));
-					cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dateRegistry.substring(6,8)));
-
-					return cal.getTime();
-				})
-				.sorted()
-				.findFirst();
-
-		if(hasDate.isPresent())
-			return hasDate.get();
-
-		return null;
-	}
-
-	@Override
-	public String[] getDatesAvailable() {
-		Set<String> yearsValues = this.mongoTemplate.getCollectionNames().stream()
-				.filter(collname -> collname.startsWith(ANALYZER_REGISTIES_COLL_NAME))	
-				.map(colName -> colName.split("_")[1])
-				.collect(Collectors.toSet());
-
-		return yearsValues.toArray(new String[yearsValues.size()]);
 	}
 
 	public MongoTemplate getMongoTemplate() {
@@ -263,31 +236,21 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	}
 
 	@Override
-	public Long getLatestDateForAnalyzer(String analyzerId) {
+	public List<Date> getDatesFromAnalyzer(String analyzerId) {
 
 		AnalyzerEntity analyzer = (AnalyzerEntity) findById(analyzerId, AnalyzerEntity.class);
-
-		if(analyzer != null) {
-
-			List<Date> listTimes = new ArrayList<Date>();
-
-			mongoTemplate.getCollectionNames().stream()
-			.filter(collname -> collname.startsWith(ANALYZER_REGISTIES_COLL_NAME))
-			.forEach(collName -> 
-			mongoTemplate.getCollection(collName).find(new BasicDBObject("analyzerId",analyzer.getId()))
-			.forEach(result -> {
-				Object currentTime = result.get( "currenttime" );
-
-				if(currentTime != null) {
-					listTimes.add((Date)currentTime);
-				}}));
-
-			Collections.sort(listTimes);
-
-			return listTimes.size() > 0 ? listTimes.get(listTimes.size()-1).getTime() : null;
-		}
-
-		return null;
+		
+		return analyzer.getRegistriesCollections().stream()
+				.map(regCollection -> {
+					String dateReg = regCollection.split("_")[1];
+					Calendar cal = Calendar.getInstance();
+					cal.set(Integer.parseInt(dateReg.substring(0, 4)),
+							Integer.parseInt(dateReg.substring(4, 6)), 
+							Integer.parseInt(dateReg.substring(6, 8)));
+					return cal.getTime();
+				})
+				.sorted()
+				.collect(Collectors.toList());
 	}
 
 	@Override
@@ -299,7 +262,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 			}
 		}
 
-		mongoTemplate.remove(currentDivision.toEntity());
+		mongoTemplate.remove(modelMapper.map(currentDivision, DivisionEntity.class));
 	}
 
 	public ClbMongoRepository getClbRepository() {
@@ -308,12 +271,6 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
 	public void setClbRepository(ClbMongoRepository clbRepository) {
 		this.clbRepository = clbRepository;
-	}
-
-	@Override
-	public Set<AnalyzerObject> getAnalyzersFromBuilding(BuildingObject building) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

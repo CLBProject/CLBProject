@@ -1,4 +1,4 @@
-package clb.business.utils;
+package clb.business.deprecated;
 
 import java.util.Date;
 

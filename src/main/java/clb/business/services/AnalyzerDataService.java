@@ -2,8 +2,6 @@ package clb.business.services;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
@@ -27,9 +25,7 @@ public interface AnalyzerDataService {
 	public List<AnalyzerRegistryObject> getMonthRegistriesFromAnalyzerWithShift(String analyzerId, int month, int year,
 			int monthShift);
 	
-	public Date getLowestAnalyzerRegistryDate();
-
-	public Map<String,List<String>> getYearsAndMonthsAvailable();
+	public List<Date> getRegistriesDatesFromAnalyzer(String analyzerId);
 
 	public void saveBuildingForUser(UsersystemObject object, BuildingObject building);
 
@@ -45,5 +41,5 @@ public interface AnalyzerDataService {
 
 	public void deleteChildDivisionFromBuilding(String selectedBuildingIdNewDivision, String divisionId);
 
-	public void removeAnalyzersForDivision(String userId, String buildingId, String divisionId, Set<String> analyzersToRemove);
+	public void removeAnalyzerForDivision(String userId, String buildingId, String divisionId, String analyzersToRemove);
 }

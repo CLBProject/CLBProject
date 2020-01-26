@@ -145,8 +145,6 @@ public class AnalyzerDataServiceDeprecatedImpl implements AnalyzerDataServiceDep
 
 			clbDao.saveAnalyzerRegistries(analyzerRegistries, ana.getId());
 
-			analyzerRegistries.stream().forEach( analyzerRegistry -> ana.addAnalyzerRegistryId( analyzerRegistry.getId() ) );
-
 			persistDummyAnalyzerRegistries( ana, dataToExclueOnDummy);
 
 			for(AnalyzerMeterValues analyzerMeter: AnalyzerMeterValues.values()) {
@@ -236,7 +234,6 @@ public class AnalyzerDataServiceDeprecatedImpl implements AnalyzerDataServiceDep
 				}
 
 				clbDao.saveAnalyzerRegistries(analyzersRegistries, analyzer.getId());
-				analyzersRegistries.stream().forEach( analyzerRegistry -> analyzer.addAnalyzerRegistryId( analyzerRegistry.getId() ) );
 			}
 		}
 	}

@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.junit.Test;
+import org.modelmapper.ModelMapper;
 
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
@@ -20,6 +21,8 @@ import clb.database.entities.BuildingEntity;
 
 public class EntitiesMappingTest {
 
+	ModelMapper modelMapper = new ModelMapper();
+	
 	@Test
 	public void testAnalyzerRegistryObjectToEntity() {
 		
@@ -88,7 +91,7 @@ public class EntitiesMappingTest {
 		obj.setVllsys(50.0);
 		obj.setVlnsys(51.0);
 		
-		AnalyzerRegistryEntity entity = obj.toEntity();
+		AnalyzerRegistryEntity entity = modelMapper.map(obj, AnalyzerRegistryEntity.class);
 		
 		assertEquals(entity.getAl1(),1.0,0.01);
 		assertEquals(entity.getAl2(),2.0,0.01);
@@ -223,7 +226,7 @@ public class EntitiesMappingTest {
 		ent.setVllsys(50.0);
 		ent.setVlnsys(51.0);
 		
-		AnalyzerRegistryObject object = new AnalyzerRegistryObject(ent);
+		AnalyzerRegistryObject object = modelMapper.map(ent, AnalyzerRegistryObject.class);
 		
 		assertEquals(object.getAl1(),1.0,0.01);
 		assertEquals(object.getAl2(),2.0,0.01);
@@ -299,18 +302,12 @@ public class EntitiesMappingTest {
 		AnalyzerObject analyzerObj = new AnalyzerObject();
 		analyzerObj.setId("1L");
 		analyzerObj.setCodeName("Analyzer Name1");
-		analyzerObj.setAnalyzerRegistriesIds(analyzerRegistriesIds);
 		
-		AnalyzerEntity analyzerEnt = analyzerObj.toEntity();
+		AnalyzerEntity analyzerEnt = modelMapper.map(analyzerObj, AnalyzerEntity.class);
 		
 		assertEquals(analyzerEnt.getId(),analyzerObj.getId());
 		assertEquals(analyzerEnt.getCodeName(),analyzerObj.getCodeName());
-		
-		Set<String> analyzerAverageRegistriesIdsMapped = analyzerEnt.getAnalyzerRegistriesIds();
-		
-		assertEquals(analyzerAverageRegistriesIdsMapped.size(), analyzerRegistriesIds.size());
-		assert(analyzerAverageRegistriesIdsMapped.contains("8"));
-		assert(analyzerAverageRegistriesIdsMapped.contains("80"));
+
 	}
 	
 	@Test
@@ -323,18 +320,11 @@ public class EntitiesMappingTest {
 		AnalyzerEntity analyzerEnt = new AnalyzerEntity();
 		analyzerEnt.setId("2L");
 		analyzerEnt.setCodeName("Analyzer Name2");
-		analyzerEnt.setAnalyzerRegistriesIds(analyzerRegistriesIds);
 		
-		AnalyzerObject analyzerObj = new AnalyzerObject(analyzerEnt);
+		AnalyzerObject analyzerObj = modelMapper.map(analyzerEnt, AnalyzerObject.class);
 		
 		assertEquals(analyzerObj.getId(),analyzerEnt.getId());
 		assertEquals(analyzerObj.getCodeName(),analyzerEnt.getCodeName());
-		
-		Set<String> analyzerAverageRegistriesIdsMapped = analyzerObj.getAnalyzerRegistriesIds();
-		
-		assertEquals(analyzerAverageRegistriesIdsMapped.size(), analyzerRegistriesIds.size());
-		assert(analyzerAverageRegistriesIdsMapped.contains("5"));
-		assert(analyzerAverageRegistriesIdsMapped.contains("6"));
 	}
 	
 	@Test
@@ -361,7 +351,7 @@ public class EntitiesMappingTest {
 		
 		bobj.addDivision(mainDivision);
 		
-		BuildingEntity bEnt = bobj.toEntity();
+		BuildingEntity bEnt = modelMapper.map(bobj, BuildingEntity.class);
 		
 		assertEquals(bobj.getId(),bEnt.getId());
 		assertEquals(bobj.getName(),bEnt.getName());

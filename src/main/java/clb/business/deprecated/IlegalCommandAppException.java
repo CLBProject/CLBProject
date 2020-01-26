@@ -1,4 +1,4 @@
-package clb.business.exceptions;
+package clb.business.deprecated;
 
 public class IlegalCommandAppException extends Exception {
 

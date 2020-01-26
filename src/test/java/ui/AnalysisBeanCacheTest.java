@@ -15,6 +15,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.services.AnalyzerDataService;
+import clb.ui.beans.objects.AnalyzerRegistryGui;
 import clb.ui.beans.utils.AnalysisBeanCache;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -52,35 +53,35 @@ public class AnalysisBeanCacheTest {
 
 		//When
 		when(analyzerDataService.getHourRegistriesFromAnalyzer(analyzerId, timeFrame)).thenReturn(registries);
-		List<AnalyzerRegistryObject> hourRegs = analysisBeanCache.getHourRegistriesFromAnalyzer(analyzerId, timeFrame);
-		List<AnalyzerRegistryObject> hourRegsAfterCache = analysisBeanCache.getHourRegistriesFromAnalyzer(analyzerId, timeFrame);
+		List<AnalyzerRegistryGui> hourRegs = analysisBeanCache.getHourRegistriesFromAnalyzer(analyzerId, timeFrame);
+		List<AnalyzerRegistryGui> hourRegsAfterCache = analysisBeanCache.getHourRegistriesFromAnalyzer(analyzerId, timeFrame);
 
 		//Then
 
 		assertEquals(hourRegs.size(),2);
 		assertEquals(hourRegsAfterCache.size(),2);
 
-		AnalyzerRegistryObject cacheObj1 = hourRegs.get(0);
-		AnalyzerRegistryObject cacheObj2 = hourRegs.get(1);
+		AnalyzerRegistryGui cacheObj1 = hourRegs.get(0);
+		AnalyzerRegistryGui cacheObj2 = hourRegs.get(1);
 
-		assertEquals(cacheObj1.getAn(),2.3,0.0);
+		assertEquals(cacheObj1.getAsys(),2.3,0.0);
 		assertEquals(cacheObj1.getAsys(),9.3,0.0);
-		assertEquals(cacheObj1.getCurrenttime().toString(),obj1.getCurrenttime().toString());
+		assertEquals(cacheObj1.getCurrentTime().toString(),obj1.getCurrenttime().toString());
 
-		assertEquals(cacheObj2.getAn(),11.5,0.0);
+		assertEquals(cacheObj2.getAsys(),11.5,0.0);
 		assertEquals(cacheObj2.getAsys(),4.1,0.0);
-		assertEquals(cacheObj2.getCurrenttime().toString(),obj2.getCurrenttime().toString());
+		assertEquals(cacheObj2.getCurrentTime().toString(),obj2.getCurrenttime().toString());
 
-		AnalyzerRegistryObject cacheObjAfterCache1 = hourRegsAfterCache.get(0);
-		AnalyzerRegistryObject cacheObjAfterCache2 = hourRegsAfterCache.get(1);
+		AnalyzerRegistryGui cacheObjAfterCache1 = hourRegsAfterCache.get(0);
+		AnalyzerRegistryGui cacheObjAfterCache2 = hourRegsAfterCache.get(1);
 
-		assertEquals(cacheObjAfterCache1.getAn(),2.3,0.0);
+		assertEquals(cacheObjAfterCache1.getAsys(),2.3,0.0);
 		assertEquals(cacheObjAfterCache1.getAsys(),9.3,0.0);
-		assertEquals(cacheObjAfterCache1.getCurrenttime().toString(),obj1.getCurrenttime().toString());
+		assertEquals(cacheObjAfterCache1.getCurrentTime().toString(),obj1.getCurrenttime().toString());
 
-		assertEquals(cacheObjAfterCache2.getAn(),11.5,0.0);
+		assertEquals(cacheObjAfterCache2.getAsys(),11.5,0.0);
 		assertEquals(cacheObjAfterCache2.getAsys(),4.1,0.0);
-		assertEquals(cacheObjAfterCache2.getCurrenttime().toString(),obj2.getCurrenttime().toString());
+		assertEquals(cacheObjAfterCache2.getCurrentTime().toString(),obj2.getCurrenttime().toString());
 	}
 
 	@Test
@@ -105,35 +106,35 @@ public class AnalysisBeanCacheTest {
 
 		//When
 		when(analyzerDataService.getDayRegistriesFromAnalyzer(analyzerId, timeFrame)).thenReturn(registries);
-		List<AnalyzerRegistryObject> dayRegs = analysisBeanCache.getDayRegistriesFromAnalyzer(analyzerId, timeFrame);
-		List<AnalyzerRegistryObject> dayRegsAfterCache = analysisBeanCache.getDayRegistriesFromAnalyzer(analyzerId, timeFrame);
+		List<AnalyzerRegistryGui> dayRegs = analysisBeanCache.getDayRegistriesFromAnalyzer(analyzerId, timeFrame);
+		List<AnalyzerRegistryGui> dayRegsAfterCache = analysisBeanCache.getDayRegistriesFromAnalyzer(analyzerId, timeFrame);
 
 		//Then
 
 		assertEquals(dayRegs.size(),2);
 		assertEquals(dayRegsAfterCache.size(),2);
 
-		AnalyzerRegistryObject cacheObj1 = dayRegs.get(0);
-		AnalyzerRegistryObject cacheObj2 = dayRegs.get(1);
+		AnalyzerRegistryGui cacheObj1 = dayRegs.get(0);
+		AnalyzerRegistryGui cacheObj2 = dayRegs.get(1);
 
-		assertEquals(cacheObj1.getKwh(),9.9,0.0);
+		assertEquals(cacheObj1.getKwsys(),9.9,0.0);
 		assertEquals(cacheObj1.getHz(),6.3,0.0);
-		assertEquals(cacheObj1.getCurrenttime().toString(),obj1.getCurrenttime().toString());
+		assertEquals(cacheObj1.getCurrentTime().toString(),obj1.getCurrenttime().toString());
 
-		assertEquals(cacheObj2.getKwh(),31.0,0.0);
+		assertEquals(cacheObj2.getKwsys(),31.0,0.0);
 		assertEquals(cacheObj2.getHz(),12.6,0.0);
-		assertEquals(cacheObj2.getCurrenttime().toString(),obj2.getCurrenttime().toString());
+		assertEquals(cacheObj2.getCurrentTime().toString(),obj2.getCurrenttime().toString());
 
-		AnalyzerRegistryObject cacheObjAfterCache1 = dayRegsAfterCache.get(0);
-		AnalyzerRegistryObject cacheObjAfterCache2 = dayRegsAfterCache.get(1);
+		AnalyzerRegistryGui cacheObjAfterCache1 = dayRegsAfterCache.get(0);
+		AnalyzerRegistryGui cacheObjAfterCache2 = dayRegsAfterCache.get(1);
 
-		assertEquals(cacheObjAfterCache1.getKwh(),9.9,0.0);
+		assertEquals(cacheObjAfterCache1.getKwsys(),9.9,0.0);
 		assertEquals(cacheObjAfterCache1.getHz(),6.3,0.0);
-		assertEquals(cacheObjAfterCache1.getCurrenttime().toString(),obj1.getCurrenttime().toString());
+		assertEquals(cacheObjAfterCache1.getCurrentTime().toString(),obj1.getCurrenttime().toString());
 
-		assertEquals(cacheObjAfterCache2.getKwh(),31.0,0.0);
+		assertEquals(cacheObjAfterCache2.getKwsys(),31.0,0.0);
 		assertEquals(cacheObjAfterCache2.getHz(),12.6,0.0);
-		assertEquals(cacheObjAfterCache2.getCurrenttime().toString(),obj2.getCurrenttime().toString());
+		assertEquals(cacheObjAfterCache2.getCurrentTime().toString(),obj2.getCurrenttime().toString());
 	}
 
 	@Test
@@ -168,8 +169,8 @@ public class AnalysisBeanCacheTest {
 
 		//When
 
-		List<AnalyzerRegistryObject> weekRegs;
-		List<AnalyzerRegistryObject> weekRegsAfterCache;
+		List<AnalyzerRegistryGui> weekRegs;
+		List<AnalyzerRegistryGui> weekRegsAfterCache;
 		
 		if(withShift) {
 			when(analyzerDataService.getWeekRegistriesFromAnalyzerWithWeekShift(analyzerId,week,month,year, shift)).thenReturn(registries);
@@ -187,23 +188,23 @@ public class AnalysisBeanCacheTest {
 		assertEquals(weekRegs.size(),2);
 		assertEquals(weekRegsAfterCache.size(),2);
 
-		AnalyzerRegistryObject cacheObj1 = weekRegs.get(0);
-		AnalyzerRegistryObject cacheObj2 = weekRegs.get(1);
+		AnalyzerRegistryGui cacheObj1 = weekRegs.get(0);
+		AnalyzerRegistryGui cacheObj2 = weekRegs.get(1);
 
-		assertEquals(cacheObj1.getPfl1(),1.4,0.0);
-		assertEquals(cacheObj1.getKvahl(),23.5,0.0);
+		assertEquals(cacheObj1.getPfsys(),1.4,0.0);
+		assertEquals(cacheObj1.getKvasys(),23.5,0.0);
 
-		assertEquals(cacheObj2.getPfl1(),8.8,0.0);
-		assertEquals(cacheObj2.getKvahl(),0.4,0.0);
+		assertEquals(cacheObj2.getPfsys(),8.8,0.0);
+		assertEquals(cacheObj2.getKvasys(),0.4,0.0);
 
-		AnalyzerRegistryObject cacheObjAfterCache1 = weekRegsAfterCache.get(0);
-		AnalyzerRegistryObject cacheObjAfterCache2 = weekRegsAfterCache.get(1);
+		AnalyzerRegistryGui cacheObjAfterCache1 = weekRegsAfterCache.get(0);
+		AnalyzerRegistryGui cacheObjAfterCache2 = weekRegsAfterCache.get(1);
 
-		assertEquals(cacheObjAfterCache1.getPfl1(),1.4,0.0);
-		assertEquals(cacheObjAfterCache1.getKvahl(),23.5,0.0);
+		assertEquals(cacheObjAfterCache1.getPfsys(),1.4,0.0);
+		assertEquals(cacheObjAfterCache1.getKvasys(),23.5,0.0);
 
-		assertEquals(cacheObjAfterCache2.getPfl1(),8.8,0.0);
-		assertEquals(cacheObjAfterCache2.getKvahl(),0.4,0.0);
+		assertEquals(cacheObjAfterCache2.getPfsys(),8.8,0.0);
+		assertEquals(cacheObjAfterCache2.getKvasys(),0.4,0.0);
 
 	}
 
@@ -237,8 +238,8 @@ public class AnalysisBeanCacheTest {
 		registries.add(obj2);
 
 		//When
-		List<AnalyzerRegistryObject> monthRegs;
-		List<AnalyzerRegistryObject> monthRegsAfterCache;
+		List<AnalyzerRegistryGui> monthRegs;
+		List<AnalyzerRegistryGui> monthRegsAfterCache;
 		
 		if(withShift) {
 			when(analyzerDataService.getMonthRegistriesFromAnalyzerWithShift(analyzerId,month,year,shift)).thenReturn(registries);
@@ -256,8 +257,8 @@ public class AnalysisBeanCacheTest {
 		assertEquals(monthRegs.size(),2);
 		assertEquals(monthRegsAfterCache.size(),2);
 
-		AnalyzerRegistryObject cacheObj1 = monthRegs.get(0);
-		AnalyzerRegistryObject cacheObj2 = monthRegs.get(1);
+		AnalyzerRegistryGui cacheObj1 = monthRegs.get(0);
+		AnalyzerRegistryGui cacheObj2 = monthRegs.get(1);
 
 		assertEquals(cacheObj1.getKwsys(),53.1,0.0);
 		assertEquals(cacheObj1.getKvasys(),2.1,0.0);
@@ -265,8 +266,8 @@ public class AnalysisBeanCacheTest {
 		assertEquals(cacheObj2.getKwsys(),33.3,0.0);
 		assertEquals(cacheObj2.getKvasys(),126.02,0.0);
 
-		AnalyzerRegistryObject cacheObjAfterCache1 = monthRegsAfterCache.get(0);
-		AnalyzerRegistryObject cacheObjAfterCache2 = monthRegsAfterCache.get(1);
+		AnalyzerRegistryGui cacheObjAfterCache1 = monthRegsAfterCache.get(0);
+		AnalyzerRegistryGui cacheObjAfterCache2 = monthRegsAfterCache.get(1);
 
 		assertEquals(cacheObjAfterCache1.getKwsys(),53.1,0.0);
 		assertEquals(cacheObjAfterCache1.getKvasys(),2.1,0.0);

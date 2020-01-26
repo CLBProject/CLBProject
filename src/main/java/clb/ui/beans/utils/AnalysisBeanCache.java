@@ -1,51 +1,57 @@
 package clb.ui.beans.utils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.services.AnalyzerDataService;
 import clb.global.DateUtils;
+import clb.ui.beans.objects.AnalyzerRegistryGui;
 
 public class AnalysisBeanCache {
 
 	private AnalyzerDataService analyzerDataService;
 
-	private Map<String,Map<String,List<AnalyzerRegistryObject>>> hoursCache;
-	private Map<String,Map<String,List<AnalyzerRegistryObject>>> dayCache;
-	private Map<String,Map<String,List<AnalyzerRegistryObject>>> weekCache;
-	private Map<String,Map<String,List<AnalyzerRegistryObject>>> monthCache;
+	private Map<String,Map<String,List<AnalyzerRegistryGui>>> hoursCache;
+	private Map<String,Map<String,List<AnalyzerRegistryGui>>> dayCache;
+	private Map<String,Map<String,List<AnalyzerRegistryGui>>> weekCache;
+	private Map<String,Map<String,List<AnalyzerRegistryGui>>> monthCache;
 
 	public AnalysisBeanCache(AnalyzerDataService analyzerDataService) {
 		this.analyzerDataService = analyzerDataService;
 
-		hoursCache = new HashMap<String,Map<String,List<AnalyzerRegistryObject>>>();
-		dayCache = new HashMap<String,Map<String,List<AnalyzerRegistryObject>>>();
-		weekCache = new HashMap<String,Map<String,List<AnalyzerRegistryObject>>>();
-		monthCache = new HashMap<String,Map<String,List<AnalyzerRegistryObject>>>();
+		hoursCache = new HashMap<String,Map<String,List<AnalyzerRegistryGui>>>();
+		dayCache = new HashMap<String,Map<String,List<AnalyzerRegistryGui>>>();
+		weekCache = new HashMap<String,Map<String,List<AnalyzerRegistryGui>>>();
+		monthCache = new HashMap<String,Map<String,List<AnalyzerRegistryGui>>>();
 	}
 
-	public List<AnalyzerRegistryObject> getHourRegistriesFromAnalyzer( String analyzerId, Date timeFrame ){
+	public List<AnalyzerRegistryGui> getHourRegistriesFromAnalyzer( String analyzerId, Date timeFrame ){
 
-		Map<String,List<AnalyzerRegistryObject>> hours = hoursCache.get(analyzerId);
+		Map<String,List<AnalyzerRegistryGui>> hours = hoursCache.get(analyzerId);
 		final String hourKey = DateUtils.getInstance().convertDateToSimpleStringFormat(timeFrame);
 
 		if(hours == null) {
 
-			List<AnalyzerRegistryObject> hoursRegistries = analyzerDataService.getHourRegistriesFromAnalyzer(analyzerId, timeFrame);
-			Map<String,List<AnalyzerRegistryObject>> hourRegs = new HashMap<String,List<AnalyzerRegistryObject>>();
+			List<AnalyzerRegistryGui> hoursRegistries = analyzerDataService.getHourRegistriesFromAnalyzer(analyzerId, timeFrame)
+					.stream().map(AnalyzerRegistryGui::new).collect(Collectors.toList());
+			
+			Map<String,List<AnalyzerRegistryGui>> hourRegs = new HashMap<String,List<AnalyzerRegistryGui>>();
 			hourRegs.put(hourKey, hoursRegistries);
 			hoursCache.put(analyzerId, hourRegs);
 
 			return hoursRegistries;
 		}
 		else {
-			List<AnalyzerRegistryObject> hoursRegistriesFromMap = hours.get(hourKey);
+			List<AnalyzerRegistryGui> hoursRegistriesFromMap = hours.get(hourKey);
 
 			if(hoursRegistriesFromMap == null) {
-				hoursRegistriesFromMap = analyzerDataService.getHourRegistriesFromAnalyzer(analyzerId, timeFrame);
+				hoursRegistriesFromMap = analyzerDataService.getHourRegistriesFromAnalyzer(analyzerId, timeFrame)
+						.stream().map(AnalyzerRegistryGui::new).collect(Collectors.toList());
+				
 				hours.put(hourKey, hoursRegistriesFromMap);
 			}
 
@@ -53,25 +59,32 @@ public class AnalysisBeanCache {
 		}
 	}
 
-	public List<AnalyzerRegistryObject> getDayRegistriesFromAnalyzer( String analyzerId, Date timeFrame ){
+	public List<AnalyzerRegistryGui> getDayRegistriesFromAnalyzer( String analyzerId, Date date ){
 
-		Map<String,List<AnalyzerRegistryObject>> days = dayCache.get(analyzerId);
-		final String dayKey = DateUtils.getInstance().convertDateToSimpleStringFormat(timeFrame);
+		Map<String,List<AnalyzerRegistryGui>> days = dayCache.get(analyzerId);
+
+		if(date == null)
+			return new ArrayList<AnalyzerRegistryGui>();
+		
+		final String dayKey = DateUtils.getInstance().convertDateToSimpleStringFormat(date);
 
 		if(days == null) {
 
-			List<AnalyzerRegistryObject> dayRegistries = analyzerDataService.getDayRegistriesFromAnalyzer(analyzerId, timeFrame);
-			Map<String,List<AnalyzerRegistryObject>> dayRegs = new HashMap<String,List<AnalyzerRegistryObject>>();
+			List<AnalyzerRegistryGui> dayRegistries = analyzerDataService.getDayRegistriesFromAnalyzer(analyzerId, date)
+					.stream().map(AnalyzerRegistryGui::new).collect(Collectors.toList());
+			
+			Map<String,List<AnalyzerRegistryGui>> dayRegs = new HashMap<String,List<AnalyzerRegistryGui>>();
 			dayRegs.put(dayKey, dayRegistries);
 			dayCache.put(analyzerId, dayRegs);
 
 			return dayRegistries;
 		}
 		else {
-			List<AnalyzerRegistryObject> dayRegistriesFromMap = days.get(dayKey);
+			List<AnalyzerRegistryGui> dayRegistriesFromMap = days.get(dayKey);
 
 			if(dayRegistriesFromMap == null) {
-				dayRegistriesFromMap = analyzerDataService.getDayRegistriesFromAnalyzer(analyzerId, timeFrame);
+				dayRegistriesFromMap = analyzerDataService.getDayRegistriesFromAnalyzer(analyzerId, date)
+						.stream().map(AnalyzerRegistryGui::new).collect(Collectors.toList());
 				days.put(dayKey, dayRegistriesFromMap);
 			}
 
@@ -79,39 +92,43 @@ public class AnalysisBeanCache {
 		}
 	}
 
-	public List<AnalyzerRegistryObject> getWeekRegistriesFromAnalyzer(String analyzerId, int week, int month, 
+	public List<AnalyzerRegistryGui> getWeekRegistriesFromAnalyzer(String analyzerId, int week, int month, 
 			int year){
 		return getWeekRegistriesFromAnalyzerWithShift(analyzerId, week, month, year, 0);
 	}
 
-	public List<AnalyzerRegistryObject> getWeekRegistriesFromAnalyzerWithShift(String analyzerId, int week, int month, 
+	public List<AnalyzerRegistryGui> getWeekRegistriesFromAnalyzerWithShift(String analyzerId, int week, int month, 
 			int year, int weekShift) {
 
-		Map<String,List<AnalyzerRegistryObject>> weeks = weekCache.get(analyzerId);
+		Map<String,List<AnalyzerRegistryGui>> weeks = weekCache.get(analyzerId);
 		final String weekKey = DateUtils.getInstance().convertDateToSimpleWeekFormat(week,month,year,weekShift);
 
 		if(weeks == null) {
-			List<AnalyzerRegistryObject> weekRegistries;
+			List<AnalyzerRegistryGui> weekRegistries;
 			if(weekShift == 0) {
-				weekRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer(analyzerId, week, month, year);
+				weekRegistries = analyzerDataService.getWeekRegistriesFromAnalyzer(analyzerId, week, month, year)
+						.stream().map(AnalyzerRegistryGui::new).collect(Collectors.toList());
 			}
 			else {
-				weekRegistries = analyzerDataService.getWeekRegistriesFromAnalyzerWithWeekShift(analyzerId, week, month, year,weekShift);
+				weekRegistries = analyzerDataService.getWeekRegistriesFromAnalyzerWithWeekShift(analyzerId, week, month, year,weekShift)
+						.stream().map(AnalyzerRegistryGui::new).collect(Collectors.toList());
 			}
-			Map<String,List<AnalyzerRegistryObject>> weekRegs = new HashMap<String,List<AnalyzerRegistryObject>>();
+			Map<String,List<AnalyzerRegistryGui>> weekRegs = new HashMap<String,List<AnalyzerRegistryGui>>();
 			weekRegs.put(weekKey, weekRegistries);
 			weekCache.put(analyzerId, weekRegs);
 			return weekRegistries;
 		}
 		else {
-			List<AnalyzerRegistryObject> weekRegistriesFromMap = weeks.get(weekKey);
+			List<AnalyzerRegistryGui> weekRegistriesFromMap = weeks.get(weekKey);
 
 			if(weekRegistriesFromMap == null) {
 				if(weekShift == 0) {
-					weekRegistriesFromMap = analyzerDataService.getWeekRegistriesFromAnalyzer(analyzerId, week, month, year);
+					weekRegistriesFromMap = analyzerDataService.getWeekRegistriesFromAnalyzer(analyzerId, week, month, year)
+							.stream().map(AnalyzerRegistryGui::new).collect(Collectors.toList());
 				}
 				else {
-					weekRegistriesFromMap = analyzerDataService.getWeekRegistriesFromAnalyzerWithWeekShift(analyzerId, week, month, year,weekShift);
+					weekRegistriesFromMap = analyzerDataService.getWeekRegistriesFromAnalyzerWithWeekShift(analyzerId, week, month, year,weekShift)
+							.stream().map(AnalyzerRegistryGui::new).collect(Collectors.toList());
 				}
 				weeks.put(weekKey, weekRegistriesFromMap);
 			}
@@ -120,38 +137,42 @@ public class AnalysisBeanCache {
 
 	}
 
-	public List<AnalyzerRegistryObject> getMonthRegistriesFromAnalyzer(String analyzerId, int month, int year) {
+	public List<AnalyzerRegistryGui> getMonthRegistriesFromAnalyzer(String analyzerId, int month, int year) {
 		return getMonthRegistriesFromAnalyzerWithShift(analyzerId, month, year, 0);
 	}
 
-	public List<AnalyzerRegistryObject> getMonthRegistriesFromAnalyzerWithShift(String analyzerId, int month, int year, int monthShift) {
+	public List<AnalyzerRegistryGui> getMonthRegistriesFromAnalyzerWithShift(String analyzerId, int month, int year, int monthShift) {
 
-		Map<String,List<AnalyzerRegistryObject>> months = monthCache.get(analyzerId);
+		Map<String,List<AnalyzerRegistryGui>> months = monthCache.get(analyzerId);
 		final String monthKey = DateUtils.getInstance().convertDateToSimpleMonthFormat(month,year,monthShift);
 
 		if(months == null) {
-			List<AnalyzerRegistryObject> monthRegistries;
+			List<AnalyzerRegistryGui> monthRegistries;
 			if(monthShift == 0) {
-				monthRegistries =  analyzerDataService.getMonthRegistriesFromAnalyzer(analyzerId, month, year);
+				monthRegistries =  analyzerDataService.getMonthRegistriesFromAnalyzer(analyzerId, month, year)
+													.stream().map(AnalyzerRegistryGui::new).collect(Collectors.toList());
 			}
 			else {
-				monthRegistries = analyzerDataService.getMonthRegistriesFromAnalyzerWithShift(analyzerId, month, year, monthShift);
+				monthRegistries = analyzerDataService.getMonthRegistriesFromAnalyzerWithShift(analyzerId, month, year, monthShift)
+										.stream().map(AnalyzerRegistryGui::new).collect(Collectors.toList());
 			}
 			
-			Map<String,List<AnalyzerRegistryObject>> monthRegs = new HashMap<String,List<AnalyzerRegistryObject>>();
+			Map<String,List<AnalyzerRegistryGui>> monthRegs = new HashMap<String,List<AnalyzerRegistryGui>>();
 			monthRegs.put(monthKey, monthRegistries);
 			monthCache.put(analyzerId, monthRegs);
 			return monthRegistries;
 		}
 		else {
-			List<AnalyzerRegistryObject> monthRegistriesFromMap = months.get(monthKey);
+			List<AnalyzerRegistryGui> monthRegistriesFromMap = months.get(monthKey);
 
 			if(monthRegistriesFromMap == null) {
 				if(monthShift == 0) {
-					monthRegistriesFromMap =  analyzerDataService.getMonthRegistriesFromAnalyzer(analyzerId, month, year);
+					monthRegistriesFromMap =  analyzerDataService.getMonthRegistriesFromAnalyzer(analyzerId, month, year)
+													.stream().map(AnalyzerRegistryGui::new).collect(Collectors.toList());
 				}
 				else {
-					monthRegistriesFromMap = analyzerDataService.getMonthRegistriesFromAnalyzerWithShift(analyzerId, month, year, monthShift);
+					monthRegistriesFromMap = analyzerDataService.getMonthRegistriesFromAnalyzerWithShift(analyzerId, month, year, monthShift)
+																.stream().map(AnalyzerRegistryGui::new).collect(Collectors.toList());
 				}
 				months.put(monthKey, monthRegistriesFromMap);
 			}

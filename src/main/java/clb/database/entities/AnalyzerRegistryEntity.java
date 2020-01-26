@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.mongodb.BasicDBObject;
@@ -21,6 +22,9 @@ public class AnalyzerRegistryEntity implements ClbEntity, Serializable {
 
     @Id
     private String id;
+    
+    @DBRef
+    private String analyzerId;
 
     //Current
     private double asys;
@@ -224,6 +228,7 @@ public class AnalyzerRegistryEntity implements ClbEntity, Serializable {
     private double wdmd;
 
     private double wdmdmax;
+    
 
     public AnalyzerRegistryEntity() {
     }
@@ -237,7 +242,8 @@ public class AnalyzerRegistryEntity implements ClbEntity, Serializable {
                 .append( "pfsys", pfsys )
                 .append( "hz", hz )
                 .append( "asys", asys )
-                .append( "currenttime", currenttime );
+                .append( "currenttime", currenttime )
+        		.append( "analyzerId", analyzerId );
         return dbObj;
     }
 
@@ -864,5 +870,15 @@ public class AnalyzerRegistryEntity implements ClbEntity, Serializable {
     public void setWdmdmax(double wdmdmax) {
         this.wdmdmax = wdmdmax;
     }
+
+	public String getAnalyzerId() {
+		return analyzerId;
+	}
+
+	public void setAnalyzerId(String analyzerId) {
+		this.analyzerId = analyzerId;
+	}
+    
+    
 
 }

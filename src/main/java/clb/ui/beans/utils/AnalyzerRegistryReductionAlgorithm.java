@@ -10,7 +10,6 @@ import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import clb.business.objects.AnalyzerRegistryObject;
 import clb.global.DateUtils;
 import clb.ui.beans.objects.AnalyzerRegistryGui;
 import clb.ui.enums.ScaleGraphic;
@@ -27,36 +26,36 @@ public class AnalyzerRegistryReductionAlgorithm {
 		return instance;
 	}
 
-	public List<AnalyzerRegistryGui> reduceRegistries(List<AnalyzerRegistryObject> registries, ScaleGraphic scale){
+	public List<AnalyzerRegistryGui> reduceRegistries(List<AnalyzerRegistryGui> registries, ScaleGraphic scale){
 		List<AnalyzerRegistryGui> registryReduced = new ArrayList<AnalyzerRegistryGui>();
 
 
-		Map<String,List<AnalyzerRegistryObject>> registriesReduced = new HashMap<String,List<AnalyzerRegistryObject>>();
+		Map<String,List<AnalyzerRegistryGui>> registriesReduced = new HashMap<String,List<AnalyzerRegistryGui>>();
 
 		//Organize Registries and insert them on RegistriesReduced 
-		for(AnalyzerRegistryObject registry: registries) {
+		for(AnalyzerRegistryGui registry: registries) {
 			String dateTransformedToHoursAverage = null;
 
 			switch(scale) {
 			case HOUR:
 			case DAY:
-				dateTransformedToHoursAverage = DateUtils.getInstance().transformDateToHoursOrDaysAverage(registry.getCurrenttime());
+				dateTransformedToHoursAverage = DateUtils.getInstance().transformDateToHoursOrDaysAverage(registry.getCurrentTime());
 				break;
 			case WEEK:
-				dateTransformedToHoursAverage = DateUtils.getInstance().transformDateToWeekAverage(registry.getCurrenttime());
+				dateTransformedToHoursAverage = DateUtils.getInstance().transformDateToWeekAverage(registry.getCurrentTime());
 				break;
 			case MONTH:
-				dateTransformedToHoursAverage = DateUtils.getInstance().transformDateToMonthAverage(registry.getCurrenttime());
+				dateTransformedToHoursAverage = DateUtils.getInstance().transformDateToMonthAverage(registry.getCurrentTime());
 				break;
 			default: 
-				dateTransformedToHoursAverage = DateUtils.getInstance().transformDateToHoursOrDaysAverage(registry.getCurrenttime());
+				dateTransformedToHoursAverage = DateUtils.getInstance().transformDateToHoursOrDaysAverage(registry.getCurrentTime());
 				break;
 			}
 
-			List<AnalyzerRegistryObject> registriesForMinuteAverage = registriesReduced.get(dateTransformedToHoursAverage);
+			List<AnalyzerRegistryGui> registriesForMinuteAverage = registriesReduced.get(dateTransformedToHoursAverage);
 
 			if(registriesForMinuteAverage == null) {
-				registriesForMinuteAverage = new ArrayList<AnalyzerRegistryObject>();
+				registriesForMinuteAverage = new ArrayList<AnalyzerRegistryGui>();
 			}
 
 			registriesForMinuteAverage.add(registry);
@@ -64,7 +63,7 @@ public class AnalyzerRegistryReductionAlgorithm {
 		}
 
 		//Reduce Registries
-		for(Entry<String,List<AnalyzerRegistryObject>> registriesReducedEntry : registriesReduced.entrySet()) {
+		for(Entry<String,List<AnalyzerRegistryGui>> registriesReducedEntry : registriesReduced.entrySet()) {
 			try {
 				registryReduced.add(averageAnalyzerRegistryObject(registriesReducedEntry.getValue(),
 						registriesReducedEntry.getKey()));
@@ -77,7 +76,7 @@ public class AnalyzerRegistryReductionAlgorithm {
 	}
 
 
-	private AnalyzerRegistryGui averageAnalyzerRegistryObject(List<AnalyzerRegistryObject> registries, String dateString) throws ParseException {
+	private AnalyzerRegistryGui averageAnalyzerRegistryObject(List<AnalyzerRegistryGui> registries, String dateString) throws ParseException {
 
 		Double asys = 0.0;
 		Double hz = 0.0;
@@ -88,7 +87,7 @@ public class AnalyzerRegistryReductionAlgorithm {
 		Double vlnsys = 0.0;
 		Double vllsys = 0.0;
 
-		for(AnalyzerRegistryObject registry : registries) {
+		for(AnalyzerRegistryGui registry : registries) {
 			asys += registry.getAsys();
 			hz += registry.getHz();
 			kwsys += registry.getKwsys();
@@ -110,7 +109,7 @@ public class AnalyzerRegistryReductionAlgorithm {
 
 		AnalyzerRegistryGui registryGui = new AnalyzerRegistryGui(asysAverage,hzAverage,kwsysAverage,pfsysAverage,
 				kvarsysAverage,kvasysAverage,vlnsysAverage,vllsysAverage, 
-				DateUtils.getInstance().convertDateStringToSimpleDateFormat(dateString));
+				DateUtils.getInstance().convertDateStringToSimpleDateFormat(dateString), registries.get(0).getAnalyzerId());
 
 		return registryGui;
 	}

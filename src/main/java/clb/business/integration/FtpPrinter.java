@@ -56,7 +56,13 @@ public class FtpPrinter {
 				}
 				
 				String splitFilePath = incomingFile.getParentFile().getName();
-				filesData.put(splitFilePath,dataFromFile);
+				List<String[]> currentFiles = filesData.get(splitFilePath);
+				
+				if(currentFiles != null) {
+					currentFiles.addAll(dataFromFile);
+					filesData.put(splitFilePath,currentFiles);
+				}
+				else filesData.put(splitFilePath,dataFromFile);
 				
 			} catch (IOException e) {
 				e.printStackTrace();

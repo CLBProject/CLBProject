@@ -12,7 +12,6 @@ import org.primefaces.model.chart.DateAxis;
 import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
 
-import clb.business.objects.AnalyzerRegistryObject;
 import clb.global.AnalyzerMeterValues;
 import clb.global.DateUtils;
 import clb.ui.beans.objects.AnalyzerRegistryGui;
@@ -85,7 +84,7 @@ public class AnalysisBeanChart {
 	}
 
 
-	public void fillGraphicForData(List<AnalyzerRegistryObject> registries, ScaleGraphic currentScale){
+	public void fillGraphicForData(List<AnalyzerRegistryGui> registries, ScaleGraphic currentScale){
 
 		this.currentRegistries = AnalyzerRegistryReductionAlgorithm.getInstance().reduceRegistries(registries, currentScale);
 
@@ -126,8 +125,8 @@ public class AnalysisBeanChart {
 		boolean addNextSerie = true;
 
 		if(nextAndPreviousSelected) {
-			List<AnalyzerRegistryObject> previousSeriesRegistries = new ArrayList<AnalyzerRegistryObject>();
-			List<AnalyzerRegistryObject> nextSeriesRegistries = new ArrayList<AnalyzerRegistryObject>();
+			List<AnalyzerRegistryGui> previousSeriesRegistries = new ArrayList<AnalyzerRegistryGui>();
+			List<AnalyzerRegistryGui> nextSeriesRegistries = new ArrayList<AnalyzerRegistryGui>();
 
 			String prevDateLabel = "";
 			String nextDateLabel = "";
@@ -219,7 +218,7 @@ public class AnalysisBeanChart {
 
 	}
 	
-	private void initSerie(ScaleGraphic currentScale, LineChartSeries serie, List<AnalyzerRegistryObject> registries, 
+	private void initSerie(ScaleGraphic currentScale, LineChartSeries serie, List<AnalyzerRegistryGui> registries, 
 			List<AnalyzerRegistryGui> registriesToProduce, TimeAnalysisType timeAnalysisType) {
 
 		serie.setShowMarker(false);

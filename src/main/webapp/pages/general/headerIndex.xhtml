@@ -6,7 +6,7 @@
 	xmlns:p="http://primefaces.org/ui"
 	template="../template/ui.xhtml">
 	<ui:define name="body">
-		<h:form id="bannerForm" class="headerForm header p-grid">
+		<h:form class="headerForm header p-grid">
 			<div class="p-col logo p-justify-center">
 				<p:graphicImage url="/resources/images/logoL8energy.png" height="50px" width="150px"></p:graphicImage>
 			</div>
@@ -36,7 +36,7 @@
 					</table>
 				</div>
 				<div class="p-col loginButton">
-					<p:commandButton styleClass="loginFormButton" value="Log In" action="#{clbHomeLoginBean.loginUser}" ajax="true"
+					<p:commandButton styleClass="loginFormButton" id="loginButId" value="Log In" action="#{clbHomeLoginBean.loginUser}" ajax="true"
 						update="@form" oncomplete="if (args.cantLoginUserNotFound === true )
 								{ 
 									PF('unSuccessPaneldoesnexistUnsuccess').show();

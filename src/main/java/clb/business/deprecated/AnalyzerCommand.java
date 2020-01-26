@@ -1,4 +1,4 @@
-package clb.business.enums;
+package clb.business.deprecated;
 
 public enum AnalyzerCommand {
 	GET_USERS_INFO("*getUsersInfo*"),

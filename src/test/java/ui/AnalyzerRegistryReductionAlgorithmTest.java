@@ -23,16 +23,16 @@ public class AnalyzerRegistryReductionAlgorithmTest {
 	public void testHoursAlgorithm() {
 
 		//Given
-		List<AnalyzerRegistryObject> registries = new ArrayList<AnalyzerRegistryObject>();
-		List<AnalyzerRegistryObject> registries2 = new ArrayList<AnalyzerRegistryObject>();
-		List<AnalyzerRegistryObject> registries3 = new ArrayList<AnalyzerRegistryObject>();
+		List<AnalyzerRegistryGui> registries = new ArrayList<AnalyzerRegistryGui>();
+		List<AnalyzerRegistryGui> registries2 = new ArrayList<AnalyzerRegistryGui>();
+		List<AnalyzerRegistryGui> registries3 = new ArrayList<AnalyzerRegistryGui>();
 
 		Calendar cal = Calendar.getInstance();
 
 		for(int i=0;i<60;i++) {
-			AnalyzerRegistryObject registry = new AnalyzerRegistryObject();
+			AnalyzerRegistryGui registry = new AnalyzerRegistryGui(new AnalyzerRegistryObject());
 			cal.set(Calendar.MINUTE, i);
-			registry.setCurrenttime(cal.getTime());
+			registry.setCurrentTime(cal.getTime());
 			registries.add(registry);	
 
 			if(i == 3 || i == 15 || i == 27 || i == 48)
@@ -62,19 +62,19 @@ public class AnalyzerRegistryReductionAlgorithmTest {
 	@Test
 	public void testDaysAlgorithm() {
 		//Given
-		List<AnalyzerRegistryObject> registries = new ArrayList<AnalyzerRegistryObject>();
-		List<AnalyzerRegistryObject> registries2 = new ArrayList<AnalyzerRegistryObject>();
-		List<AnalyzerRegistryObject> registries3 = new ArrayList<AnalyzerRegistryObject>();
+		List<AnalyzerRegistryGui> registries = new ArrayList<AnalyzerRegistryGui>();
+		List<AnalyzerRegistryGui> registries2 = new ArrayList<AnalyzerRegistryGui>();
+		List<AnalyzerRegistryGui> registries3 = new ArrayList<AnalyzerRegistryGui>();
 
 		Calendar cal = Calendar.getInstance();
 
 		for(int i=0;i<24;i++) {
 			for(int j = 0;j<60;j++) {
-				AnalyzerRegistryObject registry = new AnalyzerRegistryObject();
+				AnalyzerRegistryGui registry = new AnalyzerRegistryGui(new AnalyzerRegistryObject());
 				cal.set(Calendar.HOUR_OF_DAY, i);
 				cal.set(Calendar.MINUTE, j);
 
-				registry.setCurrenttime(cal.getTime());
+				registry.setCurrentTime(cal.getTime());
 				registries.add(registry);	
 
 				if(j == 2 || j == 6 || j == 13 || j == 19)
@@ -104,21 +104,21 @@ public class AnalyzerRegistryReductionAlgorithmTest {
 	@Test
 	public void testWeekAlgorithm() {
 		//Given
-		List<AnalyzerRegistryObject> registries = new ArrayList<AnalyzerRegistryObject>();
-		List<AnalyzerRegistryObject> registries2 = new ArrayList<AnalyzerRegistryObject>();
-		List<AnalyzerRegistryObject> registries3 = new ArrayList<AnalyzerRegistryObject>();
+		List<AnalyzerRegistryGui> registries = new ArrayList<AnalyzerRegistryGui>();
+		List<AnalyzerRegistryGui> registries2 = new ArrayList<AnalyzerRegistryGui>();
+		List<AnalyzerRegistryGui> registries3 = new ArrayList<AnalyzerRegistryGui>();
 
 		Calendar cal = Calendar.getInstance();
 
 		for(int k=1;k<8;k++) {
 			for(int i=0;i<24;i++) {
 				for(int j = 0;j<60;j++) {
-					AnalyzerRegistryObject registry = new AnalyzerRegistryObject();
+					AnalyzerRegistryGui registry = new AnalyzerRegistryGui(new AnalyzerRegistryObject());
 					cal.set(Calendar.DAY_OF_MONTH, k);
 					cal.set(Calendar.HOUR_OF_DAY, i);
 					cal.set(Calendar.MINUTE, j);
 
-					registry.setCurrenttime(cal.getTime());
+					registry.setCurrentTime(cal.getTime());
 					registries.add(registry);	
 
 					if(k == 1 || k == 3 || k == 5)
@@ -149,9 +149,9 @@ public class AnalyzerRegistryReductionAlgorithmTest {
 	@Test
 	public void testMonthAlgorithm() {
 		//Given
-		List<AnalyzerRegistryObject> registries = new ArrayList<AnalyzerRegistryObject>();
-		List<AnalyzerRegistryObject> registries2 = new ArrayList<AnalyzerRegistryObject>();
-		List<AnalyzerRegistryObject> registries3 = new ArrayList<AnalyzerRegistryObject>();
+		List<AnalyzerRegistryGui> registries = new ArrayList<AnalyzerRegistryGui>();
+		List<AnalyzerRegistryGui> registries2 = new ArrayList<AnalyzerRegistryGui>();
+		List<AnalyzerRegistryGui> registries3 = new ArrayList<AnalyzerRegistryGui>();
 
 		Calendar cal = Calendar.getInstance();
 		//January
@@ -161,12 +161,12 @@ public class AnalyzerRegistryReductionAlgorithmTest {
 		for(int k=1;k<=monthMax;k++) {
 			for(int i=0;i<24;i++) {
 				for(int j = 0;j<60;j++) {
-					AnalyzerRegistryObject registry = new AnalyzerRegistryObject();
+					AnalyzerRegistryGui registry = new AnalyzerRegistryGui(new AnalyzerRegistryObject());
 					cal.set(Calendar.DAY_OF_MONTH, k);
 					cal.set(Calendar.HOUR_OF_DAY, i);
 					cal.set(Calendar.MINUTE, j);
 
-					registry.setCurrenttime(cal.getTime());
+					registry.setCurrentTime(cal.getTime());
 					registries.add(registry);	
 
 					if(k == 1 || k == 3 || k == 5 || k == 11 || k == 23 || k == 30)

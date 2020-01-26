@@ -1,6 +1,8 @@
 package clb.ui.beans.objects;
 
+import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import clb.business.objects.AnalyzerObject;
@@ -11,6 +13,7 @@ public class AnalyzerGui {
 	private String analyzerId;
 	private String codeName;
 	private Set<AnalyzerMeterValues> analyzerMeters;
+	private List<Date> registriesDates;
 
 	public AnalyzerGui() {
 		
@@ -61,6 +64,14 @@ public class AnalyzerGui {
 
 	public void setCodeName(String codeName) {
 		this.codeName = codeName;
+	}
+
+	public List<Date> getRegistriesDates() {
+		return registriesDates;
+	}
+
+	public void setRegistriesDates(List<Date> registriesDates) {
+		this.registriesDates = registriesDates;
 	}
 	
 	

@@ -4,11 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.primefaces.json.JSONObject;
-
-import clb.database.entities.UsersystemEntity;
 
 public class UsersystemObject implements ClbObject, Serializable
 {
@@ -51,37 +48,6 @@ public class UsersystemObject implements ClbObject, Serializable
             return false;
         
         return getExpiryDate().getTime() - currentDate.getTime() <= 0;
-    }
-    
-    public UsersystemObject( UsersystemEntity usersystem ) {
-        this.id = usersystem.getId();
-        this.address = usersystem.getAddress();
-        this.name = usersystem.getName();
-        this.password = usersystem.getPassword();
-        this.token = usersystem.getToken();
-        this.expiryDate = usersystem.getExpiryDate();
-        this.lastSentEmail = usersystem.getLastSentEmail();
-        this.enabled = usersystem.isEnabled();
-        this.ftpPassword = usersystem.getFtpPassword();
-        this.buildings = usersystem.getBuildings() != null ? 
-        		usersystem.getBuildings().stream().map(BuildingObject::new).collect(Collectors.toList()) : null;
-    }
-
-    public UsersystemEntity toEntity() {
-        UsersystemEntity userSystemEntity = new UsersystemEntity();
-        userSystemEntity.setAddress( this.address );
-        userSystemEntity.setName( this.name );
-        userSystemEntity.setPassword( this.password );
-        userSystemEntity.setId( this.id );
-        userSystemEntity.setToken( this.token );
-        userSystemEntity.setExpiryDate( this.expiryDate );
-        userSystemEntity.setEnabled( this.enabled );
-        userSystemEntity.setLastSentEmail( this.lastSentEmail );
-        userSystemEntity.setFtpPassword(this.ftpPassword);
-        userSystemEntity.setBuildings( this.buildings != null ?
-        		this.buildings.stream().map(BuildingObject::toEntity).collect(Collectors.toSet()) : null);
-        
-        return userSystemEntity;
     }
     
     public JSONObject toJson() {

@@ -72,6 +72,7 @@ public class ExternalRoutines {
 					analyzerObj.setPfl2(Double.parseDouble(line[35]));
 					analyzerObj.setPfl3(Double.parseDouble(line[36]));
 					analyzerObj.setHz(Double.parseDouble(line[38]));
+					analyzerObj.setAnalyzerId(entryFile.getKey());
 					
 					registries.add(analyzerObj);
 				}

@@ -2,6 +2,8 @@ package clb.ui.beans.objects;
 
 import java.util.Date;
 
+import clb.business.objects.AnalyzerRegistryObject;
+
 public class AnalyzerRegistryGui {
 
 	private Double asys;
@@ -13,10 +15,10 @@ public class AnalyzerRegistryGui {
 	private Double vlnsys;
 	private Double vllsys;
 	private Date currentTime;
+	private String analyzerId;
 
 	public AnalyzerRegistryGui(Double asys, Double hz, Double kwsys, Double pfsys, Double kvarsys, Double kvasys,
-			Double vlnsys, Double vllsys, Date currentTime) {
-		super();
+			Double vlnsys, Double vllsys, Date currentTime, String analyzerId) {
 		this.asys = asys;
 		this.hz = hz;
 		this.kwsys = kwsys;
@@ -26,6 +28,20 @@ public class AnalyzerRegistryGui {
 		this.vlnsys = vlnsys;
 		this.vllsys = vllsys;
 		this.currentTime = currentTime;
+		this.analyzerId = analyzerId;
+	}
+	
+	public AnalyzerRegistryGui(AnalyzerRegistryObject analyzerObject) {
+		this.asys = analyzerObject.getAsys();
+		this.hz = analyzerObject.getHz();
+		this.kwsys = analyzerObject.getKwsys();
+		this.pfsys = analyzerObject.getPfsys();
+		this.kvarsys = analyzerObject.getKvarsys();
+		this.kvasys = analyzerObject.getKvasys();
+		this.vlnsys = analyzerObject.getVlnsys();
+		this.vllsys = analyzerObject.getVllsys();
+		this.currentTime = analyzerObject.getCurrenttime();
+		this.analyzerId = analyzerObject.getAnalyzerId();
 	}
 	
 	
@@ -81,10 +97,17 @@ public class AnalyzerRegistryGui {
 	public Date getCurrentTime() {
 		return currentTime;
 	}
-
-
 	public void setCurrentTime(Date currentTime) {
 		this.currentTime = currentTime;
 	}
+
+	public String getAnalyzerId() {
+		return analyzerId;
+	}
+
+	public void setAnalyzerId(String analyzerId) {
+		this.analyzerId = analyzerId;
+	}
+	
 	
 }

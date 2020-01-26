@@ -3,7 +3,6 @@ package clb.business.objects;
 import java.io.Serializable;
 import java.util.Date;
 
-import clb.database.entities.AnalyzerRegistryEntity;
 import clb.database.entities.ClbEntity;
 
 public class AnalyzerRegistryObject implements ClbEntity, Serializable {
@@ -12,6 +11,8 @@ public class AnalyzerRegistryObject implements ClbEntity, Serializable {
 
 	private String id;
 
+	private String analyzerId;
+	
 	private double al1;
 
 	private double al2;
@@ -131,136 +132,6 @@ public class AnalyzerRegistryObject implements ClbEntity, Serializable {
 
 	public AnalyzerRegistryObject() {
 	}
-
-
-    public AnalyzerRegistryObject(AnalyzerRegistryEntity analyzerRegEntity) {
-        super();
-        this.id = analyzerRegEntity.getId();
-        this.al1 = analyzerRegEntity.getAl1();
-        this.al2 = analyzerRegEntity.getAl2();
-        this.al3 = analyzerRegEntity.getAl3();
-        this.an = analyzerRegEntity.getAn();
-        this.asys = analyzerRegEntity.getAsys();
-        this.comport = analyzerRegEntity.getComport();
-        this.currenttime = analyzerRegEntity.getCurrenttime();
-        this.epochformat = analyzerRegEntity.getEpochformat();
-        this.hourmeterkwh = analyzerRegEntity.getHourmeterkwh();
-        this.hourmeterkwhnegative = analyzerRegEntity.getHourmeterkwhnegative();
-        this.hz = analyzerRegEntity.getHz();
-        this.itemlabel = analyzerRegEntity.getItemlabel();
-        this.kvahl = analyzerRegEntity.getKvahl();
-        this.kvahl1 = analyzerRegEntity.getKvahl1();
-        this.kvahl2 = analyzerRegEntity.getKvahl2();
-        this.kvahl3 = analyzerRegEntity.getKvahl3();
-        this.kval1 = analyzerRegEntity.getKval1();
-        this.kval2 = analyzerRegEntity.getKval2();
-        this.kval3 = analyzerRegEntity.getKval3();
-        this.kvarh = analyzerRegEntity.getKvarh();
-        this.kvarl1 = analyzerRegEntity.getKvarl1();
-        this.kvarl2 = analyzerRegEntity.getKvarl2();
-        this.kvarl3 = analyzerRegEntity.getKvarl3();
-        this.kvarsys = analyzerRegEntity.getKvarsys();
-        this.kvasys = analyzerRegEntity.getKvasys();
-        this.kwsys = analyzerRegEntity.getKwsys();
-        this.kwh = analyzerRegEntity.getKwh();
-        this.kwhl1 = analyzerRegEntity.getKwhl1();
-        this.kwhl2 = analyzerRegEntity.getKwhl2();
-        this.kwhl3 = analyzerRegEntity.getKwhl3();
-        this.kwl1 = analyzerRegEntity.getKwl1();
-        this.kwl2 = analyzerRegEntity.getKwl2();
-        this.kwl3 = analyzerRegEntity.getKwl3();
-        this.modbusid = analyzerRegEntity.getModbusid();
-        this.pfl1 = analyzerRegEntity.getPfl1();
-        this.pfl2 = analyzerRegEntity.getPfl2();
-        this.pfl3 = analyzerRegEntity.getPfl3();
-        this.pfsys = analyzerRegEntity.getPfsys();
-        this.producttype = analyzerRegEntity.getProducttype();
-        this.recorttype = analyzerRegEntity.getRecorttype();
-        this.rfc3339format = analyzerRegEntity.getRfc3339format();
-        this.temperature = analyzerRegEntity.getTemperature();
-        this.thdal1 = analyzerRegEntity.getThdal1();
-        this.thdal2 = analyzerRegEntity.getThdal2();
-        this.thdal3 = analyzerRegEntity.getThdal3();
-        this.thdvl1n = analyzerRegEntity.getThdvl1n();
-        this.thdvl2n = analyzerRegEntity.getThdvl2n();
-        this.thdvl3n = analyzerRegEntity.getThdvl3n();
-        this.vadmd = analyzerRegEntity.getVadmd();
-        this.vardmd = analyzerRegEntity.getVardmd();
-        this.vl1l2 = analyzerRegEntity.getVl1l2();
-        this.vl1n = analyzerRegEntity.getVl1n();
-        this.vl2l3 = analyzerRegEntity.getVl2l3();
-        this.vl2n = analyzerRegEntity.getVl2n();
-        this.vl3l1 = analyzerRegEntity.getVl3l1();
-        this.vl3n = analyzerRegEntity.getVl3n();
-        this.vllsys = analyzerRegEntity.getVllsys();
-        this.vlnsys = analyzerRegEntity.getVlnsys();
-    }
-
-	public AnalyzerRegistryEntity toEntity() {
-        AnalyzerRegistryEntity anaRegEntity = new AnalyzerRegistryEntity();
-        anaRegEntity.setId(id);
-        anaRegEntity.setAl1(al1);
-        anaRegEntity.setAl2(al2);
-        anaRegEntity.setAl3(al3);
-        anaRegEntity.setAn(an);
-        anaRegEntity.setAsys(asys);
-        anaRegEntity.setComport(comport);
-        anaRegEntity.setCurrenttime(currenttime);
-        anaRegEntity.setEpochformat(epochformat);
-        anaRegEntity.setHourmeterkwh(hourmeterkwh);
-        anaRegEntity.setHourmeterkwhnegative(hourmeterkwhnegative);
-        anaRegEntity.setHz(hz);
-        anaRegEntity.setItemlabel(itemlabel);
-        anaRegEntity.setKvahl(kvahl);
-        anaRegEntity.setKvahl1(kvahl1);
-        anaRegEntity.setKvahl2(kvahl2);
-        anaRegEntity.setKvahl3(kvahl3);
-        anaRegEntity.setKval1(kval1);
-        anaRegEntity.setKval2(kval2);
-        anaRegEntity.setKval3(kval3);
-        anaRegEntity.setKvarh(kvarh);
-        anaRegEntity.setKvarl1(kvarl1);
-        anaRegEntity.setKvarl2(kvarl2);
-        anaRegEntity.setKvarl3(kvarl3);
-        anaRegEntity.setKvarsys(kvarsys);
-        anaRegEntity.setKvasys(kvasys);
-        anaRegEntity.setKwh(kwh);
-        anaRegEntity.setKwhl1(kwhl1);
-        anaRegEntity.setKwhl2(kwhl2);
-        anaRegEntity.setKwhl3(kwhl3);
-        anaRegEntity.setKwl1(kwl1);
-        anaRegEntity.setKwl2(kwl2);
-        anaRegEntity.setKwl3(kwl3);
-        anaRegEntity.setKwsys(kwsys);
-        anaRegEntity.setModbusid(modbusid);
-        anaRegEntity.setPfl1(pfl1);
-        anaRegEntity.setPfl2(pfl2);
-        anaRegEntity.setPfl3(pfl3);
-        anaRegEntity.setPfsys(pfsys);
-        anaRegEntity.setProducttype(producttype);
-        anaRegEntity.setRecorttype(recorttype);
-        anaRegEntity.setRfc3339format(rfc3339format);
-        anaRegEntity.setTemperature(temperature);
-        anaRegEntity.setThdal1(thdal1);
-        anaRegEntity.setThdal2(thdal2);
-        anaRegEntity.setThdal3(thdal3);
-        anaRegEntity.setThdvl1n(thdvl1n);
-        anaRegEntity.setThdvl2n(thdvl2n);
-        anaRegEntity.setThdvl3n(thdvl3n);
-        anaRegEntity.setVadmd(vadmd);
-        anaRegEntity.setVardmd(vardmd);
-        anaRegEntity.setVl1l2(vl1l2);
-        anaRegEntity.setVl1n(vl1n);
-        anaRegEntity.setVl2l3(vl2l3);
-        anaRegEntity.setVl2n(vl2n);
-        anaRegEntity.setVl3l1(vl3l1);
-        anaRegEntity.setVl3n(vl3n);
-        anaRegEntity.setVllsys(vllsys);
-        anaRegEntity.setVlnsys(vlnsys);
-        
-        return anaRegEntity;
-    }
-    
 
 	public String getId() {
 		return id;
@@ -732,6 +603,16 @@ public class AnalyzerRegistryObject implements ClbEntity, Serializable {
 
 	public void setVlnsys(double vlnsys) {
 		this.vlnsys = vlnsys;
+	}
+
+
+	public String getAnalyzerId() {
+		return analyzerId;
+	}
+
+
+	public void setAnalyzerId(String analyzerId) {
+		this.analyzerId = analyzerId;
 	}
 	
 	

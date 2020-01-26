@@ -1,11 +1,8 @@
 package clb.business.services;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -67,6 +64,7 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
 	@Override
 	public List<AnalyzerRegistryObject> getDayRegistriesFromAnalyzer( String analyzerId , Date timeFrame) {
+		
 		if(DateUtils.getInstance().isToday(timeFrame)) {
 			Date nowDate = new Date();
 			Date currentDateReseted = DateUtils.getInstance().getDayReseted(nowDate);
@@ -125,31 +123,10 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 		return clbDao.getMonthRegistriesFromAnalyzer( analyzerId,firstDay,lastDay);
 	}
 
-	@Override
-	public Date getLowestAnalyzerRegistryDate() {
-		return clbDao.getLowestAnalyzerRegistryDate();
-	}
 
 	@Override
-	public Map<String,List<String>> getYearsAndMonthsAvailable() {
-		
-		Map<String,List<String>> yearsAndMonths = new HashMap<String,List<String>>();
-		
-		for(String date: clbDao.getDatesAvailable()) {
-			String year = date.substring(0,4);
-			String month = date.substring(4,6);
-			
-			List<String> months = yearsAndMonths.get(year);
-			
-			if(months == null) {
-				months = new ArrayList<String>();
-			}
-			
-			months.add(month);
-			yearsAndMonths.put(year, months);
-		}
-		
-		return yearsAndMonths;
+	public List<Date> getRegistriesDatesFromAnalyzer(String analyzerId){
+		return clbDao.getDatesFromAnalyzer(analyzerId);
 	}
 	
 	@Transactional
@@ -252,18 +229,18 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 
 	@Override
 	@Transactional
-	public void removeAnalyzersForDivision(String userId, String buildingId, String divisionId, Set<String> analyzersToRemove) {
+	public void removeAnalyzerForDivision(String userId, String buildingId, String divisionId, String analyzerToRemove) {
 		DivisionObject division = clbDao.findDivisionById(divisionId);
 
 		if(division != null && division.getAnalyzers() != null) {
 			division.setAnalyzers(division.getAnalyzers().stream()
-										.filter( analyzer -> !analyzersToRemove.contains(analyzer.getId()))
+										.filter( analyzer -> !analyzer.getId().equals(analyzerToRemove))
 										.collect(Collectors.toSet()));
 		}
 		
 		clbDao.saveClbObject(division);
 	}
-	
+
 	public TaskExecutor getTaskExecutor() {
 		return taskExecutor;
 	}
@@ -287,4 +264,5 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	public void setAnalyzersFtp(List<String> analyzersFtp) {
 		this.analyzersFtp = analyzersFtp;
 	}
+
 }

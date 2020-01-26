@@ -2,6 +2,7 @@ package business.configuration;
 
 import static org.mockito.Mockito.mock;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -28,6 +29,12 @@ import clb.database.ClbDao;
 		"clb.database"})
 public class ConfigurationBusiness {
 
+	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+	public ModelMapper modelMapper() {
+		return mock(ModelMapper.class);
+	}
+	
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 	public ClbDao clbDao() {

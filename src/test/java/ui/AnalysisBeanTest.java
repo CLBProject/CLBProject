@@ -3,7 +3,6 @@ package ui;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,7 +16,7 @@ import clb.global.AnalyzerMeterValues;
 import clb.ui.beans.AnalysisBean;
 import clb.ui.beans.ClbHomeLoginBean;
 import clb.ui.beans.objects.AnalyzerGui;
-import clb.ui.beans.objects.BuildingAnalysisGui;
+import clb.ui.beans.objects.BuildingGui;
 import clb.ui.beans.objects.DivisionGui;
 
 public class AnalysisBeanTest extends AbstractBeanTest{
@@ -35,9 +34,9 @@ public class AnalysisBeanTest extends AbstractBeanTest{
 	@Override
 	public void initBean() {
 		
-		List<BuildingAnalysisGui> buildings = new ArrayList<BuildingAnalysisGui>();
-		BuildingAnalysisGui bGui = new BuildingAnalysisGui(new BuildingObject());
-		BuildingAnalysisGui bGui2 = new BuildingAnalysisGui(new BuildingObject());
+		List<BuildingGui> buildings = new ArrayList<BuildingGui>();
+		BuildingGui bGui = new BuildingGui(new BuildingObject());
+		BuildingGui bGui2 = new BuildingGui(new BuildingObject());
 		AnalyzerGui analObj = new AnalyzerGui();
 		AnalyzerGui analObj2 = new AnalyzerGui();
 		
@@ -56,9 +55,6 @@ public class AnalysisBeanTest extends AbstractBeanTest{
 		buildings.add(bGui);
 		buildings.add(bGui2);
 		
-		Date currentDate = new Date();
-		
-		when(analyzerDataService.getLowestAnalyzerRegistryDate()).thenReturn(currentDate);
 		when(clbHomeLoginBean.getUserBuildings()).thenReturn(buildings);
 		analysisBean.init();
 	}

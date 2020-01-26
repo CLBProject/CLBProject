@@ -2,9 +2,6 @@ package clb.business.objects;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
-
-import clb.database.entities.BuildingEntity;
 
 public class BuildingObject implements ClbObject
 {
@@ -23,31 +20,6 @@ public class BuildingObject implements ClbObject
     public BuildingObject(){
 
     }
-
-    public BuildingObject( BuildingEntity building ) {
-        this.id = building.getId();
-        this.name = building.getName();
-        this.buildingusername = building.getBuildingusername();
-        this.location = building.getLocation();
-        this.imgPath = building.getImgPath();
-        this.divisions = building.getDivisions() != null ? 
-        					building.getDivisions().stream().map(DivisionObject::new).collect(Collectors.toSet()) : 
-        						null;     
-    }
-
-    public BuildingEntity toEntity() {
-        BuildingEntity buildingEntity = new BuildingEntity();
-        buildingEntity.setId( this.id );
-        buildingEntity.setName( this.name );
-        buildingEntity.setLocation(this.location);
-        buildingEntity.setImgPath( this.imgPath );
-        buildingEntity.setDivisions(this.divisions != null ? 
-        								this.divisions.stream().map(DivisionObject::toEntity).collect(Collectors.toSet()): 
-        									null);
-
-        return buildingEntity;
-    }
-    
 	
 	@Override
 	public boolean equals(Object obj) {

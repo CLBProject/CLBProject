@@ -7,9 +7,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -260,41 +258,5 @@ public class AnalyzerDataServiceTest {
 		assertEquals(finalReg1Obj.getAn(), 22.8, 0.01);
 		assertEquals(finalReg2Obj.getKwh(), 16.5, 0.01);
 		assertEquals(finalReg2Obj.getAn(),87, 0.01);
-	}
-
-	@Test
-	public void testGetYearsAvailable() {
-
-		String[] dates = {"20160801","20170702","20180501"};
-
-		when(clbDao.getDatesAvailable()).thenReturn(dates);
-
-		Map<String, List<String>> yearsAndMonths = analyzerDataService.getYearsAndMonthsAvailable();
-
-		
-		List<String> firstYearAndMonth = yearsAndMonths.get("2016");
-		List<String> secondYearAndMonth = yearsAndMonths.get("2017");
-		List<String> thirdYearAndMonth = yearsAndMonths.get("2018");
-		
-		Assert.assertEquals(firstYearAndMonth.get(0), "08");
-		Assert.assertEquals(secondYearAndMonth.get(0), "07");
-		Assert.assertEquals(thirdYearAndMonth.get(0), "05");
-		
-		System.out.println(firstYearAndMonth);
-		
-		Assert.assertEquals(firstYearAndMonth.size(), 1);
-		Assert.assertEquals(secondYearAndMonth.size(), 1);
-		Assert.assertEquals(thirdYearAndMonth.size(), 1);
-	}
-	
-	@Test
-	public void testLowestAnalyzerRegistryDate() {
-		
-		Date date = new Date();
-		
-		when(clbDao.getLowestAnalyzerRegistryDate()).thenReturn(date);
-		Date currentDate = analyzerDataService.getLowestAnalyzerRegistryDate();
-		
-		Assert.assertEquals(date.toString(), currentDate.toString());
 	}
 }

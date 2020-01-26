@@ -3,6 +3,7 @@ package clb.business.deprecated;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -17,12 +18,9 @@ import org.primefaces.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import clb.business.enums.AnalyzerCommand;
-import clb.business.exceptions.IlegalCommandAppException;
 import clb.business.objects.AnalyzerObject;
 import clb.business.objects.AnalyzerRegistryObject;
 import clb.business.objects.UsersystemObject;
-import clb.business.utils.JsonUtils;
 import clb.database.ClbDao;
 import clb.global.AnalyzerMeterValues;
 
@@ -94,7 +92,6 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 							Set<AnalyzerRegistryObject> registries = new HashSet<AnalyzerRegistryObject>();
 							registries.add(analyzerRegistry);
 							clbDao.saveAnalyzerRegistries( registries, analyzerObject.getId());
-							analyzerObject.addAnalyzerRegistryId(analyzerRegistry.getId());
 
 							clientSocket.getOutputStream().write(AnalyzerCommand.ACKNOWLEDGE.getValue().getBytes());
 							clientSocket.getOutputStream().flush();
@@ -102,7 +99,7 @@ public class AnalyzerDataServiceImplExecutor implements Runnable{
 
 						case GET_LATEST_PERSISTED_DATE:
 
-							Long latestDateForAnalyzer = clbDao.getLatestDateForAnalyzer(in.nextLine());
+							Date latestDateForAnalyzer = clbDao.getDatesFromAnalyzer(in.nextLine()).get(0);
 							
 							clientSocket.getOutputStream().write(latestDateForAnalyzer != null ? 
 									(latestDateForAnalyzer.toString()+"\n").getBytes() : "\n".getBytes());

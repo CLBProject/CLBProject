@@ -47,6 +47,9 @@
 		<constructor-arg name="userCredentials"
 			ref="mongoCredentials" />
 	</bean>
+	
+	<bean class="org.modelmapper.ModelMapper" id="modelMapper" >
+	</bean>
 
 	<bean
 		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
@@ -62,7 +65,7 @@
 	</bean>
 	
 	<task:scheduled-tasks scheduler="myScheduler">
-	    <task:scheduled ref="externalRoutines" method="fetchAnalyzerRegistries" fixed-delay="3600000"/>
+	    <task:scheduled ref="externalRoutines" method="fetchAnalyzerRegistries" fixed-delay="10000000"/>
 	</task:scheduled-tasks>
 
 	<task:scheduler id="myScheduler" pool-size="10"/>

@@ -2,6 +2,8 @@ package clb.ui.beans;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,20 +11,27 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.model.SelectItem;
 
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.NodeUnselectEvent;
+import org.primefaces.event.SelectEvent;
 import org.primefaces.model.TreeNode;
 
 import clb.business.objects.BuildingObject;
 import clb.business.objects.DivisionObject;
 import clb.business.services.AnalyzerDataService;
+import clb.global.AnalyzerMeterValues;
+import clb.ui.beans.newobjects.AnalyzerNewManagementGui;
 import clb.ui.beans.newobjects.BuildingNewManagementGui;
 import clb.ui.beans.newobjects.DivisionNewManagementGui;
-import clb.ui.beans.objects.BuildingAnalysisGui;
+import clb.ui.beans.objects.AnalyzerGui;
+import clb.ui.beans.objects.AnalyzerRegistryGui;
+import clb.ui.beans.objects.BuildingGui;
 import clb.ui.beans.treeStructure.BuildingTreeGui;
 import clb.ui.beans.treeStructure.DivisionTreeGui;
+import clb.ui.beans.utils.AnalysisBeanCache;
+import clb.ui.beans.utils.AnalysisBeanChart;
+import clb.ui.enums.ScaleGraphic;
 
 @ViewScoped
 @ManagedBean
@@ -37,15 +46,27 @@ public class AnalysisBean implements Serializable{
 	private AnalyzerDataService analyzerDataService;
 	
 	private List<BuildingTreeGui> buildingsToShow;
-	private TreeNode currentDivisionSelected;
-	private List<SelectItem> currentDivisionAnalyzersSelected;
+	private List<AnalyzerGui> analyzersFromDivision;
 	
 	private BuildingNewManagementGui newBuilding;
 	private DivisionNewManagementGui newDivision;
-	
-	private BuildingTreeGui selectedBuilding;
-	private TreeNode parentDivisionSelected;
+	private AnalyzerNewManagementGui newAnalyzer;
 
+	private TreeNode parentDivisionSelected;
+	private BuildingTreeGui selectedBuilding;
+	private AnalyzerGui selectedAnalyzer;
+	private Date currentDateAnalyzer;
+	private Date minCurrentDateAnalyzer;
+	private Date maxCurrentDateAnalyzer;
+
+	private List<AnalyzerMeterValues> analyzerMeterValues;
+
+	private AnalysisBeanChart analysisDayPojo;
+	private AnalysisBeanCache analysisBeanCache;
+	
+	private ScaleGraphic scaleGraphic;
+	private ScaleGraphic[] scalesGraphic;
+	
 	/*private Date todayDate;
 	private Date minDate;
 	private Date analysisDate;
@@ -89,10 +110,13 @@ public class AnalysisBean implements Serializable{
 	@PostConstruct
 	public void init() {
 		
-		this.newBuilding = new BuildingNewManagementGui();
-		this.newDivision = new DivisionNewManagementGui();
-		
 		fillBuildingsData();
+		
+		analysisBeanCache = new AnalysisBeanCache(analyzerDataService);
+		analyzerMeterValues = Arrays.asList(AnalyzerMeterValues.values());
+		
+		scalesGraphic = ScaleGraphic.values();
+		scaleGraphic = ScaleGraphic.DAY;
 		
 		/*analysisBeanCache = new AnalysisBeanCache(analyzerDataService);
 		
@@ -144,10 +168,19 @@ public class AnalysisBean implements Serializable{
 	}
 	
 	private void fillBuildingsData() {
+		
+		this.newBuilding = new BuildingNewManagementGui();
+		this.newDivision = new DivisionNewManagementGui();
+		this.newAnalyzer = new AnalyzerNewManagementGui();
+		
+		this.parentDivisionSelected = null;
+		this.selectedBuilding = null;
+		this.selectedAnalyzer = null;
+		
 		this.buildingsToShow = clbHomeLoginBean.getAuthenticatedUser().hasBuildings() ? 
 								clbHomeLoginBean.getAuthenticatedUser().getBuildings()
 																			.stream()
-																			.map(BuildingAnalysisGui::toObject)
+																			.map(BuildingGui::toObject)
 																			.map(BuildingTreeGui::new).collect(Collectors.toList()) : new ArrayList<BuildingTreeGui>();
 	}
 
@@ -155,14 +188,14 @@ public class AnalysisBean implements Serializable{
 		this.parentDivisionSelected = event.getTreeNode();
 		this.parentDivisionSelected.setSelected(true);
 
-		//this.analyzersDivisionSelection = ((DivisionTreeGui) this.parentDivisionSelected.getData()).getAnalyzers();
+		this.analyzersFromDivision = ((DivisionTreeGui) this.parentDivisionSelected.getData()).getAnalyzers();
+		
+		this.selectedAnalyzer = null;
 	}
 
-	public void hideDivisionOptions(NodeUnselectEvent event) {
+	public void unselectDivision(NodeUnselectEvent event) {
 		event.getTreeNode().setSelected(false);
 		this.parentDivisionSelected = null;
-
-		//this.analyzersDivisionSelection = null;
 	}
 	
 	
@@ -179,7 +212,6 @@ public class AnalysisBean implements Serializable{
 		if (buildingToDelete != null) {
 			clbHomeLoginBean.deleteBuildingFromUser(buildingToDelete.toObject());
 			buildingsToShow.remove(buildingToDelete);
-			fillBuildingsData();
 		}
 	}
 	
@@ -193,8 +225,11 @@ public class AnalysisBean implements Serializable{
 			} else {
 				analyzerDataService.saveDivisionForParent(((DivisionTreeGui) parentDivisionSelected.getData()).getDivisionId(), divisionObj);
 			}
+			
+			this.parentDivisionSelected = null;
 				
 			clbHomeLoginBean.loginUser();
+			fillBuildingsData();
 		}
 	}
 	
@@ -212,11 +247,53 @@ public class AnalysisBean implements Serializable{
 			analyzerDataService.deleteChildDivisionFromBuilding(buildId, divisionToDeleteNode.getDivisionId());
 		}
 
+		this.parentDivisionSelected = null;
+		
 		clbHomeLoginBean.loginUser();
+		fillBuildingsData();
 	}
 	
-	public void setNewDivisionBuilding(BuildingTreeGui building) {
-		this.selectedBuilding = building;
+	public void createAnalyzer(String buildId) {
+		String divisionId = ((DivisionTreeGui) this.parentDivisionSelected.getData()).getDivisionId();
+
+		analyzerDataService.saveAnalyzersForDivision(clbHomeLoginBean.getLoginUsername(), buildId, divisionId, newAnalyzer.toObject());
+		
+		clbHomeLoginBean.loginUser();
+		fillBuildingsData();
+	}
+	
+	public String removeAnalyzerSelected(String buildId) {
+		if (this.parentDivisionSelected != null && this.selectedAnalyzer != null) {
+			String divisionId = ((DivisionTreeGui) this.parentDivisionSelected.getData()).getDivisionId();
+			analyzerDataService.removeAnalyzerForDivision(this.clbHomeLoginBean.getLoginUsername(), buildId, divisionId, 
+					this.selectedAnalyzer.getAnalyzerId());
+			clbHomeLoginBean.loginUser();
+			fillBuildingsData();
+		}
+
+		return "analysis.xhtml?faces-redirect=true";
+	}
+	
+	public void initAnalyzerGraph(SelectEvent event) {
+		analysisDayPojo = new AnalysisBeanChart( this.analysisBeanCache);
+		
+		this.selectedAnalyzer.setRegistriesDates(analyzerDataService.getRegistriesDatesFromAnalyzer(this.selectedAnalyzer.getAnalyzerId()));
+		List<Date> selectedAnalyzerDates = this.selectedAnalyzer.getRegistriesDates();
+		
+		if(selectedAnalyzerDates != null && selectedAnalyzerDates.size() > 0) {
+			this.minCurrentDateAnalyzer = selectedAnalyzerDates.get(0);
+			this.currentDateAnalyzer =  selectedAnalyzerDates.get(selectedAnalyzerDates.size()-1);
+			this.maxCurrentDateAnalyzer = selectedAnalyzerDates.get(selectedAnalyzerDates.size()-1);
+		}
+		
+		fillGraphicData(analysisBeanCache.getDayRegistriesFromAnalyzer( this.selectedAnalyzer.getAnalyzerId(), currentDateAnalyzer));
+		
+	}
+	
+	private void fillGraphicData(List<AnalyzerRegistryGui> registries) {
+
+		analysisDayPojo.fillGraphicForData( registries, ScaleGraphic.DAY );
+		//updatePreviousAndNextSeries();
 	}
 
 	public ClbHomeLoginBean getClbHomeLoginBean() {
@@ -243,21 +320,6 @@ public class AnalysisBean implements Serializable{
 		this.buildingsToShow = buildingsToShow;
 	}
 
-	public TreeNode getCurrentDivisionSelected() {
-		return currentDivisionSelected;
-	}
-
-	public void setCurrentDivisionSelected(TreeNode currentDivisionSelected) {
-		this.currentDivisionSelected = currentDivisionSelected;
-	}
-
-	public List<SelectItem> getCurrentDivisionAnalyzersSelected() {
-		return currentDivisionAnalyzersSelected;
-	}
-
-	public void setCurrentDivisionAnalyzersSelected(List<SelectItem> currentDivisionAnalyzersSelected) {
-		this.currentDivisionAnalyzersSelected = currentDivisionAnalyzersSelected;
-	}
 
 	public BuildingNewManagementGui getNewBuilding() {
 		return newBuilding;
@@ -289,6 +351,94 @@ public class AnalysisBean implements Serializable{
 
 	public void setParentDivisionSelected(TreeNode parentDivisionSelected) {
 		this.parentDivisionSelected = parentDivisionSelected;
+	}
+
+	public List<AnalyzerGui> getAnalyzersFromDivision() {
+		return analyzersFromDivision;
+	}
+
+	public void setAnalyzersFromDivision(List<AnalyzerGui> analyzersFromDivision) {
+		this.analyzersFromDivision = analyzersFromDivision;
+	}
+
+	public AnalyzerNewManagementGui getNewAnalyzer() {
+		return newAnalyzer;
+	}
+
+	public void setNewAnalyzer(AnalyzerNewManagementGui newAnalyzer) {
+		this.newAnalyzer = newAnalyzer;
+	}
+
+	public List<AnalyzerMeterValues> getAnalyzerMeterValues() {
+		return analyzerMeterValues;
+	}
+
+	public void setAnalyzerMeterValues(List<AnalyzerMeterValues> analyzerMeterValues) {
+		this.analyzerMeterValues = analyzerMeterValues;
+	}
+
+	public AnalyzerGui getSelectedAnalyzer() {
+		return selectedAnalyzer;
+	}
+
+	public void setSelectedAnalyzer(AnalyzerGui selectedAnalyzer) {
+		this.selectedAnalyzer = selectedAnalyzer;
+	}
+
+	public AnalysisBeanChart getAnalysisDayPojo() {
+		return analysisDayPojo;
+	}
+
+	public void setAnalysisDayPojo(AnalysisBeanChart analysisDayPojo) {
+		this.analysisDayPojo = analysisDayPojo;
+	}
+
+	public AnalysisBeanCache getAnalysisBeanCache() {
+		return analysisBeanCache;
+	}
+
+	public void setAnalysisBeanCache(AnalysisBeanCache analysisBeanCache) {
+		this.analysisBeanCache = analysisBeanCache;
+	}
+
+	public Date getCurrentDateAnalyzer() {
+		return currentDateAnalyzer;
+	}
+
+	public void setCurrentDateAnalyzer(Date currentDateAnalyzer) {
+		this.currentDateAnalyzer = currentDateAnalyzer;
+	}
+
+	public Date getMinCurrentDateAnalyzer() {
+		return minCurrentDateAnalyzer;
+	}
+
+	public void setMinCurrentDateAnalyzer(Date minCurrentDateAnalyzer) {
+		this.minCurrentDateAnalyzer = minCurrentDateAnalyzer;
+	}
+
+	public Date getMaxCurrentDateAnalyzer() {
+		return maxCurrentDateAnalyzer;
+	}
+
+	public void setMaxCurrentDateAnalyzer(Date maxCurrentDateAnalyzer) {
+		this.maxCurrentDateAnalyzer = maxCurrentDateAnalyzer;
+	}
+
+	public ScaleGraphic getScaleGraphic() {
+		return scaleGraphic;
+	}
+
+	public void setScaleGraphic(ScaleGraphic scaleGraphic) {
+		this.scaleGraphic = scaleGraphic;
+	}
+
+	public ScaleGraphic[] getScalesGraphic() {
+		return scalesGraphic;
+	}
+
+	public void setScalesGraphic(ScaleGraphic[] scalesGraphic) {
+		this.scalesGraphic = scalesGraphic;
 	}
 
 	

@@ -10,7 +10,6 @@ import clb.business.objects.BuildingObject;
 import clb.business.objects.ClbObject;
 import clb.business.objects.DivisionObject;
 import clb.business.objects.UsersystemObject;
-import clb.database.entities.BuildingEntity;
 
 public interface ClbDao{
 	
@@ -23,8 +22,6 @@ public interface ClbDao{
 	void deleteClbObject(ClbObject object);
 
 	Set<UsersystemObject> getAllUsers();
-
-	Set<AnalyzerObject> getAnalyzersFromBuilding(BuildingObject building);
 
     UsersystemObject findUserByToken( String token );
 
@@ -41,13 +38,9 @@ public interface ClbDao{
 	List<AnalyzerRegistryObject> getWeekRegistriesFromAnalyzer(String analyzerId, Date firstDay, Date lastDay);
 
 	List<AnalyzerRegistryObject> getMonthRegistriesFromAnalyzer(String analyzerId, Date firstDay, Date lastDay);
+
+	List<Date> getDatesFromAnalyzer(String analyzerId);
 	
-	Date getLowestAnalyzerRegistryDate();
-
-	String[] getDatesAvailable();
-
-	Long getLatestDateForAnalyzer(String analyzerCodeName);
-
 	void deleteDivisionCascade(DivisionObject mainDivision);
 
 }

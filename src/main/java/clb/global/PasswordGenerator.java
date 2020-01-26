@@ -1,4 +1,4 @@
-package clb.business.utils;
+package clb.global;
 
 import java.util.ArrayList;
 import java.util.List;

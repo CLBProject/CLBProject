@@ -10,7 +10,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import clb.business.objects.BuildingObject;
 
-public class BuildingAnalysisGui {
+public class BuildingGui {
 
 	@NotNull
 	private String buildingid;
@@ -25,7 +25,7 @@ public class BuildingAnalysisGui {
     
     private Set<DivisionGui> divisions;
 
-	public BuildingAnalysisGui(BuildingObject bObject) {
+	public BuildingGui(BuildingObject bObject) {
 		super();
 		this.buildingid = bObject.getId();
 		this.name = bObject.getName();
@@ -58,7 +58,7 @@ public class BuildingAnalysisGui {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		BuildingAnalysisGui other = (BuildingAnalysisGui) obj;
+		BuildingGui other = (BuildingGui) obj;
 		if (buildingid == null) {
 			if (other.buildingid != null)
 				return false;
