@@ -7,36 +7,27 @@
 	template="../template/ui.xhtml">
 	<ui:define name="body">
 		<h:form class="headerForm header p-grid">
-			<div class="p-col logo p-justify-center">
-				<p:graphicImage url="/resources/images/logoL8energy.png" height="50px" width="150px"></p:graphicImage>
-			</div>
-			<div align="right" class="p-col loginForm">
-				<div class="p-col username">
-					<table>
-						<tr>
-							<td>
-								<p:outputLabel for="username" class="headerLabel">Username:</p:outputLabel>
-							</td>
-							<td>
-								<p:inputText id="username" label="username" value="#{clbHomeLoginBean.loginUsername}" />
-							</td>
-						</tr>
-					</table>
-				</div>
-				<div class="p-col password">
-					<table>
-						<tr>
-							<td>
-								<p:outputLabel for="passwordUser" class="headerLabel">Password:</p:outputLabel>
-							</td>
-							<td>
-								<p:inputText label="passwordUser" id="passwordUser" value="#{clbHomeLoginBean.loginPassword}" type="password" />
-							</td>
-						</tr>
-					</table>
-				</div>
-				<div class="p-col loginButton">
-					<p:commandButton styleClass="loginFormButton" id="loginButId" value="Log In" action="#{clbHomeLoginBean.loginUser}" ajax="true"
+			<table cellspacing="5">
+				<tr>
+					<td align="left" width="60%">
+						<p:graphicImage url="/resources/images/logoL8energy.png" height="50px" width="150px"></p:graphicImage>
+					</td>
+					<td>
+						<p:outputLabel for="username" class="headerLabel">Username:</p:outputLabel>
+					</td>
+					<td width="15%">
+						<p:inputText id="username" label="username" value="#{clbHomeLoginBean.loginUsername}" />
+					</td>
+					<td width="2%"/>
+					<td>
+						<p:outputLabel for="passwordUser" class="headerLabel">Password:</p:outputLabel>
+					</td>
+					<td width="15%">
+						<p:inputText label="passwordUser" id="passwordUser" value="#{clbHomeLoginBean.loginPassword}" type="password" />
+					</td>
+					<td width="2%"/>
+					<td width="5%">
+						<p:commandButton styleClass="loginFormButton" id="loginButId" value="Log In" action="#{clbHomeLoginBean.loginUser}" ajax="true"
 						update="@form" oncomplete="if (args.cantLoginUserNotFound === true )
 								{ 
 									PF('unSuccessPaneldoesnexistUnsuccess').show();
@@ -46,8 +37,10 @@
 									PF('unSuccessPanelpasswordnotmatchUnsuccess').show();
 								}
 								"></p:commandButton>
-				</div>
-			</div>
+					</td>
+					<td width="1%"/>
+				</tr>
+			</table>
 		</h:form>
 	</ui:define>
 </ui:composition>

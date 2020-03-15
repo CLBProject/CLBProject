@@ -13,316 +13,415 @@
 		<ui:include src="./general/headerLoggedIn.xhtml" />
 		<div class="analysisDiv">
 			<h:form id="analysisForm">
-					<table width="100%" id="tableId">
-						<tr>
-							<td valign="top" width="20%">
-								    <p:panel id="buildingPanelId" widgetVar="buildingPanel">
-								    	<div class="analysisNewBuildingClass" align="center">
-									    	<p:graphicImage width="12px" value="#{request.contextPath}/../resources/images/plus.png" style="padding-right:5px"/>
-											<p:commandLink value="Create Building" oncomplete="PF('newBuildingPopup').show()"></p:commandLink>    
-										</div>
-										<ui:repeat value="#{analysisBean.buildingsToShow}" var="building" varStatus="varStatus" id="buildingSelection">
-											 <p:panel styleClass="buildingPanelClass" id="panel#{varStatus.index}" widgetVar="testingIds" header="#{building.name}" collapsed="true" toggleable="true" toggleSpeed="500">
-											    <f:facet name="actions">
-											     	<p:commandLink styleClass="ui-panel-titlebar-icon ui-corner-all ui-state-default" ajax="true" update="analysisForm" action="#{analysisBean.deleteBuilding(building)}">
-											     		<h:outputText styleClass="ui-icon ui-icon-circle-close" />
-											     	</p:commandLink>
-												</f:facet>
-											    <p:treeTable rendered="#{not empty building.rootDivision}" styleClass="divisionTree" id="treeDivs" value="#{building.rootDivision}" var="division" selectionMode="single" >
-											        <p:column>
-											            <h:outputText value="#{division.name}" />
-											        </p:column>
-											        <p:ajax event="select" listener="#{analysisBean.selectDivision}" ajax="true" update="analysisForm:buildingSelection:#{varStatus.index}:toUpdate analysisForm:buildingSelection:#{varStatus.index}:deleteDivisionLink"></p:ajax>
-													<p:ajax event="unselect" listener="#{analysisBean.unselectDivision}" ajax="true" update="analysisForm:buildingSelection:#{varStatus.index}:toUpdate analysisForm:buildingSelection:#{varStatus.index}:deleteDivisionLink"></p:ajax>
-											    </p:treeTable>
-											    <p:graphicImage width="12px" value="#{request.contextPath}/../resources/images/plus.png" style="padding-right:5px"/>
-											    <p:commandLink styleClass="buildingLinks" value="Add Division"
-											     		    oncomplete="PF('newDivisionPopup').show()"
-															action="#{analysisBean.setSelectedBuilding(building)}"
-															ajax="true" update=":newDivisionFormId"></p:commandLink>
-											    <p:spacer width="10"></p:spacer>
-											    <p:graphicImage width="12px" value="#{request.contextPath}/../resources/images/negative.png" style="padding-right:5px"/>
-											    <p:commandLink id="deleteDivisionLink" 
-											    			   disabled="#{empty analysisBean.parentDivisionSelected}" 
-											    			   styleClass="buildingLinks" 
-											    			   value="Delete Division" 
-											    			   ajax="false" 
-											    			   type="submit"
-															   action="#{analysisBean.deleteDivision(building.buildingid)}"></p:commandLink>
-												<p:outputPanel id="toUpdate">
-													<br/>
-													<p:panel styleClass="analyzersStatus" rendered="#{not empty analysisBean.parentDivisionSelected}">
-														<p:outputPanel rendered="#{not empty analysisBean.analyzersFromDivision}">
-															<div align="center" style="padding-bottom: 10px">
-																<p:outputLabel value="Analyzers List" styleClass="analyzerListCss"/>
-															</div>
-															<p:dataTable var="analyzer" value="#{analysisBean.analyzersFromDivision}" selectionMode="single" selection="#{analysisBean.selectedAnalyzer}" rowKey="#{analyzer.analyzerId}">
-																<p:ajax event="rowSelect" listener="#{analysisBean.initAnalyzerGraph}" update="analysisForm:buildingSelection:#{varStatus.index}:toUpdate analysisForm:chartPanel" />
-																<p:column headerText="Analyzer">
-																	<p:outputLabel value="#{analyzer.codeName}"/>
-																</p:column>
-																<p:column headerText="Meters" style="text-align: center !important">
-																	 <p:commandLink
-														    			   disabled="#{empty analysisBean.selectedAnalyzer or (analyzer.analyzerId ne analysisBean.selectedAnalyzer.analyzerId)}"
-														    			   oncomplete="PF('metersPanel').show()"
-														    			   update="metersForm"
-														    			   value="Show" 
-														    			   ajax="true"></p:commandLink>
-																</p:column>
-															</p:dataTable>
-														</p:outputPanel>
-														<p:graphicImage width="12px" value="#{request.contextPath}/../resources/images/plus.png" style="padding-right:5px"/>
-													    <p:commandLink value="Add Analyzer"
-													        styleClass="buildingLinks"
-											     		    oncomplete="PF('newAnalyzerPopup').show()"
-															ajax="true" update="analysisForm"></p:commandLink>
-													    <p:spacer width="10"></p:spacer>
-													    <p:graphicImage width="12px" value="#{request.contextPath}/../resources/images/negative.png" style="padding-right:5px"/>
-													    <p:commandLink id="deleteAnalyzerId"
-										    			   styleClass="buildingLinks" 
-										    			   value="Delete Analyzer"
-										    			   disabled="#{empty analysisBean.selectedAnalyzer}"
-										    			   ajax="false" 
-										    			   type="submit"
-														   action="#{analysisBean.removeAnalyzerSelected(building.buildingid)}"></p:commandLink>
-													</p:panel>
-												</p:outputPanel>
-										     </p:panel>
-										</ui:repeat>
-									</p:panel>
-							</td>
-							<td valign="top" width="80%">
-								<p:outputPanel id="chartPanel">
-									<p:panel rendered="#{empty analysisBean.analysisDayPojo}">
-										<p:graphicImage rendered="#{empty analysisBean.analysisDayPojo}" width="100%" value="#{request.contextPath}/../resources/images/renewimage.jpg"/>    
-										<br/>
-										<br/>
-										<p:panel styleClass="introAnalysis" rendered="#{empty analysisBean.analysisDayPojo}">
-											<div style="width:100%" align="center">
-												<div align="center" class="mainTextTitleDiv">
-													Start your 'Energy System Management'
-												</div>	
-												<br/>
-												<div class="mainTextContentDiv" style="width:70%" align="center">
-													Create your own Buildings with Divisions and merge them with your Analyzer
-													Information System. After The System is merged you can visualize the 
-													Energy costs over time.
-												</div>
-											</div>
-										</p:panel>
-									</p:panel>
-									<p:panel rendered="#{not empty analysisBean.analysisDayPojo}" styleClass="graphTitle">
-										 <f:facet name="header">
-										 	<div align="center">
-										 		<p:outputLabel value="Time"/>
-										 		<p:spacer width="10"/>
-												<p:calendar pattern="dd/MM/yyyy" id="calDate" value="#{analysisBean.currentDateAnalyzer}" mindate="#{analysisBean.minCurrentDateAnalyzer}" maxdate="#{analysisBean.maxCurrentDateAnalyzer}"/>
-												<p:spacer width="40" style="vertical-align:middle"/>
-												<p:outputLabel value="View"/>
-										 		<p:spacer width="10"/>
-												<p:selectOneMenu value="#{analysisBean.scaleGraphic}">
-													<f:selectItems value="#{analysisBean.scalesGraphic}"></f:selectItems>
-												</p:selectOneMenu>
-											</div>
+				<table width="100%" id="tableId">
+					<tr>
+						<td valign="top" width="20%"><p:panel id="buildingPanelId"
+								widgetVar="buildingPanel">
+								<div class="analysisNewBuildingClass" align="center">
+									<p:graphicImage width="12px"
+										value="#{request.contextPath}/../resources/images/plus.png"
+										style="padding-right:5px" />
+									<p:commandLink value="Create Building"
+										oncomplete="PF('newBuildingPopup').show()"></p:commandLink>
+								</div>
+								<ui:repeat value="#{analysisBean.buildingsToShow}"
+									var="building" varStatus="varStatus" id="buildingSelection">
+									<p:panel styleClass="buildingPanelClass"
+										id="panel#{varStatus.index}" widgetVar="testingIds"
+										header="#{building.name}" collapsed="true" toggleable="true"
+										toggleSpeed="500">
+										<f:facet name="actions">
+											<p:commandLink
+												styleClass="ui-panel-titlebar-icon ui-corner-all ui-state-default"
+												ajax="true" update="analysisForm"
+												action="#{analysisBean.deleteBuilding(building)}">
+												<h:outputText styleClass="ui-icon ui-icon-circle-close" />
+											</p:commandLink>
 										</f:facet>
-										<div align="center">
-											<p:chart rendered="#{not empty analysisBean.analysisDayPojo}" type="line" responsive="true" model="#{analysisBean.analysisDayPojo.lineModel}" styleClass="analysisChart"/>
+										<p:treeTable rendered="#{not empty building.rootDivision}"
+											styleClass="divisionTree" id="treeDivs"
+											value="#{building.rootDivision}" var="division"
+											selectionMode="single">
+											<p:column>
+												<h:outputText value="#{division.name}" />
+											</p:column>
+											<p:ajax event="select"
+												listener="#{analysisBean.selectDivision}" ajax="true"
+												update="analysisForm:buildingSelection:#{varStatus.index}:toUpdate analysisForm:buildingSelection:#{varStatus.index}:deleteDivisionLink"></p:ajax>
+											<p:ajax event="unselect"
+												listener="#{analysisBean.unselectDivision}" ajax="true"
+												update="analysisForm:buildingSelection:#{varStatus.index}:toUpdate analysisForm:buildingSelection:#{varStatus.index}:deleteDivisionLink"></p:ajax>
+										</p:treeTable>
+										<p:graphicImage width="12px"
+											value="#{request.contextPath}/../resources/images/plus.png"
+											style="padding-right:5px" />
+										<p:commandLink styleClass="buildingLinks" value="Add Division"
+											oncomplete="PF('newDivisionPopup').show()"
+											action="#{analysisBean.setSelectedBuilding(building)}"
+											ajax="true" update=":newDivisionFormId"></p:commandLink>
+										<p:spacer width="10"></p:spacer>
+										<p:graphicImage width="12px"
+											value="#{request.contextPath}/../resources/images/negative.png"
+											style="padding-right:5px" />
+										<p:commandLink id="deleteDivisionLink"
+											disabled="#{empty analysisBean.parentDivisionSelected}"
+											styleClass="buildingLinks" value="Delete Division"
+											ajax="false" type="submit"
+											action="#{analysisBean.deleteDivision(building.buildingid)}"></p:commandLink>
+										<p:outputPanel id="toUpdate">
+											<br />
+											<p:panel styleClass="analyzersStatus"
+												rendered="#{not empty analysisBean.parentDivisionSelected}">
+												<p:outputPanel
+													rendered="#{not empty analysisBean.analyzersFromDivision}">
+													<div align="center" style="padding-bottom: 10px">
+														<p:outputLabel value="Analyzers List"
+															styleClass="analyzerListCss" />
+													</div>
+													<p:dataTable var="analyzer"
+														value="#{analysisBean.analyzersFromDivision}"
+														selectionMode="single"
+														selection="#{analysisBean.selectedAnalyzer}"
+														rowKey="#{analyzer.analyzerId}">
+														<p:ajax event="rowSelect"
+															listener="#{analysisBean.initAnalyzerGraph}"
+															update="analysisForm:buildingSelection:#{varStatus.index}:toUpdate analysisForm:chartPanel" />
+														<p:column headerText="Analyzer">
+															<p:outputLabel value="#{analyzer.codeName}" />
+														</p:column>
+														<p:column headerText="Meters"
+															style="text-align: center !important">
+															<p:commandLink
+																disabled="#{empty analysisBean.selectedAnalyzer or (analyzer.analyzerId ne analysisBean.selectedAnalyzer.analyzerId)}"
+																oncomplete="PF('metersPanel').show()"
+																update="metersForm" value="Show" ajax="true"></p:commandLink>
+														</p:column>
+													</p:dataTable>
+												</p:outputPanel>
+												<p:graphicImage width="12px"
+													value="#{request.contextPath}/../resources/images/plus.png"
+													style="padding-right:5px" />
+												<p:commandLink value="Add Analyzer"
+													styleClass="buildingLinks"
+													oncomplete="PF('newAnalyzerPopup').show()" ajax="true"
+													update="analysisForm"></p:commandLink>
+												<p:spacer width="10"></p:spacer>
+												<p:graphicImage width="12px"
+													value="#{request.contextPath}/../resources/images/negative.png"
+													style="padding-right:5px" />
+												<p:commandLink id="deleteAnalyzerId"
+													styleClass="buildingLinks" value="Delete Analyzer"
+													disabled="#{empty analysisBean.selectedAnalyzer}"
+													ajax="false" type="submit"
+													action="#{analysisBean.removeAnalyzerSelected(building.buildingid)}"></p:commandLink>
+											</p:panel>
+										</p:outputPanel>
+									</p:panel>
+								</ui:repeat>
+							</p:panel></td>
+						<td valign="top" width="80%"><p:outputPanel id="chartPanel">
+								<p:panel rendered="#{empty analysisBean.analysisDayPojo}">
+									<p:graphicImage
+										rendered="#{empty analysisBean.analysisDayPojo}" width="100%"
+										value="#{request.contextPath}/../resources/images/renewimage.jpg" />
+									<br />
+									<br />
+									<p:panel styleClass="introAnalysis"
+										rendered="#{empty analysisBean.analysisDayPojo}">
+										<div style="width: 100%" align="center">
+											<div align="center" class="mainTextTitleDiv">Start your
+												'Energy System Management'</div>
+											<br />
+											<div class="mainTextContentDiv" style="width: 70%"
+												align="center">Create your own Buildings with
+												Divisions and merge them with your Analyzer Information
+												System. After The System is merged you can visualize the
+												Energy costs over time.</div>
 										</div>
 									</p:panel>
-								</p:outputPanel>
-							</td>
-						</tr>
-					</table>
+								</p:panel>
+								<p:panel rendered="#{not empty analysisBean.analysisDayPojo}"
+									styleClass="graphTitle">
+										<div align="right" class="panelGraphHeader">
+											<p:selectBooleanCheckbox value="#{analysisBean.updateSeries}" itemLabel="Adjacent Series">
+									            <p:ajax update="analysisForm" listener="#{analysisBean.updatePreviousAndNextSeries}" />
+									        </p:selectBooleanCheckbox>
+									        <p:spacer width="40" style="vertical-align:middle" />
+											<p:graphicImage value="#{request.contextPath}/../resources/images/thunder.png" style="vertical-align: middle !important" 
+															width="24" height="24"></p:graphicImage>
+											<p:spacer width="10" />
+											<p:selectOneMenu value="#{analysisBean.analyzerMeter}">
+												<f:selectItems value="#{analysisBean.selectedAnalyzer.analyzerMeters}"
+													var="analyzerMeter" itemLabel="#{analyzerMeter.label}"
+													itemValue="#{analyzerMeter}"></f:selectItems>
+												<p:ajax event="change"
+													listener="#{analysisBean.changeViewData}"
+													update="analysisForm" />
+											</p:selectOneMenu>
+									        <p:spacer width="40" style="vertical-align:middle" />
+											<p:graphicImage value="#{request.contextPath}/../resources/images/calendar.png" style="vertical-align: middle !important" 
+															width="24" height="24"></p:graphicImage>
+											<p:spacer width="10" />
+											<p:calendar pattern="dd/MM/yyyy" id="calDate" label="Time"
+												widgetVar="calDate"
+												value="#{analysisBean.currentDateAnalyzer}"
+												mindate="#{analysisBean.minCurrentDateAnalyzer}"
+												maxdate="#{analysisBean.maxCurrentDateAnalyzer}">
+												<p:ajax event="dateSelect"
+													listener="#{analysisBean.changeViewData}"
+													update="analysisForm" />
+											</p:calendar>
+											<p:spacer width="40" style="vertical-align:middle" />
+											<p:graphicImage value="#{request.contextPath}/../resources/images/picture.png" style="vertical-align: middle !important" 
+															width="24" height="24"></p:graphicImage>
+											<p:spacer width="10" />
+											<p:selectOneMenu value="#{analysisBean.scaleGraphic}">
+												<f:selectItems value="#{analysisBean.scalesGraphic}"
+													var="scaleGraphic" itemLabel="#{scaleGraphic.label}"
+													itemValue="#{scaleGraphic}"></f:selectItems>
+												<p:ajax event="change"
+													listener="#{analysisBean.changeViewData}"
+													update="analysisForm" />
+											</p:selectOneMenu>
+											<p:spacer width="40"
+												rendered="#{analysisBean.scaleGraphic eq 'HOUR'}"
+												style="vertical-align:middle" />
+											<p:graphicImage value="#{request.contextPath}/../resources/images/time.png" style="vertical-align: middle !important" 
+														    rendered="#{analysisBean.scaleGraphic eq 'HOUR'}" width="24" height="24"></p:graphicImage>
+											<p:spacer width="10"
+												rendered="#{analysisBean.scaleGraphic eq 'HOUR'}"
+												style="vertical-align:middle" />
+											<pe:timePicker value="#{analysisBean.hour}"
+												widgetVar="popupTimePicker" mode="popup" 
+												rendered="#{analysisBean.scaleGraphic eq 'HOUR'}"
+												label="Hour" locale="en_US">
+												<p:ajax event="timeSelect"
+													listener="#{analysisBean.changeViewDataHours}"
+													update="analysisForm" />
+											</pe:timePicker>
+										</div>
+									<div align="center">
+										<p:chart rendered="#{not empty analysisBean.analysisDayPojo}"
+											type="line" responsive="true"
+											model="#{analysisBean.analysisDayPojo.lineModel}"
+											styleClass="analysisChart" />
+									</div>
+								</p:panel>
+							</p:outputPanel></td>
+					</tr>
+				</table>
 			</h:form>
-			</div>
-			<ui:include src="./general/footer.xhtml" />
-			<p:dialog widgetVar="newBuildingPopup" id="newBuildingPopup" style="z-index: 1002 !important"
-				modal="true" position="center center" draggable="false" dynamic="true"
-				closable="true" header="Add New Building" closeOnEscape="true"  resizable="false">
-				<h:form id="newBuildingForm">
-					<div>
-						<p:panelGrid columns="2" styleClass="newBuildingGrid">
-							<p:column>
-								<p:outputLabel for="newBuildingName" value="Name:"></p:outputLabel>
-							</p:column>
-							<p:column>
-								<p:inputText id="newBuildingName" required="true" value="#{analysisBean.newBuilding.name}"></p:inputText>
-							</p:column>
-							<p:column>
-								<p:outputLabel for="newBuildingLocation" value="Location"></p:outputLabel>
-							</p:column>
-							<p:column>
-								<p:inputText id="newBuildingLocation" value="#{analysisBean.newBuilding.location}" required="true"></p:inputText>
-							</p:column>
-						</p:panelGrid>
-						<br/>
-						<div align="center">
-							<p:commandButton action="#{analysisBean.createBuilding}" ajax="true" update="analysisForm" 
-										styleClass="loginFormButton" value="Create"
-										onstart="document.body.style.cursor='wait'"
-										oncomplete="document.body.style.cursor='default'; 
+		</div>
+		<ui:include src="./general/footer.xhtml" />
+		<p:dialog widgetVar="newBuildingPopup" id="newBuildingPopup"
+			style="z-index: 1002 !important" modal="true"
+			position="center center" draggable="false" dynamic="true"
+			closable="true" header="Add New Building" closeOnEscape="true"
+			resizable="false">
+			<h:form id="newBuildingForm">
+				<div>
+					<p:panelGrid columns="2" styleClass="newBuildingGrid">
+						<p:column>
+							<p:outputLabel for="newBuildingName" value="Name:"></p:outputLabel>
+						</p:column>
+						<p:column>
+							<p:inputText id="newBuildingName" required="true"
+								value="#{analysisBean.newBuilding.name}"></p:inputText>
+						</p:column>
+						<p:column>
+							<p:outputLabel for="newBuildingLocation" value="Location"></p:outputLabel>
+						</p:column>
+						<p:column>
+							<p:inputText id="newBuildingLocation"
+								value="#{analysisBean.newBuilding.location}" required="true"></p:inputText>
+						</p:column>
+					</p:panelGrid>
+					<br />
+					<div align="center">
+						<p:commandButton action="#{analysisBean.createBuilding}"
+							ajax="true" update="analysisForm" styleClass="loginFormButton"
+							value="Create" onstart="document.body.style.cursor='wait'"
+							oncomplete="document.body.style.cursor='default'; 
 													PF('newBuildingPopup').hide();
 													PF('successPanelnewBuildingPopup').show();"></p:commandButton>
-						</div>
 					</div>
-				</h:form>
-			</p:dialog>
-			<p:dialog widgetVar="newDivisionPopup" id="newDivisionPopup"
-				modal="true" position="center center" draggable="false"
-				closable="true" header="Add New Division" closeOnEscape="true" dynamic="true"
-				styleClass="logoClass" resizable="false">
-				<h:form id="newDivisionFormId">
-					<div class="newBuildingClass">
-						<p:panelGrid columns="2" styleClass="successGrid">
-							<p:column>
-								<p:outputLabel rendered="#{not empty analysisBean.parentDivisionSelected}" />
-							</p:column>
-							<p:column>
-								<p:outputLabel rendered="#{not empty analysisBean.parentDivisionSelected}" value="#{analysisBean.parentDivisionSelected.data.name}"/>
-							</p:column>
-							<p:column>
-								<p:outputLabel for="newDivisionName" value="Name:"></p:outputLabel>
-							</p:column>
-							<p:column>
-								<p:inputText id="newDivisionName" required="true" value="#{analysisBean.newDivision.name}"></p:inputText>
-							</p:column>
-						</p:panelGrid>
-						<br/>
-						<div align="center">
-							<p:commandButton action="#{analysisBean.createDivision}" ajax="true" update="analysisForm" 
-										styleClass="signButton" value="Create"
-										oncomplete="PF('newDivisionPopup').hide();
+				</div>
+			</h:form>
+		</p:dialog>
+		<p:dialog widgetVar="newDivisionPopup" id="newDivisionPopup"
+			modal="true" position="center center" draggable="false"
+			closable="true" header="Add New Division" closeOnEscape="true"
+			dynamic="true" styleClass="logoClass" resizable="false">
+			<h:form id="newDivisionFormId">
+				<div class="newBuildingClass">
+					<p:panelGrid columns="2" styleClass="successGrid">
+						<p:column>
+							<p:outputLabel
+								rendered="#{not empty analysisBean.parentDivisionSelected}" />
+						</p:column>
+						<p:column>
+							<p:outputLabel
+								rendered="#{not empty analysisBean.parentDivisionSelected}"
+								value="#{analysisBean.parentDivisionSelected.data.name}" />
+						</p:column>
+						<p:column>
+							<p:outputLabel for="newDivisionName" value="Name:"></p:outputLabel>
+						</p:column>
+						<p:column>
+							<p:inputText id="newDivisionName" required="true"
+								value="#{analysisBean.newDivision.name}"></p:inputText>
+						</p:column>
+					</p:panelGrid>
+					<br />
+					<div align="center">
+						<p:commandButton action="#{analysisBean.createDivision}"
+							ajax="true" update="analysisForm" styleClass="signButton"
+							value="Create"
+							oncomplete="PF('newDivisionPopup').hide();
 												    PF('successPanelnewDivisionPopup').show();"></p:commandButton>
-						</div>
 					</div>
-				</h:form>
-			</p:dialog>
-			<p:dialog widgetVar="newAnalyzerPopup" id="newAnalyzerPopup"
-			modal="true" position="center center" draggable="false" 
+				</div>
+			</h:form>
+		</p:dialog>
+		<p:dialog widgetVar="newAnalyzerPopup" id="newAnalyzerPopup"
+			modal="true" position="center center" draggable="false"
 			closable="true" header="Add New Analyzer" closeOnEscape="true"
 			styleClass="logoClass" resizable="false">
-				<h:form id="newAnalyzerFormId">
-					<div class="newBuildingClass">
-						<p:panelGrid columns="2" styleClass="successGrid">
-							<p:column>
-								<p:outputLabel for="newAnalyzerName" value="CodeName:"></p:outputLabel>
-							</p:column>
-							<p:column>
-								<p:inputText id="newAnalyzerName" required="true"
-									value="#{analysisBean.newAnalyzer.codeName}"></p:inputText>
-							</p:column>
-							<p:column>
-								<p:outputLabel for="newAnalyzerName" value="Meters:"></p:outputLabel>
-							</p:column>
-							<p:column>
-								<p:selectManyMenu id="analyzersMeters" filter="false" styleClass="analyzersMeters"
-									value="#{analysisBean.newAnalyzer.analyzerMeters}"
-									var="analyzerMeterSel" showCheckbox="true">
-									<f:selectItems value="#{analysisBean.analyzerMeterValues}" var="analyzerMeter"
-										itemLabel="#{analyzerMeter.label}" itemValue="#{analyzerMeter}" />
-									<p:column>
-						                <h:outputText style="font-size: 12px" value="#{analyzerMeterSel.label}" />
-						            </p:column>
-								</p:selectManyMenu>
-							</p:column>
-						</p:panelGrid>
-						<br />
-						<div align="center">
-							<p:commandButton action="#{analysisBean.createAnalyzer(buildingId)}"
-								ajax="true" update="analysisForm"
-								styleClass="signButton" value="Create"
-								onstart="document.body.style.cursor='wait'"
-								oncomplete="document.body.style.cursor='default'; 
+			<h:form id="newAnalyzerFormId">
+				<div class="newBuildingClass">
+					<p:panelGrid columns="2" styleClass="successGrid">
+						<p:column>
+							<p:outputLabel for="newAnalyzerName" value="CodeName:"></p:outputLabel>
+						</p:column>
+						<p:column>
+							<p:inputText id="newAnalyzerName" required="true"
+								value="#{analysisBean.newAnalyzer.codeName}"></p:inputText>
+						</p:column>
+						<p:column>
+							<p:outputLabel for="newAnalyzerName" value="Meters:"></p:outputLabel>
+						</p:column>
+						<p:column>
+							<p:selectManyMenu id="analyzersMeters" filter="false"
+								styleClass="analyzersMeters"
+								value="#{analysisBean.newAnalyzer.analyzerMeters}"
+								var="analyzerMeterSel" showCheckbox="true">
+								<f:selectItems value="#{analysisBean.analyzerMeterValues}"
+									var="analyzerMeter" itemLabel="#{analyzerMeter.label}"
+									itemValue="#{analyzerMeter}" />
+								<p:column>
+									<h:outputText style="font-size: 12px"
+										value="#{analyzerMeterSel.label}" />
+								</p:column>
+							</p:selectManyMenu>
+						</p:column>
+					</p:panelGrid>
+					<br />
+					<div align="center">
+						<p:commandButton
+							action="#{analysisBean.createAnalyzer(buildingId)}" ajax="true"
+							update="analysisForm" styleClass="signButton" value="Create"
+							onstart="document.body.style.cursor='wait'"
+							oncomplete="document.body.style.cursor='default'; 
 													PF('newAnalyzerPopup').hide();
 													PF('successPanelnewAnalyzerPopup').show();"></p:commandButton>
-						</div>
 					</div>
-				</h:form>
-			</p:dialog>
-			<p:dialog widgetVar="successPanelnewBuildingPopup" id="successPanelnewBuildingPopup" modal="true" draggable="false" closable="false" header="Done"
-				closeOnEscape="true" resizable="false" dynamic="true">
-				<h:form>
-					<div class="successDialogDiv">
-						<p:panelGrid columns="2" styleClass="successGrid">
-							<p:column>
-								<p:graphicImage value="${pageContext.request.contextPath}/resources/images/success.png"></p:graphicImage>
-							</p:column>
-							<p:column>
-								<p:outputLabel value="The Building has been created successfully!"></p:outputLabel>
-							</p:column>
-						</p:panelGrid>
-						<br />
-						<div align="center">
-							<p:commandButton type="submit" 
-								styleClass="signButton" 
-								ajax="false" 
-								value="OK" 
-								oncomplete="#{redirectBean.redirectTo('analysis.xhtml?faces-redirect=true')}">
-							</p:commandButton>
-						</div>
-					</div>
-				</h:form>
-			</p:dialog>
-			<p:dialog widgetVar="successPanelnewDivisionPopup" id="successPanelnewDivisionPopup" modal="true" draggable="false" closable="false" header="Done"
-				closeOnEscape="true" resizable="false" dynamic="true">
-				<h:form>
-					<div class="successDialogDiv">
-						<p:panelGrid columns="2" styleClass="successGrid">
-							<p:column>
-								<p:graphicImage value="${pageContext.request.contextPath}/resources/images/success.png"></p:graphicImage>
-							</p:column>
-							<p:column>
-								<p:outputLabel value="The Division has been created successfully!"></p:outputLabel>
-							</p:column>
-						</p:panelGrid>
-						<br />
-						<div align="center">
-							<p:commandButton type="submit" 
-								styleClass="signButton" 
-								ajax="false" 
-								value="OK" 
-								oncomplete="#{redirectBean.redirectTo('analysis.xhtml?faces-redirect=true')}">
-							</p:commandButton>
-						</div>
-					</div>
-				</h:form>
-			</p:dialog>
-			<p:dialog widgetVar="successPanelnewAnalyzerPopup" id="successPanelnewAnalyzerPopup" modal="true" draggable="false" closable="false" header="Done"
-				closeOnEscape="true" resizable="false" dynamic="true">
-				<h:form>
-					<div class="successDialogDiv">
-						<p:panelGrid columns="2" styleClass="successGrid">
-							<p:column>
-								<p:graphicImage value="${pageContext.request.contextPath}/resources/images/success.png"></p:graphicImage>
-							</p:column>
-							<p:column>
-								<p:outputLabel value="The Analyzer has been created successfully!"></p:outputLabel>
-							</p:column>
-						</p:panelGrid>
-						<br />
-						<div align="center">
-							<p:commandButton type="submit" 
-								styleClass="signButton" 
-								ajax="false" 
-								value="OK" 
-								oncomplete="#{redirectBean.redirectTo('analysis.xhtml?faces-redirect=true')}">
-							</p:commandButton>
-						</div>
-					</div>
-				</h:form>
-			</p:dialog>
-			<p:dialog widgetVar="metersPanel" id="metersPanel" modal="true" draggable="false" closable="true" header="Meters List"
-				closeOnEscape="true" resizable="false" dynamic="true" width="400" height="100%">
-				<h:form id="metersForm">
-					<p:dataTable var="analyzerMeter" value="#{analysisBean.selectedAnalyzer.analyzerMeters}" rowKey="#{analyzerMeter}">
-						<p:column headerText="Label">
-							<p:outputLabel value="#{analyzerMeter.label}"/>
+				</div>
+			</h:form>
+		</p:dialog>
+		<p:dialog widgetVar="successPanelnewBuildingPopup"
+			id="successPanelnewBuildingPopup" modal="true" draggable="false"
+			closable="false" header="Done" closeOnEscape="true" resizable="false"
+			dynamic="true">
+			<h:form>
+				<div class="successDialogDiv">
+					<p:panelGrid columns="2" styleClass="successGrid">
+						<p:column>
+							<p:graphicImage
+								value="${pageContext.request.contextPath}/resources/images/success.png"></p:graphicImage>
 						</p:column>
-						<p:column headerText="Unit">
-							<p:outputLabel value="#{analyzerMeter.unit}"/>
+						<p:column>
+							<p:outputLabel
+								value="The Building has been created successfully!"></p:outputLabel>
 						</p:column>
-					</p:dataTable>
-				</h:form>
-			</p:dialog>
+					</p:panelGrid>
+					<br />
+					<div align="center">
+						<p:commandButton type="submit" styleClass="signButton"
+							ajax="false" value="OK"
+							oncomplete="#{redirectBean.redirectTo('analysis.xhtml?faces-redirect=true')}">
+						</p:commandButton>
+					</div>
+				</div>
+			</h:form>
+		</p:dialog>
+		<p:dialog widgetVar="successPanelnewDivisionPopup"
+			id="successPanelnewDivisionPopup" modal="true" draggable="false"
+			closable="false" header="Done" closeOnEscape="true" resizable="false"
+			dynamic="true">
+			<h:form>
+				<div class="successDialogDiv">
+					<p:panelGrid columns="2" styleClass="successGrid">
+						<p:column>
+							<p:graphicImage
+								value="${pageContext.request.contextPath}/resources/images/success.png"></p:graphicImage>
+						</p:column>
+						<p:column>
+							<p:outputLabel
+								value="The Division has been created successfully!"></p:outputLabel>
+						</p:column>
+					</p:panelGrid>
+					<br />
+					<div align="center">
+						<p:commandButton type="submit" styleClass="signButton"
+							ajax="false" value="OK"
+							oncomplete="#{redirectBean.redirectTo('analysis.xhtml?faces-redirect=true')}">
+						</p:commandButton>
+					</div>
+				</div>
+			</h:form>
+		</p:dialog>
+		<p:dialog widgetVar="successPanelnewAnalyzerPopup"
+			id="successPanelnewAnalyzerPopup" modal="true" draggable="false"
+			closable="false" header="Done" closeOnEscape="true" resizable="false"
+			dynamic="true">
+			<h:form>
+				<div class="successDialogDiv">
+					<p:panelGrid columns="2" styleClass="successGrid">
+						<p:column>
+							<p:graphicImage
+								value="${pageContext.request.contextPath}/resources/images/success.png"></p:graphicImage>
+						</p:column>
+						<p:column>
+							<p:outputLabel
+								value="The Analyzer has been created successfully!"></p:outputLabel>
+						</p:column>
+					</p:panelGrid>
+					<br />
+					<div align="center">
+						<p:commandButton type="submit" styleClass="signButton"
+							ajax="false" value="OK"
+							oncomplete="#{redirectBean.redirectTo('analysis.xhtml?faces-redirect=true')}">
+						</p:commandButton>
+					</div>
+				</div>
+			</h:form>
+		</p:dialog>
+		<p:dialog widgetVar="metersPanel" id="metersPanel" modal="true"
+			draggable="false" closable="true" header="Meters List"
+			closeOnEscape="true" resizable="false" dynamic="true" width="400"
+			height="100%">
+			<h:form id="metersForm">
+				<p:dataTable var="analyzerMeter"
+					value="#{analysisBean.selectedAnalyzer.analyzerMeters}"
+					rowKey="#{analyzerMeter}">
+					<p:column headerText="Label">
+						<p:outputLabel value="#{analyzerMeter.label}" />
+					</p:column>
+					<p:column headerText="Unit">
+						<p:outputLabel value="#{analyzerMeter.unit}" />
+					</p:column>
+				</p:dataTable>
+			</h:form>
+		</p:dialog>
 	</ui:define>
 </ui:composition>

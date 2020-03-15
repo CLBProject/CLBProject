@@ -137,23 +137,23 @@ public class AnalysisBeanCache {
 
 	}
 
-	public List<AnalyzerRegistryGui> getMonthRegistriesFromAnalyzer(String analyzerId, int month, int year) {
-		return getMonthRegistriesFromAnalyzerWithShift(analyzerId, month, year, 0);
+	public List<AnalyzerRegistryGui> getMonthRegistriesFromAnalyzer(String analyzerId, Date date) {
+		return getMonthRegistriesFromAnalyzerWithShift(analyzerId, date, 0);
 	}
 
-	public List<AnalyzerRegistryGui> getMonthRegistriesFromAnalyzerWithShift(String analyzerId, int month, int year, int monthShift) {
+	public List<AnalyzerRegistryGui> getMonthRegistriesFromAnalyzerWithShift(String analyzerId, Date date, int monthShift) {
 
 		Map<String,List<AnalyzerRegistryGui>> months = monthCache.get(analyzerId);
-		final String monthKey = DateUtils.getInstance().convertDateToSimpleMonthFormat(month,year,monthShift);
+		final String monthKey = DateUtils.getInstance().convertDateToSimpleMonthFormat(date,monthShift);
 
 		if(months == null) {
 			List<AnalyzerRegistryGui> monthRegistries;
 			if(monthShift == 0) {
-				monthRegistries =  analyzerDataService.getMonthRegistriesFromAnalyzer(analyzerId, month, year)
+				monthRegistries =  analyzerDataService.getMonthRegistriesFromAnalyzer(analyzerId, date)
 													.stream().map(AnalyzerRegistryGui::new).collect(Collectors.toList());
 			}
 			else {
-				monthRegistries = analyzerDataService.getMonthRegistriesFromAnalyzerWithShift(analyzerId, month, year, monthShift)
+				monthRegistries = analyzerDataService.getMonthRegistriesFromAnalyzerWithShift(analyzerId, date, monthShift)
 										.stream().map(AnalyzerRegistryGui::new).collect(Collectors.toList());
 			}
 			
@@ -167,11 +167,11 @@ public class AnalysisBeanCache {
 
 			if(monthRegistriesFromMap == null) {
 				if(monthShift == 0) {
-					monthRegistriesFromMap =  analyzerDataService.getMonthRegistriesFromAnalyzer(analyzerId, month, year)
+					monthRegistriesFromMap =  analyzerDataService.getMonthRegistriesFromAnalyzer(analyzerId, date)
 													.stream().map(AnalyzerRegistryGui::new).collect(Collectors.toList());
 				}
 				else {
-					monthRegistriesFromMap = analyzerDataService.getMonthRegistriesFromAnalyzerWithShift(analyzerId, month, year, monthShift)
+					monthRegistriesFromMap = analyzerDataService.getMonthRegistriesFromAnalyzerWithShift(analyzerId, date, monthShift)
 																.stream().map(AnalyzerRegistryGui::new).collect(Collectors.toList());
 				}
 				months.put(monthKey, monthRegistriesFromMap);

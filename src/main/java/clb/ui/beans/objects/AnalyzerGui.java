@@ -41,6 +41,11 @@ public class AnalyzerGui {
 		
 		this.analyzerMeters.add(analyzerMeter);
 	}
+	
+	public boolean hasMeters() {
+		return this.analyzerMeters != null && this.analyzerMeters.size() > 0; 
+	}
+	
 
 	public Set<AnalyzerMeterValues> getAnalyzerMeters() {
 		return analyzerMeters;
@@ -73,6 +78,7 @@ public class AnalyzerGui {
 	public void setRegistriesDates(List<Date> registriesDates) {
 		this.registriesDates = registriesDates;
 	}
-	
+
+
 	
 }

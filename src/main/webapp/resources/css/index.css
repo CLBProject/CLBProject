@@ -1,875 +1,3 @@
-@import url("https://fonts.googleapis.com/css?family=Open+Sans");
-
-@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro");
-/* line 7, ../scss/variables/_grid.scss */
-.p-grid {
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-	-ms-flex-wrap: wrap;
-	flex-wrap: wrap;
-	margin-right: -0.5em;
-	margin-left: -0.5em;
-	margin-top: -0.5em;
-}
-
-/* line 18, ../scss/variables/_grid.scss */
-.p-nogutter {
-	margin-right: 0;
-	margin-left: 0;
-	margin-top: 0;
-}
-
-/* line 24, ../scss/variables/_grid.scss */
-.p-nogutter>.p-col, .p-nogutter>[class*="p-col-"] {
-	padding: 0;
-}
-
-/* line 29, ../scss/variables/_grid.scss */
-.p-dir-rev {
-	-webkit-box-orient: horizontal;
-	-webkit-box-direction: reverse;
-	-ms-flex-direction: row-reverse;
-	flex-direction: row-reverse;
-}
-
-/* line 36, ../scss/variables/_grid.scss */
-.p-dir-col {
-	-webkit-box-orient: vertical;
-	-webkit-box-direction: normal;
-	-ms-flex-direction: column;
-	flex-direction: column;
-}
-
-/* line 43, ../scss/variables/_grid.scss */
-.p-dir-col-rev {
-	-webkit-box-orient: vertical;
-	-webkit-box-direction: reverse;
-	-ms-flex-direction: column-reverse;
-	flex-direction: column-reverse;
-}
-
-/* line 50, ../scss/variables/_grid.scss */
-.p-justify-start {
-	-webkit-box-pack: start;
-	-ms-flex-pack: start;
-	justify-content: flex-start;
-}
-
-/* line 56, ../scss/variables/_grid.scss */
-.p-justify-end {
-	-webkit-box-pack: end;
-	-ms-flex-pack: end;
-	justify-content: flex-end;
-}
-
-/* line 62, ../scss/variables/_grid.scss */
-.p-justify-center {
-	-webkit-box-pack: center;
-	-ms-flex-pack: center;
-	justify-content: center;
-}
-
-/* line 68, ../scss/variables/_grid.scss */
-.p-justify-between {
-	-webkit-box-pack: justify;
-	-ms-flex-pack: justify;
-	justify-content: space-between;
-}
-
-/* line 74, ../scss/variables/_grid.scss */
-.p-justify-around {
-	-ms-flex-pack: distribute;
-	justify-content: space-around;
-}
-
-/* line 79, ../scss/variables/_grid.scss */
-.p-justify-even {
-	-webkit-box-pack: space-evenly;
-	-ms-flex-pack: space-evenly;
-	justify-content: space-evenly;
-}
-
-/* line 85, ../scss/variables/_grid.scss */
-.p-align-start {
-	-webkit-box-align: start;
-	-ms-flex-align: start;
-	align-items: flex-start;
-}
-
-/* line 91, ../scss/variables/_grid.scss */
-.p-align-end {
-	-webkit-box-align: end;
-	-ms-flex-align: end;
-	align-items: flex-end;
-}
-
-/* line 97, ../scss/variables/_grid.scss */
-.p-align-center {
-	-webkit-box-align: center;
-	-ms-flex-align: center;
-	align-items: center;
-}
-
-/* line 103, ../scss/variables/_grid.scss */
-.p-align-baseline {
-	-webkit-box-align: baseline;
-	-ms-flex-align: baseline;
-	align-items: baseline;
-}
-
-/* line 109, ../scss/variables/_grid.scss */
-.p-align-stretch {
-	-webkit-box-align: stretch;
-	-ms-flex-align: stretch;
-	align-items: stretch;
-}
-
-/* line 115, ../scss/variables/_grid.scss */
-.vertical-container {
-	margin: 5vw;
-	height: 50vh;
-}
-
-/* line 120, ../scss/variables/_grid.scss */
-.p-col {
-	-webkit-box-flex: 1;
-	-ms-flex-positive: 1;
-	flex-grow: 1;
-	-ms-flex-preferred-size: 0;
-	flex-basis: 0;
-	padding: 0.5em;
-}
-
-/* line 129, ../scss/variables/_grid.scss */
-.p-col-fixed {
-	-webkit-box-flex: 0;
-	-ms-flex: 0 0 auto;
-	flex: 0 0 auto;
-	padding: 0.5em;
-}
-
-/* line 136, ../scss/variables/_grid.scss */
-.p-col-align-start {
-	-ms-flex-item-align: start;
-	align-self: flex-start;
-}
-
-/* line 141, ../scss/variables/_grid.scss */
-.p-col-align-end {
-	-ms-flex-item-align: end;
-	align-self: flex-end;
-}
-
-/* line 146, ../scss/variables/_grid.scss */
-.p-col-align-center {
-	-ms-flex-item-align: center;
-	-ms-grid-row-align: center;
-	align-self: center;
-}
-
-/* line 152, ../scss/variables/_grid.scss */
-.p-col-align-baseline {
-	-ms-flex-item-align: baseline;
-	align-self: baseline;
-}
-
-/* line 157, ../scss/variables/_grid.scss */
-.p-col-align-stretch {
-	-ms-flex-item-align: stretch;
-	-ms-grid-row-align: stretch;
-	align-self: stretch;
-}
-
-/* line 163, ../scss/variables/_grid.scss */
-.p-col-1, .p-col-2, .p-col-3, .p-col-4, .p-col-5, .p-col-6, .p-col-7,
-	.p-col-8, .p-col-9, .p-col-10, .p-col-11, .p-col-12 {
-	-webkit-box-flex: 0;
-	-ms-flex: 0 0 auto;
-	flex: 0 0 auto;
-	padding: 0.5em;
-}
-
-/* line 181, ../scss/variables/_grid.scss */
-.p-col-1 {
-	width: 8.3333%;
-}
-
-/* line 185, ../scss/variables/_grid.scss */
-.p-col-2 {
-	width: 16.6667%;
-}
-
-/* line 189, ../scss/variables/_grid.scss */
-.p-col-3 {
-	width: 25%;
-}
-
-/* line 193, ../scss/variables/_grid.scss */
-.p-col-4 {
-	width: 33.3333%;
-}
-
-/* line 197, ../scss/variables/_grid.scss */
-.p-col-5 {
-	width: 41.6667%;
-}
-
-/* line 201, ../scss/variables/_grid.scss */
-.p-col-6 {
-	width: 50%;
-}
-
-/* line 205, ../scss/variables/_grid.scss */
-.p-col-7 {
-	width: 58.3333%;
-}
-
-/* line 209, ../scss/variables/_grid.scss */
-.p-col-8 {
-	width: 66.6667%;
-}
-
-/* line 213, ../scss/variables/_grid.scss */
-.p-col-9 {
-	width: 75%;
-}
-
-/* line 217, ../scss/variables/_grid.scss */
-.p-col-10 {
-	width: 83.3333%;
-}
-
-/* line 221, ../scss/variables/_grid.scss */
-.p-col-11 {
-	width: 91.6667%;
-}
-
-/* line 225, ../scss/variables/_grid.scss */
-.p-col-12 {
-	width: 100%;
-}
-
-/* line 229, ../scss/variables/_grid.scss */
-.p-offset-12 {
-	margin-left: 100%;
-}
-
-/* line 233, ../scss/variables/_grid.scss */
-.p-offset-11 {
-	margin-left: 91.66666667%;
-}
-
-/* line 237, ../scss/variables/_grid.scss */
-.p-offset-10 {
-	margin-left: 83.33333333%;
-}
-
-/* line 241, ../scss/variables/_grid.scss */
-.p-offset-9 {
-	margin-left: 75%;
-}
-
-/* line 245, ../scss/variables/_grid.scss */
-.p-offset-8 {
-	margin-left: 66.66666667%;
-}
-
-/* line 249, ../scss/variables/_grid.scss */
-.p-offset-7 {
-	margin-left: 58.33333333%;
-}
-
-/* line 253, ../scss/variables/_grid.scss */
-.p-offset-6 {
-	margin-left: 50%;
-}
-
-/* line 257, ../scss/variables/_grid.scss */
-.p-offset-5 {
-	margin-left: 41.66666667%;
-}
-
-/* line 261, ../scss/variables/_grid.scss */
-.p-offset-4 {
-	margin-left: 33.33333333%;
-}
-
-/* line 265, ../scss/variables/_grid.scss */
-.p-offset-3 {
-	margin-left: 25%;
-}
-
-/* line 269, ../scss/variables/_grid.scss */
-.p-offset-2 {
-	margin-left: 16.66666667%;
-}
-
-/* line 273, ../scss/variables/_grid.scss */
-.p-offset-1 {
-	margin-left: 8.33333333%;
-}
-
-/* line 277, ../scss/variables/_grid.scss */
-.p-offset-0 {
-	margin-left: 0%;
-}
-
-/* line 281, ../scss/variables/_grid.scss */
-.p-sm-1, .p-sm-2, .p-sm-3, .p-sm-4, .p-sm-5, .p-sm-6, .p-sm-7, .p-sm-8,
-	.p-sm-9, .p-sm-10, .p-sm-11, .p-sm-12, .p-md-1, .p-md-2, .p-md-3,
-	.p-md-4, .p-md-5, .p-md-6, .p-md-7, .p-md-8, .p-md-9, .p-md-10,
-	.p-md-11, .p-md-12, .p-lg-1, .p-lg-2, .p-lg-3, .p-lg-4, .p-lg-5,
-	.p-lg-6, .p-lg-7, .p-lg-8, .p-lg-9, .p-lg-10, .p-lg-11, .p-lg-12,
-	.p-xl-1, .p-xl-2, .p-xl-3, .p-xl-4, .p-xl-5, .p-xl-6, .p-xl-7, .p-xl-8,
-	.p-xl-9, .p-xl-10, .p-xl-11, .p-xl-12 {
-	padding: 0.5em;
-}
-
-/* line 332, ../scss/variables/_grid.scss */
-.p-col-nogutter {
-	padding: 0;
-}
-
-@media screen and (min-width: 576px) {
-	/* line 338, ../scss/variables/_grid.scss */
-	.p-sm-1, .p-sm-2, .p-sm-3, .p-sm-4, .p-sm-5, .p-sm-6, .p-sm-7, .p-sm-8,
-		.p-sm-9, .p-sm-10, .p-sm-11, .p-sm-12 {
-		-webkit-box-flex: 0;
-		-ms-flex: 0 0 auto;
-		flex: 0 0 auto;
-	}
-
-	/* line 355, ../scss/variables/_grid.scss */
-	.p-sm-1 {
-		width: 8.3333%;
-	}
-
-	/* line 359, ../scss/variables/_grid.scss */
-	.p-sm-2 {
-		width: 16.6667%;
-	}
-
-	/* line 363, ../scss/variables/_grid.scss */
-	.p-sm-3 {
-		width: 25%;
-	}
-
-	/* line 367, ../scss/variables/_grid.scss */
-	.p-sm-4 {
-		width: 33.3333%;
-	}
-
-	/* line 371, ../scss/variables/_grid.scss */
-	.p-sm-5 {
-		width: 41.6667%;
-	}
-
-	/* line 375, ../scss/variables/_grid.scss */
-	.p-sm-6 {
-		width: 50%;
-	}
-
-	/* line 379, ../scss/variables/_grid.scss */
-	.p-sm-7 {
-		width: 58.3333%;
-	}
-
-	/* line 383, ../scss/variables/_grid.scss */
-	.p-sm-8 {
-		width: 66.6667%;
-	}
-
-	/* line 387, ../scss/variables/_grid.scss */
-	.p-sm-9 {
-		width: 75%;
-	}
-
-	/* line 391, ../scss/variables/_grid.scss */
-	.p-sm-10 {
-		width: 83.3333%;
-	}
-
-	/* line 395, ../scss/variables/_grid.scss */
-	.p-sm-11 {
-		width: 91.6667%;
-	}
-
-	/* line 399, ../scss/variables/_grid.scss */
-	.p-sm-12 {
-		width: 100%;
-	}
-
-	/* line 403, ../scss/variables/_grid.scss */
-	.p-sm-offset-12 {
-		margin-left: 100%;
-	}
-
-	/* line 407, ../scss/variables/_grid.scss */
-	.p-sm-offset-11 {
-		margin-left: 91.66666667%;
-	}
-
-	/* line 411, ../scss/variables/_grid.scss */
-	.p-sm-offset-10 {
-		margin-left: 83.33333333%;
-	}
-
-	/* line 415, ../scss/variables/_grid.scss */
-	.p-sm-offset-9 {
-		margin-left: 75%;
-	}
-
-	/* line 419, ../scss/variables/_grid.scss */
-	.p-sm-offset-8 {
-		margin-left: 66.66666667%;
-	}
-
-	/* line 423, ../scss/variables/_grid.scss */
-	.p-sm-offset-7 {
-		margin-left: 58.33333333%;
-	}
-
-	/* line 427, ../scss/variables/_grid.scss */
-	.p-sm-offset-6 {
-		margin-left: 50%;
-	}
-
-	/* line 431, ../scss/variables/_grid.scss */
-	.p-sm-offset-5 {
-		margin-left: 41.66666667%;
-	}
-
-	/* line 435, ../scss/variables/_grid.scss */
-	.p-sm-offset-4 {
-		margin-left: 33.33333333%;
-	}
-
-	/* line 439, ../scss/variables/_grid.scss */
-	.p-sm-offset-3 {
-		margin-left: 25%;
-	}
-
-	/* line 443, ../scss/variables/_grid.scss */
-	.p-sm-offset-2 {
-		margin-left: 16.66666667%;
-	}
-
-	/* line 447, ../scss/variables/_grid.scss */
-	.p-sm-offset-1 {
-		margin-left: 8.33333333%;
-	}
-
-	/* line 451, ../scss/variables/_grid.scss */
-	.p-sm-offset-0 {
-		margin-left: 0%;
-	}
-}
-
-@media screen and (min-width: 768px) {
-	/* line 458, ../scss/variables/_grid.scss */
-	.p-md-1, .p-md-2, .p-md-3, .p-md-4, .p-md-5, .p-md-6, .p-md-7, .p-md-8,
-		.p-md-9, .p-md-10, .p-md-11, .p-md-12 {
-		-webkit-box-flex: 0;
-		-ms-flex: 0 0 auto;
-		flex: 0 0 auto;
-	}
-
-	/* line 475, ../scss/variables/_grid.scss */
-	.p-md-1 {
-		width: 8.3333%;
-	}
-
-	/* line 479, ../scss/variables/_grid.scss */
-	.p-md-2 {
-		width: 16.6667%;
-	}
-
-	/* line 483, ../scss/variables/_grid.scss */
-	.p-md-3 {
-		width: 25%;
-	}
-
-	/* line 487, ../scss/variables/_grid.scss */
-	.p-md-4 {
-		width: 33.3333%;
-	}
-
-	/* line 491, ../scss/variables/_grid.scss */
-	.p-md-5 {
-		width: 41.6667%;
-	}
-
-	/* line 495, ../scss/variables/_grid.scss */
-	.p-md-6 {
-		width: 50%;
-	}
-
-	/* line 499, ../scss/variables/_grid.scss */
-	.p-md-7 {
-		width: 58.3333%;
-	}
-
-	/* line 503, ../scss/variables/_grid.scss */
-	.p-md-8 {
-		width: 66.6667%;
-	}
-
-	/* line 507, ../scss/variables/_grid.scss */
-	.p-md-9 {
-		width: 75%;
-	}
-
-	/* line 511, ../scss/variables/_grid.scss */
-	.p-md-10 {
-		width: 83.3333%;
-	}
-
-	/* line 515, ../scss/variables/_grid.scss */
-	.p-md-11 {
-		width: 91.6667%;
-	}
-
-	/* line 519, ../scss/variables/_grid.scss */
-	.p-md-12 {
-		width: 100%;
-	}
-
-	/* line 523, ../scss/variables/_grid.scss */
-	.p-md-offset-12 {
-		margin-left: 100%;
-	}
-
-	/* line 527, ../scss/variables/_grid.scss */
-	.p-md-offset-11 {
-		margin-left: 91.66666667%;
-	}
-
-	/* line 531, ../scss/variables/_grid.scss */
-	.p-md-offset-10 {
-		margin-left: 83.33333333%;
-	}
-
-	/* line 535, ../scss/variables/_grid.scss */
-	.p-md-offset-9 {
-		margin-left: 75%;
-	}
-
-	/* line 539, ../scss/variables/_grid.scss */
-	.p-md-offset-8 {
-		margin-left: 66.66666667%;
-	}
-
-	/* line 543, ../scss/variables/_grid.scss */
-	.p-md-offset-7 {
-		margin-left: 58.33333333%;
-	}
-
-	/* line 547, ../scss/variables/_grid.scss */
-	.p-md-offset-6 {
-		margin-left: 50%;
-	}
-
-	/* line 551, ../scss/variables/_grid.scss */
-	.p-md-offset-5 {
-		margin-left: 41.66666667%;
-	}
-
-	/* line 555, ../scss/variables/_grid.scss */
-	.p-md-offset-4 {
-		margin-left: 33.33333333%;
-	}
-
-	/* line 559, ../scss/variables/_grid.scss */
-	.p-md-offset-3 {
-		margin-left: 25%;
-	}
-
-	/* line 563, ../scss/variables/_grid.scss */
-	.p-md-offset-2 {
-		margin-left: 16.66666667%;
-	}
-
-	/* line 567, ../scss/variables/_grid.scss */
-	.p-md-offset-1 {
-		margin-left: 8.33333333%;
-	}
-
-	/* line 571, ../scss/variables/_grid.scss */
-	.p-md-offset-0 {
-		margin-left: 0%;
-	}
-}
-
-@media screen and (min-width: 992px) {
-	/* line 578, ../scss/variables/_grid.scss */
-	.p-lg-1, .p-lg-2, .p-lg-3, .p-lg-4, .p-lg-5, .p-lg-6, .p-lg-7, .p-lg-8,
-		.p-lg-9, .p-lg-10, .p-lg-11, .p-lg-12 {
-		-webkit-box-flex: 0;
-		-ms-flex: 0 0 auto;
-		flex: 0 0 auto;
-	}
-
-	/* line 595, ../scss/variables/_grid.scss */
-	.p-lg-1 {
-		width: 8.3333%;
-	}
-
-	/* line 599, ../scss/variables/_grid.scss */
-	.p-lg-2 {
-		width: 16.6667%;
-	}
-
-	/* line 603, ../scss/variables/_grid.scss */
-	.p-lg-3 {
-		width: 25%;
-	}
-
-	/* line 607, ../scss/variables/_grid.scss */
-	.p-lg-4 {
-		width: 33.3333%;
-	}
-
-	/* line 611, ../scss/variables/_grid.scss */
-	.p-lg-5 {
-		width: 41.6667%;
-	}
-
-	/* line 615, ../scss/variables/_grid.scss */
-	.p-lg-6 {
-		width: 50%;
-	}
-
-	/* line 619, ../scss/variables/_grid.scss */
-	.p-lg-7 {
-		width: 58.3333%;
-	}
-
-	/* line 623, ../scss/variables/_grid.scss */
-	.p-lg-8 {
-		width: 66.6667%;
-	}
-
-	/* line 627, ../scss/variables/_grid.scss */
-	.p-lg-9 {
-		width: 75%;
-	}
-
-	/* line 631, ../scss/variables/_grid.scss */
-	.p-lg-10 {
-		width: 83.3333%;
-	}
-
-	/* line 635, ../scss/variables/_grid.scss */
-	.p-lg-11 {
-		width: 91.6667%;
-	}
-
-	/* line 639, ../scss/variables/_grid.scss */
-	.p-lg-12 {
-		width: 100%;
-	}
-
-	/* line 643, ../scss/variables/_grid.scss */
-	.p-lg-offset-12 {
-		margin-left: 100%;
-	}
-
-	/* line 647, ../scss/variables/_grid.scss */
-	.p-lg-offset-11 {
-		margin-left: 91.66666667%;
-	}
-
-	/* line 651, ../scss/variables/_grid.scss */
-	.p-lg-offset-10 {
-		margin-left: 83.33333333%;
-	}
-
-	/* line 655, ../scss/variables/_grid.scss */
-	.p-lg-offset-9 {
-		margin-left: 75%;
-	}
-
-	/* line 659, ../scss/variables/_grid.scss */
-	.p-lg-offset-8 {
-		margin-left: 66.66666667%;
-	}
-
-	/* line 663, ../scss/variables/_grid.scss */
-	.p-lg-offset-7 {
-		margin-left: 58.33333333%;
-	}
-
-	/* line 667, ../scss/variables/_grid.scss */
-	.p-lg-offset-6 {
-		margin-left: 50%;
-	}
-
-	/* line 671, ../scss/variables/_grid.scss */
-	.p-lg-offset-5 {
-		margin-left: 41.66666667%;
-	}
-
-	/* line 675, ../scss/variables/_grid.scss */
-	.p-lg-offset-4 {
-		margin-left: 33.33333333%;
-	}
-
-	/* line 679, ../scss/variables/_grid.scss */
-	.p-lg-offset-3 {
-		margin-left: 25%;
-	}
-
-	/* line 683, ../scss/variables/_grid.scss */
-	.p-lg-offset-2 {
-		margin-left: 16.66666667%;
-	}
-
-	/* line 687, ../scss/variables/_grid.scss */
-	.p-lg-offset-1 {
-		margin-left: 8.33333333%;
-	}
-
-	/* line 691, ../scss/variables/_grid.scss */
-	.p-lg-offset-0 {
-		margin-left: 0%;
-	}
-}
-
-@media screen and (min-width: 1200px) {
-	/* line 698, ../scss/variables/_grid.scss */
-	.p-xl-1, .p-xl-2, .p-xl-3, .p-xl-4, .p-xl-5, .p-xl-6, .p-xl-7, .p-xl-8,
-		.p-xl-9, .p-xl-10, .p-xl-11, .p-xl-12 {
-		-webkit-box-flex: 0;
-		-ms-flex: 0 0 auto;
-		flex: 0 0 auto;
-	}
-
-	/* line 715, ../scss/variables/_grid.scss */
-	.p-xl-1 {
-		width: 8.3333%;
-	}
-
-	/* line 719, ../scss/variables/_grid.scss */
-	.p-xl-2 {
-		width: 16.6667%;
-	}
-
-	/* line 723, ../scss/variables/_grid.scss */
-	.p-xl-3 {
-		width: 25%;
-	}
-
-	/* line 727, ../scss/variables/_grid.scss */
-	.p-xl-4 {
-		width: 33.3333%;
-	}
-
-	/* line 731, ../scss/variables/_grid.scss */
-	.p-xl-5 {
-		width: 41.6667%;
-	}
-
-	/* line 735, ../scss/variables/_grid.scss */
-	.p-xl-6 {
-		width: 50%;
-	}
-
-	/* line 739, ../scss/variables/_grid.scss */
-	.p-xl-7 {
-		width: 58.3333%;
-	}
-
-	/* line 743, ../scss/variables/_grid.scss */
-	.p-xl-8 {
-		width: 66.6667%;
-	}
-
-	/* line 747, ../scss/variables/_grid.scss */
-	.p-xl-9 {
-		width: 75%;
-	}
-
-	/* line 751, ../scss/variables/_grid.scss */
-	.p-xl-10 {
-		width: 83.3333%;
-	}
-
-	/* line 755, ../scss/variables/_grid.scss */
-	.p-xl-11 {
-		width: 91.6667%;
-	}
-
-	/* line 759, ../scss/variables/_grid.scss */
-	.p-xl-12 {
-		width: 100%;
-	}
-
-	/* line 763, ../scss/variables/_grid.scss */
-	.p-xl-offset-12 {
-		margin-left: 100%;
-	}
-
-	/* line 767, ../scss/variables/_grid.scss */
-	.p-xl-offset-11 {
-		margin-left: 91.66666667%;
-	}
-
-	/* line 771, ../scss/variables/_grid.scss */
-	.p-xl-offset-10 {
-		margin-left: 83.33333333%;
-	}
-
-	/* line 775, ../scss/variables/_grid.scss */
-	.p-xl-offset-9 {
-		margin-left: 75%;
-	}
-
-	/* line 779, ../scss/variables/_grid.scss */
-	.p-xl-offset-8 {
-		margin-left: 66.66666667%;
-	}
-
-	/* line 783, ../scss/variables/_grid.scss */
-	.p-xl-offset-7 {
-		margin-left: 58.33333333%;
-	}
-
-	/* line 787, ../scss/variables/_grid.scss */
-	.p-xl-offset-6 {
-		margin-left: 50%;
-	}
-
-	/* line 791, ../scss/variables/_grid.scss */
-	.p-xl-offset-5 {
-		margin-left: 41.66666667%;
-	}
-
-	/* line 795, ../scss/variables/_grid.scss */
-	.p-xl-offset-4 {
-		margin-left: 33.33333333%;
-	}
-
-	/* line 799, ../scss/variables/_grid.scss */
-	.p-xl-offset-3 {
-		margin-left: 25%;
-	}
-
-	/* line 803, ../scss/variables/_grid.scss */
-	.p-xl-offset-2 {
-		margin-left: 16.66666667%;
-	}
-
-	/* line 807, ../scss/variables/_grid.scss */
-	.p-xl-offset-1 {
-		margin-left: 8.33333333%;
-	}
-
-	/* line 811, ../scss/variables/_grid.scss */
-	.p-xl-offset-0 {
-		margin-left: 0%;
-	}
-}
 /* line 1, ../scss/base/_base.scss */
 body, htlm {
 	background-color: #D7D2D2;
@@ -915,26 +43,18 @@ body {
 }
 
 /* line 11, ../scss/homepage/_header.scss */
-.header .loginForm .username {
+.header .loginForm {
 	float: left;
 	padding-right: 30px;
 }
 
 /* line 15, ../scss/homepage/_header.scss */
-.header .loginForm .password {
+.header .loginForm {
 	float: left;
 	padding-right: 20px;
 }
 
-.header .loginForm .headerIcon {
-	float: left;
-	padding-right: 15px;
-	padding-top: 15px;
-	height: 30px;
-}
-
 .header .loginForm .userLogged {
-	float: left;
 	padding-right: 20px;
 	padding-top: 20px;
 	height: 30px;
@@ -943,17 +63,17 @@ body {
 	font-size: 15px;
 }
 
-/* line 23, ../scss/homepage/_header.scss */
-.header .loginForm .headerLabel {
-	padding-right: 0.5em;
-	font-size: 15px;
+.userLabelHeader{
+	color: #F5D0A9;
 	font-weight: bold;
-	color: #DCDBD9 !important;
 }
 
-/* line 27, ../scss/homepage/_header.scss */
+.headerLabel {
+	padding-right: 0.5em;
+	font-weight: bold;
+	color: #F2F2F2 !important;
+}
 
-/* line 1, ../scss/homepage/_center.scss */
 .textAreaRegForm {
 	width: 16.6rem;
 }
@@ -967,6 +87,7 @@ body {
 
 /* line 1, ../scss/homepage/_footer.scss */
 .footer {
+	padding:10px;
 	background-color: #3A3939;
 	text-align: center;
 	position: fixed;
@@ -977,7 +98,6 @@ body {
 
 /*# sourceMappingURL=index.css.map */
 .ui-inputfield {
-	height: 35px !important;
 	width: 100% !important;
 }
 
@@ -1005,7 +125,7 @@ body {
 	background-color: #3A3939 !important;
 	color: white !important;
 	font-weight: normal !important;
-	font-family: arial !important;
+	font-family: Source Sans Pro !important;
 }
 
 .ui-panelgrid>*>tr, .ui-panelgrid .ui-panelgrid-cell {
@@ -1158,7 +278,7 @@ body {
 }
 
 .analysisChart {
-	height:70vh !important;
+	height:65vh !important;
 	width:75vw !important;
 }
 
@@ -1167,16 +287,39 @@ body {
 	text-align: center !important;
 }
 
-.hasDatepicker{
-	width:300px !important;
-}
-
 .ui-selectonemenu{
 	vertical-align: middle !important;
 }
 
 .ui-selectonemenu-label{
-	font-size: 12px !important;
+	font-size: 16px !important;
 	height: 20px !important;
 	vertical-align: middle !important;
+}
+
+.hasDatePicker{
+	height: 30px !important;
+	width:150px !important;
+	font-weight: normal !important;
+	vertical-align: middle !important;
+}
+
+.hasTimePicker{
+	height: 30px !important;
+	width:100px !important;
+	font-weight: normal !important;
+	vertical-align: middle !important;
+	text-align: middle !important;
+}
+
+.calDate .ui-calendar{
+	vertical-align: bottom !important;
+}
+
+.panelGraphHeader{
+	padding-right: 2%;
+}
+
+.jqplot-table-legend{
+	color: #3A3939 !important;
 }

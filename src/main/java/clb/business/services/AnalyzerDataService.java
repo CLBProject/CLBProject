@@ -20,10 +20,9 @@ public interface AnalyzerDataService {
 	public List<AnalyzerRegistryObject> getWeekRegistriesFromAnalyzerWithWeekShift(String analyzerId, 
 			int week, int month, int year, int weekShift);
 	
-	public List<AnalyzerRegistryObject> getMonthRegistriesFromAnalyzer(String analyzerId, int month, int year);
+	public List<AnalyzerRegistryObject> getMonthRegistriesFromAnalyzer(String analyzerId, Date date);
 	
-	public List<AnalyzerRegistryObject> getMonthRegistriesFromAnalyzerWithShift(String analyzerId, int month, int year,
-			int monthShift);
+	public List<AnalyzerRegistryObject> getMonthRegistriesFromAnalyzerWithShift(String analyzerId, Date date, int monthShift);
 	
 	public List<Date> getRegistriesDatesFromAnalyzer(String analyzerId);
 

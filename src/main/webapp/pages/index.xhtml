@@ -8,14 +8,13 @@
 
 		<div class="homeMainDivClass">
 			<ui:include src="./general/headerIndex.xhtml" />
-			<table class="regFormTableClass" width="100%">
+			<table class="regFormTableClass" width="100%" style="height:70vh">
 				<tr>
-					<td width="50%">
-						<div
-							class="p-grid p-col-align-center p-justify-around vertical-container">
+					<td width="50%" align="middle" valign="middle">
+						<div>
 							<h:form id="registerForm" class="registerForm">
 								<p:panel style="width:400px !important">
-									<div class="p-col">
+									<div align="left">
 										<p:outputLabel>Name</p:outputLabel>
 										<p:inputText validatorMessage="Name too short!"
 											requiredMessage="Name is required!" id="nameUser"
@@ -25,8 +24,8 @@
 										</p:inputText>
 										<p:message for="nameUser" />
 									</div>
-
-									<div class="p-col">
+									<p:spacer height="10" />
+									<div align="left">
 										<p:outputLabel>Email</p:outputLabel>
 										<p:inputText requiredMessage="Email is required!"
 											validatorMessage="Email is not valid!"
@@ -37,8 +36,8 @@
 										</p:inputText>
 										<p:message for="emailUser" />
 									</div>
-
-									<div class="p-col">
+									<p:spacer height="10" />
+									<div align="left">
 										<p:outputLabel>Password</p:outputLabel>
 										<p:inputText requiredMessage="Password is required!"
 											value="#{clbHomeRegisterBean.user.password}"
@@ -49,28 +48,28 @@
 										</p:inputText>
 										<p:message for="passwordUser" />
 									</div>
-
-									<div class="p-col">
+									<p:spacer height="10" />
+									<div align="left">
 										<p:outputLabel>Address</p:outputLabel>
 										<p:inputTextarea rows="5"
 											value="#{clbHomeRegisterBean.user.address}"
 											class="textAreaRegForm"></p:inputTextarea>
 									</div>
 									<p:spacer height="50" />
-									<div class="p-col">
+									<div>
 										<p:commandLink styleClass="regFormLink"
 											oncomplete="PF('resendEmail').show()"
 											value="Resend Registration Email" />
 									</div>
 
-									<div class="p-col">
+									<div>
 										<p:commandLink styleClass="regFormLink"
 											oncomplete="PF('recoverPassword').show()"
 											value="Forget your password?" />
 									</div>
 									<p:spacer height="10" />
-									<div class="p-col">
-										<div class="p-col">
+									<div>
+										<div>
 											<p:commandButton styleClass="regFormButton"
 												action="#{clbHomeRegisterBean.registerUserAccount}"
 												validateClient="true" value="Sign Up" ajax="true"
@@ -95,7 +94,7 @@
 							</h:form>
 						</div>
 					</td>
-					<td valign="middle">
+					<td valign="middle" align="left">
 						<div class="p-grid p-col-align-left">
 							<div class="mainTextTitleDiv">CLB Team Project Starts Now!
 							</div>

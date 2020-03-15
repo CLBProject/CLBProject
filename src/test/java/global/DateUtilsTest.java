@@ -64,16 +64,16 @@ public class DateUtilsTest {
 			cal.set(Calendar.MONTH, i);
 			
 			if(i == 1)
-				Assert.assertEquals(DateUtils.getInstance().getNumberOfMonthWeeks( i, year), 4);
+				Assert.assertEquals(DateUtils.getInstance().getNumberOfMonthWeeks( cal.getTime()), 4);
 			else
-				Assert.assertEquals(DateUtils.getInstance().getNumberOfMonthWeeks( i, year), 5);
+				Assert.assertEquals(DateUtils.getInstance().getNumberOfMonthWeeks( cal.getTime()), 5);
 		}
 		
 		//29 days february
 		cal.set(Calendar.YEAR,yearBi);
 		for(int i=0;i<12;i++) {
 			cal.set(Calendar.MONTH, i);
-			Assert.assertEquals(DateUtils.getInstance().getNumberOfMonthWeeks(i, yearBi), 5);
+			Assert.assertEquals(DateUtils.getInstance().getNumberOfMonthWeeks(cal.getTime()), 5);
 		}
 		
 		cal.setTime(new Date());

@@ -41,9 +41,9 @@ public class AnalyzerRegistryReductionAlgorithm {
 			case DAY:
 				dateTransformedToHoursAverage = DateUtils.getInstance().transformDateToHoursOrDaysAverage(registry.getCurrentTime());
 				break;
-			case WEEK:
+			/*case WEEK:
 				dateTransformedToHoursAverage = DateUtils.getInstance().transformDateToWeekAverage(registry.getCurrentTime());
-				break;
+				break;*/
 			case MONTH:
 				dateTransformedToHoursAverage = DateUtils.getInstance().transformDateToMonthAverage(registry.getCurrentTime());
 				break;

@@ -26,8 +26,10 @@ public class DateUtils
 		return week + "-" + month + "-" + year + "-" + weekShift;
 	}
 	
-	public String convertDateToSimpleMonthFormat(int month, int year, int weekShift) {
-		return month + "-" + year + "-" + weekShift;
+	public String convertDateToSimpleMonthFormat(Date date, int weekShift) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		return cal.get(Calendar.MONTH) + "-" + cal.get(Calendar.YEAR) + "-" + weekShift;
 	}
 
 	public String convertDateToSimpleStringFormat(Date date) {
@@ -209,11 +211,13 @@ public class DateUtils
 				dateCal.get(Calendar.MONTH) == month && getWeekFromByDayOfMonth(dayOfMonth) == week;
 	}
 
-	public boolean isThisMonth(int month, int year) {
+	public boolean isThisMonth(Date date) {
 		Calendar dateCal = Calendar.getInstance();
+		Calendar oldCal = Calendar.getInstance();
+		oldCal.setTime(date);
 
-		return dateCal.get(Calendar.YEAR) == year && 
-				dateCal.get(Calendar.MONTH) == month;
+		return dateCal.get(Calendar.YEAR) == oldCal.get(Calendar.YEAR) && 
+				dateCal.get(Calendar.MONTH) == oldCal.get(Calendar.MONTH);
 	}
 
 	public Date getMonthToDate(Date date,boolean add) {
@@ -235,10 +239,9 @@ public class DateUtils
 		return dateCal.get(Calendar.YEAR) == year;
 	}
 
-	public Date getMonthFirstDay(int month, int year) {	
+	public Date getMonthFirstDay(Date date) {	
 		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.MONTH, month);
-		cal.set(Calendar.YEAR, year);
+		cal.setTime(date);
 		cal.set(Calendar.DAY_OF_MONTH,1);
 		cal.set(Calendar.MILLISECOND,0);
 		cal.set(Calendar.SECOND,0);
@@ -351,7 +354,7 @@ public class DateUtils
 		return date1.compareTo(date2) > 0;
 	}
 
-	public int getNumberOfMonthWeeks(int month, int year) {
+	public int getNumberOfMonthWeeks(Date date) {
 
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.DAY_OF_MONTH,1);
@@ -360,12 +363,11 @@ public class DateUtils
 		cal.set(Calendar.SECOND,0);
 		cal.set(Calendar.MILLISECOND,0);
 
-		if(isThisMonth(month, year)) {
+		if(isThisMonth(date)) {
 			return getWeekFromByDayOfMonth(cal.get(Calendar.DAY_OF_MONTH));
 		}
 		else {
-			cal.set(Calendar.YEAR, year);
-			cal.set(Calendar.MONTH, month);
+			cal.setTime(date);
 
 			int maxMonthDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 
@@ -461,8 +463,21 @@ public class DateUtils
 		}
 	}
 
-	public Date getMonthFirstDayShift(int week, int month, int year, int monthShift) {
-		return shiftMonth(getMonthFirstDay(month, year), monthShift);
+	public Date getMonthFirstDayShift(Date date, int monthShift) {
+		return shiftMonth(getMonthFirstDay(date), monthShift);
+	}
+
+	public Date mergeHourOfDate(Date currentDateAnalyzer, Date hour) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(currentDateAnalyzer);
+		
+
+		Calendar calHour = Calendar.getInstance();
+		calHour.setTime(hour);
+		
+		cal.set(Calendar.HOUR_OF_DAY, calHour.get(Calendar.HOUR_OF_DAY));
+		
+		return cal.getTime();
 	}
 
 }

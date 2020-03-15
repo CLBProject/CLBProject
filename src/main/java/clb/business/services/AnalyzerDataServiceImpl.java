@@ -100,22 +100,22 @@ public class AnalyzerDataServiceImpl implements AnalyzerDataService, Serializabl
 	}
 
 	@Override
-	public List<AnalyzerRegistryObject> getMonthRegistriesFromAnalyzer(String analyzerId, int month, int year) {
+	public List<AnalyzerRegistryObject> getMonthRegistriesFromAnalyzer(String analyzerId, Date date) {
 
-		Date lastDay = DateUtils.getInstance().isThisMonth(month,year) ? 
-				new Date() : DateUtils.getInstance().getDay(DateUtils.getInstance().getMonthLastDay(month,year),true);
+		Date lastDay = DateUtils.getInstance().isThisMonth(date) ? 
+				new Date() : DateUtils.getInstance().getDay(DateUtils.getInstance().getMonthLastDay(date),true);
 
-				Date firstDay = DateUtils.getInstance().getMonthFirstDay(month, year);
+				Date firstDay = DateUtils.getInstance().getMonthFirstDay(date);
 
 				return clbDao.getMonthRegistriesFromAnalyzer( analyzerId, firstDay , lastDay );
 	}
 
 	@Override
-	public List<AnalyzerRegistryObject> getMonthRegistriesFromAnalyzerWithShift(String analyzerId, int month, int year,
+	public List<AnalyzerRegistryObject> getMonthRegistriesFromAnalyzerWithShift(String analyzerId, Date date,
 			int monthShift) {
 
 
-		Date tempDate = DateUtils.getInstance().getMonthFirstDay(month, year);
+		Date tempDate = DateUtils.getInstance().getMonthFirstDay(date);
 
 		Date firstDay = DateUtils.getInstance().shiftMonth(tempDate, monthShift);
 		Date lastDay = DateUtils.getInstance().getDay(DateUtils.getInstance().getMonthLastDay(firstDay),true);

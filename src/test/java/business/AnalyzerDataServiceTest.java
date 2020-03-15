@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -213,10 +214,14 @@ public class AnalyzerDataServiceTest {
 		List<AnalyzerRegistryObject> monthRegistries = new ArrayList<AnalyzerRegistryObject>();
 		monthRegistries.add(analyzerReg1);
 		monthRegistries.add(analyzerReg2);
+		
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.YEAR, 2014);
+		cal.set(Calendar.MONTH, 10);
 
 		//When
 		when(clbDao.getMonthRegistriesFromAnalyzer(any(String.class), any(Date.class) , any(Date.class))).thenReturn(monthRegistries);
-		List<AnalyzerRegistryObject> monthRegs = analyzerDataService.getMonthRegistriesFromAnalyzer("8",10,2014);
+		List<AnalyzerRegistryObject> monthRegs = analyzerDataService.getMonthRegistriesFromAnalyzer("8",cal.getTime());
 
 		AnalyzerRegistryObject finalReg1Obj = monthRegs.get(0);
 		AnalyzerRegistryObject finalReg2Obj = monthRegs.get(1);
@@ -246,8 +251,12 @@ public class AnalyzerDataServiceTest {
 		monthRegistries.add(analyzerReg2);
 
 		//When
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.YEAR, 2016);
+		cal.set(Calendar.MONTH, 9);
+		
 		when(clbDao.getMonthRegistriesFromAnalyzer(any(String.class), any(Date.class) , any(Date.class))).thenReturn(monthRegistries);
-		List<AnalyzerRegistryObject> monthRegs = analyzerDataService.getMonthRegistriesFromAnalyzerWithShift("7",9,2016,4);
+		List<AnalyzerRegistryObject> monthRegs = analyzerDataService.getMonthRegistriesFromAnalyzerWithShift("7",cal.getTime(),4);
 
 		AnalyzerRegistryObject finalReg1Obj = monthRegs.get(0);
 		AnalyzerRegistryObject finalReg2Obj = monthRegs.get(1);

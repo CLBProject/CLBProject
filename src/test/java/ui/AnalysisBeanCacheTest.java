@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -220,8 +221,10 @@ public class AnalysisBeanCacheTest {
 	
 	private void testMonthCacheFunc(boolean withShift) {
 		final String analyzerId = "9999ssd124";
-		final int month = 9;
-		final int year = 2001;
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.MONTH, 9);
+		cal.set(Calendar.YEAR, 2001);
+		
 		final int shift = 3;
 
 		List<AnalyzerRegistryObject> registries = new ArrayList<AnalyzerRegistryObject>();
@@ -242,14 +245,14 @@ public class AnalysisBeanCacheTest {
 		List<AnalyzerRegistryGui> monthRegsAfterCache;
 		
 		if(withShift) {
-			when(analyzerDataService.getMonthRegistriesFromAnalyzerWithShift(analyzerId,month,year,shift)).thenReturn(registries);
-			monthRegs = analysisBeanCache.getMonthRegistriesFromAnalyzerWithShift(analyzerId,month,year,shift);
-			monthRegsAfterCache = analysisBeanCache.getMonthRegistriesFromAnalyzerWithShift(analyzerId,month,year,shift);
+			when(analyzerDataService.getMonthRegistriesFromAnalyzerWithShift(analyzerId,cal.getTime(),shift)).thenReturn(registries);
+			monthRegs = analysisBeanCache.getMonthRegistriesFromAnalyzerWithShift(analyzerId,cal.getTime(),shift);
+			monthRegsAfterCache = analysisBeanCache.getMonthRegistriesFromAnalyzerWithShift(analyzerId,cal.getTime(),shift);
 		}
 		else {
-			when(analyzerDataService.getMonthRegistriesFromAnalyzer(analyzerId,month,year)).thenReturn(registries);
-			monthRegs = analysisBeanCache.getMonthRegistriesFromAnalyzer(analyzerId,month,year);
-			monthRegsAfterCache = analysisBeanCache.getMonthRegistriesFromAnalyzer(analyzerId,month,year);
+			when(analyzerDataService.getMonthRegistriesFromAnalyzer(analyzerId,cal.getTime())).thenReturn(registries);
+			monthRegs = analysisBeanCache.getMonthRegistriesFromAnalyzer(analyzerId,cal.getTime());
+			monthRegsAfterCache = analysisBeanCache.getMonthRegistriesFromAnalyzer(analyzerId,cal.getTime());
 		}
 		
 

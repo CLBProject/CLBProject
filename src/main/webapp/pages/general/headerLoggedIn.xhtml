@@ -6,47 +6,41 @@
 	xmlns:p="http://primefaces.org/ui"
 	template="../template/ui.xhtml">
 	<ui:define name="body">
-		<h:form class="headerForm header p-grid">
-			<div class="p-col logo p-justify-center">
-				<p:graphicImage url="/resources/images/logoL8energy.png" height="50px" width="150px"></p:graphicImage>
-			</div>
-				<div align="right" class="p-col loginForm">
-				<div class="p-col userLogged">
-					<p:outputLabel value="#{clbHomeLoginBean.authenticatedUser.name}"></p:outputLabel>
-				</div>
-				<div class="p-col headerIcon verticalLine"></div>
-				<div class="p-col headerIcon">
-					<table>
-						<tr>
-							<td valign="middle">
-								<p:graphicImage value="#{request.contextPath}/../resources/images/graph.png"/>
-							</td>
-							<td valign="middle">
-								<p:commandLink value="Analysis"
-									styleClass="headerLabel" ajax="false" type="submit"
-									action="#{redirectBean.redirectTo('analysis.xhtml?faces-redirect=true')}"></p:commandLink>
-							</td>
-						</tr>
-					</table>
-				</div>
-				<div class="p-col headerIcon">
-					<table>
-						<tr>
-							<td>
-								<p:graphicImage value="#{request.contextPath}/../resources/images/maintenance.png"></p:graphicImage>
-							</td>
-							<td>
-								<p:commandLink value="Building Management"
-									styleClass="headerLabel" ajax="false" type="submit"
-									action="#{redirectBean.redirectTo('buildingManagement.xhtml?faces-redirect=true')}"></p:commandLink> 
-							</td>
-						</tr>
-					</table>
-				</div>
-				<div class="p-col loginButton">
-					<p:commandButton styleClass="loginFormButton" id="logoutButId" value="Log Out" action="#{clbHomeLoginBean.logout}"></p:commandButton>
-				</div>
-			</div>
+		<h:form class="headerForm header">
+			<table>
+				<tr>
+					<td align="left" width="70%">
+						<p:graphicImage url="/resources/images/logoL8energy.png" height="50px" width="150px"></p:graphicImage>
+					</td>
+					<td>
+						<p:graphicImage url="/resources/images/user.png" width="20" height="20"></p:graphicImage>
+					</td>
+					<td width="10%%" align="left">
+						<p:outputLabel value="#{clbHomeLoginBean.authenticatedUser.name}" styleClass="userLabelHeader"></p:outputLabel>
+					</td>
+					<td width="1%"/>
+					<td>
+							<p:graphicImage value="#{request.contextPath}/../resources/images/graph.png"/>
+					</td>
+					<td width="5%" align="left">
+						<p:commandLink value="Analysis"
+							styleClass="headerLabel" ajax="false" type="submit"
+							action="#{redirectBean.redirectTo('analysis.xhtml?faces-redirect=true')}"></p:commandLink>
+					</td>
+					<td align="right">
+						<p:graphicImage value="#{request.contextPath}/../resources/images/maintenance.png"></p:graphicImage>
+					</td>
+					<td width="13%" align="left">
+						<p:commandLink value="Building Management"
+							styleClass="headerLabel" ajax="false" type="submit"
+							action="#{redirectBean.redirectTo('buildingManagement.xhtml?faces-redirect=true')}"></p:commandLink> 
+					</td>
+					<td align="left">
+						<p:commandButton styleClass="loginFormButton" id="logoutButId" value="Log Out" action="#{clbHomeLoginBean.logout}"></p:commandButton>
+					</td>
+					<td width="1%"/>
+				</tr>
+			</table>
 		</h:form>
 	</ui:define>
 </ui:composition>
