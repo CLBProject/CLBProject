@@ -117,10 +117,6 @@ body {
 	background-color: #3A3939 !important;
 }
 
-.ui-panelgrid table tbody tr {
-	border: none;
-}
-
 .graphTitle .ui-panel-titlebar{
 	background-color: #3A3939 !important;
 	color: white !important;

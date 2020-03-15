@@ -9,7 +9,8 @@
 		<h:form class="headerForm header">
 			<table>
 				<tr>
-					<td align="left" width="70%">
+					<td width="1%"/>
+					<td align="left" width="87%">
 						<p:graphicImage url="/resources/images/logoL8energy.png" height="50px" width="150px"></p:graphicImage>
 					</td>
 					<td>
@@ -17,23 +18,6 @@
 					</td>
 					<td width="10%%" align="left">
 						<p:outputLabel value="#{clbHomeLoginBean.authenticatedUser.name}" styleClass="userLabelHeader"></p:outputLabel>
-					</td>
-					<td width="1%"/>
-					<td>
-							<p:graphicImage value="#{request.contextPath}/../resources/images/graph.png"/>
-					</td>
-					<td width="5%" align="left">
-						<p:commandLink value="Analysis"
-							styleClass="headerLabel" ajax="false" type="submit"
-							action="#{redirectBean.redirectTo('analysis.xhtml?faces-redirect=true')}"></p:commandLink>
-					</td>
-					<td align="right">
-						<p:graphicImage value="#{request.contextPath}/../resources/images/maintenance.png"></p:graphicImage>
-					</td>
-					<td width="13%" align="left">
-						<p:commandLink value="Building Management"
-							styleClass="headerLabel" ajax="false" type="submit"
-							action="#{redirectBean.redirectTo('buildingManagement.xhtml?faces-redirect=true')}"></p:commandLink> 
 					</td>
 					<td align="left">
 						<p:commandButton styleClass="loginFormButton" id="logoutButId" value="Log Out" action="#{clbHomeLoginBean.logout}"></p:commandButton>
