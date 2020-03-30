@@ -53,6 +53,15 @@ public class AnalyzerEntity implements ClbEntity, Serializable {
 	public void setAnalyzerMeters(Set<AnalyzerMeterValues> analyzerMeters) {
 		this.analyzerMeters = analyzerMeters;
 	}
+	
+
+	public void putRegistryCollection(String collection) {
+		if (registriesCollections == null) {
+			registriesCollections = new HashSet<String>();
+		}
+		
+		registriesCollections.add(collection);
+	}
 
 	public Set<String> getRegistriesCollections() {
 		return registriesCollections;
@@ -60,14 +69,6 @@ public class AnalyzerEntity implements ClbEntity, Serializable {
 
 	public void setRegistriesCollections(Set<String> registriesCollections) {
 		this.registriesCollections = registriesCollections;
-	}
-
-	public void addRegistryCollection(String currentCollectionName) {
-		if (registriesCollections == null) {
-			registriesCollections = new HashSet<String>();
-		}
-		
-		registriesCollections.add(currentCollectionName);
 	}
 	
 	

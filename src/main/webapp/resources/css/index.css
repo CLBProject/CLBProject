@@ -313,9 +313,30 @@ body {
 }
 
 .panelGraphHeader{
-	padding-right: 2%;
+	padding-right: 1%;
 }
 
 .jqplot-table-legend{
 	color: #3A3939 !important;
+}
+
+.analyzerTitleChart{
+	font-size:30px !important;
+	font-weight:bold;
+	float: left;
+	vertical-align: middle;
+}
+
+.analyzerBuildingTitle{
+	color: #3C18DF; 
+	font-size:12px !important; 
+	font-weight:bold;
+}
+
+.analyzerDivisionTitle{
+	font-size: 12px !important;
+}
+
+.chartPanel{
+	background: #F7F5F5 !important;
 }

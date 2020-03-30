@@ -65,7 +65,7 @@
 	</bean>
 	
 	<task:scheduled-tasks scheduler="myScheduler">
-	    <task:scheduled ref="externalRoutines" method="fetchAnalyzerRegistries" fixed-delay="10000000"/>
+	    <task:scheduled ref="externalRoutines" method="fetchAnalyzerRegistries" fixed-delay="100000"/>
 	</task:scheduled-tasks>
 
 	<task:scheduler id="myScheduler" pool-size="10"/>

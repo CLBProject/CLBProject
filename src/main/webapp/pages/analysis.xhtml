@@ -15,7 +15,7 @@
 			<h:form id="analysisForm">
 				<table width="100%" id="tableId">
 					<tr>
-						<td valign="top" width="20%"><p:panel id="buildingPanelId"
+						<td valign="top" width="25%"><p:panel id="buildingPanelId"
 								widgetVar="buildingPanel">
 								<div class="analysisNewBuildingClass" align="center">
 									<p:graphicImage width="12px"
@@ -27,7 +27,6 @@
 								<ui:repeat value="#{analysisBean.buildingsToShow}"
 									var="building" varStatus="varStatus" id="buildingSelection">
 									<p:panel styleClass="buildingPanelClass"
-										id="panel#{varStatus.index}" widgetVar="testingIds"
 										header="#{building.name}" collapsed="true" toggleable="true"
 										toggleSpeed="500">
 										<f:facet name="actions">
@@ -104,7 +103,7 @@
 												<p:commandLink value="Add Analyzer"
 													styleClass="buildingLinks"
 													oncomplete="PF('newAnalyzerPopup').show()" ajax="true"
-													update="analysisForm"></p:commandLink>
+													update="newAnalyzerPopup"></p:commandLink>
 												<p:spacer width="10"></p:spacer>
 												<p:graphicImage width="12px"
 													value="#{request.contextPath}/../resources/images/negative.png"
@@ -119,7 +118,7 @@
 									</p:panel>
 								</ui:repeat>
 							</p:panel></td>
-						<td valign="top" width="80%"><p:outputPanel id="chartPanel">
+						<td valign="top" width="75%"><p:outputPanel id="chartPanel">
 								<p:panel rendered="#{empty analysisBean.analysisDayPojo}">
 									<p:graphicImage
 										rendered="#{empty analysisBean.analysisDayPojo}" width="100%"
@@ -143,8 +142,13 @@
 								<p:panel rendered="#{not empty analysisBean.analysisDayPojo}"
 									styleClass="graphTitle">
 										<div align="right" class="panelGraphHeader">
-											<p:selectBooleanCheckbox value="#{analysisBean.updateSeries}" itemLabel="Adjacent Series">
-									            <p:ajax update="analysisForm" listener="#{analysisBean.updatePreviousAndNextSeries}" />
+											<p:outputLabel value="#{analysisBean.selectedAnalyzer.codeName}" styleClass="analyzerTitleChart"></p:outputLabel>
+											<p:selectBooleanCheckbox 
+												value="#{analysisBean.updateSeries}" itemLabel="Adjacent Series">
+									            <p:ajax onstart="document.body.style.cursor='wait'"
+														oncomplete="document.body.style.cursor='pointer'" 
+														update="analysisForm" 
+														listener="#{analysisBean.updatePreviousAndNextSeries}" />
 									        </p:selectBooleanCheckbox>
 									        <p:spacer width="40" style="vertical-align:middle" />
 											<p:graphicImage value="#{request.contextPath}/../resources/images/thunder.png" style="vertical-align: middle !important" 
@@ -155,6 +159,8 @@
 													var="analyzerMeter" itemLabel="#{analyzerMeter.label}"
 													itemValue="#{analyzerMeter}"></f:selectItems>
 												<p:ajax event="change"
+													onstart="document.body.style.cursor='wait'"
+													oncomplete="document.body.style.cursor='pointer'"
 													listener="#{analysisBean.changeViewData}"
 													update="analysisForm" />
 											</p:selectOneMenu>
@@ -167,7 +173,9 @@
 												value="#{analysisBean.currentDateAnalyzer}"
 												mindate="#{analysisBean.minCurrentDateAnalyzer}"
 												maxdate="#{analysisBean.maxCurrentDateAnalyzer}">
-												<p:ajax event="dateSelect"
+												<p:ajax event="dateSelect" 
+													onstart="document.body.style.cursor='wait'"
+													oncomplete="document.body.style.cursor='pointer'"
 													listener="#{analysisBean.changeViewData}"
 													update="analysisForm" />
 											</p:calendar>
@@ -180,6 +188,8 @@
 													var="scaleGraphic" itemLabel="#{scaleGraphic.label}"
 													itemValue="#{scaleGraphic}"></f:selectItems>
 												<p:ajax event="change"
+													onstart="document.body.style.cursor='wait'"
+													oncomplete="document.body.style.cursor='pointer'"
 													listener="#{analysisBean.changeViewData}"
 													update="analysisForm" />
 											</p:selectOneMenu>
@@ -196,15 +206,26 @@
 												rendered="#{analysisBean.scaleGraphic eq 'HOUR'}"
 												label="Hour" locale="en_US">
 												<p:ajax event="timeSelect"
+													onstart="document.body.style.cursor='wait'"
+													oncomplete="document.body.style.cursor='pointer'"
 													listener="#{analysisBean.changeViewDataHours}"
 													update="analysisForm" />
 											</pe:timePicker>
-										</div>
+									</div>
+									<br/>
 									<div align="center">
-										<p:chart rendered="#{not empty analysisBean.analysisDayPojo}"
-											type="line" responsive="true"
-											model="#{analysisBean.analysisDayPojo.lineModel}"
-											styleClass="analysisChart" />
+										<p:panel styleClass="chartPanel">
+											<p:chart rendered="#{not empty analysisBean.analysisDayPojo}"
+												type="line" responsive="true"
+												model="#{analysisBean.analysisDayPojo.lineModel}"
+												styleClass="analysisChart" />
+										</p:panel>
+									</div>
+									<p:spacer height="8"/>
+									<div align="center">
+											<p:outputLabel value="#{analysisBean.parentDivisionSelected.data.buildingName}" styleClass="analyzerBuildingTitle"></p:outputLabel>
+											<p:outputLabel value=" - "/>
+											<p:outputLabel value="#{analysisBean.parentDivisionSelected.data.name}" styleClass="analyzerDivisionTitle"></p:outputLabel>
 									</div>
 								</p:panel>
 							</p:outputPanel></td>

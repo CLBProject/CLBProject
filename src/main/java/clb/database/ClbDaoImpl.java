@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -63,7 +64,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	
 	@Override
 	public void saveClbObject(ClbObject clbObj) {
-		ClbEntity clbEntity = modelMapper.map(clbObj, ClbEntity.class);
+		ClbEntity clbEntity = (ClbEntity) modelMapper.map(clbObj, clbObj.getEntity());
 		mongoTemplate.save(clbEntity);
 		clbObj.setId(clbEntity.getId());
 	}
@@ -85,6 +86,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 				}
 				else {
 					analyzerRegCol = mongoTemplate.createCollection(collectionName );
+					analyzerRegCol.createIndex("analyzerId");
 					currentCollectionName = collectionName;
 				}
 			}
@@ -97,7 +99,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 			analyzerRegistryObject.setId(_id);
 			
 			
-			analyzer.addRegistryCollection(collectionName);
+			analyzer.putRegistryCollection(collectionName);
 		}
 		
 		mongoTemplate.save(analyzer);
@@ -113,33 +115,33 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 	@Override
 	public AnalyzerObject findAnalyzerById(String analyzerId) {
 		AnalyzerEntity analyzer = (AnalyzerEntity) findById(analyzerId, AnalyzerEntity.class);
-		return modelMapper.map(analyzer, AnalyzerObject.class);
+		return analyzer != null ? modelMapper.map(analyzer, AnalyzerObject.class) : null;
 	}
 	
 
 	@Override
 	public DivisionObject findDivisionById(String parentId) {
 		DivisionEntity division = (DivisionEntity) findById(parentId, DivisionEntity.class);
-		return modelMapper.map(division, DivisionObject.class);
+		return division != null ? modelMapper.map(division, DivisionObject.class) : null;
 	}
 
 	@Override
 	public BuildingObject findBuildingById(String buildingId) {
 		BuildingEntity building = (BuildingEntity) mongoTemplate.findById(buildingId, BuildingEntity.class);
-		return modelMapper.map(building, BuildingObject.class);
+		return building != null ? modelMapper.map(building, BuildingObject.class) : null;
 	}
 
 
 	@Override
 	public UsersystemObject findUserByToken( String token) {
 		UsersystemEntity userEntity = clbRepository.findUserbyToken( token );
-		return modelMapper.map(userEntity, UsersystemObject.class);
+		return userEntity != null ? modelMapper.map(userEntity, UsersystemObject.class) : null;
 	}
 
 	@Override
 	public UsersystemObject findUserByUserName( String userName ) {
 		UsersystemEntity userEntity = (UsersystemEntity) findById(userName, UsersystemEntity.class); 
-		return modelMapper.map(userEntity, UsersystemObject.class);
+		return userEntity != null ? modelMapper.map(userEntity, UsersystemObject.class) : null;
 	}
 
 	@Override
@@ -149,7 +151,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
 	@Override
 	public List<AnalyzerRegistryObject> getDayHourRegistriesFromAnalyzer( String analyzerId, Date from, Date to) {
-		return  processRegistries(analyzerId, from, to);
+		return  processRegistries(analyzerId, from, to, false);
 	}
 
 
@@ -160,13 +162,13 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
 		if(DateUtils.getInstance().isTheSameDay(lastDay, firstDay)) {
 			final Date nextDay = DateUtils.getInstance().getDay(firstDay,true);
-			weekRegistries.addAll(processRegistries(analyzerId, firstDay,nextDay));
+			weekRegistries.addAll(processRegistries(analyzerId, firstDay,nextDay, true));
 		}
 
 		while(!DateUtils.getInstance().isTheSameDay(lastDay, firstDay)){
 			final Date nextDay = DateUtils.getInstance().getDay(firstDay,true);
 
-			weekRegistries.addAll(processRegistries(analyzerId, firstDay,nextDay));
+			weekRegistries.addAll(processRegistries(analyzerId, firstDay,nextDay, true));
 
 			firstDay = nextDay;
 		} 
@@ -182,12 +184,12 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
 		if(DateUtils.getInstance().isTheSameDay(lastDay, firstDay)) {
 			final Date nextDay = DateUtils.getInstance().getDay(firstDay,true);
-			monthRegistries.addAll(processRegistries(analyzerId, firstDay,nextDay));
+			monthRegistries.addAll(processRegistries(analyzerId, firstDay,nextDay, true));
 		}
 
 		while(!DateUtils.getInstance().isTheSameDay(lastDay, firstDay)){
 			monthRegistries.addAll(processRegistries(analyzerId, firstDay, 
-					DateUtils.getInstance().getDay(firstDay,true)));
+					DateUtils.getInstance().getDay(firstDay,true),true));
 
 			firstDay = DateUtils.getInstance().getDay(firstDay, true);
 		} 
@@ -197,16 +199,19 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
 
 
-	private List<AnalyzerRegistryObject> processRegistries(final String analyzerId, final Date previousTimeFrame, final Date timeFrameNow){
+	private List<AnalyzerRegistryObject> processRegistries(final String analyzerId, final Date previousTimeFrame, final Date timeFrameNow, boolean noDateInterval){
 
 		final String collectionName =  DateUtils.getInstance().concatTimeWithString(ANALYZER_REGISTIES_COLL_NAME, previousTimeFrame );
 
 		DBCollection collection = this.mongoTemplate.getCollection( collectionName );
 		DBObject dbObj = new BasicDBObject("analyzerId",analyzerId);
-		dbObj.put( "currenttime", BasicDBObjectBuilder.start("$gte",previousTimeFrame ).add("$lte", timeFrameNow).get() );
+		
+		if(!noDateInterval)
+			dbObj.put( "currenttime", BasicDBObjectBuilder.start("$gte",previousTimeFrame ).add("$lte", timeFrameNow).get() );
 
 		final List<AnalyzerRegistryObject> analyzerRegistries = new ArrayList<AnalyzerRegistryObject>();
 
+		long startTime = System.currentTimeMillis();
 		collection.find(dbObj).forEach( result -> {
 			AnalyzerRegistryEntity analyzerReg = new AnalyzerRegistryEntity();
 			analyzerReg.setId((String)result.get("id") );
@@ -224,6 +229,8 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 			analyzerRegistries.add( analyzerRegObj );
 		});
 
+		long endTime = (System.currentTimeMillis() - startTime) / 1000;
+		System.out.println("EndTime For " + timeFrameNow.toString() + ": " + endTime);
 		return analyzerRegistries;
 	}
 
@@ -240,7 +247,9 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 
 		AnalyzerEntity analyzer = (AnalyzerEntity) findById(analyzerId, AnalyzerEntity.class);
 		
-		return analyzer.getRegistriesCollections().stream()
+		Set<String> analyzerRegistriesCol = analyzer.getRegistriesCollections();
+		
+		return analyzerRegistriesCol != null ? analyzerRegistriesCol.stream()
 				.map(regCollection -> {
 					String dateReg = regCollection.split("_")[1];
 					Calendar cal = Calendar.getInstance();
@@ -250,7 +259,7 @@ public class ClbDaoImpl implements ClbDao, Serializable{
 					return cal.getTime();
 				})
 				.sorted()
-				.collect(Collectors.toList());
+				.collect(Collectors.toList()) : new ArrayList<Date>();
 	}
 
 	@Override

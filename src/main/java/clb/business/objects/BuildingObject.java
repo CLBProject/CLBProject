@@ -3,6 +3,8 @@ package clb.business.objects;
 import java.util.HashSet;
 import java.util.Set;
 
+import clb.database.entities.BuildingEntity;
+
 public class BuildingObject implements ClbObject
 {
     private String id;
@@ -20,6 +22,11 @@ public class BuildingObject implements ClbObject
     public BuildingObject(){
 
     }
+    
+	@Override
+	public Class<BuildingEntity> getEntity() {
+		return BuildingEntity.class;
+	}
 	
 	@Override
 	public boolean equals(Object obj) {

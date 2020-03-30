@@ -15,9 +15,11 @@ public class DivisionTreeGui implements Serializable, Comparable<DivisionTreeGui
 	private static final long serialVersionUID = 1L;
 	private String divisionId;
 	private String name;
+	private String buildingName;
 	private List<AnalyzerGui> analyzers;
 	
-	public DivisionTreeGui(DivisionObject division) {
+	public DivisionTreeGui(DivisionObject division, String buildingName) {
+		this.buildingName = buildingName;
 		this.divisionId = division.getId();
 		this.name = division.getName();
 		this.analyzers = division.getAnalyzers() != null ? 
@@ -55,5 +57,14 @@ public class DivisionTreeGui implements Serializable, Comparable<DivisionTreeGui
 	public void setAnalyzers(List<AnalyzerGui> analyzers) {
 		this.analyzers = analyzers;
 	}
+
+	public String getBuildingName() {
+		return buildingName;
+	}
+
+	public void setBuildingName(String buildingName) {
+		this.buildingName = buildingName;
+	}
+	
 	
 }

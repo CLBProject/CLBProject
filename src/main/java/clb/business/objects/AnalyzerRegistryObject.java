@@ -3,9 +3,9 @@ package clb.business.objects;
 import java.io.Serializable;
 import java.util.Date;
 
-import clb.database.entities.ClbEntity;
+import clb.database.entities.AnalyzerRegistryEntity;
 
-public class AnalyzerRegistryObject implements ClbEntity, Serializable {
+public class AnalyzerRegistryObject implements ClbObject, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -131,6 +131,11 @@ public class AnalyzerRegistryObject implements ClbEntity, Serializable {
 
 
 	public AnalyzerRegistryObject() {
+	}
+	
+	@Override
+	public Class<AnalyzerRegistryEntity> getEntity() {
+		return AnalyzerRegistryEntity.class;
 	}
 
 	public String getId() {

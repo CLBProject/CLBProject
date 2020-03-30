@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import clb.database.entities.DivisionEntity;
+
 public class DivisionObject implements ClbObject
 {
     private String id;
@@ -16,6 +18,11 @@ public class DivisionObject implements ClbObject
 
     public DivisionObject(){
     }
+    
+	@Override
+	public Class<DivisionEntity> getEntity() {
+		return DivisionEntity.class;
+	}
 
     
     public void addAnalyzer(AnalyzerObject analyzerObj) {

@@ -60,7 +60,7 @@ public class AnalysisBean implements Serializable{
 	private Date minCurrentDateAnalyzer;
 	private Date maxCurrentDateAnalyzer;
 
-	private List<AnalyzerMeterValues> analyzerMeterValues;
+	private AnalyzerMeterValues[] analyzerMeterValues;
 	private AnalyzerMeterValues analyzerMeter;
 
 	private AnalysisBeanChart analysisDayPojo;
@@ -81,6 +81,8 @@ public class AnalysisBean implements Serializable{
 		
 		scalesGraphic = ScaleGraphic.values();
 		scaleGraphic = ScaleGraphic.DAY;
+		
+		analyzerMeterValues = AnalyzerMeterValues.values();
 		
 		hour = new Date();
 		updateSeries = false;
@@ -224,18 +226,16 @@ public class AnalysisBean implements Serializable{
 		this.currentDateAnalyzer = DateUtils.getInstance().mergeHourOfDate(this.currentDateAnalyzer, this.hour);
 		this.fillGraphicData();
 	}
+
+	public void updatePreviousAndNextSeries() {
+		this.fillGraphicData();
+	}
 	
 	private void fillGraphicData() {
 
-		analysisDayPojo.fillGraphicForData( selectedAnalyzer.getAnalyzerId(), this.currentDateAnalyzer, this.scaleGraphic, this.analyzerMeter );
+		analysisDayPojo.fillGraphicForData( selectedAnalyzer.getAnalyzerId(), this.currentDateAnalyzer, this.scaleGraphic, this.analyzerMeter, updateSeries );
 	}
-	
-	public void updatePreviousAndNextSeries() {
-		if(updateSeries) {
-			analysisDayPojo.affectPreviousAndNextSeries(scaleGraphic,this.currentDateAnalyzer,selectedAnalyzer.getAnalyzerId(), this.analyzerMeter);
-		}
-	}
-	
+		
 	
 	public ClbHomeLoginBean getClbHomeLoginBean() {
 		return clbHomeLoginBean;
@@ -310,11 +310,12 @@ public class AnalysisBean implements Serializable{
 		this.newAnalyzer = newAnalyzer;
 	}
 
-	public List<AnalyzerMeterValues> getAnalyzerMeterValues() {
+	
+	public AnalyzerMeterValues[] getAnalyzerMeterValues() {
 		return analyzerMeterValues;
 	}
 
-	public void setAnalyzerMeterValues(List<AnalyzerMeterValues> analyzerMeterValues) {
+	public void setAnalyzerMeterValues(AnalyzerMeterValues[] analyzerMeterValues) {
 		this.analyzerMeterValues = analyzerMeterValues;
 	}
 

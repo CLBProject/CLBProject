@@ -39,8 +39,6 @@ public class AnalysisBeanChart {
 	private List<AnalyzerRegistryGui> currentRegistries;
 	private List<AnalyzerRegistryGui> nextRegistries;
 
-	private Boolean nextAndPreviousSelected;
-
 	private AnalysisBeanCache analysisBeanCache;
 
 	public AnalysisBeanChart(AnalysisBeanCache analysisBeanCache, AnalyzerMeterValues meter){
@@ -71,12 +69,10 @@ public class AnalysisBeanChart {
 		this.currentRegistries = new ArrayList<AnalyzerRegistryGui>();
 		this.previousRegistries = new ArrayList<AnalyzerRegistryGui>();
 		this.nextRegistries = new ArrayList<AnalyzerRegistryGui>();
-
-		this.nextAndPreviousSelected = false;
 	}
 
 
-	public void fillGraphicForData(String analyzerId, final Date currentDateAnalyzer, ScaleGraphic currentScale, AnalyzerMeterValues analyzerMeter){
+	public void fillGraphicForData(String analyzerId, final Date currentDateAnalyzer, ScaleGraphic currentScale, AnalyzerMeterValues analyzerMeter, boolean nextAndPreviousSelected){
 		
 		List<AnalyzerRegistryGui> registries = new ArrayList<AnalyzerRegistryGui>();
 
@@ -110,7 +106,7 @@ public class AnalysisBeanChart {
 		}
 		
 		
-		this.affectPreviousAndNextSeries(currentScale,currentDateAnalyzer,analyzerId, analyzerMeter);
+		this.affectPreviousAndNextSeries(currentScale,currentDateAnalyzer,analyzerId, analyzerMeter, nextAndPreviousSelected);
 
 	}
 
@@ -126,19 +122,18 @@ public class AnalysisBeanChart {
 		currentSerie.setShowMarker( false );
 		lineModel.addSeries( currentSerie );
 		
-		this.nextAndPreviousSelected = false;
-		
 		setSeriesRegistriesValues(currentScale,currentSerie,this.currentRegistries,TimeAnalysisType.CURRENT, meter);
 	}
 
 
 
 
-	public void affectPreviousAndNextSeries(ScaleGraphic scaleGraphic, Date analysisDate, String analyzerId, AnalyzerMeterValues meter) {
+	private void affectPreviousAndNextSeries(ScaleGraphic scaleGraphic, Date analysisDate, String analyzerId, AnalyzerMeterValues meter, boolean nextAndPreviousSelected) {
 		removeNextAndPreviousSeriesRegistries();
 
 		boolean addNextSerie = true;
 
+		
 		if(nextAndPreviousSelected) {
 			List<AnalyzerRegistryGui> previousSeriesRegistries = new ArrayList<AnalyzerRegistryGui>();
 			List<AnalyzerRegistryGui> nextSeriesRegistries = new ArrayList<AnalyzerRegistryGui>();
@@ -448,15 +443,6 @@ public class AnalysisBeanChart {
 
 	public void setLineModel( LineChartModel lineModel ) {
 		this.lineModel = lineModel;
-	}
-
-	public Boolean getNextAndPreviousSelected() {
-		return nextAndPreviousSelected;
-	}
-
-
-	public void setNextAndPreviousSelected(Boolean nextAndPreviousSelected) {
-		this.nextAndPreviousSelected = nextAndPreviousSelected;
 	}
 
 }

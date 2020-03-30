@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.primefaces.json.JSONObject;
 
+import clb.database.entities.UsersystemEntity;
+
 public class UsersystemObject implements ClbObject, Serializable
 {
     /**
@@ -29,6 +31,11 @@ public class UsersystemObject implements ClbObject, Serializable
     public UsersystemObject(){
         
     }
+    
+	@Override
+	public Class<UsersystemEntity> getEntity() {
+		return UsersystemEntity.class;
+	}
     
     public boolean hasBuildings() {
     	return buildings != null && buildings.size() > 0;

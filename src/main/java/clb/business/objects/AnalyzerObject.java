@@ -3,6 +3,7 @@ package clb.business.objects;
 import java.util.HashSet;
 import java.util.Set;
 
+import clb.database.entities.AnalyzerEntity;
 import clb.global.AnalyzerMeterValues;
 
 public class AnalyzerObject implements ClbObject
@@ -16,6 +17,11 @@ public class AnalyzerObject implements ClbObject
     
 	public AnalyzerObject(){
 
+	}
+	
+	@Override
+	public Class<AnalyzerEntity> getEntity() {
+		return AnalyzerEntity.class;
 	}
 
 	public void addAnalyzerMeter(AnalyzerMeterValues analyzerMeter) {
