@@ -3,9 +3,6 @@ version: "3.2"
 volumes:
   mongodb_data_volume:
     external: true
-  clbapp_volume:
-    external: true
-
 services:
   clbapp:
         image: clbproject/clbapp:v1
@@ -17,10 +14,6 @@ services:
                cpus: "0.3"
         ports:
             - "80:80"
-        volumes:
-          - type: volume
-            source: clbapp_volume
-            target: /data/vol
   mongo:
         image: tutum/mongodb:latest
         deploy:
