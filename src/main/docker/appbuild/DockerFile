@@ -5,8 +5,6 @@ RUN git clone --single-branch -b dev https://github.com/CLBProject/CLBProject
 FROM maven:3.5-jdk-8-alpine
 WORKDIR /app
 COPY --from=0 /app/CLBProject /app
-COPY --from=0 /app/CLBProject/src/main/script/schoolsFtp/recentRegistries.py /home/vagrant/scripting/recentRegistries.py
-COPY --from=0 /app/CLBProject/src/main/script/schoolsFtp/ftp_users.properties /home/vagrant/scripting/ftp_users.properties
 
 RUN \
  echo "**** install build packages ****" && \
