@@ -12,7 +12,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<spring.version>4.3.11.RELEASE</spring.version>
-		<springsecurity.version>4.0.1.RELEASE</springsecurity.version>
+		<springsecurity.version>5.2.10.RELEASE</springsecurity.version>
 		<derby.version>10.13.1.1</derby.version>
 		<jsf.version>2.2.15</jsf.version>
 		<hibernate.version>5.2.11.Final</hibernate.version>
